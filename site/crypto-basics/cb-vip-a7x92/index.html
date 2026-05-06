@@ -275,7 +275,6 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
   <div class="scroll-area">
     <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
     <div class="ch-list" id="ch-list"></div>
-    <div style="margin-top:20px;padding:0 4px;"><button onclick="showScreen('glossary')" style="width:100%;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.9rem;font-weight:600;padding:14px;border-radius:12px;cursor:pointer;letter-spacing:.03em;">📖 Jargon Buster — Quick Reference</button></div>
   </div>
 </div>
 
@@ -309,7 +308,8 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- GLOSSARY -->
 <div id="glossary" class="screen">
-  <div class="glossary-hdr" style="position:relative;"><img src="../../../images/jargon.png" alt="Jargon Buster" style="position:absolute;top:0;right:0;width:80px;height:80px;object-fit:contain;border-radius:12px;" />
+  <img src="../../../images/jargon.png" alt="Jargon Buster" style="width:100%;height:auto;display:block;flex-shrink:0;object-fit:cover;" />
+  <div class="glossary-hdr">
     <button class="icon-btn" id="glossary-back-btn" style="margin-bottom:12px;">&#8592; Back</button>
     <div class="glossary-overline">Jargon Buster</div>
     <h2 class="glossary-h2">Plain English, Please.</h2>
@@ -320,6 +320,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- CERTIFICATE -->
 <div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
   <div class="cert-wrap">
     <div class="cert-card">
       <img class="cert-mascot" id="img-cert" src="../../../images/cert.png" alt="Buck the Coin" />
@@ -328,7 +329,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
       <p class="cert-body">You powered through all 5 chapters with Buck. You answered the questions. You did not run away screaming when someone mentioned blockchain. That deserves recognition.</p>
       <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
     </div>
-    <div class="cert-actions"><button class="icon-btn" id="cert-back-btn" style="margin-bottom:12px;">&#8592; Back to Chapters</button>
+    <div class="cert-actions">
       <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
       <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
     </div>
@@ -337,7 +338,8 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- WHATS NEXT -->
 <div id="whatsnext" class="screen">
-  <div class="wn-wrap"><button class="icon-btn" id="wn-back-btn" style="margin-bottom:16px;">&#8592; Back</button>
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
     <img class="wn-mascot" id="img-wn" src="../../../images/visit.png" alt="Buck" />
     <div class="wn-overline">You've graduated Volume 1</div>
     <h2 class="wn-h2">But honestly?<br>We've <em>barely</em> started.</h2>
@@ -360,23 +362,23 @@ window.__resources = {
   imgCover:         '../../../images/cover-hero.png',
   imgAvatar:        '../../../images/ch1-asks.png',
   imgCh1Avatar:     '../../../images/ch1-asks.png',
-  imgCh1TakeAvatar: '../../../images/ch1-takes.png',
+  imgCh1TakeAvatar: '../../../images/ch1-take.png',
   imgCh1Hero:       '../../../images/ch1-hero.png',
   imgCh1Mid:        '../../../images/ch1-mid.png',
   imgCh2Avatar:     '../../../images/ch2-asks.png',
-  imgCh2TakeAvatar: '../../../images/ch2-takes.png',
+  imgCh2TakeAvatar: '../../../images/ch2-take.png',
   imgCh2Hero:       '../../../images/ch2-hero.png',
   imgCh2Mid:        '../../../images/ch2-mid.png',
   imgCh3Avatar:     '../../../images/ch3-asks.png',
-  imgCh3TakeAvatar: '../../../images/ch3-takes.png',
+  imgCh3TakeAvatar: '../../../images/ch3-take.png',
   imgCh3Hero:       '../../../images/ch3-hero.png',
   imgCh3Mid:        '../../../images/ch3-mid.png',
   imgCh4Avatar:     '../../../images/ch4-asks.png',
-  imgCh4TakeAvatar: '../../../images/ch4-takes.png',
+  imgCh4TakeAvatar: '../../../images/ch4-take.png',
   imgCh4Hero:       '../../../images/ch4-hero.png',
   imgCh4Mid:        '../../../images/ch4-mid.png',
   imgCh5Avatar:     '../../../images/ch5-asks.png',
-  imgCh5TakeAvatar: '../../../images/ch5-takes.png',
+  imgCh5TakeAvatar: '../../../images/ch5-take.png',
   imgCh5Hero:       '../../../images/ch5-hero.png',
   imgCh5Mid:        '../../../images/ch5-mid.png'
 };
@@ -639,6 +641,7 @@ function renderMap() {
     html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
     html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
   });
+  html += '<button onclick="showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
   document.getElementById('ch-list').innerHTML = html;
 }
 
@@ -698,7 +701,7 @@ function enterChapter(idx) {
   nav.style.background = t.navBg;
   nav.style.borderTop = '1px solid ' + t.navBorder;
   var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
-  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Get My Certificate &#127881;';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
   var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
   nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
 
