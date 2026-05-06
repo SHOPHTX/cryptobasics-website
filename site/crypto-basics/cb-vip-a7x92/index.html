@@ -199,7 +199,10 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 .btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
 
 /* GLOSSARY */
-#glossary{background:#0c1520;}
+#glossary{background:#0c1520;position:relative;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
 .glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
 .glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
 .glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
@@ -308,14 +311,14 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- GLOSSARY -->
 <div id="glossary" class="screen">
-  <img src="../../../images/jargon.png" alt="Jargon Buster" style="width:100%;height:auto;display:block;flex-shrink:0;object-fit:cover;" />
-  <div class="glossary-hdr">
+  <div class="gloss-bg"><img src="../../../images/jargon1.png" alt="" /><div class="gloss-overlay"></div></div>
+  <div class="glossary-hdr" style="position:relative;z-index:2;">
     <button class="icon-btn" id="glossary-back-btn" style="margin-bottom:12px;">&#8592; Back</button>
     <div class="glossary-overline">Jargon Buster</div>
     <h2 class="glossary-h2">Plain English, Please.</h2>
     <p class="glossary-sub">Every scary word, explained like you're a human being.</p>
   </div>
-  <div class="scroll-area"><div class="glossary-items" id="glossary-items"></div></div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
 </div>
 
 <!-- CERTIFICATE -->
@@ -621,6 +624,7 @@ var GLOSSARY_DATA = [
 var totalXP = 0;
 var currentIdx = 0;
 var chProgress = {};
+var glossaryFrom = 'chaptermap';
 
 // SCREENS
 function showScreen(id) {
@@ -641,7 +645,7 @@ function renderMap() {
     html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
     html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
   });
-  html += '<button onclick="showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
   document.getElementById('ch-list').innerHTML = html;
 }
 
@@ -887,9 +891,9 @@ document.getElementById('glossary-items').innerHTML = glossaryHTML;
 document.getElementById('cover-cta-btn').onclick = function() { showScreen('chaptermap'); };
 document.getElementById('map-back-btn').onclick = function() { showScreen('cover'); };
 document.getElementById('topbar-back-btn').onclick = function() { showScreen('chaptermap'); };
-document.getElementById('glossary-back-btn').onclick = function() { showScreen('certificate'); };
+document.getElementById('glossary-back-btn').onclick = function() { showScreen(glossaryFrom); };
 document.getElementById('cert-next-btn').onclick = function() { document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
-document.getElementById('cert-glossary-btn').onclick = function() { showScreen('glossary'); };
+document.getElementById('cert-glossary-btn').onclick = function() { glossaryFrom = 'certificate'; showScreen('glossary'); };
 document.getElementById('wn-restart-btn').onclick = function() { totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
 document.getElementById('cert-back-btn').onclick = function() { showScreen('chaptermap'); };
 document.getElementById('wn-back-btn').onclick = function() { showScreen('certificate'); };
