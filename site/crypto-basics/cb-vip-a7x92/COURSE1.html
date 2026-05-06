@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Basics - with Buck the Coin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCover" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgAvatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh1Avatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh2Avatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh3Avatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh4Avatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh5Avatar" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh1Hero" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh1Mid" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh2Hero" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh2Mid" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh3Hero" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh3Mid" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh4Hero" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh4Mid" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh5Hero" />
+<meta name="ext-resource-dependency" content="" data-resource-id="imgCh5Mid" />
+<template id="__bundler_thumbnail" data-bg-color="#0c1520">
+  <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="#0c1520"/>
+    <circle cx="200" cy="130" r="70" fill="#FFD700" opacity="0.9"/>
+    <circle cx="200" cy="118" r="48" fill="#F5C800"/>
+    <circle cx="185" cy="112" r="7" fill="#3a2000"/>
+    <circle cx="215" cy="112" r="7" fill="#3a2000"/>
+    <path d="M183 130 Q200 144 217 130" stroke="#3a2000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="154" y="196" width="92" height="12" rx="6" fill="#FFD700" opacity="0.8"/>
+    <rect x="130" y="216" width="140" height="8" rx="4" fill="rgba(255,215,0,0.4)"/>
+    <text x="200" y="272" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#FFD700" letter-spacing="2">CRYPTO BASICS</text>
+  </svg>
+</template>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+
+/* COVER */
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;}
+.cover-h1 em{font-style:normal;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+
+/* CHAPTER MAP */
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+
+/* BUCK INTERSTITIAL */
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:32px 24px;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:contain;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+
+/* CHAPTER VIEW */
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+
+/* HERO */
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:contain;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+
+/* CONTENT */
+.ch-content{padding:24px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+
+/* MID IMAGE */
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:4/3;max-height:340px;min-height:200px;object-fit:contain;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+
+/* BUCK CLOSES */
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+
+/* ANALOGY */
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+
+/* FACT REVEAL */
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+
+/* DEF CARD */
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+
+/* CALLOUT */
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+
+/* PRO TIP */
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+
+/* SECTION RULE */
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+
+/* QUIZ */
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+
+/* NAV ROW */
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+
+/* GLOSSARY */
+#glossary{background:#0c1520;}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+
+/* CERTIFICATE */
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:contain;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+
+/* WHATS NEXT */
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:contain;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="../../../images/cover-hero.png" alt="Buck welcoming you" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">5 Chapters - Interactive Guide</span></div>
+    <h1 class="cover-h1">Crypto.<br>Finally <em>explained.</em></h1>
+    <p class="cover-byline">Meet <strong>Buck the Coin</strong> — not an expert, not a guru, just a curious coin who asked every dumb question so you don't have to.</p>
+    <button class="cover-cta" id="cover-cta-btn">Meet Buck &amp; Get Started</button>
+    <p class="cover-meta">5 chapters - 15 quiz questions - glossary - certificate</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is waiting. He is not great at waiting.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="../../../images/cover-hero.png" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="glossary-hdr">
+    <button class="icon-btn" id="glossary-back-btn" style="margin-bottom:12px;">&#8592; Back</button>
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every scary word, explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="../../../images/cover-hero.png" alt="Buck the Coin" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You get crypto now.<br><em>For real.</em></h1>
+      <p class="cert-body">You powered through all 5 chapters with Buck. You answered the questions. You did not run away screaming when someone mentioned blockchain. That deserves recognition.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="../../../images/cover-hero.png" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 1</div>
+    <h2 class="wn-h2">But honestly?<br>We've <em>barely</em> started.</h2>
+    <div class="wn-buck-quote">"Okay, you know what money is, why Bitcoin exists, what a blockchain does, and why nobody's in charge. That's genuinely more than most people ever learn. But we haven't even touched <strong>wallets, exchanges, how to actually buy it, what Ethereum is, or why everyone keeps saying DeFi like it's a personality.</strong> Volume 2 is going to be fun." - Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" id="wn-website-btn" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" id="wn-etsy-btn" href="https://etsy.com/shop/cryptobasics" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// CONFIG
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://etsy.com/shop/cryptobasics';
+
+// RESOURCES
+window.__resources = {
+  imgCover:         '../../../images/cover-hero.png',
+  imgAvatar:        '../../../images/ch1-avatar.png',
+  imgCh1Avatar:     '../../../images/ch1-avatar.png',
+  imgCh1TakeAvatar: '../../../images/ch1-asks.png',
+  imgCh1Hero:       '../../../images/ch1-hero.png',
+  imgCh1Mid:        '../../../images/ch1-mid.png',
+  imgCh2Avatar:     '../../../images/ch2-avatar.png',
+  imgCh2TakeAvatar: '../../../images/ch2-asks.png',
+  imgCh2Hero:       '../../../images/ch2-hero.png',
+  imgCh2Mid:        '../../../images/ch2-mid.png',
+  imgCh3Avatar:     '../../../images/ch3-avatar.png',
+  imgCh3TakeAvatar: '../../../images/ch3-asks.png',
+  imgCh3Hero:       '../../../images/ch3-hero.png',
+  imgCh3Mid:        '../../../images/ch3-mid.png',
+  imgCh4Avatar:     '../../../images/ch4-avatar.png',
+  imgCh4TakeAvatar: '../../../images/ch4-asks.png',
+  imgCh4Hero:       '../../../images/ch4-hero.png',
+  imgCh4Mid:        '../../../images/ch4-mid.png',
+  imgCh5Avatar:     '../../../images/ch5-avatar.png',
+  imgCh5TakeAvatar: '../../../images/ch5-asks.png',
+  imgCh5Hero:       '../../../images/ch5-hero.png',
+  imgCh5Mid:        '../../../images/ch5-mid.png'
+};
+
+// THEMES
+var THEME = {
+  gold: {
+    bg: '#0f1200', topbarBg: 'rgba(15,18,0,0.97)', textPrimary: '#fff', textSecondary: 'rgba(255,255,255,0.72)',
+    accent: '#FFD700', accentBg: 'rgba(255,215,0,0.12)', border: 'rgba(255,215,0,0.25)',
+    readFill: 'linear-gradient(90deg,#D4A017,#FFD700)',
+    cardBg: 'rgba(255,215,0,0.07)', cardBorder: 'rgba(255,215,0,0.2)',
+    quizBg: 'rgba(0,0,0,0.35)', quizText: '#fff', quizBorder: 'rgba(255,215,0,0.15)',
+    optBg: 'rgba(255,255,255,0.06)', optBorder: 'rgba(255,255,255,0.1)', optText: 'rgba(255,255,255,0.82)',
+    buckBg: 'rgba(255,215,0,0.08)', buckBorder: 'rgba(255,215,0,0.25)',
+    factBg: 'rgba(255,215,0,0.08)', factBorder: 'rgba(255,215,0,0.3)',
+    factRevBg: 'rgba(255,215,0,0.06)', analogyBg: 'rgba(255,215,0,0.06)',
+    navBg: '#0f1200', navBorder: 'rgba(255,215,0,0.2)',
+    prevColor: 'rgba(255,255,255,0.35)', prevBorder: 'rgba(255,255,255,0.15)'
+  },
+  teal: {
+    bg: '#061412', topbarBg: 'rgba(6,20,18,0.97)', textPrimary: '#fff', textSecondary: 'rgba(255,255,255,0.72)',
+    accent: '#3AAFA9', accentBg: 'rgba(58,175,169,0.15)', border: 'rgba(58,175,169,0.3)',
+    readFill: 'linear-gradient(90deg,#3AAFA9,#7ECECA)',
+    cardBg: 'rgba(58,175,169,0.08)', cardBorder: 'rgba(58,175,169,0.22)',
+    quizBg: 'rgba(0,0,0,0.35)', quizText: '#fff', quizBorder: 'rgba(58,175,169,0.2)',
+    optBg: 'rgba(255,255,255,0.05)', optBorder: 'rgba(255,255,255,0.1)', optText: 'rgba(255,255,255,0.8)',
+    buckBg: 'rgba(58,175,169,0.1)', buckBorder: 'rgba(58,175,169,0.28)',
+    factBg: 'rgba(58,175,169,0.1)', factBorder: 'rgba(58,175,169,0.32)',
+    factRevBg: 'rgba(58,175,169,0.08)', analogyBg: 'rgba(58,175,169,0.08)',
+    navBg: '#061412', navBorder: 'rgba(58,175,169,0.2)',
+    prevColor: 'rgba(255,255,255,0.35)', prevBorder: 'rgba(255,255,255,0.15)'
+  },
+  purple: {
+    bg: '#0d0720', topbarBg: 'rgba(13,7,32,0.97)', textPrimary: '#fff', textSecondary: 'rgba(255,255,255,0.72)',
+    accent: '#9B8DEE', accentBg: 'rgba(155,141,238,0.15)', border: 'rgba(155,141,238,0.3)',
+    readFill: 'linear-gradient(90deg,#667eea,#9b8dee)',
+    cardBg: 'rgba(155,141,238,0.08)', cardBorder: 'rgba(155,141,238,0.22)',
+    quizBg: 'rgba(0,0,0,0.35)', quizText: '#fff', quizBorder: 'rgba(155,141,238,0.2)',
+    optBg: 'rgba(255,255,255,0.05)', optBorder: 'rgba(255,255,255,0.1)', optText: 'rgba(255,255,255,0.8)',
+    buckBg: 'rgba(155,141,238,0.1)', buckBorder: 'rgba(155,141,238,0.28)',
+    factBg: 'rgba(155,141,238,0.1)', factBorder: 'rgba(155,141,238,0.32)',
+    factRevBg: 'rgba(155,141,238,0.08)', analogyBg: 'rgba(155,141,238,0.08)',
+    navBg: '#0d0720', navBorder: 'rgba(155,141,238,0.2)',
+    prevColor: 'rgba(255,255,255,0.35)', prevBorder: 'rgba(255,255,255,0.15)'
+  },
+  orange: {
+    bg: '#130800', topbarBg: 'rgba(19,8,0,0.97)', textPrimary: '#fff', textSecondary: 'rgba(255,255,255,0.72)',
+    accent: '#FFA500', accentBg: 'rgba(255,165,0,0.12)', border: 'rgba(255,165,0,0.28)',
+    readFill: 'linear-gradient(90deg,#FFA500,#FFD580)',
+    cardBg: 'rgba(255,165,0,0.07)', cardBorder: 'rgba(255,165,0,0.2)',
+    quizBg: 'rgba(0,0,0,0.35)', quizText: '#fff', quizBorder: 'rgba(255,165,0,0.18)',
+    optBg: 'rgba(255,255,255,0.06)', optBorder: 'rgba(255,255,255,0.1)', optText: 'rgba(255,255,255,0.82)',
+    buckBg: 'rgba(255,165,0,0.08)', buckBorder: 'rgba(255,165,0,0.25)',
+    factBg: 'rgba(255,165,0,0.08)', factBorder: 'rgba(255,165,0,0.3)',
+    factRevBg: 'rgba(255,165,0,0.06)', analogyBg: 'rgba(255,165,0,0.07)',
+    navBg: '#130800', navBorder: 'rgba(255,165,0,0.2)',
+    prevColor: 'rgba(255,255,255,0.35)', prevBorder: 'rgba(255,255,255,0.15)'
+  },
+  green: {
+    bg: '#041209', topbarBg: 'rgba(4,18,9,0.97)', textPrimary: '#fff', textSecondary: 'rgba(255,255,255,0.72)',
+    accent: '#22C55E', accentBg: 'rgba(34,197,94,0.15)', border: 'rgba(34,197,94,0.3)',
+    readFill: 'linear-gradient(90deg,#22C55E,#4ADE80)',
+    cardBg: 'rgba(34,197,94,0.08)', cardBorder: 'rgba(34,197,94,0.22)',
+    quizBg: 'rgba(0,0,0,0.35)', quizText: '#fff', quizBorder: 'rgba(34,197,94,0.2)',
+    optBg: 'rgba(255,255,255,0.05)', optBorder: 'rgba(255,255,255,0.1)', optText: 'rgba(255,255,255,0.8)',
+    buckBg: 'rgba(34,197,94,0.1)', buckBorder: 'rgba(34,197,94,0.28)',
+    factBg: 'rgba(34,197,94,0.1)', factBorder: 'rgba(34,197,94,0.32)',
+    factRevBg: 'rgba(34,197,94,0.08)', analogyBg: 'rgba(34,197,94,0.08)',
+    navBg: '#041209', navBorder: 'rgba(34,197,94,0.2)',
+    prevColor: 'rgba(255,255,255,0.35)', prevBorder: 'rgba(255,255,255,0.15)'
+  }
+};
+
+// CHAPTERS
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id: 1, themeKey: 'gold', tag: 'Chapter 1 - The Basics',
+    title: "What Even IS Money?", blurb: "Spoiler: it's mostly made up. Seriously.",
+    heroImg: R.imgCh1Hero, midImg: R.imgCh1Mid,
+    midCaption: 'Two sides of every transaction: someone wants something, someone has it. Value is born.',
+    buckOpens: { q: "Okay real talk - has anyone actually explained what money IS? Like actually is? Not 'it is currency' or 'it is legal tender.' I am asking philosophically. Where does the value come from??" },
+    buckCloses: { text: "So let me get this straight. Money is real because we all decided it is. Laws, countries, companies - also all made up, also all real because we act like they are. We are basically running civilization on a collective pinky promise. <strong>And somehow it mostly works. Incredible.</strong>" },
+    facts: [
+      { myth: 'Most people think: "Dollars are backed by gold stored in Fort Knox."', q: 'Are they though?', revealed: "Nope. The US dollar has not been backed by gold since August 15th, 1971 - when Nixon ended the gold standard in a Sunday night TV address that shocked the entire world. The dollar has been running on trust and collective agreement ever since. Fort Knox still has gold. It's just... decorative at this point." },
+      { myth: 'Most people think: "My bank is holding my actual money in a vault somewhere."', q: 'Is it?', revealed: "Also no. Banks operate on 'fractional reserve' - meaning they only keep a small fraction of deposits on hand. The rest is lent out. Your balance is a number in a database, backed by promises and regulations. This is completely normal and legal. It's just not what most people picture." }
+    ],
+    blocks: [
+      { t: 'cold', text: "You've used money your entire life. Coins, notes, taps, swipes. But here's the question nobody ever asks:<br><br><em>What on earth <strong>is</strong> it, actually?</em>" },
+      { t: 'body', text: 'Not "how do I get more of it?" Not "why does it keep disappearing before the month ends?" Fundamentally - <strong>what is money?</strong> Why does a piece of paper make a landlord hand you keys? Why does a number on a screen let you board a flight to another country?' },
+      { t: 'fact', idx: 0 },
+      { t: 'analogy', icon: '&#127903;', title: 'Think of it like concert tickets', text: "A ticket to see your favorite band is a piece of card that costs pennies to print. The night before the show, it's worth hundreds of dollars because everyone agrees it is. The band cancels? Suddenly it's worth zero. <strong>Same paper. Different story. Different value.</strong> Money works exactly the same way." },
+      { t: 'body', text: 'A $20 bill is cotton and linen worth about 6 cents to manufacture. But because <em>everyone agrees</em> it is worth $20 - it is. No magic. No gold in a vault backing it up. Just pure, collective belief maintained by habit, law, and the fact that your landlord accepts it.' },
+      { t: 'fact', idx: 1 },
+      { t: 'def', term: 'Fiat Currency', def: 'Money that a government declares to be legal tender. "Fiat" is Latin for "let it be done." In other words: it\'s money because the government said so. Works because everyone plays along.' },
+      { t: 'body', text: 'So when someone tells you Bitcoin "isn\'t real money" - you can smile knowingly and point out that neither is the $20 in their back pocket, technically. It\'s real because we all agreed it is. And that, my friend, is <strong>exactly how crypto works too.</strong>' },
+      { t: 'callout', icon: '&#128161;', text: '<strong>The big unlock:</strong> If money is just a story everyone agrees on, then a new kind of money is not crazy - it just needs enough people to believe in it. Sound familiar?' }
+    ],
+    quizzes: [
+      { q: "What fundamentally gives money its value?", opts: [{id:'a',text:"Gold stored in government vaults"},{id:'b',text:"The quality of the paper it's printed on"},{id:'c',text:"Collective agreement that it has value"},{id:'d',text:"How much of it exists"}], correct: 'c', good: "Exactly - value is a shared story. You're already one chapter ahead of most adults.", bad: "Answer C - money's value comes entirely from collective agreement. Nothing more." },
+      { q: "When did the US dollar stop being backed by gold?", opts: [{id:'a',text:"1929 - the Great Depression"},{id:'b',text:"1971 - Nixon ended the gold standard"},{id:'c',text:"2008 - the financial crisis"},{id:'d',text:"It's still backed by gold today"}], correct: 'b', good: "1971! Nixon's Sunday night surprise that changed global finance forever.", bad: "1971 - Nixon ended the Bretton Woods gold standard in a surprise TV address. The dollar hasn't looked back since." },
+      { q: "Which is the best analogy for how money works?", opts: [{id:'a',text:"A physical commodity with built-in worth, like copper wire"},{id:'b',text:"A government IOU backed by military strength"},{id:'c',text:"A shared agreement - like the rules of a game everyone agreed to play"},{id:'d',text:"A receipt for gold stored somewhere safe"}], correct: 'c', good: "Nailed it - money is a game where the rules only work because everyone keeps playing.", bad: "Answer C - money is a shared agreement, like the rules of a game everyone decided to play." }
+    ]
+  },
+  {
+    id: 2, themeKey: 'teal', tag: 'Chapter 2 - Supply & Scarcity',
+    title: 'The Jar with the Very Firm Note', blurb: '21 million. Not one more. The audacity.',
+    heroImg: R.imgCh2Hero, midImg: R.imgCh2Mid,
+    midCaption: 'When everyone can see the records, nobody can cheat. The jar stays honest.',
+    buckOpens: { q: "Wait - so someone just... decided how many Bitcoin would ever exist? And then left? Like, they just hard-coded the number and walked away? Nobody can change it? Not even them??" },
+    buckCloses: { text: "I find this deeply relatable. As a coin, I've watched governments print friends of mine into existence and water down my value overnight. Bitcoin's creator basically said: <strong>'No. We're doing this differently.'</strong> And then wrote it into the rules of math. Respect." },
+    facts: [
+      { myth: 'Most people think: "They\'ll just make more Bitcoin when they run out."', q: 'Can they?', revealed: "Absolutely not. The 21 million cap is written into Bitcoin's core code - not as a policy or a gentleman's agreement, but as math. To change it would require convincing the majority of thousands of independent computers worldwide to agree to new software. In practice, this would never happen. The jar is extremely serious." },
+      { myth: 'Most people think: "Bitcoin mining is almost done - there\'s barely any left."', q: 'How much is left actually?', revealed: "About 19.7 million Bitcoin have been mined - leaving roughly 1.3 million to go. But here's the twist: the rate of new Bitcoin creation halves every four years (called a 'halving'). The last Bitcoin won't be mined until approximately 2140. Someone alive today will see that happen." }
+    ],
+    blocks: [
+      { t: 'cold', text: "Imagine someone walked into the global financial system, slammed a jar on the table, and said:<br><br><em>\"There are this many. There will never be more. I'm leaving now. Don't touch it.\"</em><br><br>Then left. Forever. Anonymously." },
+      { t: 'body', text: "That's not a metaphor. That's almost exactly what happened when Bitcoin was created in 2009. Hard-coded into the software: a maximum of <strong>21 million coins.</strong> Not a guideline. Not a policy subject to committee votes. Code. Permanent. Immovable." },
+      { t: 'fact', idx: 0 },
+      { t: 'analogy', icon: '&#127912;', title: 'Think of it like a limited print run', text: "When an artist releases 100 signed prints, each is worth more than if they'd made 10,000. The art didn't change. The scarcity did. <strong>Scarcity creates rarity, and rarity creates value.</strong> Bitcoin was designed with this principle at its foundation." },
+      { t: 'body', text: "Compare this to regular money. Governments can - and regularly do - create more currency. Sometimes for genuinely good reasons (financial crises, pandemics). Each new dollar printed makes every existing dollar worth fractionally less. This is <strong>inflation</strong>, and it's why your grandparents' savings from 1985 didn't stretch as far as they expected." },
+      { t: 'fact', idx: 1 },
+      { t: 'def', term: 'Inflation', def: "When money loses purchasing power over time - usually because more of it is being created. The $100 your grandma put in a sock in 1985 buys far less today. Bitcoin's fixed supply was specifically designed as a hedge against exactly this." },
+      { t: 'body', text: "Scarcity alone doesn't make something valuable - it needs demand too. But Bitcoin's scarcity is interesting because it's the combination: <strong>scarce + useful + decentralized + globally accessible.</strong> Take any one away and it's much less compelling. Together? That's why people keep paying attention." },
+      { t: 'callout', icon: '&#9888;', text: "<strong>Important:</strong> Scarcity creates upward price pressure, not guaranteed price growth. Bitcoin has dropped 80%+ from peaks multiple times and recovered. The jar stays the same size. Demand is what moves the needle." }
+    ],
+    quizzes: [
+      { q: "What is Bitcoin's maximum total supply?", opts: [{id:'a',text:"Unlimited - more can always be created"},{id:'b',text:"21 million coins, permanently fixed in code"},{id:'c',text:"1 billion coins"},{id:'d',text:"Whatever developers decide each year"}], correct: 'b', good: "21 million - permanent, non-negotiable. The jar means business.", bad: "Answer B - 21 million, locked in code forever. No committee. No override. No exceptions." },
+      { q: "What happens to every existing dollar when a government prints more?", opts: [{id:'a',text:"It becomes worth more due to increased circulation"},{id:'b',text:"Nothing - supply does not affect value"},{id:'c',text:"It becomes worth slightly less - that's inflation"},{id:'d',text:"It gets automatically updated by the Federal Reserve"}], correct: 'c', good: "Exactly - more supply chasing the same goods means each dollar buys a little less. That's inflation.", bad: "Answer C - printing more money dilutes the value of every existing dollar. Classic inflation." },
+      { q: "Approximately when will the last Bitcoin be mined?", opts: [{id:'a',text:"2030"},{id:'b',text:"2050"},{id:'c',text:"2100"},{id:'d',text:"2140"}], correct: 'd', good: "2140! Someone reading this right now will probably live to see it.", bad: "Around 2140 - the mining rate slows drastically every four years via a process called 'the halving.'" }
+    ]
+  },
+  {
+    id: 3, themeKey: 'purple', tag: 'Chapter 3 - Blockchain',
+    title: "The World's Least Sexy Superpower", blurb: 'A notebook. A very specific, revolutionary notebook.',
+    heroImg: R.imgCh3Hero, midImg: R.imgCh3Mid,
+    midCaption: 'Every node in the network holds an identical copy. Change one and you change nothing.',
+    buckOpens: { q: "So I keep hearing 'blockchain' everywhere. But nobody actually explains it. They just say it slowly and confidently like that'll help. What actually IS a blockchain and why does everyone act like it's magic??" },
+    buckCloses: { text: "Okay so a blockchain is just a notebook. Except the notebook is public, permanent, and photocopied across thousands of computers worldwide. Simple. Revolutionary. <strong>And somehow the most jargon-heavy thing in tech.</strong> Peak marketing, honestly." },
+    facts: [
+      { myth: 'Most people think: "Blockchain is just a Bitcoin thing."', q: 'Is it just for crypto?', revealed: "Not even close. Blockchain is a data storage technology that has uses far beyond cryptocurrency. Supply chains (tracking where your food came from), medical records, voting systems, land registries, digital contracts - anywhere you want a tamper-proof, transparent record, blockchain is a legitimate tool. Companies like Walmart, Maersk, and the UN are already using it." },
+      { myth: 'Most people think: "The blockchain is private and encrypted - nobody can see your transactions."', q: 'Can people actually see?', revealed: "Almost the opposite. Most blockchains (including Bitcoin's) are completely public. Anyone can look up any transaction ever made. Ever. What's private is the identity behind the wallet address - transactions are pseudonymous, not anonymous. Your name isn't attached, but your transaction history absolutely is visible. Forensics firms make good money tracing this." }
+    ],
+    blocks: [
+      { t: 'cold', text: "What if I told you the most revolutionary technology of the 21st century is, at its core...<br><br><em>a very fancy notebook?</em><br><br>Bear with me. It's worth it." },
+      { t: 'body', text: "Right now, your financial life depends on private databases. Your bank has a ledger: your name, your balance, every transaction. You trust them not to alter it. They mostly don't! But they could. And you'd have very little way of knowing." },
+      { t: 'fact', idx: 0 },
+      { t: 'analogy', icon: '&#128248;', title: 'Think of it like a group photo', text: "If one person has your photo, they can edit it and you'd never know. But if 10,000 people took the identical photo at the same moment and kept their copies - good luck changing history. <strong>The blockchain is that photo. Taken by thousands. Stored by thousands. Permanent.</strong>" },
+      { t: 'body', text: "A blockchain solves the trust problem with elegant brutality. Instead of one bank keeping a private record, <strong>thousands of computers worldwide</strong> all hold identical copies of the same ledger simultaneously. Coin A gave Coin B 5 coins. Coin B paid rent. It's all there. Verifiable by anyone." },
+      { t: 'fact', idx: 1 },
+      { t: 'def', term: 'Blockchain', def: "A public, distributed ledger of transactions stored in linked 'blocks.' Each block is cryptographically sealed to the last - forming a chain. Once written, entries cannot be altered without rewriting every block that follows, on every copy, everywhere. Practically impossible." },
+      { t: 'body', text: "To alter one transaction, you'd need to change it on every single copy simultaneously - thousands of independent computers across dozens of countries, all at once. This isn't just 'very difficult.' The computational power required would be so enormous it's <strong>functionally impossible.</strong> The honest network is always stronger." },
+      { t: 'callout', icon: '&#129521;', text: '<strong>Fun detail:</strong> Bitcoin\'s very first block - the "Genesis Block," mined January 3rd, 2009 - contained a hidden message: a newspaper headline reading "Chancellor on brink of second bailout for banks." Satoshi Nakamoto was making a point. It\'s still there today, untouched.' }
+    ],
+    quizzes: [
+      { q: "Why can't someone secretly alter a blockchain transaction?", opts: [{id:'a',text:"A government agency monitors every entry"},{id:'b',text:"You'd need to change thousands of identical copies simultaneously - basically impossible"},{id:'c',text:"The blockchain uses military passwords nobody can crack"},{id:'d',text:"Suspicious entries are automatically deleted"}], correct: 'b', good: "Exactly - thousands of copies, all needing to change at once. No single attacker can pull that off.", bad: "Answer B - distributed copies are the whole trick. Change one and the others reject it automatically." },
+      { q: "What was hidden in Bitcoin's Genesis Block?", opts: [{id:'a',text:"Satoshi Nakamoto's real name"},{id:'b',text:"A newspaper headline about bank bailouts"},{id:'c',text:"The initial price of Bitcoin"},{id:'d',text:"A list of the first 100 Bitcoin wallets"}], correct: 'b', good: '"Chancellor on brink of second bailout for banks." A subtle message about why Bitcoin was created.', bad: "Answer B - Satoshi embedded a newspaper headline about bank bailouts. Make of that what you will." },
+      { q: "Are Bitcoin transactions private?", opts: [{id:'a',text:"Completely private - nobody can see anything"},{id:'b',text:"Visible only to banks and governments"},{id:'c',text:"Pseudonymous - transactions are public, but wallet addresses aren't tied to your name"},{id:'d',text:"Encrypted and deleted after 30 days"}], correct: 'c', good: "Pseudonymous is the key word - public transactions, anonymous identities. Unless someone traces the wallet.", bad: "Answer C - Bitcoin transactions are publicly visible to anyone. The wallet address just isn't automatically tied to your real name." }
+    ]
+  },
+  {
+    id: 4, themeKey: 'orange', tag: 'Chapter 4 - Decentralization',
+    title: "Nobody's In Charge (On Purpose)", blurb: 'No HQ. No CEO. No help line. Weirdly fine.',
+    heroImg: R.imgCh4Hero, midImg: R.imgCh4Mid,
+    midCaption: 'Direct from me to you. No middleman needed. No permission required.',
+    buckOpens: { q: "Okay so there's no boss of Bitcoin? No customer service? No one I can call if something goes wrong? That sounds... terrifying? But also kind of amazing?? How does anything work without someone in charge??" },
+    buckCloses: { text: "I've spent my whole life being told where I can go and what I'm worth by banks and governments. Crypto is the first time money can move from person A to person B without asking anyone's permission. <strong>No forms. No fees. No three-business-day wait.</strong> That's not a bug. That's the whole point." },
+    facts: [
+      { myth: 'Most people think: "Crypto must have a headquarters somewhere that controls it."', q: 'Does it?', revealed: "There is no Bitcoin headquarters. No office. No CEO. No board of directors. No phone number. The Bitcoin network runs on tens of thousands of independent nodes spread across every continent, run by individuals, businesses, and organizations who have no connection to each other. The closest thing to 'control' is the open-source developers who propose changes - but every node operator chooses whether to adopt them." },
+      { myth: 'Most people think: "If crypto is decentralized, governments can\'t do anything about it."', q: "Can they really not?", revealed: "Governments can - and do - regulate crypto exchanges, ban certain activities, and tax gains. What they can't easily do is shut down the underlying network itself. They can make it harder to use. They can't make it not exist. Several countries have 'banned' Bitcoin; the network runs on regardless, 24/7, as it always has." }
+    ],
+    blocks: [
+      { t: 'cold', text: "There's no CEO of Bitcoin.<br>No headquarters you could visit.<br>No customer service number to call.<br><br><em>And this is a feature, not a bug.</em>" },
+      { t: 'body', text: "Every financial system you've ever used runs through a middleman. A bank, a government, a payment processor. These hubs make things work smoothly. They also create single points of failure, single points of control, and unfortunately - single points of corruption." },
+      { t: 'fact', idx: 0 },
+      { t: 'analogy', icon: '&#128167;', title: 'Think of it like water in a river vs. underground streams', text: "Dam a river in one place and you control everything downstream. But water flowing through thousands of underground streams is nearly impossible to stop completely - block one, the others route around it. <strong>Decentralized networks are built exactly this way. Remove one node, the rest continue without blinking.</strong>" },
+      { t: 'body', text: "In Bitcoin's network, every participant is equal. There's no master server. If a thousand computers go offline, the remaining fifteen thousand carry on automatically. The network doesn't notice. <strong>It just keeps running.</strong> Nights, weekends, holidays, political crises - irrelevant." },
+      { t: 'fact', idx: 1 },
+      { t: 'def', term: 'Decentralization', def: "Distribution of power and data across many participants rather than concentrating it in one place. In crypto, it means no single entity can control, censor, or shut down the network. Resilience is the whole point." },
+      { t: 'body', text: "This isn't just technical architecture - it's a philosophical statement. Decentralized money means <strong>no single entity can freeze your account arbitrarily.</strong> No government can print their way out of problems at your expense. No bank can collapse and take your savings with it." },
+      { t: 'callout', icon: '&#9888;', text: "<strong>The real trade-off:</strong> No middleman also means no safety net. Lose your wallet password and nobody - not the police, not the developers, not Buck - can recover it for you. Freedom is genuine. So is the responsibility." }
+    ],
+    quizzes: [
+      { q: "What's the main advantage of a decentralized network?", opts: [{id:'a',text:"It's faster than traditional systems"},{id:'b',text:"It's completely anonymous"},{id:'c',text:"No single point of failure or control - resilient to attack and censorship"},{id:'d',text:"It's always free to use"}], correct: 'c', good: "Exactly - no center means no single point to corrupt or attack. That's the whole architecture.", bad: "Answer C - no single point of control means no single point of failure. That's what decentralization buys you." },
+      { q: "Approximately how many Bitcoin nodes run worldwide?", opts: [{id:'a',text:"Around 100, run by major banks"},{id:'b',text:"About 1,000, mostly in the US"},{id:'c',text:"Over 16,000, across dozens of countries"},{id:'d',text:"Just one master server with backups"}], correct: 'c', good: "Over 16,000 nodes globally - no single country or company controls even a meaningful fraction.", bad: "Over 16,000 nodes worldwide, spread across every continent. Nobody controls them all." },
+      { q: "What is the biggest trade-off of decentralization?", opts: [{id:'a',text:"Transactions are much slower"},{id:'b',text:"You must pay a monthly subscription fee"},{id:'c',text:"No safety net - lose wallet access and nobody can recover it for you"},{id:'d',text:"Only tech experts can participate"}], correct: 'c', good: "Freedom and responsibility come as a package. No helpdesk. No resets. Write down your passwords.", bad: "Answer C - no central authority means no recovery option if you lose access. Total freedom, total responsibility." }
+    ]
+  },
+  {
+    id: 5, themeKey: 'green', tag: 'Chapter 5 - Reality Check',
+    title: 'OK But Should I Actually Buy Some?', blurb: 'The question. Finally answered honestly.',
+    heroImg: R.imgCh5Hero, midImg: R.imgCh5Mid,
+    midCaption: 'Every journey starts somewhere. Knowing the door exists is step one.',
+    buckOpens: { q: "Okay. We've done the theory. I get what money is, I get the scarcity thing, the blockchain, the decentralization. So now can someone please just tell me - should I actually buy some crypto or not??" },
+    buckCloses: { text: "My honest advice after years of being passed between wallets? Understand it first. Then decide. The people who got burned usually didn't understand what they were buying. <strong>The people who did well usually did too.</strong> You've already done the hard part." },
+    facts: [
+      { myth: 'Most people think: "You have to buy a whole Bitcoin - it\'s too expensive for regular people."', q: 'Do you really?', revealed: "You can buy any fraction of a Bitcoin you want. The smallest unit is called a Satoshi - 0.00000001 BTC. You can invest $10 and own a perfectly legitimate slice of a Bitcoin. You don't buy whole coins any more than you buy a whole house without a mortgage. Start wherever makes sense for you." },
+      { myth: 'Most people think: "If Bitcoin crashes, it\'s basically over."', q: "Is it though?", revealed: "Bitcoin has crashed by 80%+ from its all-time high not once, not twice, but multiple times in its history - 2011, 2013, 2018, 2022. Each time, the obituaries were written. Each time, it recovered and eventually set new highs. This doesn't guarantee future performance. But 'crashed before' doesn't mean 'dead.'" }
+    ],
+    blocks: [
+      { t: 'cold', text: "You've made it to Chapter 5.<br>You now understand money, scarcity, blockchain, and decentralization.<br><br><em>So. Should you buy crypto?</em><br><br>Let's be real adults about this." },
+      { t: 'body', text: "<strong>Honest answer: maybe.</strong> And anyone who tells you 'definitely yes' or 'definitely no' with complete confidence is either very lucky, very wrong, or trying to sell you something. Possibly all three." },
+      { t: 'fact', idx: 0 },
+      { t: 'analogy', icon: '&#127906;', title: 'Think of it like a rollercoaster', text: "A rollercoaster will almost certainly bring you back to where you started - but the journey involves screaming, gripping the rail, and questioning your life choices. <strong>Crypto is similar, except sometimes the track ends without warning, and sometimes it goes higher than the brochure ever promised.</strong>" },
+      { t: 'body', text: "Crypto is <strong>volatile</strong>. Not 'stock market volatile.' Not 'interest rates moved' volatile. Bitcoin has dropped 80%+ from its peak multiple times in its history. Ethereum lost 94% of its value in 2018. These are not horror stories - they're just the normal history of this asset class." },
+      { t: 'fact', idx: 1 },
+      { t: 'def', term: 'Volatility', def: "How dramatically and quickly a price moves. High volatility means big swings - up and down. Bitcoin is far more volatile than stocks, gold, or property. This creates both opportunity and risk simultaneously, often within the same week." },
+      { t: 'callout', icon: '&#9888;', text: "<strong>The only rule that matters:</strong> Only invest money you can genuinely afford to lose. Not 'afford to lose and shrug it off.' Genuinely afford to lose - as in, treat it like money spent on a vacation. It's gone. You're okay. If that's not true, don't invest it." },
+      { t: 'body', text: "Here's the genuinely good news: understanding crypto is valuable whether or not you buy it. This knowledge makes you smarter about money in general - inflation, banking, digital payments, how value actually works. <strong>That's useful for life.</strong>" },
+      { t: 'protip', title: 'Dollar-Cost Averaging (DCA)', icon: '&#128197;', text: "One of the most powerful strategies in investing - and it is so simple it feels like cheating.<br><br>Think of it like buying your morning coffee. You don't wait for the 'perfect' day to get coffee - you just buy it when you want it. DCA works the same way: <strong>invest a fixed amount at regular intervals, no matter the price.</strong> Say $20 every week, automatically.<br><br>Some weeks you'll buy when the price is high. Some weeks low. Over time it all averages out. No stress. No crystal ball. No trying to 'time the market.' Just consistent, boring investing - which, historically, beats emotional investing almost every time." }
+    ],
+    quizzes: [
+      { q: "Which statement about crypto investing is TRUE?", opts: [{id:'a',text:"It's guaranteed to increase in value long-term"},{id:'b',text:"You need thousands of dollars to get started"},{id:'c',text:"Only invest money you can genuinely afford to lose"},{id:'d',text:"Bitcoin always recovers quickly after crashes"}], correct: 'c', good: "The golden rule, every time. Only risk what you can genuinely afford to lose.", bad: "Answer C - only ever invest what you can afford to lose. Nothing in crypto is guaranteed." },
+      { q: "What is Dollar-Cost Averaging (DCA)?", opts: [{id:'a',text:"Buying crypto only when the price drops significantly"},{id:'b',text:"Investing a fixed amount at regular intervals regardless of price"},{id:'c',text:"Averaging out gains across multiple currencies"},{id:'d',text:"A fee structure used by crypto exchanges"}], correct: 'b', good: "Exactly - fixed amount, regular schedule, no overthinking. Simple and historically effective.", bad: "Answer B - invest the same amount regularly, regardless of whether the price is high or low. It all averages out." },
+      { q: "What does understanding crypto give you even if you never buy any?", opts: [{id:'a',text:"Access to secret early investment opportunities"},{id:'b',text:"A deeper understanding of money, value, and how financial systems actually work"},{id:'c',text:"Tax advantages on other investments"},{id:'d',text:"Nothing useful - you need to own it to benefit"}], correct: 'b', good: "Financial literacy is its own reward. You're already ahead of most people just by finishing this.", bad: "Answer B - understanding crypto makes you smarter about money in general. That knowledge is genuinely valuable." }
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  { term: 'Bitcoin', def: "The original cryptocurrency, created in 2009 by the anonymous Satoshi Nakamoto. Limited to 21 million coins. Decentralized, borderless, and the one your relatives keep mentioning at family dinners.", accent: '#FFD700' },
+  { term: 'Blockchain', def: "A public, distributed ledger of transactions stored in linked blocks. Anyone can read it. Nobody can secretly alter it. Thousands of identical copies exist worldwide simultaneously.", accent: '#9B8DEE' },
+  { term: 'Cryptocurrency', def: "Digital money secured by cryptography (advanced mathematics). Typically decentralized - no government or bank controls it. Bitcoin was the first; there are now thousands.", accent: '#FFD700' },
+  { term: 'DCA (Dollar-Cost Averaging)', def: "Investing a fixed dollar amount at regular intervals, regardless of price. Removes the impossible task of 'timing the market.' Boring in the best possible way.", accent: '#22C55E' },
+  { term: 'Decentralization', def: "Distribution of power and data across many participants rather than one central authority. No single point of failure, control, or corruption.", accent: '#FFA500' },
+  { term: 'Ethereum', def: "The second-largest crypto by value - and more than money. It's a platform for running decentralized programs called 'smart contracts.' Think of it as a global, unstoppable computer.", accent: '#9B8DEE' },
+  { term: 'Fiat Currency', def: "Money declared legal by a government. Dollars, euros, pounds - it's money because they said so. Has been running on pure trust since the gold standard ended in 1971.", accent: '#FFD700' },
+  { term: 'HODLing', def: "Holding onto crypto through price swings instead of panic-selling. Originally a typo in a 2013 Bitcoin forum post that became a philosophy. Has worked for long-term holders historically.", accent: '#22C55E' },
+  { term: 'Inflation', def: "When money loses purchasing power over time - usually because more is being created. The $100 your grandma put in a sock in 1985 buys far less today.", accent: '#3AAFA9' },
+  { term: 'Mining', def: "How new Bitcoin are created. Computers compete to solve mathematical puzzles to validate transactions; the winner receives new Bitcoin as reward. Increasingly energy-intensive.", accent: '#FFA500' },
+  { term: 'NFT', def: "Non-Fungible Token. A unique digital certificate of ownership on a blockchain. Used for digital art, music, collectibles. Had a spectacular boom in 2021 and an equally spectacular correction.", accent: '#9B8DEE' },
+  { term: 'Private Key', def: "Your secret cryptographic password to your crypto wallet. If you lose it, your crypto is permanently gone. No resets, no helpdesk, no exceptions. Write it down on paper. Seriously.", accent: '#FFA500' },
+  { term: 'Satoshi', def: "The smallest unit of Bitcoin - 0.00000001 BTC, named after Bitcoin's creator. You don't need to buy a whole Bitcoin. Most people own fractions.", accent: '#FFD700' },
+  { term: 'Scarcity', def: "There's only so much of something. Bitcoin's hard cap of 21 million makes it scarce by design. Scarcity combined with demand creates upward price pressure.", accent: '#3AAFA9' },
+  { term: 'Volatility', def: "The degree to which a price swings. Bitcoin is extremely volatile - 80%+ drops followed by new all-time highs are part of its history. Creates both risk and opportunity.", accent: '#22C55E' },
+  { term: 'Wallet', def: "Software (or hardware) that stores your private keys and lets you send and receive crypto. Not a wallet that holds coins - more like a keyring that holds access to your coins on the blockchain.", accent: '#FFA500' }
+];
+
+// STATE
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+
+// SCREENS
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  requestAnimationFrame(function() { document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+// MAP
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+// OPEN CHAPTER - shows Buck interstitial first
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]] || window.__resources.imgAvatar;
+
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').textContent = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = '#0c1520';
+  document.getElementById('bi-cta').onclick = function() { enterChapter(idx); };
+
+  showScreen('buckintro');
+}
+
+// ENTER CHAPTER - the actual reading view
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Get My Certificate &#127881;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+
+  showScreen('chapterview');
+}
+
+// BUILD CHAPTER HTML
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]] || window.__resources.imgAvatar;
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar'];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b) { return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi) { return buildQuiz(q, t, qi); }).join('');
+
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check - 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary;
+  var p = t.textPrimary;
+  var a = t.accent;
+  if (b.t === 'cold') {
+    return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  }
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g, '<strong style="color:' + p + ';">').replace(/<em>/g, '<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') {
+    return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  }
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g, '<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon" style="font-size:1.6rem;">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g, '<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon" style="font-size:2rem;">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') {
+    return buildFact(ch.facts[b.idx], b.idx, t);
+  }
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g, '<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span style="font-style:normal;">🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g, '<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) {
+    revealed.classList.remove('show');
+    btn.style.opacity = '1';
+  } else {
+    revealed.classList.add('show');
+    btn.style.opacity = '0.5';
+  }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:#0c1520;">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b) { b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '&#10003;';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP - nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '&#10007;';
+    document.getElementById(pfx + 'res-' + correct).textContent = '&#10003;';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function() { p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+// GLOSSARY
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+// WIRE UP
+document.getElementById('cover-cta-btn').onclick = function() { showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function() { showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function() { showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function() { showScreen('certificate'); };
+document.getElementById('cert-next-btn').onclick = function() { document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function() { showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function() { totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+
+// HYDRATE images from resources
+document.querySelectorAll('img[data-resource-key]').forEach(function(img) {
+  var key = img.getAttribute('data-resource-key');
+  if (window.__resources[key]) img.src = window.__resources[key];
+});
+
+renderMap();
+</script>
+</body>
+</html>
