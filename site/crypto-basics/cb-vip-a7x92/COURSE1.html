@@ -275,6 +275,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
   <div class="scroll-area">
     <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
     <div class="ch-list" id="ch-list"></div>
+    <div style="margin-top:20px;padding:0 4px;"><button onclick="showScreen('glossary')" style="width:100%;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.9rem;font-weight:600;padding:14px;border-radius:12px;cursor:pointer;letter-spacing:.03em;">📖 Jargon Buster — Quick Reference</button></div>
   </div>
 </div>
 
@@ -308,7 +309,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- GLOSSARY -->
 <div id="glossary" class="screen">
-  <div class="glossary-hdr">
+  <div class="glossary-hdr" style="position:relative;"><img src="../../../images/jargon.png" alt="Jargon Buster" style="position:absolute;top:0;right:0;width:80px;height:80px;object-fit:contain;border-radius:12px;" />
     <button class="icon-btn" id="glossary-back-btn" style="margin-bottom:12px;">&#8592; Back</button>
     <div class="glossary-overline">Jargon Buster</div>
     <h2 class="glossary-h2">Plain English, Please.</h2>
@@ -321,13 +322,13 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 <div id="certificate" class="screen">
   <div class="cert-wrap">
     <div class="cert-card">
-      <img class="cert-mascot" id="img-cert" src="../../../images/cover-hero.png" alt="Buck the Coin" />
+      <img class="cert-mascot" id="img-cert" src="../../../images/cert.png" alt="Buck the Coin" />
       <div class="cert-eyebrow">Certificate of Completion</div>
       <h1 class="cert-h1">You get crypto now.<br><em>For real.</em></h1>
       <p class="cert-body">You powered through all 5 chapters with Buck. You answered the questions. You did not run away screaming when someone mentioned blockchain. That deserves recognition.</p>
       <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
     </div>
-    <div class="cert-actions">
+    <div class="cert-actions"><button class="icon-btn" id="cert-back-btn" style="margin-bottom:12px;">&#8592; Back to Chapters</button>
       <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
       <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
     </div>
@@ -336,8 +337,8 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 
 <!-- WHATS NEXT -->
 <div id="whatsnext" class="screen">
-  <div class="wn-wrap">
-    <img class="wn-mascot" id="img-wn" src="../../../images/cover-hero.png" alt="Buck" />
+  <div class="wn-wrap"><button class="icon-btn" id="wn-back-btn" style="margin-bottom:16px;">&#8592; Back</button>
+    <img class="wn-mascot" id="img-wn" src="../../../images/visit.png" alt="Buck" />
     <div class="wn-overline">You've graduated Volume 1</div>
     <h2 class="wn-h2">But honestly?<br>We've <em>barely</em> started.</h2>
     <div class="wn-buck-quote">"Okay, you know what money is, why Bitcoin exists, what a blockchain does, and why nobody's in charge. That's genuinely more than most people ever learn. But we haven't even touched <strong>wallets, exchanges, how to actually buy it, what Ethereum is, or why everyone keeps saying DeFi like it's a personality.</strong> Volume 2 is going to be fun." - Buck</div>
@@ -357,25 +358,25 @@ var ETSY_URL = 'https://etsy.com/shop/cryptobasics';
 // RESOURCES
 window.__resources = {
   imgCover:         '../../../images/cover-hero.png',
-  imgAvatar:        '../../../images/ch1-avatar.png',
-  imgCh1Avatar:     '../../../images/ch1-avatar.png',
-  imgCh1TakeAvatar: '../../../images/ch1-asks.png',
+  imgAvatar:        '../../../images/ch1-asks.png',
+  imgCh1Avatar:     '../../../images/ch1-asks.png',
+  imgCh1TakeAvatar: '../../../images/ch1-takes.png',
   imgCh1Hero:       '../../../images/ch1-hero.png',
   imgCh1Mid:        '../../../images/ch1-mid.png',
-  imgCh2Avatar:     '../../../images/ch2-avatar.png',
-  imgCh2TakeAvatar: '../../../images/ch2-asks.png',
+  imgCh2Avatar:     '../../../images/ch2-asks.png',
+  imgCh2TakeAvatar: '../../../images/ch2-takes.png',
   imgCh2Hero:       '../../../images/ch2-hero.png',
   imgCh2Mid:        '../../../images/ch2-mid.png',
-  imgCh3Avatar:     '../../../images/ch3-avatar.png',
-  imgCh3TakeAvatar: '../../../images/ch3-asks.png',
+  imgCh3Avatar:     '../../../images/ch3-asks.png',
+  imgCh3TakeAvatar: '../../../images/ch3-takes.png',
   imgCh3Hero:       '../../../images/ch3-hero.png',
   imgCh3Mid:        '../../../images/ch3-mid.png',
-  imgCh4Avatar:     '../../../images/ch4-avatar.png',
-  imgCh4TakeAvatar: '../../../images/ch4-asks.png',
+  imgCh4Avatar:     '../../../images/ch4-asks.png',
+  imgCh4TakeAvatar: '../../../images/ch4-takes.png',
   imgCh4Hero:       '../../../images/ch4-hero.png',
   imgCh4Mid:        '../../../images/ch4-mid.png',
-  imgCh5Avatar:     '../../../images/ch5-avatar.png',
-  imgCh5TakeAvatar: '../../../images/ch5-asks.png',
+  imgCh5Avatar:     '../../../images/ch5-asks.png',
+  imgCh5TakeAvatar: '../../../images/ch5-takes.png',
   imgCh5Hero:       '../../../images/ch5-hero.png',
   imgCh5Mid:        '../../../images/ch5-mid.png'
 };
@@ -887,6 +888,8 @@ document.getElementById('glossary-back-btn').onclick = function() { showScreen('
 document.getElementById('cert-next-btn').onclick = function() { document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
 document.getElementById('cert-glossary-btn').onclick = function() { showScreen('glossary'); };
 document.getElementById('wn-restart-btn').onclick = function() { totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function() { showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function() { showScreen('certificate'); };
 
 // HYDRATE images from resources
 document.querySelectorAll('img[data-resource-key]').forEach(function(img) {
