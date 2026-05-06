@@ -201,7 +201,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 /* GLOSSARY */
 #glossary{background:#0c1520;position:relative;}
 .gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.45;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
 .gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
 .glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
 .glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
@@ -312,8 +312,8 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 <!-- GLOSSARY -->
 <div id="glossary" class="screen">
   <div class="gloss-bg"><img src="../../../images/jargon1.png" alt="" /><div class="gloss-overlay"></div></div>
-  <div class="glossary-hdr" style="position:relative;z-index:2;">
-    <button class="icon-btn" id="glossary-back-btn" style="margin-bottom:12px;">&#8592; Back</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:64px;">
+    <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;">&#8592;</button>
     <div class="glossary-overline">Jargon Buster</div>
     <h2 class="glossary-h2">Plain English, Please.</h2>
     <p class="glossary-sub">Every scary word, explained like you're a human being.</p>
@@ -534,7 +534,7 @@ var CHAPTERS = [
       { t: 'fact', idx: 1 },
       { t: 'def', term: 'Blockchain', def: "A public, distributed ledger of transactions stored in linked 'blocks.' Each block is cryptographically sealed to the last - forming a chain. Once written, entries cannot be altered without rewriting every block that follows, on every copy, everywhere. Practically impossible." },
       { t: 'body', text: "To alter one transaction, you'd need to change it on every single copy simultaneously - thousands of independent computers across dozens of countries, all at once. This isn't just 'very difficult.' The computational power required would be so enormous it's <strong>functionally impossible.</strong> The honest network is always stronger." },
-      { t: 'callout', icon: '&#129521;', text: '<strong>Fun detail:</strong> Bitcoin\'s very first block - the "Genesis Block," mined January 3rd, 2009 - contained a hidden message: a newspaper headline reading "Chancellor on brink of second bailout for banks." Satoshi Nakamoto was making a point. It\'s still there today, untouched.' }
+      { t: 'callout', icon: '&#129521;', text: '<strong>Fun fact:</strong> Bitcoin\'s very first block - the "Genesis Block," mined January 3rd, 2009 - contained a hidden message: a newspaper headline reading "Chancellor on brink of second bailout for banks." Satoshi Nakamoto was making a point. It\'s still there today, untouched.' }
     ],
     quizzes: [
       { q: "Why can't someone secretly alter a blockchain transaction?", opts: [{id:'a',text:"A government agency monitors every entry"},{id:'b',text:"You'd need to change thousands of identical copies simultaneously - basically impossible"},{id:'c',text:"The blockchain uses military passwords nobody can crack"},{id:'d',text:"Suspicious entries are automatically deleted"}], correct: 'b', good: "Exactly - thousands of copies, all needing to change at once. No single attacker can pull that off.", bad: "Answer B - distributed copies are the whole trick. Change one and the others reject it automatically." },
