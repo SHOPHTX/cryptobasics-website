@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What the F*** Even IS Decentralized Finance?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:9px 22px;margin-bottom:18px;}
+.cover-dot{width:8px;height:8px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;}
+.cover-h1 em{font-style:normal;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:32px 24px;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:contain;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:24px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:4/3;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:contain;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:contain;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">7 Chapters – Interactive Guide</span></div>
+    <h1 class="cover-h1">Decentralized Finance.<br>Finally <em>explained.</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> — from broken banks to Bitcoin to a whole parallel financial system running on code.</p>
+    <button class="cover-cta" id="cover-cta-btn">Follow the Money → Get Started</button>
+    <p class="cover-meta">7 chapters · 21 quiz questions · glossary · certificate</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is waiting. He is never great at waiting.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every DeFi term, explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div><p style="margin:8px 0 32px;font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You understand DeFi now.<br><em>For real.</em></h1>
+      <p class="cert-body">Seven chapters. Twenty-one quiz questions. A whole financial revolution, explained without the jargon. You now understand more about money than most people who've been using it their whole lives.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+    <p style="margin-top:28px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 2</div>
+    <h2 class="wn-h2">But the universe?<br>We've <em>barely</em> mapped it.</h2>
+    <div class="wn-buck-quote">"Okay. You understand TradFi, Bitcoin, smart contracts, DeFi, and why the banks are sweating. That's genuinely more than most people ever sit down to learn. But we haven't even touched <strong>the thousands of other coins, the competing blockchains, utility tokens, and why everyone's arguing about which ecosystem actually wins.</strong> Volume 3 is where the map gets interesting." — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+// PLACEHOLDER IMAGE GENERATOR
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../images/Hero_right_facing.webp',
+  imgCh1Avatar:      '../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../images/ch1-take.webp',
+  imgCh1Hero:        '../images/c2-ch1-hero.webp',
+  imgCh1Mid:         '../images/c2-ch1-mid.webp',
+  imgCh2Avatar:      '../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../images/ch2-take.webp',
+  imgCh2Hero:        '../images/c2-ch2-hero.webp',
+  imgCh2Mid:         '../images/c2-ch2-mid.webp',
+  imgCh3Avatar:      '../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../images/ch3-take.webp',
+  imgCh3Hero:        '../images/c2-ch3-hero.webp',
+  imgCh3Mid:         '../images/c2-ch3-mid.webp',
+  imgCh4Avatar:      '../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../images/ch4-take.webp',
+  imgCh4Hero:        '../images/c2-ch4-hero.webp',
+  imgCh4Mid:         '../images/c2-ch4-mid.webp',
+  imgCh5Avatar:      '../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../images/ch5-take.webp',
+  imgCh5Hero:        '../images/c2-ch5-hero.webp',
+  imgCh5Mid:         '../images/c2-ch5-mid.webp',
+  imgCh6Avatar:      '../images/ch1-asks.webp',
+  imgCh6TakeAvatar:  '../images/ch1-take.webp',
+  imgCh6Hero:        '../images/c2-ch6-hero.webp',
+  imgCh6Mid:         '../images/c2-ch6-mid.webp',
+  imgCh7Avatar:      '../images/ch2-asks.webp',
+  imgCh7TakeAvatar:  '../images/ch2-take.webp',
+  imgCh7Hero:        '../images/c2-ch7-hero.webp',
+  imgCh7Mid:         '../images/c2-ch7-mid.webp',
+  imgGlossary:       '../images/jargon1.webp',
+  imgCert:           '../images/cert.webp',
+  imgWN:             '../images/visit.webp'
+};
+
+// Set static image srcs
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+// THEMES
+var THEME = {
+  crimson: {
+    bg:'#190000', topbarBg:'rgba(25,0,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#E74C3C', accentBg:'rgba(231,76,60,0.12)', border:'rgba(231,76,60,0.28)',
+    readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',
+    cardBg:'rgba(231,76,60,0.07)', cardBorder:'rgba(231,76,60,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(231,76,60,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(231,76,60,0.08)', buckBorder:'rgba(231,76,60,0.25)',
+    factBg:'rgba(231,76,60,0.08)', factBorder:'rgba(231,76,60,0.3)',
+    factRevBg:'rgba(231,76,60,0.06)', analogyBg:'rgba(231,76,60,0.07)',
+    navBg:'#190000', navBorder:'rgba(231,76,60,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  gold: {
+    bg:'#0f1200', topbarBg:'rgba(15,18,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFD700', accentBg:'rgba(255,215,0,0.12)', border:'rgba(255,215,0,0.25)',
+    readFill:'linear-gradient(90deg,#D4A017,#FFD700)',
+    cardBg:'rgba(255,215,0,0.07)', cardBorder:'rgba(255,215,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,215,0,0.15)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,215,0,0.08)', buckBorder:'rgba(255,215,0,0.25)',
+    factBg:'rgba(255,215,0,0.08)', factBorder:'rgba(255,215,0,0.3)',
+    factRevBg:'rgba(255,215,0,0.06)', analogyBg:'rgba(255,215,0,0.06)',
+    navBg:'#0f1200', navBorder:'rgba(255,215,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  teal: {
+    bg:'#061412', topbarBg:'rgba(6,20,18,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#3AAFA9', accentBg:'rgba(58,175,169,0.15)', border:'rgba(58,175,169,0.3)',
+    readFill:'linear-gradient(90deg,#3AAFA9,#7ECECA)',
+    cardBg:'rgba(58,175,169,0.08)', cardBorder:'rgba(58,175,169,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(58,175,169,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(58,175,169,0.1)', buckBorder:'rgba(58,175,169,0.28)',
+    factBg:'rgba(58,175,169,0.1)', factBorder:'rgba(58,175,169,0.32)',
+    factRevBg:'rgba(58,175,169,0.08)', analogyBg:'rgba(58,175,169,0.08)',
+    navBg:'#061412', navBorder:'rgba(58,175,169,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  purple: {
+    bg:'#0d0720', topbarBg:'rgba(13,7,32,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#9B8DEE', accentBg:'rgba(155,141,238,0.15)', border:'rgba(155,141,238,0.3)',
+    readFill:'linear-gradient(90deg,#667eea,#9b8dee)',
+    cardBg:'rgba(155,141,238,0.08)', cardBorder:'rgba(155,141,238,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(155,141,238,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(155,141,238,0.1)', buckBorder:'rgba(155,141,238,0.28)',
+    factBg:'rgba(155,141,238,0.1)', factBorder:'rgba(155,141,238,0.32)',
+    factRevBg:'rgba(155,141,238,0.08)', analogyBg:'rgba(155,141,238,0.08)',
+    navBg:'#0d0720', navBorder:'rgba(155,141,238,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  orange: {
+    bg:'#130800', topbarBg:'rgba(19,8,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFA500', accentBg:'rgba(255,165,0,0.12)', border:'rgba(255,165,0,0.28)',
+    readFill:'linear-gradient(90deg,#FFA500,#FFD580)',
+    cardBg:'rgba(255,165,0,0.07)', cardBorder:'rgba(255,165,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,165,0,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,165,0,0.08)', buckBorder:'rgba(255,165,0,0.25)',
+    factBg:'rgba(255,165,0,0.08)', factBorder:'rgba(255,165,0,0.3)',
+    factRevBg:'rgba(255,165,0,0.06)', analogyBg:'rgba(255,165,0,0.07)',
+    navBg:'#130800', navBorder:'rgba(255,165,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  blue: {
+    bg:'#060d1a', topbarBg:'rgba(6,13,26,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#4A90E2', accentBg:'rgba(74,144,226,0.12)', border:'rgba(74,144,226,0.28)',
+    readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',
+    cardBg:'rgba(74,144,226,0.07)', cardBorder:'rgba(74,144,226,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(74,144,226,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(74,144,226,0.08)', buckBorder:'rgba(74,144,226,0.25)',
+    factBg:'rgba(74,144,226,0.08)', factBorder:'rgba(74,144,226,0.3)',
+    factRevBg:'rgba(74,144,226,0.06)', analogyBg:'rgba(74,144,226,0.07)',
+    navBg:'#060d1a', navBorder:'rgba(74,144,226,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  green: {
+    bg:'#041209', topbarBg:'rgba(4,18,9,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#22C55E', accentBg:'rgba(34,197,94,0.15)', border:'rgba(34,197,94,0.3)',
+    readFill:'linear-gradient(90deg,#22C55E,#4ADE80)',
+    cardBg:'rgba(34,197,94,0.08)', cardBorder:'rgba(34,197,94,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(34,197,94,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(34,197,94,0.1)', buckBorder:'rgba(34,197,94,0.28)',
+    factBg:'rgba(34,197,94,0.1)', factBorder:'rgba(34,197,94,0.32)',
+    factRevBg:'rgba(34,197,94,0.08)', analogyBg:'rgba(34,197,94,0.08)',
+    navBg:'#041209', navBorder:'rgba(34,197,94,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  }
+};
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'crimson', tag:'Chapter 1 — The System',
+    title:'The System You Were Born Into',
+    blurb:'Banks, money, and the game you didn\'t know you were playing.',
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'Every transaction you\'ve ever made passed through someone else\'s system. Until now.',
+    buckOpens:{q:"Okay so real talk — I have used banks my whole life. I have never actually asked: why do I need them? Like, what are they actually doing with my money? And who decided they get to be in charge?"},
+    buckCloses:{text:"I have been passed between banks my whole life. I've had fees taken from me, been held for three business days, and been 'frozen' whenever someone in an office decided there was a compliance issue. And look — the system isn't going anywhere. But understanding why Bitcoin exists starts with understanding what problem it was trying to solve. <strong>This was the problem.</strong>"},
+    facts:[
+      {myth:"Most people think: \"My bank is holding my money safely until I need it.\"",q:"Where is it actually?",revealed:"Banks operate on fractional reserve banking — they're legally allowed to lend out the vast majority of your deposits. For every $1,000 you deposit, the bank might keep $100 on hand and lend out $900. Your balance is a promise backed by regulation and trust, not a pile of cash in a vault. This is completely normal and legal. It's just not what most people picture."},
+      {myth:"Most people think: \"Inflation is just prices going up for random reasons.\"",q:"What actually causes it?",revealed:"Inflation has many causes, but one of the most direct is money supply expansion. When more dollars chase the same amount of goods, prices rise. The US Federal Reserve's balance sheet grew from roughly $900 billion in 2008 to nearly $9 trillion by 2022. The purchasing power of the dollar fell accordingly. This is measurable, documented, and intentional policy — not an accident."}
+    ],
+    blocks:[
+      {t:'cold',text:"You were born into a financial system.<br>You didn't choose it. You didn't read the terms.<br>You just... started playing by its rules.<br><br><em>Let's look at what those rules actually are.</em>"},
+      {t:'body',text:"Banks present themselves as safe houses for your money. And they mostly are — within limits. But the reality of how they operate is something most people are never taught. Your deposit isn't sitting in a vault. It never was."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'✈️',title:'Think of it like airline overbooking',text:"Airlines routinely sell more seats than they have on a plane, betting that some people won't show up. Banks do the same thing with deposits. It works fine — until a bank run happens and everyone wants their money at once. <strong>Then the math gets uncomfortable.</strong>"},
+      {t:'body',text:"Beyond your personal bank, there's the bigger picture: central banks. The Federal Reserve in the US. The European Central Bank (ECB) in Europe. These are the institutions that control the money supply itself — they decide how much money exists. When they create new money — a process called quantitative easing — there are more dollars in circulation competing for the same amount of goods. That makes each dollar you already hold worth slightly less. This isn't a conspiracy theory. It's how the system is designed, done openly."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Central Bank',def:"An institution that manages a nation's currency, money supply, and interest rates. In the US, that's the Federal Reserve. Unlike your regular bank, the central bank can create new money. It answers to the government — not to you."},
+      {t:'body',text:"None of this means the system is evil. Banks perform real functions: they fund businesses, smooth economic cycles, and give ordinary people access to credit. The question isn't whether the system works — it does. The question is: <strong>who does it work best for, and what are the alternatives?</strong>"},
+      {t:'callout',icon:'⚠️',text:"<strong>The bigger picture:</strong> In 2022, the US had debt exceeding $30 trillion. Globally, over 1.4 billion adults remain unbanked — no account, no credit, no access to basic financial services. The system that works smoothly for many doesn't reach everyone equally."}
+    ],
+    quizzes:[
+      {q:"What is fractional reserve banking?",opts:[{id:'a',text:"Banks storing all deposits in a secured vault"},{id:'b',text:"Banks keeping only a fraction of deposits and lending the rest"},{id:'c',text:"Banks charging fractional fees per transaction"},{id:'d',text:"A government policy for dividing assets equally"}],correct:'b',good:"Exactly — banks lend out most of your deposit. Your balance is a database entry backed by trust.",bad:"Answer B — banks lend out the vast majority of deposits. Your money isn't sitting in a vault."},
+      {q:"What is one direct cause of inflation?",opts:[{id:'a',text:"Supply chains getting more expensive"},{id:'b',text:"Companies raising prices arbitrarily"},{id:'c',text:"Expanding the money supply — more money chasing the same goods"},{id:'d',text:"Inflation has no specific cause"}],correct:'c',good:"Yes — more money chasing the same goods means each dollar buys a little less. Classic inflation mechanics.",bad:"Answer C — expanding the money supply dilutes each existing dollar's purchasing power. That's inflation."},
+      {q:"Approximately how many adults worldwide are unbanked?",opts:[{id:'a',text:"Around 10 million"},{id:'b',text:"Around 100 million"},{id:'c',text:"Over 1.4 billion"},{id:'d',text:"The number is unknown"}],correct:'c',good:"1.4 billion — a reminder that the 'normal' financial system isn't accessible to everyone.",bad:"Over 1.4 billion people have no bank account. For them, traditional finance was never available."}
+    ]
+  },
+  {
+    id:2, themeKey:'gold', tag:'Chapter 2 — Bitcoin',
+    title:'Bitcoin Breaks the Rules',
+    blurb:'One anonymous person. One whitepaper. One very consequential weekend.',
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Peer-to-peer. No bank in the middle. The transaction goes directly from you to them.',
+    buckOpens:{q:"So someone actually sat down, decided the entire global banking system was a bad idea, and just... built an alternative? By themselves? And then disappeared? That's either genius or completely unhinged. Possibly both."},
+    buckCloses:{text:"Satoshi didn't ask permission. They identified a problem — money controlled by humans who could be corrupted, pressured, or wrong — and wrote math that solved it. <strong>You can debate whether Bitcoin fully succeeded. But you cannot argue it didn't try to solve something real.</strong>"},
+    facts:[
+      {myth:"Most people think: \"Bitcoin was created to get rich.\"",q:"What was it actually for?",revealed:"Bitcoin's original whitepaper — a detailed document explaining exactly how the system would work — was published October 31st, 2008 under the pseudonym Satoshi Nakamoto. It was titled 'Bitcoin: A Peer-to-Peer Electronic Cash System.' Its stated purpose was a payment system that could operate directly between parties — no bank, no payment processor, no third party that could freeze, reverse, or charge for your transaction. The timing, right after the 2008 crash, was not a coincidence."},
+      {myth:"Most people think: \"Bitcoin is anonymous — criminals use it because nobody can trace it.\"",q:"Is that actually true?",revealed:"Bitcoin transactions are pseudonymous, not anonymous. Every transaction is recorded permanently on a public blockchain — visible to anyone. Specialized tracking companies like Chainalysis have tools that follow Bitcoin transactions across the blockchain, making it possible to trace exactly where money moved and when. Major criminal busts, including the Silk Road takedown and Colonial Pipeline ransom recovery, both used blockchain analysis to follow the money. Bitcoin is actually a poor choice for long-term money laundering."}
+    ],
+    blocks:[
+      {t:'cold',text:"January 3rd, 2009.<br>While the world was still reeling from the worst financial crisis in decades, someone — identity unknown — quietly released a new kind of money.<br><br><em>Nobody noticed for months.</em>"},
+      {t:'body',text:"The 2008 financial crisis revealed something uncomfortable: the global banking system was deeply interconnected, highly leveraged, and in places, deeply corrupt. When it collapsed, regular people paid the price through bailouts, unemployment, and lost savings. Someone decided to build an alternative."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏰',title:'Think of it like a town that got tired of its lord',text:"Every transaction used to go through the lord's castle: taxed, delayed, subject to approval, occasionally refused for political reasons. Bitcoin is the town deciding to trade directly with each other. No castle. No permission required. <strong>Just two parties and a shared mathematical agreement.</strong>"},
+      {t:'body',text:"Here's what actually changed. In traditional payments, a bank certifies that you have the funds — they're the trusted middleman. Bitcoin's blockchain removes that middleman. Your transaction is verified by thousands of independent computers checking the same ledger. No bank needed. No business hours. No geographic restrictions."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Peer-to-Peer (P2P)',def:"A network where participants transact directly with each other, without a central authority in the middle. Like handing someone cash in person — except it works globally, digitally, and 24/7 without any bank involved."},
+      {t:'body',text:"Satoshi Nakamoto disappeared in 2010 — handing off the project to the open-source developer community and going silent forever. Their identity remains unknown. The estimated holdings of early Satoshi-era wallets have never moved. And somehow, the network they created keeps running without them."},
+      {t:'callout',icon:'💡',text:"<strong>The 21 million cap</strong> — hard-coded into Bitcoin's rules from day one — was a deliberate message to central banks: we are doing the opposite of you. You can create money. This cannot. Ever."}
+    ],
+    quizzes:[
+      {q:"What was Bitcoin's stated purpose in the original 2008 whitepaper?",opts:[{id:'a',text:"A speculative investment vehicle for digital assets"},{id:'b',text:"A peer-to-peer electronic cash system"},{id:'c',text:"A replacement for gold as a global store of value"},{id:'d',text:"A decentralized exchange for trading currencies"}],correct:'b',good:"P2P electronic cash — payments between people, no middleman. That was the entire original idea.",bad:"Answer B — Satoshi's whitepaper described a peer-to-peer electronic cash system. The investment angle came later."},
+      {q:"Why was the timing of Bitcoin's 2009 launch significant?",opts:[{id:'a',text:"It coincided with the invention of smartphones"},{id:'b',text:"It was when internet speeds became fast enough"},{id:'c',text:"It launched during and after the 2008 global financial crisis"},{id:'d',text:"2009 was chosen randomly by the developer"}],correct:'c',good:"The timing was intentional. Bitcoin's Genesis Block even contains a newspaper headline about bank bailouts.",bad:"Answer C — Bitcoin launched directly in response to the 2008 financial crisis and the bank bailouts that followed."},
+      {q:"What happened to Bitcoin's creator, Satoshi Nakamoto?",opts:[{id:'a',text:"They sold their Bitcoin and retired publicly in 2012"},{id:'b',text:"They were identified by the FBI in 2013"},{id:'c',text:"They handed off the project and disappeared in 2010"},{id:'d',text:"They continue to manage the project anonymously today"}],correct:'c',good:"Gone since 2010 — identity unknown, Bitcoin still running. History's weirdest founding story.",bad:"Answer C — Satoshi went silent in 2010, handing off to the open-source community. Never identified. Never returned."}
+    ]
+  },
+  {
+    id:3, themeKey:'teal', tag:'Chapter 3 — The Gap',
+    title:"What Bitcoin Couldn't Do",
+    blurb:"Digital gold is great. But gold can't run programs.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:'A calculator does one thing brilliantly. A smartphone does everything else. Both are useful.',
+    buckOpens:{q:"Okay so Bitcoin solved money. That seems huge. Why does anything else need to exist? What exactly couldn't Bitcoin do?"},
+    buckCloses:{text:"I used to think Bitcoin was the final answer. Then I learned it was more like the first question. Once you have money that doesn't need a bank, the next question is obvious: <strong>what about all the other things banks do?</strong> That question built an entire parallel financial system."},
+    facts:[
+      {myth:"Most people think: \"You can build any kind of app on Bitcoin.\"",q:"Can you?",revealed:"Bitcoin was deliberately designed to be simple and secure rather than programmable. Its programming language is intentionally kept simple — this limits what it can do, but also makes it much harder for hackers to find and exploit weaknesses. While second-layer solutions are being built on Bitcoin, its base layer cannot run the complex smart contracts that Ethereum handles natively. This was a philosophical choice by Satoshi — security over flexibility."},
+      {myth:"Most people think: \"Smart contracts are legally binding agreements, just digital.\"",q:"Are they the same as legal contracts?",revealed:"Smart contracts are code that executes automatically when conditions are met — not the same as legal contracts. In most jurisdictions they don't have legal standing as contracts. A smart contract will do exactly what it's programmed to do, which is both its power (no interpretation needed) and its risk (bugs execute too). The 'contract' is the code. The code is law — for better and worse."}
+    ],
+    blocks:[
+      {t:'cold',text:"Bitcoin solved one problem brilliantly:<br>how to send value to anyone, anywhere, without asking permission.<br><br><em>But money isn't everything. And that gap changed everything.</em>"},
+      {t:'body',text:"Imagine you want to buy a house. You can send Bitcoin to a seller globally. But what about the contract? The escrow? What if you want to earn interest on your savings? Take out a loan? Exchange one currency for another automatically? Bitcoin can't do any of this natively. It's digital gold — valuable as a store of value. But it's not a computer. It can't run programs."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🧮',title:'Think of it like a calculator vs. a smartphone',text:"A calculator does one thing extraordinarily well: math. Fast, reliable, exact. A smartphone does math too, but also navigation, photography, banking, communication. Bitcoin is the calculator. Exceptional at its job. Ethereum's creators looked at the calculator and asked: <strong>what if we built a smartphone?</strong>"},
+      {t:'body',text:"In 2013, a 19-year-old named Vitalik Buterin published a whitepaper describing something new: a blockchain that could run any kind of computer program — not just record payments, but actually execute instructions automatically. If A happens, then B. Automatically. Without a middleman. He called these programs 'smart contracts.' The platform was Ethereum."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Smart Contract',def:"A self-executing program stored on a blockchain that automatically carries out actions when predetermined conditions are met. No middleman, no delays, no human interpretation required. If it's in the code, it happens."},
+      {t:'body',text:"Smart contracts unlocked something nobody fully anticipated: the ability to recreate financial services — lending, borrowing, trading, earning yield — in code. Without banks. Without loan officers. Without business hours. This concept got a name: Decentralized Finance. DeFi."},
+      {t:'callout',icon:'⚡',text:"<strong>The gap Bitcoin left:</strong> Bitcoin can store your wealth. But it can't lend it, earn yield on it, swap it automatically, or execute complex financial agreements. That gap is exactly the size and shape of DeFi."}
+    ],
+    quizzes:[
+      {q:"Why can't Bitcoin run complex smart contracts natively?",opts:[{id:'a',text:"Bitcoin developers haven't had time to add the feature"},{id:'b',text:"Bitcoin's scripting language is intentionally limited for security"},{id:'c',text:"Smart contracts are illegal in most countries"},{id:'d',text:"Bitcoin's blockchain is too slow to run programs"}],correct:'b',good:"Exactly — a deliberate design choice. Security over flexibility. The calculator stays a calculator.",bad:"Answer B — Bitcoin was designed to be simple and secure. Complex programmability was intentionally excluded."},
+      {q:"Who proposed Ethereum and what was its key innovation?",opts:[{id:'a',text:"Satoshi Nakamoto, adding smart contracts to Bitcoin"},{id:'b',text:"The Ethereum Foundation as a group with no single founder"},{id:'c',text:"Vitalik Buterin, proposing a blockchain that could run arbitrary programs"},{id:'d',text:"Craig Wright, building on his earlier Bitcoin work"}],correct:'c',good:"Vitalik Buterin at 19. The whitepaper that redirected the entire crypto industry.",bad:"Answer C — Vitalik Buterin published the Ethereum whitepaper in 2013 at age 19, proposing a programmable blockchain."},
+      {q:"What is a smart contract?",opts:[{id:'a',text:"A legal contract stored digitally for easy access"},{id:'b',text:"A binding agreement between crypto wallets"},{id:'c',text:"A self-executing program that runs automatically when conditions are met"},{id:'d',text:"A type of insurance policy for crypto holdings"}],correct:'c',good:"Self-executing code — no middleman, no delays, no interpretation. If it's in the code, it happens.",bad:"Answer C — smart contracts are programs that execute automatically when their conditions are met. Code is law."}
+    ]
+  },
+  {
+    id:4, themeKey:'purple', tag:'Chapter 4 — DeFi',
+    title:'DeFi Fills the Gap',
+    blurb:'Be your own bank. No application required.',
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:'No loan officer. No credit check. No business hours. Just code executing the rules.',
+    buckOpens:{q:"Hold on. You're telling me I can lend my crypto to strangers, earn interest on it, borrow against it, and trade it — all without a bank? No credit check? No application? No three-business-day wait? Who is running this thing??"},
+    buckCloses:{text:"The concept of lending money to strangers through code and earning interest every single block — every 12 seconds on Ethereum — is either the future of finance or the most elaborate way to lose money ever devised. <strong>The honest answer is probably: some of both.</strong> But the underlying idea? Banks as intermediaries? That model is being challenged in real time."},
+    facts:[
+      {myth:"Most people think: \"DeFi is just crypto trading with extra steps.\"",q:"What does DeFi actually do?",revealed:"DeFi protocols perform the same functions as traditional financial institutions — except via code instead of people. Aave and Compound let you lend and borrow assets automatically, interest calculated per block, no credit check required. Uniswap lets you swap one cryptocurrency for another using liquidity pools instead of an order book. Yearn Finance automates yield farming. These aren't games. They're functional financial infrastructure processing billions in real volume."},
+      {myth:"Most people think: \"DeFi is only accessible to tech experts and developers.\"",q:"How accessible is it really?",revealed:"The early days of DeFi required significant technical knowledge. By 2023-2024, most major DeFi platforms have consumer-grade interfaces — not much harder than online banking, once you understand wallets and gas fees. The learning curve is real but shrinking. The bigger barriers today are gas costs on Ethereum (driving users to cheaper chains like Arbitrum and Solana) and the complexity of understanding what you're actually putting your money into."}
+    ],
+    blocks:[
+      {t:'cold',text:"What if you could be your own bank?<br>Not metaphorically. Literally.<br><br><em>Earn interest. Make loans. Trade assets. No permission required. No business hours. No suits.</em>"},
+      {t:'body',text:"DeFi — Decentralized Finance — is the collective term for financial services built on blockchains using smart contracts. It's using code to replace the functions traditionally performed by banks, exchanges, and brokers. By 2021, Total Value Locked in DeFi protocols crossed $180 billion. Real money, in real protocols, doing real financial work."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏧',title:'Think of it like a vending machine vs. a store clerk',text:"A store clerk is a human with judgment, working hours, the ability to say no, and a paycheck. A vending machine doesn't care who you are, what time it is, or where you're from. Put in your coins, get your product. <strong>DeFi is the vending machine. It doesn't know your credit score. It executes the rules in its code.</strong>"},
+      {t:'body',text:"The key innovation is liquidity pools. Instead of a traditional exchange matching buyers with sellers, DeFi protocols let anyone deposit two different cryptocurrencies (called a pair) into a shared pool. Traders swap against the pool. Depositors earn fees proportional to their share. Nobody is sitting on the other side of your trade — the math built into the code handles it automatically. This created an entirely new model for how asset trading works."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Liquidity Pool',def:"A smart contract holding pairs of tokens deposited by users (liquidity providers). Traders swap against the pool instead of a specific counterparty. Liquidity providers earn a percentage of trading fees in return for their contribution."},
+      {t:'body',text:"In traditional banking, your savings account might earn 0.01% to 4% per year — that's the extra money the bank pays you for letting them use your funds. DeFi protocols have offered much higher returns: 10%, 50%, or more on certain assets during peak periods. These come with proportional risks — smart contract bugs, liquidations, protocol collapses — but the concept itself is new. Money earning returns, automatically, via code, around the clock."},
+      {t:'callout',icon:'⚠️',text:"<strong>Risk Reality:</strong> DeFi protocols have lost over $3 billion to exploits, hacks, and bugs. Smart contracts execute exactly what they're programmed to do — including the bugs. Before putting money into any protocol, understanding the risks is table stakes, not optional."}
+    ],
+    quizzes:[
+      {q:"What is a liquidity pool?",opts:[{id:'a',text:"A reserve of money held by a central bank to prevent crises"},{id:'b',text:"A savings account at a DeFi-licensed financial institution"},{id:'c',text:"A smart contract holding paired tokens that traders swap against"},{id:'d',text:"A collection of NFTs used to back loans"}],correct:'c',good:"Exactly — a pool of paired assets that traders swap against, managed by code. No counterparty. Just math.",bad:"Answer C — liquidity pools are smart contracts holding token pairs that traders swap against, earning fees for depositors."},
+      {q:"What replaced traditional market makers in DeFi exchanges?",opts:[{id:'a',text:"Large financial institutions that agreed to participate"},{id:'b',text:"Automated Market Makers using mathematical formulas"},{id:'c',text:"Government-approved crypto dealers"},{id:'d',text:"Individual traders from different time zones"}],correct:'b',good:"AMMs — the math does what market makers used to do. 24/7. No lunch break.",bad:"Answer B — Automated Market Makers use mathematical formulas to price trades without traditional order books."},
+      {q:"What is a major risk unique to DeFi vs. traditional finance?",opts:[{id:'a',text:"Transactions take much longer to process"},{id:'b',text:"There are no potential returns — only losses"},{id:'c',text:"Smart contract bugs can be exploited with no authority to reverse it"},{id:'d',text:"You need government ID to participate"}],correct:'c',good:"Smart contract risk is real — code executes, including errors. No customer service. No reversals.",bad:"Answer C — smart contract exploits are irreversible. Over $3 billion has been lost this way. Risk is part of the deal."}
+    ]
+  },
+  {
+    id:5, themeKey:'orange', tag:'Chapter 5 — The Ecosystem',
+    title:'The Ecosystem Today',
+    blurb:'Real protocols, real money, real mess. Welcome to now.',
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'Multiple chains, billions in value, and a race nobody has won yet.',
+    buckOpens:{q:"Okay so DeFi is real, it's running, people are using it. But there are thousands of projects, a bunch have blown up, some are definitely scams. How does anyone know what's real vs. what's noise?"},
+    buckCloses:{text:"The ecosystem is messy, overcrowded, and full of projects that won't survive. That's what early looks like. <strong>It's also building infrastructure that didn't exist five years ago.</strong> Some of what's being built right now will matter in twenty years. Some will be a trivia question. The skill is learning to tell the difference."},
+    facts:[
+      {myth:"Most people think: \"Most DeFi protocols are scams or get-rich-quick schemes.\"",q:"Is DeFi mostly scams?",revealed:"The space has had its share of rug pulls, Ponzi schemes, and outright fraud — especially during the 2021 bull run. But major protocols that have survived multiple market cycles — Uniswap, Aave, Compound, MakerDAO, Curve — have demonstrated genuine utility over years of real operation. The noise is real. So is the signal. Separating them requires doing the reading."},
+      {myth:"Most people think: \"You need Ethereum for DeFi — other chains are just copies.\"",q:"Is Ethereum the only option?",revealed:"While Ethereum remains the largest DeFi ecosystem by Total Value Locked, significant DeFi ecosystems exist on Solana, Avalanche, BNB Chain, and various Ethereum layer-2 networks. Solana processes thousands of transactions per second at fractions of a cent. Ethereum processes ~15 on its base layer but offers a longer security track record. Neither is objectively better — they're different trade-offs on what matters most."}
+    ],
+    blocks:[
+      {t:'cold',text:"It's 2024.<br>DeFi didn't die. It didn't take over the world either.<br>It's somewhere more interesting than both:<br><br><em>it's actually being used.</em>"},
+      {t:'body',text:"The total amount of money deposited in DeFi protocols — a metric called Total Value Locked, or TVL — peaked above $250 billion in late 2021 before the 2022 crypto market crash pulled it back. Through bull and bear, certain protocols established themselves as infrastructure rather than speculation. Uniswap processes billions in trading volume. Aave has managed billions in loans. MakerDAO backs DAI — a stablecoin — with crypto collateral."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🌐',title:'Think of it like the early internet',text:"In 1999, most websites were terrible and most internet companies were worthless. The dot-com crash wiped out fortunes. But buried in the wreckage were early versions of Amazon, Google, and eBay. <strong>The internet wasn't the problem. The speculation around it was. DeFi is running the same playbook.</strong>"},
+      {t:'body',text:"Beyond DeFi, the broader ecosystem includes layer-2 networks scaling Ethereum — Arbitrum, Optimism, zkSync — and competing layer-1 blockchains: Solana, Avalanche, Cardano, Polygon. Each makes different trade-offs between speed, security, and decentralization. Multiple separate blockchains — each with their own rules, speed, and tradeoffs — are all running DeFi at the same time. This multi-chain world is real, it's active, and nobody has won yet."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Layer 2 (L2)',def:"A secondary network built on top of a base blockchain to improve speed and reduce costs, while inheriting the security of the underlying chain. Arbitrum and Optimism are Layer 2s built on Ethereum."},
+      {t:'body',text:"Stablecoins have become the connective tissue of the DeFi ecosystem. USDC and USDT are stablecoins designed to always be worth exactly one US dollar — so you get the speed of crypto without the price swings. DAI is decentralized, backed by crypto collateral. In 2023, stablecoin transaction volumes surpassed Visa in some months. That's not hype. That's real adoption with real numbers."},
+      {t:'callout',icon:'💡',text:"<strong>The clearest sign DeFi is real:</strong> BlackRock — the world's largest asset manager, overseeing $9+ trillion — launched a tokenized fund on the Ethereum blockchain in 2024. When the most conservative institution in traditional finance starts building on the blockchain, the 'it's just speculation' argument gets harder to make."}
+    ],
+    quizzes:[
+      {q:"What is Total Value Locked (TVL) in DeFi?",opts:[{id:'a',text:"The maximum amount regulators allow DeFi protocols to hold"},{id:'b',text:"The total value of assets currently deposited in DeFi protocols"},{id:'c',text:"The cumulative value of all crypto transactions ever made"},{id:'d',text:"The value of tokens created by DeFi protocols"}],correct:'b',good:"TVL measures how much is actually deployed in DeFi — the ecosystem's balance sheet.",bad:"Answer B — TVL is the total value of assets deposited in DeFi protocols. The main metric for ecosystem size."},
+      {q:"What is a stablecoin?",opts:[{id:'a',text:"A cryptocurrency that never rises in value"},{id:'b',text:"A government-issued digital currency"},{id:'c',text:"A token pegged to a stable asset, usually the US dollar"},{id:'d',text:"A cryptocurrency backed by gold reserves"}],correct:'c',good:"Pegged to the dollar — blockchain speed and DeFi access without crypto price volatility.",bad:"Answer C — stablecoins maintain a fixed value, usually 1:1 with the US dollar, enabling DeFi without price exposure."},
+      {q:"What is an Ethereum Layer 2 network designed to do?",opts:[{id:'a',text:"Create a more decentralized version of Ethereum"},{id:'b',text:"Replace Ethereum's base layer with a faster alternative"},{id:'c',text:"Improve speed and reduce costs while inheriting Ethereum's security"},{id:'d',text:"Allow Ethereum to connect to traditional banking systems"}],correct:'c',good:"Scale without sacrifice — L2s keep Ethereum's security while dramatically improving speed and cost.",bad:"Answer C — Layer 2s like Arbitrum batch transactions to improve speed and cost while settling on Ethereum's secure base layer."}
+    ]
+  },
+  {
+    id:6, themeKey:'blue', tag:'Chapter 6 — The Response',
+    title:"Banks Are Sweating",
+    blurb:"They noticed. Now comes the interesting part.",
+    heroImg:R.imgCh6Hero, midImg:R.imgCh6Mid,
+    midCaption:'The establishment didn\'t ignore crypto. It adapted around it. That\'s different — and worth watching.',
+    buckOpens:{q:"If DeFi is building a whole parallel financial system... why are banks still here? Are they just going to ignore this until it goes away? That doesn't seem like something they would do."},
+    buckCloses:{text:"The banks aren't going down without a fight. The governments aren't leaving money outside their control without a response. This was always going to happen. <strong>What's interesting is that Bitcoin is still running, DeFi is still running, and the institutions are building products on top of the very technology they called a scam five years ago.</strong> Make of that what you will."},
+    facts:[
+      {myth:"Most people think: \"Bitcoin ETFs mean Bitcoin is now just another mainstream investment, no different from stocks.\"",q:"Does an ETF change what Bitcoin is?",revealed:"A Bitcoin ETF lets you own Bitcoin's price movement without actually holding or managing the Bitcoin yourself — no wallet, no private key, no technical setup required. For institutions constrained by regulations, this matters enormously. But the underlying Bitcoin — the network, the 21M cap, the decentralized ledger — hasn't changed at all. An ETF adds a layer of traditional finance on top. The asset underneath remains exactly what it was."},
+      {myth:"Most people think: \"CBDCs are basically the same as crypto — the government is just catching up.\"",q:"Are CBDCs really decentralized?",revealed:"CBDCs are the philosophical opposite of decentralized crypto. A CBDC is issued, controlled, and programmable by a central authority. Transactions can be monitored, restricted, or reversed. Some CBDC designs being explored include expiry dates — money that becomes worthless if not spent by a certain date — or restrictions on what you're allowed to buy with it. The government would have that control built in. The efficiency is real. The decentralization is zero. That trade-off is one of the most important financial policy debates of the decade."}
+    ],
+    blocks:[
+      {t:'cold',text:"The establishment noticed.<br>It took a few years, a few billion dollars in DeFi activity, and a Bitcoin ETF approved by the SEC.<br><br><em>Now everybody's paying attention.</em>"},
+      {t:'body',text:"In January 2024, the US Securities and Exchange Commission (the main US financial regulator) approved the first Bitcoin ETFs — investment products that let traditional investors buy Bitcoin exposure through a regular brokerage account, the same way they'd buy a stock. Applications from BlackRock, Fidelity, and Invesco were approved. Within weeks, these ETFs attracted tens of billions in flows. Wall Street's position on crypto shifted from hostile to quietly, extremely interested."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'📺',title:'Think of it like streaming vs. cable TV',text:"The entertainment industry spent years protecting cable TV's model. Streaming didn't ask permission — it built a better product. Eventually, cable companies launched their own streaming services. They adapted, sort of. <strong>Financial institutions are doing the same thing with crypto. They couldn't stop it, so they're building products around it.</strong>"},
+      {t:'body',text:"Governments are responding more directly with Central Bank Digital Currencies — CBDCs. These are government-issued digital currencies, essentially digital versions of cash. China's digital yuan is in advanced testing. The European Central Bank is developing a digital euro. The idea: the efficiency of crypto without the decentralization. Government-controlled money, but with rules built into the code — for example, the ability to track every purchase, restrict what it can be spent on, or even set expiry dates that force you to spend it by a certain time."},
+      {t:'fact',idx:1},
+      {t:'def',term:'CBDC (Central Bank Digital Currency)',def:"A digital form of a country's official currency, issued and controlled by the central bank. Unlike decentralized crypto, a CBDC is fully controlled by the issuing authority — including potentially the ability to monitor, restrict, or reverse transactions."},
+      {t:'body',text:"Meanwhile, regulation of decentralized crypto is accelerating. The SEC has taken enforcement action against exchanges and token issuers. The EU passed MiCA — comprehensive crypto regulation across Europe. Countries have taken wildly different approaches: El Salvador made Bitcoin legal tender; China banned it. The regulatory landscape is genuinely uncertain, and that uncertainty shapes how DeFi develops."},
+      {t:'callout',icon:'💡',text:"<strong>The bigger picture:</strong> Governments have two options with a monetary technology they can't shut down: ignore it (it keeps growing), or engage with it (and try to shape it). Most major governments are now doing the second. The question is whether regulation captures the good parts of crypto or destroys them."}
+    ],
+    quizzes:[
+      {q:"What did the SEC's approval of spot Bitcoin ETFs in January 2024 enable?",opts:[{id:'a',text:"Direct Bitcoin purchases through the SEC's official website"},{id:'b',text:"Traditional investors to gain Bitcoin exposure through regular brokerage accounts"},{id:'c',text:"Bitcoin to be used as legal currency in the United States"},{id:'d',text:"DeFi protocols to register as licensed financial institutions"}],correct:'b',good:"Brokerage accounts holding Bitcoin exposure — the Wall Street wrapper around decentralized money.",bad:"Answer B — ETF approval lets traditional investors buy Bitcoin price exposure through regular accounts without self-custody."},
+      {q:"How do CBDCs fundamentally differ from decentralized cryptocurrencies?",opts:[{id:'a',text:"CBDCs are faster and more anonymous than crypto"},{id:'b',text:"CBDCs are privately issued by commercial banks, not governments"},{id:'c',text:"CBDCs are issued and fully controlled by central authorities"},{id:'d',text:"CBDCs use the same blockchain as Ethereum"}],correct:'c',good:"Central control is the key difference. CBDC efficiency, zero decentralization.",bad:"Answer C — CBDCs are government-issued and controlled. Programmable, yes. Decentralized, absolutely not."},
+      {q:"What unique approach has El Salvador taken to Bitcoin?",opts:[{id:'a',text:"El Salvador banned Bitcoin completely in 2022"},{id:'b',text:"El Salvador made Bitcoin legal tender"},{id:'c',text:"El Salvador issued its own Bitcoin-backed CBDC"},{id:'d',text:"El Salvador's government mines Bitcoin to fund public services"}],correct:'b',good:"Legal tender — you can pay taxes and debts with it. The first country to do this, ever.",bad:"Answer B — El Salvador adopted Bitcoin as legal tender in 2021, a global first. Results have been mixed but it's still in place."}
+    ]
+  },
+  {
+    id:7, themeKey:'green', tag:'Chapter 7 — Now What?',
+    title:'So... Now What?',
+    blurb:"The part where we figure out what you do with all of this.",
+    heroImg:R.imgCh7Hero, midImg:R.imgCh7Mid,
+    midCaption:'Understanding the system is the first step to navigating it — or building something better.',
+    buckOpens:{q:"Okay. We've done the whole thing. I understand TradFi, Bitcoin, smart contracts, DeFi, the ecosystem, and the regulatory fight. So what do I actually do with all of this?"},
+    buckCloses:{text:"Nobody knows exactly how this ends. Crypto could become the backbone of global finance, or it could be absorbed into a CBDC world where governments reclaim control, or it could be something nobody's predicted yet. But <strong>you can follow along now. You know what the words mean. You know what the problems are and what's being built to solve them.</strong> That's not nothing. That's actually kind of everything."},
+    facts:[
+      {myth:"Most people think: \"If I don't invest in DeFi right now, I'll miss the whole thing.\"",q:"Is this a now-or-never moment?",revealed:"This is the fear of missing out (FOMO) pitch, and it's not accurate. DeFi has been 'early' for several years and will continue developing for several more. The infrastructure being built now — stablecoins, lending protocols, cross-chain bridges — will take a decade to mature. Missing the 2021 cycle doesn't mean missing DeFi. It means you arrive with better information than people who rushed in then."},
+      {myth:"Most people think: \"DeFi is safer than traditional banks because banks have failed before.\"",q:"Is DeFi safer than banks?",revealed:"Different risks, not safer risks. Banks are insured — FDIC coverage protects up to $250,000 per depositor in the US. DeFi has no equivalent protection. Smart contracts have lost billions to exploits. Platforms have collapsed. The decentralization that protects DeFi from bank-run dynamics also means there's no bailout if things go wrong. Know which risks you're actually taking before you take them."}
+    ],
+    blocks:[
+      {t:'cold',text:"You now know more about money than most adults on Earth.<br><br>Not because it's complicated.<br>Because nobody teaches it.<br><br><em>So. What do you do with this?</em>"},
+      {t:'body',text:"Start with the obvious: you don't have to do anything. Understanding how this works is valuable whether you invest, participate, or simply observe. Financial literacy isn't just for investors. Knowing that your bank lends out your deposits, that inflation is a function of money supply, that a functioning alternative financial system runs on public code — this makes you a smarter participant in the economy you're already in."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🌐',title:'Think of it like the internet in 1995',text:"In 1995, the internet was real, it was growing, and it was going to change everything. Most people didn't need to know how to code to benefit from what came next. The decade after 1995 built the infrastructure that made the 2000s internet useful. <strong>We may be in the equivalent moment with DeFi.</strong>"},
+      {t:'body',text:"If you do decide to engage beyond observation: start small, understand before you touch it, and treat anything you put into DeFi as money you're willing to lose. The protocols are real. The risks are also real — smart contract exploits, liquidations, regulatory shifts, and market crashes can all wipe positions. The same rules apply as crypto in general: only what you can genuinely afford to lose."},
+      {t:'fact',idx:1},
+      {t:'def',term:'DYOR (Do Your Own Research)',def:"The most repeated and most ignored advice in crypto. Before putting money into any protocol, token, or platform, understand what it does, who built it, what the risks are, and whether the promised returns make mathematical sense. If they seem too good to be true, they usually are."},
+      {t:'callout',icon:'🔑',text:"<strong>The three things that matter:</strong> (1) Understand what you're putting money into. (2) Only risk what you can genuinely lose. (3) Track what you do — for taxes, for learning, for sanity. Everything else is strategy on top of those foundations."},
+      {t:'protip',title:'Start with observation, not investment',icon:'👀',text:"Before touching any DeFi protocol, spend time watching it work. Look up Uniswap, Aave, or any major protocol — you can see live transaction data, liquidity levels, and yield rates without connecting a wallet. <strong>Understanding what you're looking at before you put money in is the single biggest difference</strong> between people who navigate DeFi successfully and people who lose money to things they didn't understand."}
+    ],
+    quizzes:[
+      {q:"Why is FDIC insurance relevant when comparing DeFi to traditional banking?",opts:[{id:'a',text:"DeFi protocols are also FDIC insured up to $250,000"},{id:'b',text:"FDIC insurance doesn't apply anywhere outside the US"},{id:'c',text:"Traditional bank deposits are insured; DeFi has no equivalent protection"},{id:'d',text:"FDIC insurance covers crypto assets held on licensed exchanges"}],correct:'c',good:"Different risk profiles — banks have insurance backstops, DeFi doesn't. Know what risks you're actually taking.",bad:"Answer C — FDIC insures bank deposits up to $250k. DeFi has no equivalent. Understanding this difference is essential."},
+      {q:"What does DYOR mean, and why does it matter?",opts:[{id:'a',text:"Digital Yield Optimization Resource — a DeFi tool"},{id:'b',text:"Do Your Own Research — understand what you're investing in before you touch it"},{id:'c',text:"Decentralized Yield On Returns — a staking strategy"},{id:'d',text:"Don't Yell On Reddit — community etiquette"}],correct:'b',good:"Do Your Own Research — ignored constantly, regretted regularly. The most boring and most important advice in crypto.",bad:"Answer B — Do Your Own Research. Understand the protocol, the team, the risks, and the math before committing a dollar."},
+      {q:"What's the most honest description of where DeFi is right now?",opts:[{id:'a',text:"A fully mature system ready to replace banks immediately"},{id:'b',text:"A failed experiment that peaked in 2021 and is declining"},{id:'c',text:"Early-stage financial infrastructure that's real, risky, and still developing"},{id:'d',text:"A speculative bubble with no underlying utility"}],correct:'c',good:"Real, risky, early. That's the honest description. And that's an interesting place to be paying attention.",bad:"Answer C — DeFi has genuine utility and real infrastructure, combined with real risk and ongoing development. Early, not fake."}
+    ]
+  }
+];
+var GLOSSARY_DATA = [
+  {term:'Aave',def:"A decentralized lending protocol on Ethereum. Users deposit assets to earn yield or borrow against collateral — no bank, no credit check, rates set by supply and demand.",accent:'#9B8DEE'},
+  {term:'AMM (Automated Market Maker)',def:"A DeFi exchange that prices trades using mathematical formulas instead of a traditional order book. Uniswap pioneered this model — no human market makers needed.",accent:'#3AAFA9'},
+  {term:'Bitcoin ETF',def:"An exchange-traded fund giving investors exposure to Bitcoin's price through a traditional brokerage account, without requiring self-custody of actual Bitcoin. Approved by the SEC in January 2024.",accent:'#FFD700'},
+  {term:'CBDC',def:"Central Bank Digital Currency — a digital form of a nation's official currency, issued and controlled by the central bank. Efficient, but not decentralized.",accent:'#4A90E2'},
+  {term:'Collateral',def:"Assets deposited to secure a loan. In DeFi, you typically over-collateralize — deposit $150 of crypto to borrow $100 — since there's no credit score system.",accent:'#FFA500'},
+  {term:'DAI',def:"A decentralized stablecoin maintained by MakerDAO, backed by crypto collateral rather than a company's dollar reserves. Soft-pegged to $1.00.",accent:'#22C55E'},
+  {term:'DeFi (Decentralized Finance)',def:"Financial services — lending, borrowing, trading, yield — built on blockchains using smart contracts, without banks or intermediaries. The system that runs while you sleep.",accent:'#9B8DEE'},
+  {term:'DYOR',def:"Do Your Own Research. The most important and most ignored advice in crypto. Understand it before you touch it.",accent:'#22C55E'},
+  {term:'Ethereum',def:"The second-largest blockchain by value, and the primary platform for DeFi and smart contracts. Think of it as a global, decentralized computer anyone can build on.",accent:'#9B8DEE'},
+  {term:'Fractional Reserve Banking',def:"A banking system where banks keep only a fraction of deposits on hand and lend the rest. Your balance is a promise backed by regulation, not a pile of cash in a vault.",accent:'#E74C3C'},
+  {term:'Gas Fee',def:"The cost to execute a transaction on a blockchain, paid to validators. On Ethereum, gas fees range from cents to dollars depending on network congestion.",accent:'#FFA500'},
+  {term:'Inflation',def:"When money loses purchasing power — usually because more is being created. The Fed's balance sheet went from $900B in 2008 to nearly $9T by 2022. Your dollar bought less accordingly.",accent:'#3AAFA9'},
+  {term:'Layer 2 (L2)',def:"A network built on top of a base blockchain to improve speed and reduce costs while inheriting the security of the underlying chain. Arbitrum and Optimism are Ethereum L2s.",accent:'#4A90E2'},
+  {term:'Liquidity Pool',def:"A smart contract holding paired token deposits. Traders swap against the pool; depositors earn fees. No counterparty — just math. The engine of DeFi exchanges.",accent:'#9B8DEE'},
+  {term:'MakerDAO',def:"One of the oldest DeFi protocols. Issues DAI stablecoins backed by crypto collateral. Has survived multiple market cycles — battle-tested infrastructure.",accent:'#22C55E'},
+  {term:'Peer-to-Peer (P2P)',def:"Direct transactions between two parties without a central intermediary. Bitcoin was designed as a peer-to-peer electronic cash system — the bank removed from the middle.",accent:'#FFD700'},
+  {term:'Protocol',def:"In crypto, a set of rules governing how a blockchain or DeFi platform operates. Protocols are typically open-source — anyone can read, verify, and build on the code.",accent:'#3AAFA9'},
+  {term:'Satoshi Nakamoto',def:"The anonymous creator (or creators) of Bitcoin. Published the whitepaper in 2008, launched the network in 2009, disappeared in 2010. Identity still unknown.",accent:'#FFD700'},
+  {term:'Smart Contract',def:"A self-executing program stored on a blockchain that automatically carries out actions when conditions are met. No middleman, no delays. The code is law.",accent:'#9B8DEE'},
+  {term:'Stablecoin',def:"A cryptocurrency pegged to a stable asset, usually the US dollar. USDC and USDT are the largest centralized stablecoins. DAI is the largest decentralized one.",accent:'#22C55E'},
+  {term:'Total Value Locked (TVL)',def:"The total value of assets deposited in DeFi protocols. The main metric for measuring ecosystem size and how much real money is actually deployed.",accent:'#FFA500'},
+  {term:'Uniswap',def:"The largest decentralized exchange by volume. Uses liquidity pools and AMM pricing to allow trustless token swaps — no account required, no KYC.",accent:'#9B8DEE'},
+  {term:'Yield',def:"Returns earned on deposited assets. In DeFi, yield is generated by lending, providing liquidity, or staking assets in protocols — automatically, around the clock.",accent:'#22C55E'}
+];
+
+// STATE
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+// SCREENS
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+// MAP
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  html += '<p style="margin-top:28px;font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+// OPEN CHAPTER
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').textContent = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+// ENTER CHAPTER
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+// BUILD CHAPTER HTML
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar','imgCh6TakeAvatar','imgCh7TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+// GLOSSARY
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+// WIRE UP
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
