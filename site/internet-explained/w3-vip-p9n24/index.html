@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What the F*** Even IS the Internet?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:9px 22px;margin-bottom:18px;}
+.cover-dot{width:8px;height:8px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;}
+.cover-h1 em{font-style:normal;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:32px 24px;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:contain;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:24px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:4/3;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:contain;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:contain;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Vol. 3 · Web3 · Blockchain · Digital Wallets</span></div>
+    <h1 class="cover-h1">What the F*** Even IS<br><em>Web3?</em></h1>
+    <p class="cover-byline">Blockchain, Digital Wallets & the Future of the Internet — <strong>Finally Explained.</strong></p>
+    <button class="cover-cta" id="cover-cta-btn">Start the Story → Let's Go</button>
+    <p class="cover-meta">7 chapters · 21 quiz questions · glossary · certificate</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is waiting. He is never great at waiting.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every internet &amp; Web3 term, explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div><p style="margin:8px 0 32px;font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You understand the internet now.<br><em>For real.</em></h1>
+      <p class="cert-body">Six chapters. Eighteen quiz questions. A whole new way of seeing the web you've been using your whole life. You now understand where the internet came from, why Web2 owns your data, and what Web3 is actually trying to build. Most people never stop to ask these questions.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+    <p style="margin-top:28px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've finished the course about internet</div>
+    <h2 class="wn-h2">But the story?<br>We've <em>barely</em> started.</h2>
+    <div class="wn-buck-quote">"Okay. You understand Web1, Web2, Web3, blockchain, wallets, and why this all matters. That's genuinely more than most people who use the internet every single day ever think about. But we haven't even touched what's being built on top of all this — the tokens, the ecosystems, the protocols competing to become the infrastructure of the next internet. That's Volume 4." — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+// PLACEHOLDER IMAGE GENERATOR
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../../images/c3-cover.webp',
+  imgCh1Avatar:      '../../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh1Hero:        '../../images/c3-ch1-hero.webp',
+  imgCh1Mid:         '../../images/c3-ch1-mid.webp',
+  imgCh2Avatar:      '../../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh2Hero:        '../../images/c3-ch2-hero.webp',
+  imgCh2Mid:         '../../images/c3-ch2-mid.webp',
+  imgCh3Avatar:      '../../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../../images/ch3-take.webp',
+  imgCh3Hero:        '../../images/c3-ch3-hero.webp',
+  imgCh3Mid:         '../../images/c3-ch3-mid.webp',
+  imgCh4Avatar:      '../../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../../images/ch4-take.webp',
+  imgCh4Hero:        '../../images/c3-ch4-hero.webp',
+  imgCh4Mid:         '../../images/c3-ch4-mid.webp',
+  imgCh5Avatar:      '../../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../../images/ch5-take.webp',
+  imgCh5Hero:        '../../images/c3-ch5-hero.webp',
+  imgCh5Mid:         '../../images/c3-ch5-mid.webp',
+  imgCh6Avatar:      '../../images/ch1-asks.webp',
+  imgCh6TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh6Hero:        '../../images/c3-ch6-hero.webp',
+  imgCh6Mid:         '../../images/c3-ch6-mid.webp',
+  imgCh7Avatar:      '../../images/ch2-asks.webp',
+  imgCh7TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh7Hero:        '../../images/c3-ch7-hero.webp',
+  imgCh7Mid:         '../../images/c3-ch7-mid.webp',
+  imgGlossary:       '../../images/jargon1.webp',
+  imgCert:           '../../images/cert.webp',
+  imgWN:             '../../images/visit.webp'
+};
+
+// Set static image srcs
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+// THEMES
+var THEME = {
+  crimson: {
+    bg:'#190000', topbarBg:'rgba(25,0,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#E74C3C', accentBg:'rgba(231,76,60,0.12)', border:'rgba(231,76,60,0.28)',
+    readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',
+    cardBg:'rgba(231,76,60,0.07)', cardBorder:'rgba(231,76,60,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(231,76,60,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(231,76,60,0.08)', buckBorder:'rgba(231,76,60,0.25)',
+    factBg:'rgba(231,76,60,0.08)', factBorder:'rgba(231,76,60,0.3)',
+    factRevBg:'rgba(231,76,60,0.06)', analogyBg:'rgba(231,76,60,0.07)',
+    navBg:'#190000', navBorder:'rgba(231,76,60,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  gold: {
+    bg:'#0f1200', topbarBg:'rgba(15,18,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFD700', accentBg:'rgba(255,215,0,0.12)', border:'rgba(255,215,0,0.25)',
+    readFill:'linear-gradient(90deg,#D4A017,#FFD700)',
+    cardBg:'rgba(255,215,0,0.07)', cardBorder:'rgba(255,215,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,215,0,0.15)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,215,0,0.08)', buckBorder:'rgba(255,215,0,0.25)',
+    factBg:'rgba(255,215,0,0.08)', factBorder:'rgba(255,215,0,0.3)',
+    factRevBg:'rgba(255,215,0,0.06)', analogyBg:'rgba(255,215,0,0.06)',
+    navBg:'#0f1200', navBorder:'rgba(255,215,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  teal: {
+    bg:'#061412', topbarBg:'rgba(6,20,18,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#3AAFA9', accentBg:'rgba(58,175,169,0.15)', border:'rgba(58,175,169,0.3)',
+    readFill:'linear-gradient(90deg,#3AAFA9,#7ECECA)',
+    cardBg:'rgba(58,175,169,0.08)', cardBorder:'rgba(58,175,169,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(58,175,169,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(58,175,169,0.1)', buckBorder:'rgba(58,175,169,0.28)',
+    factBg:'rgba(58,175,169,0.1)', factBorder:'rgba(58,175,169,0.32)',
+    factRevBg:'rgba(58,175,169,0.08)', analogyBg:'rgba(58,175,169,0.08)',
+    navBg:'#061412', navBorder:'rgba(58,175,169,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  purple: {
+    bg:'#0d0720', topbarBg:'rgba(13,7,32,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#9B8DEE', accentBg:'rgba(155,141,238,0.15)', border:'rgba(155,141,238,0.3)',
+    readFill:'linear-gradient(90deg,#667eea,#9b8dee)',
+    cardBg:'rgba(155,141,238,0.08)', cardBorder:'rgba(155,141,238,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(155,141,238,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(155,141,238,0.1)', buckBorder:'rgba(155,141,238,0.28)',
+    factBg:'rgba(155,141,238,0.1)', factBorder:'rgba(155,141,238,0.32)',
+    factRevBg:'rgba(155,141,238,0.08)', analogyBg:'rgba(155,141,238,0.08)',
+    navBg:'#0d0720', navBorder:'rgba(155,141,238,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  orange: {
+    bg:'#130800', topbarBg:'rgba(19,8,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFA500', accentBg:'rgba(255,165,0,0.12)', border:'rgba(255,165,0,0.28)',
+    readFill:'linear-gradient(90deg,#FFA500,#FFD580)',
+    cardBg:'rgba(255,165,0,0.07)', cardBorder:'rgba(255,165,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,165,0,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,165,0,0.08)', buckBorder:'rgba(255,165,0,0.25)',
+    factBg:'rgba(255,165,0,0.08)', factBorder:'rgba(255,165,0,0.3)',
+    factRevBg:'rgba(255,165,0,0.06)', analogyBg:'rgba(255,165,0,0.07)',
+    navBg:'#130800', navBorder:'rgba(255,165,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  blue: {
+    bg:'#060d1a', topbarBg:'rgba(6,13,26,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#4A90E2', accentBg:'rgba(74,144,226,0.12)', border:'rgba(74,144,226,0.28)',
+    readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',
+    cardBg:'rgba(74,144,226,0.07)', cardBorder:'rgba(74,144,226,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(74,144,226,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(74,144,226,0.08)', buckBorder:'rgba(74,144,226,0.25)',
+    factBg:'rgba(74,144,226,0.08)', factBorder:'rgba(74,144,226,0.3)',
+    factRevBg:'rgba(74,144,226,0.06)', analogyBg:'rgba(74,144,226,0.07)',
+    navBg:'#060d1a', navBorder:'rgba(74,144,226,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  green: {
+    bg:'#041209', topbarBg:'rgba(4,18,9,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#22C55E', accentBg:'rgba(34,197,94,0.15)', border:'rgba(34,197,94,0.3)',
+    readFill:'linear-gradient(90deg,#22C55E,#4ADE80)',
+    cardBg:'rgba(34,197,94,0.08)', cardBorder:'rgba(34,197,94,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(34,197,94,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(34,197,94,0.1)', buckBorder:'rgba(34,197,94,0.28)',
+    factBg:'rgba(34,197,94,0.1)', factBorder:'rgba(34,197,94,0.32)',
+    factRevBg:'rgba(34,197,94,0.08)', analogyBg:'rgba(34,197,94,0.08)',
+    navBg:'#041209', navBorder:'rgba(34,197,94,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  }
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'blue', tag:'Chapter 1 — Web1',
+    title:'The Internet Was a Baby Once',
+    blurb:'Static pages, no logins, no algorithms. The internet before it knew what it was.',
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'Before the feed. Before the algorithm. Before anyone tried to keep you on the page.',
+    buckOpens:{q:"Wait — the internet was just... websites you could only look at? No accounts? No feeds? No one trying to sell you something? That sounds kind of peaceful, actually."},
+    buckCloses:{text:"Web1 feels almost innocent now. Nobody owned it. Nobody was trying to keep you on it longer than you wanted to be. You came, you read, you left. That version of the internet is basically gone — but understanding what it was makes the next chapter make a lot more sense. Because what came next changed everything."},
+    facts:[
+      {myth:"Most people think: \"The internet was always interactive — we've always been able to post and comment.\"",q:"Was Web1 really that different?",revealed:"Web1 had no user accounts, no comments, no social feeds. Tim Berners-Lee invented the World Wide Web in 1991 as a way to share documents between scientists. The first website is still live at info.cern.ch. It's just text and links. Nobody is trying to monetize your attention."},
+      {myth:"Most people think: \"The internet was invented by the US military and has always been about communication.\"",q:"Who actually built the web we use?",revealed:"The military did fund ARPANET, the early precursor network, but the World Wide Web — the thing most people mean when they say 'internet' — was invented by Tim Berners-Lee at CERN, a physics research lab in Switzerland, so scientists could share documents. It had nothing to do with the military. Berners-Lee gave it away for free, which is why the web is open."}
+    ],
+    blocks:[
+      {t:'cold',text:"Before Google told you what to think.<br>Before Instagram knew your insecurities.<br>Before the algorithm.<br><br><em>There was just… the internet. And it was mostly just vibes.</em>"},
+      {t:'body',text:"Web1 (roughly 1991–2004) was the read-only web. Static HTML pages. You could browse but not interact. No accounts, no profiles, no commenting. Information flowed one way — from website to reader. Like a giant digital encyclopedia that nobody owned."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'📚',title:'Think of it like a library',text:"Web1 was a library. You could walk in, browse the shelves, read whatever you wanted. But you couldn't write in the books, rearrange the shelves, or leave notes for other visitors. Information flowed one direction: from the shelf to your eyes. <strong>Nobody was watching which books you picked up.</strong>"},
+      {t:'body',text:"The technology was simple: HTML (the language that structures web pages), URLs (addresses for every page), and HTTP (the protocol that moves pages from servers to browsers). These three things are still how the internet works today. Web1 built the roads. Everything that came after just drove on them faster."},
+      {t:'fact',idx:1},
+      {t:'def',term:'HTML (HyperText Markup Language)',def:"The language used to structure web pages. Every website you've ever visited is built on HTML at its core. Tim Berners-Lee wrote the first version in 1991. It's still the foundation of the entire web."},
+      {t:'body',text:"Web1 lasted roughly from 1991 to the early 2000s. It was scrappy, open, and a little boring. Nobody was getting rich off it. Nobody was tracking your behavior. You just... read stuff. Then everything changed when the web realized it could be two-way."},
+      {t:'callout',icon:'🌐',text:"The first website ever made is still online at <strong>info.cern.ch</strong>. It describes what the World Wide Web is, and includes links to other early web pages. It loads in under a second and has no ads. It's a time capsule from when the internet was just an idea someone was trying to explain."}
+    ],
+    quizzes:[
+      {q:"Who invented the World Wide Web?",opts:[{id:'a',text:"Bill Gates at Microsoft"},{id:'b',text:"Tim Berners-Lee at CERN"},{id:'c',text:"The US military"},{id:'d',text:"Steve Jobs at Apple"}],correct:'b',good:"CERN physicist, not a tech giant. And he gave it away for free.",bad:"Answer B — Tim Berners-Lee at CERN invented the Web in 1991 to share scientific documents. No profit motive."},
+      {q:"What could users NOT do on Web1?",opts:[{id:'a',text:"Read web pages"},{id:'b',text:"Click links between pages"},{id:'c',text:"Post content or create accounts"},{id:'d',text:"View images"}],correct:'c',good:"Web1 was read-only. No profiles, no comments, no algorithms trying to keep you engaged.",bad:"Answer C — Web1 had no user accounts, no posting, no interaction. Information went one direction only."},
+      {q:"What three technologies made Web1 work?",opts:[{id:'a',text:"JavaScript, CSS, and Python"},{id:'b',text:"HTML, URLs, and HTTP"},{id:'c',text:"Wi-Fi, Bluetooth, and 4G"},{id:'d',text:"Java, Flash, and Internet Explorer"}],correct:'b',good:"HTML, URLs, HTTP — the same three things still running the web today.",bad:"Answer B — HTML structures pages, URLs address them, HTTP moves them. Still the core of every website."}
+    ]
+  },
+  {
+    id:2, themeKey:'orange', tag:'Chapter 2 — Web2',
+    title:'Then the Internet Got Greedy',
+    blurb:"You got free apps. They got everything else.",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Free to use. Free to scroll. Free to hand over every data point about who you are.',
+    buckOpens:{q:"So we went from 'here's some information, enjoy' to... 'please give us your name, birthday, email, phone number, location, and browsing habits in exchange for the ability to post a photo'? And everyone just said yes?"},
+    buckCloses:{text:"I'm not saying Web2 was pure evil. YouTube gave me a voice. Maps gave me directions when I was lost in a city I'd never been to. But there's a difference between 'this is useful' and 'this is fair.' Web2 was incredibly useful and not very fair. You got the apps. They got the data, the leverage, and the money. That trade-off is exactly what Web3 is trying to renegotiate."},
+    facts:[
+      {myth:"Most people think: \"Social media is free because the companies are generous.\"",q:"How does Facebook make $116 billion?",revealed:"Social media companies are not charities. They are advertising businesses. Facebook made $116 billion in revenue in 2022 — almost entirely from ads. The product being sold is your attention and behavior data. When you scroll, like, share, or pause on a video, that data is collected, modeled, and sold to advertisers. 'If you're not paying for the product, you are the product' is a cliché because it's accurate."},
+      {myth:"Most people think: \"I can always delete my data and start fresh.\"",q:"Does deleting your account actually work?",revealed:"You can request deletion, but the data already sold to third parties, modeled into ad profiles, and used to train algorithms doesn't get recalled. In 2018, the Cambridge Analytica scandal revealed that data from 87 million Facebook users had been harvested and used for political targeting — without their meaningful consent. The EU passed GDPR in response. The US still has no equivalent federal law. Your data has a life beyond your account."}
+    ],
+    blocks:[
+      {t:'cold',text:"It started innocently enough.<br>You could finally talk back to the internet.<br>Post things. Share things. Connect with people.<br><br><em>You just didn't read what you were agreeing to.</em>"},
+      {t:'body',text:"Web2 (roughly 2004–present): the interactive web. You could now log in, post, comment, upload, share. Facebook launched in 2004. YouTube in 2005. Twitter in 2006. The iPhone in 2007. Suddenly, everyone had a platform and a profile. The web transformed from a library into a town square — and then into a shopping mall."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏪',title:'Think of it like a shopping mall',text:"Web2 turned the internet into a mall. The stores look free to enter. The parking is free. The food court looks inviting. But the mall is tracking exactly which stores you walk past, how long you linger, what you almost bought. <strong>That data makes the mall extraordinarily valuable — even though you never paid a dollar to be there.</strong>"},
+      {t:'body',text:"This model created some of the most valuable companies in history. Google. Facebook (Meta). Amazon. Apple. Microsoft. The FAANG companies collectively were worth over $7 trillion at their 2021 peak. All of them built their empires on data — your search history, your purchase behavior, your social connections, your location. The data was the oil. You were the well."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Algorithm',def:"A set of rules used to decide what you see. Social media algorithms are designed to maximize engagement — the time you spend on the platform. They show you content that generates strong reactions (outrage, delight, fear) because strong reactions keep you scrolling. The algorithm doesn't care about your wellbeing. It cares about your attention."},
+      {t:'body',text:"Web2 also created something genuinely new: the creator economy. YouTube paid creators. Instagram built careers. Podcasting distributed power away from traditional media. Not all of Web2 is extraction — some of it genuinely democratized content creation. But the ownership model stayed the same: the platform owns the relationship, the data, and the infrastructure. You own your content until they decide otherwise."},
+      {t:'callout',icon:'⚠️',text:"In 2021, a Facebook whistleblower named Frances Haugen released internal documents showing <strong>Facebook knew its products were harmful</strong> — particularly to teenage girls — and prioritized growth anyway. The documents showed the company had research proving Instagram worsened body image issues in teens. The platform changed nothing significant as a result."}
+    ],
+    quizzes:[
+      {q:"How do free social media platforms like Facebook primarily make money?",opts:[{id:'a',text:"Premium subscription fees"},{id:'b',text:"Selling branded merchandise"},{id:'c',text:"Advertising — selling your attention and behavior data"},{id:'d',text:"Government subsidies"}],correct:'c',good:"Your scroll is the product. Your attention is the inventory. Ads are how they sell it.",bad:"Answer C — Facebook made $116B in 2022 almost entirely from advertising. You're the audience being sold."},
+      {q:"What did the Cambridge Analytica scandal reveal?",opts:[{id:'a',text:"Facebook had been hacked by a foreign government"},{id:'b',text:"Data from 87 million users was harvested and used for political targeting"},{id:'c',text:"Cambridge University had built a competing social network"},{id:'d',text:"Advertisers were overpaying for Facebook ads"}],correct:'b',good:"87 million users. No meaningful consent. Used for political targeting. It changed how the world thinks about data.",bad:"Answer B — Cambridge Analytica used harvested Facebook data from 87M users for political ad targeting without consent."},
+      {q:"What does a social media algorithm primarily optimize for?",opts:[{id:'a',text:"Showing you the most accurate information"},{id:'b',text:"Connecting you with your closest friends first"},{id:'c',text:"Maximizing the time you spend on the platform"},{id:'d',text:"Filtering out harmful content"}],correct:'c',good:"Engagement time — not your wellbeing, not accuracy. Time on platform is the metric that matters to the algorithm.",bad:"Answer C — algorithms are built to maximize engagement, not accuracy or wellbeing. Strong reactions = more scrolling."}
+    ]
+  },
+  {
+    id:3, themeKey:'teal', tag:'Chapter 3 — The Problem',
+    title:'What If Nobody Was in Charge?',
+    blurb:"One company owns your photos. One company owns your followers. What if that changed?",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:'You built it. They own it. That\'s the deal you agreed to — without knowing there was a deal.',
+    buckOpens:{q:"So everything I've built online — my followers, my content, my connections — technically belongs to the platform? If Instagram shut down tomorrow, I just... lose it? That's what we all agreed to?"},
+    buckCloses:{text:"This is the moment I actually started caring about Web3 — not the crypto price, not the JPEGs. The idea that your digital life could actually belong to you. That what you build online could be yours to take with you. Web2 never offered that. It gave you the illusion of it while keeping the reality for itself. Whether Web3 actually delivers on this promise is still being figured out."},
+    facts:[
+      {myth:"Most people think: \"Platforms wouldn't just delete my content or account — that would hurt their business.\"",q:"Does deplatforming actually happen?",revealed:"Platform deplatforming is documented and regular. In 2021, Twitch banned thousands of accounts in a single day citing music copyright violations — many creators lost years of content with no appeal process. Facebook has mistakenly deleted news organizations' pages, artist accounts with millions of followers, and activist accounts — sometimes for weeks before restoring them. Your account is property of the platform. Your continued access is a privilege, not a right."},
+      {myth:"Most people think: \"Web3 is just crypto and NFTs — it's already failed.\"",q:"Is the technology actually dead?",revealed:"NFT stands for Non-Fungible Token — basically a blockchain receipt proving you own a specific digital item. In 2021, people started buying and selling digital images using this technology, and things got weird fast. A JPEG of a cartoon ape sold for $3 million. A tweet sold for $2.9 million. People were flipping pixelated rocks for six figures. Most of it was pure speculation — people buying not because they believed in digital ownership, but because they thought someone else would pay more tomorrow. When the frenzy ended in 2022, most of those projects lost 90–99% of their value and became jokes. But here's the thing: the technology itself still works exactly as designed. An NFT is still a legitimate way to prove you own something digital — a concert ticket, a game item, a piece of art with a verifiable history. The speculation crashed. The use case didn't. Blaming blockchain ownership because of the 2021 NFT bubble is like blaming email because someone used it to send spam."}
+    ],
+    blocks:[
+      {t:'cold',text:"You built an audience on a platform you don't own.<br>You uploaded content to servers you'll never control.<br>You agreed to terms you didn't read.<br><br><em>Web2 gave you a stage. It kept the building.</em>"},
+      {t:'body',text:"The core problem with Web2 is ownership. You don't own your followers on Instagram — Instagram does. You don't own your content on YouTube — YouTube can demonetize it, delete it, or change the algorithm so nobody sees it. You don't own your data — the platform does. You rent your digital life from companies whose incentives are not aligned with yours."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏠',title:'Think of it like renting vs. owning',text:"You've spent years decorating an apartment. You've put work into it, built memories there, invited all your friends. But you're renting. The landlord can raise the rent, change the rules, sell the building, or decide they want you out. <strong>Web2 is a very well-decorated rental. Web3 is trying to sell you the deed.</strong>"},
+      {t:'body',text:"This is the problem Web3 is trying to solve. Not the technology problem — that was solved by Bitcoin and Ethereum. The ownership problem. What if your followers were yours, not the platform's? What if your content lived on a network nobody controlled? What if the rules of the platform couldn't change without your vote? This is the promise at the center of the Web3 idea."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Decentralization',def:"Distributing control across many participants instead of concentrating it in one place. A decentralized network has no single point of failure, no single company that can be pressured, regulated, or shut down. Bitcoin and Ethereum are decentralized — nobody can turn them off. Instagram is centralized — one company controls it."},
+      {t:'body',text:"The shift from Web2 to Web3 isn't just technical — it's philosophical. Web1 was open but passive. Web2 was interactive but extractive. Web3 proposes interactive and owned. You participate, but you keep what you create. The argument is that this is simply a fairer deal. The counterargument is that it's still mostly theoretical, technically complex, and not yet accessible to most people."},
+      {t:'callout',icon:'💡',text:"The average person has accounts on <strong>8+ social platforms</strong>. None of the content, followers, or data on those platforms is portable. If every platform shut down tomorrow, you'd lose everything digital you've built on them — your audience, your content history, your connections. That's not a hypothetical. MySpace had 100 million users and most of that content is gone."}
+    ],
+    quizzes:[
+      {q:"What do you actually own when you build a following on a social media platform?",opts:[{id:'a',text:"Your account and all followers, protected by terms of service"},{id:'b',text:"Nothing — the platform owns the relationship and can remove your access"},{id:'c',text:"Your content, but not your follower list"},{id:'d',text:"Full ownership including the right to sell your account"}],correct:'b',good:"Your access is a privilege the platform grants. The relationship, the data, the infrastructure — theirs.",bad:"Answer B — platforms own the relationship with your followers. Your account access is theirs to grant or revoke."},
+      {q:"What does 'decentralization' mean in the context of Web3?",opts:[{id:'a',text:"Websites that load faster"},{id:'b',text:"Control distributed across many participants instead of one company"},{id:'c',text:"Internet access available in rural areas"},{id:'d',text:"Open-source software licenses"}],correct:'b',good:"No single point of control, no single company to pressure or shut down. That's the core idea.",bad:"Answer B — decentralization distributes control so no single entity can unilaterally change the rules or shut it down."},
+      {q:"How does Web3 differ from Web2 in terms of ownership?",opts:[{id:'a',text:"Web3 platforms own even more user data than Web2"},{id:'b',text:"Web3 is identical to Web2 but runs faster"},{id:'c',text:"Web3 proposes that users own their content, data, and digital assets"},{id:'d',text:"Web3 eliminates content creation entirely"}],correct:'c',good:"Ownership is the core promise — your content, your data, your digital assets actually belong to you.",bad:"Answer C — Web3's central argument is user ownership of digital assets and data, not platform extraction."}
+    ]
+  },
+  {
+    id:4, themeKey:'purple', tag:'Chapter 4 — The Tech',
+    title:'Blockchain Is the New Foundation',
+    blurb:"Not just for crypto. The technology that makes ownership on the internet possible.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:'A database nobody owns. A ledger nobody can erase. A foundation the internet has never had before.',
+    buckOpens:{q:"Okay so blockchain keeps coming up. I kind of get that it's what Bitcoin runs on. But if it's the 'new foundation' for the internet... what does that actually mean? How does a chain of blocks become the internet?"},
+    buckCloses:{text:"Blockchain isn't magic. It's a very specific solution to a very specific problem: how do you prove something is true on the internet without trusting a company to tell you so? For most of internet history, the answer was: you can't. You just had to trust Facebook, trust your bank, trust the platform. Blockchain is the first real answer to that problem. It replaces trust with math."},
+    facts:[
+      {myth:"Most people think: \"Blockchain is a company or product you can buy.\"",q:"What is blockchain actually?",revealed:"Blockchain is a data structure — a way of organizing information. Calling it a product is like calling 'spreadsheet' a product. There are thousands of different blockchains: Bitcoin's blockchain records Bitcoin transactions. Ethereum's blockchain records smart contracts and token balances. Each is a separate network maintained by separate groups of computers. 'Blockchain technology' is an approach, not a brand."},
+      {myth:"Most people think: \"Blockchain is anonymous — perfect for hiding transactions.\"",q:"Is it actually untraceable?",revealed:"Blockchains are pseudonymous, not anonymous. Every transaction is permanently recorded and publicly visible. Your wallet address isn't linked to your name by default — but if you ever connect that wallet to an exchange that verified your identity, the link exists. Blockchain analytics companies can trace transaction histories across years. Law enforcement has successfully traced and recovered billions in supposedly 'hidden' crypto. The ledger is permanent and public."}
+    ],
+    blocks:[
+      {t:'cold',text:"You've heard the word a thousand times.<br>You might have nodded like you understood it.<br><br><em>Let's actually look at what it is.</em>"},
+      {t:'body',text:"A blockchain is a shared database. That's it. Except it has three unusual properties that make it different from every other database. First: it's distributed — thousands of computers all over the world hold a copy. Second: it's append-only — you can add new information but you can never change or delete old information. Third: it's trustless — you don't have to trust any single person or company because the math proves it's accurate."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'📒',title:'Think of it like a public notebook that nobody can erase',text:"Imagine a notebook that every person in a city has an identical copy of. When someone writes a new entry, every copy in the city updates simultaneously. And nobody — not even the person who wrote the entry — can go back and change what's already there. That's a blockchain. <strong>The 'chain' part refers to how each new entry (block) is mathematically linked to the previous one, making tampering with any entry break the entire chain.</strong>"},
+      {t:'body',text:"For Web3, the important part isn't the currency. It's what blockchain enables: proof of ownership without a trusted middleman. On Web2, Facebook's servers say you own your account. On Web3, the blockchain says you own your wallet — and it says it in math that can't be overridden by any company. Your wallet holds your tokens, your NFTs, your digital assets. It goes wherever you go. No platform can take it away."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Wallet',def:"In Web3, a wallet isn't a place to store tokens — it's proof of identity. Your wallet is a cryptographic key pair: a public address (like an email address) and a private key (like a password only you have). Whoever holds the private key controls the wallet. Unlike a bank account, nobody can freeze it, no company manages it, and there's no customer service if you lose the key."},
+      {t:'def',term:'Token',def:"A unit of value that lives on a blockchain. Tokens aren't just cryptocurrency — they can represent almost anything: a share of ownership in a company, voting rights in a DAO, a concert ticket, a piece of real estate, or a digital collectible. If Bitcoin is digital money, a token is a digital representation of <em>any</em> asset. Your wallet holds your tokens. The blockchain proves they're yours."},
+      {t:'body',text:"The applications of blockchain beyond currency are real but still early. Supply chain tracking: proving a diamond is conflict-free, or that a food product came from the farm it claims. Identity: a digital ID you control instead of a government or company holding your data. Contracts: agreements that execute automatically when conditions are met, with no lawyers or courts needed to enforce them. None of this is fully deployed at scale. All of it is being built."},
+      {t:'callout',icon:'🔑',text:"<strong>Your private key is not a password.</strong> It can't be reset, recovered, or guessed by customer service. Whoever has the private key has the wallet, permanently. This is why 'not your keys, not your coins' is the most repeated phrase in crypto. It's also why self-custody is a serious responsibility — and why some people prefer exchanges."}
+    ],
+    quizzes:[
+      {q:"What are the three key properties that make a blockchain different from a regular database?",opts:[{id:'a',text:"Fast, cheap, and colorful"},{id:'b',text:"Distributed, append-only, and trustless"},{id:'c',text:"Encrypted, private, and owned by one company"},{id:'d',text:"Open-source, fast, and government-regulated"}],correct:'b',good:"Distributed, append-only, trustless — the three things that make blockchain proof instead of promise.",bad:"Answer B — distributed (many copies), append-only (can't change history), trustless (math proves it, not a company)."},
+      {q:"In Web3, what does a 'wallet' actually represent?",opts:[{id:'a',text:"A digital bank account managed by a crypto company"},{id:'b',text:"A mobile app for buying crypto"},{id:'c',text:"Cryptographic proof of identity and ownership you control"},{id:'d',text:"A subscription to a blockchain network"}],correct:'c',good:"Your keys, your identity, your assets — no company in the middle. That's what a wallet actually is.",bad:"Answer C — a wallet is a cryptographic key pair proving identity. No company controls it. Lose the key, lose everything."},
+      {q:"Why is blockchain described as 'trustless'?",opts:[{id:'a',text:"Nobody trusts blockchain technology yet"},{id:'b',text:"It removes the need to trust individuals by using math to verify transactions"},{id:'c',text:"Blockchain companies are untrustworthy"},{id:'d',text:"Transactions cannot be verified by anyone"}],correct:'b',good:"Trustless doesn't mean untrustworthy — it means math does the verifying instead of a person or company.",bad:"Answer B — 'trustless' means you don't need to trust any single party. The math on every computer verifies it."}
+    ]
+  },
+  {
+    id:5, themeKey:'gold', tag:'Chapter 5 — Getting In',
+    title:"Exchanges, Wallets, and Who's Holding Your Stuff",
+    blurb:"The on-ramp exists. Here's how it actually works — and who's really in control.",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'Coinbase holds your keys. MetaMask lets you hold your own. The difference is everything.',
+    buckOpens:{q:"Okay so I want to actually try this. I go to... an app store? A website? Do I need a bank account? What's a seed phrase and why does everyone act like losing it means your life is over?"},
+    buckCloses:{text:"Here's the thing nobody tells you upfront: the moment you buy crypto on Coinbase or any exchange, you technically don't own crypto yet. You own an IOU from Coinbase saying they'll give you crypto if you ask. That's not a scam — it's how it works. The question is whether that's enough for you. <strong>For most people starting out, it is. For people who want true ownership, the next step is a self-custody wallet. Both are valid. Just know which one you're using.</strong>"},
+    facts:[
+      {myth:"Most people think: \"Keeping crypto on an exchange is basically the same as holding it yourself.\"",q:"Is your exchange balance really yours?",revealed:"When you buy Bitcoin on Coinbase or Binance, the exchange holds the actual Bitcoin in their wallets — you have an account balance that represents it. This is called custodial ownership. If the exchange is hacked, goes bankrupt, or freezes withdrawals (as FTX did in 2022, wiping out billions in customer funds), your access goes with it. 'Not your keys, not your coins' exists because this has happened, repeatedly, to real people."},
+      {myth:"Most people think: \"A hardware wallet is a device that stores your crypto.\"",q:"What does a cold wallet actually store?",revealed:"Your crypto never actually lives on a hardware wallet — it lives on the blockchain. What a hardware wallet stores is your private key, completely offline. The device signs transactions without your private key ever touching the internet, which is what makes it secure. Think of it less like a USB drive full of Bitcoin and more like an offline vault that holds the password to your blockchain address. The Bitcoin is always on the chain — the question is who controls access."}
+    ],
+    blocks:[
+      {t:'cold',text:"The technology makes sense now.<br>The wallets, the blockchain, the tokens.<br><br><em>But how does an actual human being get from here to there?</em>"},
+      {t:'body',text:"The most common starting point is a centralized exchange — Coinbase, Binance, Kraken. You sign up with an email, verify your identity (yes, like a bank — they're regulated), connect a payment method, and buy. It works like any other financial app. The exchange holds your crypto on your behalf. You see a balance. You can sell, transfer, or sit on it. This is called a custodial setup — they're the custodian, meaning they hold the keys."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏦',title:'Think of it like a bank vs. a safe in your house',text:"Keeping crypto on an exchange is like keeping cash in a bank — convenient, backed by a company, and dependent on that company staying solvent and honest. A self-custody wallet is like a safe in your house — nobody else has access, but if you lose the combination, nobody can help you. <strong>Neither is wrong. They're different risk trade-offs. The bank is easier. The safe is yours.</strong>"},
+      {t:'body',text:"If you want true ownership — your keys, your coins — you move to a self-custody wallet. MetaMask and Coinbase Wallet are hot wallets: software apps connected to the internet. Convenient for using dApps and DeFi, but connected to the internet means there's always some exposure to hacks. A cold wallet (hardware wallet) takes your private key completely offline. The most popular ones are Ledger (looks like a USB drive with a small screen), Trezor (similar, open-source), and Tangem (a credit card you tap to your phone — no screen, no battery, fits in your regular wallet). You only connect it when you need to approve a transaction, then disconnect it. The rest of the time, your keys are unreachable — even by hackers, even if your computer is compromised."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Exchange (Centralized)',def:"A company that lets you buy, sell, and hold cryptocurrency. Coinbase, Binance, and Kraken are the largest. They manage your private keys for you (custodial), which is convenient but means you're trusting them with your assets. Regulated in most countries — you'll need to verify your identity to use one."},
+      {t:'def',term:'Hot Wallet vs. Cold Wallet',def:"A hot wallet is connected to the internet — a software app like MetaMask or Coinbase Wallet. Convenient for transactions, but online means there's always some risk. A cold wallet stores your private key completely offline. The most popular cold wallets are Ledger (looks like a USB stick), Trezor (a small device with a screen), and Tangem (a credit card-sized tap card — no screen, no battery, just tap your phone to sign). Most serious holders use both: a hot wallet for everyday spending, a cold wallet for long-term storage."},
+      {t:'body',text:"One more term worth knowing: seed phrase. When you create a self-custody wallet, you're given 12 or 24 random words in a specific order. This is the master key to your wallet — it can regenerate your private key on any device. Write it down on paper. Store it somewhere fireproof. Never type it into any website or app. Anyone who has your seed phrase has your wallet, completely and permanently. This is not a password you can reset. It's the key to the vault."},
+      {t:'callout',icon:'⚠️',text:"<strong>The FTX collapse (November 2022)</strong> — one of the largest crypto exchanges in the world — froze customer withdrawals and filed for bankruptcy. Over $8 billion in customer funds went missing. People who had moved their crypto to self-custody wallets before the collapse lost nothing. People who trusted FTX as their custodian lost everything. It was the loudest proof that 'not your keys, not your coins' is not just a phrase."}
+    ],
+    quizzes:[
+      {q:"What does 'custodial' mean when applied to a crypto exchange?",opts:[{id:'a',text:"The exchange charges a custody fee for holding your assets"},{id:'b',text:"The exchange holds your private keys on your behalf"},{id:'c',text:"Your crypto is insured by the government up to $250,000"},{id:'d',text:"The exchange is regulated and legally required to return your funds"}],correct:'b',good:"They hold the keys. You hold an account balance. It's convenient — and it means trusting them completely.",bad:"Answer B — custodial means the exchange controls the private keys. You own the balance on their platform, not the crypto directly."},
+      {q:"What does a hardware (cold) wallet actually store?",opts:[{id:'a',text:"A copy of the blockchain downloaded to the device"},{id:'b',text:"Your crypto tokens in an encrypted chip"},{id:'c',text:"Your private key, kept completely offline"},{id:'d',text:"A backup of your exchange account credentials"}],correct:'c',good:"The private key — offline, unreachable, secure. The crypto itself always lives on the blockchain.",bad:"Answer C — cold wallets store your private key offline. The crypto stays on the blockchain; the wallet stores the key that controls it."},
+      {q:"What is a seed phrase?",opts:[{id:'a',text:"A password you create when signing up for a crypto exchange"},{id:'b',text:"A 12 or 24 word master key that can regenerate your entire wallet"},{id:'c',text:"A code sent by text message to verify your identity"},{id:'d',text:"A phrase used to encrypt transactions on the blockchain"}],correct:'b',good:"12 or 24 words. Written on paper. Never typed anywhere. The master key to everything in your wallet.",bad:"Answer B — a seed phrase is the master key to your wallet. Anyone who has it controls your wallet. Guard it like cash."}
+    ]
+  },
+  {
+    id:6, themeKey:'green', tag:'Chapter 6 — Web3',
+    title:'Web3 Is Being Built Right Now',
+    blurb:"NFTs were the headline. Ownership is the story.",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'The hype cycle came and went. The infrastructure is still being built.',
+    buckOpens:{q:"Okay so if Web3 is about owning your digital stuff — not just crypto but like, everything — why does it mostly seem like people arguing about cartoon pictures? What does Web3 actually look like when it's working?"},
+    buckCloses:{text:"I won't pretend Web3 is finished. It's not. But I've used it — I've owned digital assets that nobody could take from me, voted on protocol decisions, and moved money to someone in another country in seconds with no bank involved. These aren't theoretical things. They exist. Whether they become the foundation of the next internet or stay a niche experiment is genuinely unknown. But the tech works."},
+    facts:[
+      {myth:"Most people think: \"NFTs were a scam and Web3 is over.\"",q:"Did the crash kill the technology?",revealed:"The NFT market of 2020–2022 was heavily speculative and many projects were worthless or fraudulent. But NFTs as a technology — a blockchain-verified proof of ownership for a specific digital item — still function exactly as designed. NBA Top Shot, gaming items with real ownership, and digital art with verifiable provenance all use NFT technology for legitimate purposes. The speculation crashed. The technology remains."},
+      {myth:"Most people think: \"Web3 requires technical expertise — it's not for regular people.\"",q:"Is it actually that hard to use?",revealed:"The user experience of Web3 is genuinely improving. Wallets like MetaMask and Coinbase Wallet have browser extensions and mobile apps. Buying crypto now works like any e-commerce transaction. Layer-2 networks have reduced transaction costs from dollars to cents. The gap between 'regular person' and 'Web3 participant' is narrowing. The bigger barriers today are education (understanding what you're doing) and trust (confidence that it's safe), not technical complexity."}
+    ],
+    blocks:[
+      {t:'cold',text:"NFTs got the headlines.<br>Crypto got the speculation.<br>And somewhere underneath all the noise...<br><br><em>someone was actually building something.</em>"},
+      {t:'body',text:"Web3 is real, active, and easier to understand when you look past the hype. At its core, Web3 is about three things: owning your digital assets (via blockchain), accessing apps that nobody controls (via smart contracts), and participating in the governance of platforms you use (via tokens). Each of these is happening right now, at different stages of maturity."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🎮',title:'Think of it like video game items',text:"In Web2 games, the sword you spent 200 hours earning lives on the game company's servers. If the game shuts down, it's gone. In Web3 gaming, that sword is a token in your wallet. The game could shut down and you'd still own it. You could sell it, trade it, or bring it to another game that recognizes the same standard. <strong>That's what ownership means in a Web3 context.</strong>"},
+      {t:'body',text:"Decentralized apps (dApps) are applications that run on a blockchain instead of a company's servers. Uniswap — a decentralized exchange — processes billions in trading volume. No CEO, no company headquarters, no servers to shut down. The smart contract runs as long as the Ethereum network runs. Compare that to a centralized exchange: one point of failure, one set of terms of service, one team that can freeze your account."},
+      {t:'fact',idx:1},
+      {t:'def',term:'dApp (Decentralized Application)',def:"An application built on a blockchain that runs via smart contracts instead of a company's servers. Nobody can shut it down, change its rules unilaterally, or freeze your access. Uniswap, Aave, and OpenSea are dApps. They run on Ethereum — as long as Ethereum runs, they run."},
+      {t:'body',text:"DAOs — Decentralized Autonomous Organizations — are Web3's answer to companies. Instead of a CEO and board making decisions, a DAO is governed by token holders who vote on proposals. Uniswap is governed by a DAO. MakerDAO controls a multi-billion dollar stablecoin protocol through token voting. The idea is radical: the users of a platform are also the owners of it, and major decisions require a democratic vote rather than an executive decision."},
+      {t:'body',text:"Here's where it gets really interesting for the future: <strong>tokenization</strong>. If a token can represent anything, then almost any real-world asset can be put on a blockchain. A piece of a building. A share of a Picasso painting. A US Treasury bond. A bar of gold. Right now, owning a fraction of a New York skyscraper requires lawyers, paperwork, and minimum investments in the millions. Tokenization means that same building could be split into a million digital tokens, each one representing a tiny slice of ownership — and anyone with a wallet could buy one. BlackRock, the world's largest asset manager with over $9 trillion under management, launched a tokenized fund on the Ethereum blockchain in 2024. When the most conservative institution in traditional finance starts doing this, it's not a trend. It's a signal."},
+      {t:'def',term:'Tokenization',def:"The process of putting a real-world asset onto a blockchain as a token. A building, a painting, a bond, a song's royalties — anything with value can be represented as a token and traded on a blockchain. Tokenization makes assets that were previously hard to divide or trade (like real estate) as easy to buy a fraction of as a stock. It's one of the biggest practical applications of blockchain technology being built right now."},
+      {t:'callout',icon:'💡',text:"The most honest description of Web3 right now: <strong>it's about as mature as the internet was in 1997.</strong> The infrastructure exists. Some things work remarkably well. A lot is still being figured out. The companies and protocols that will matter in ten years are probably being built right now — and most people haven't heard of them yet."}
+    ],
+    quizzes:[
+      {q:"What is a dApp?",opts:[{id:'a',text:"A digital app sold on the App Store"},{id:'b',text:"An app that runs on blockchain via smart contracts, with no central company controlling it"},{id:'c',text:"A government-approved crypto application"},{id:'d',text:"An app designed specifically for DeFi trading"}],correct:'b',good:"No company, no servers to shut down, no terms of service that change without notice. That's a dApp.",bad:"Answer B — dApps run on blockchain smart contracts. No central company can shut them down or freeze your access."},
+      {q:"What is a DAO?",opts:[{id:'a',text:"A type of cryptocurrency traded on exchanges"},{id:'b',text:"A government digital currency"},{id:'c',text:"A Decentralized Autonomous Organization — governed by token holders voting on decisions"},{id:'d',text:"A type of NFT used for membership"}],correct:'c',good:"Users as owners, decisions by vote. The Web3 alternative to traditional company governance.",bad:"Answer C — DAOs are organizations governed by token holder votes instead of executives. Users own and govern the platform."},
+      {q:"What does blockchain-based ownership mean for a digital item like a game item?",opts:[{id:'a',text:"The item can only be used in one specific game"},{id:'b',text:"The game company still controls it but records it on blockchain"},{id:'c',text:"The item lives in your wallet — you own it even if the game shuts down"},{id:'d',text:"Blockchain makes digital items impossible to trade"}],correct:'c',good:"Your wallet, your item — not the game company's servers. That's what digital ownership actually means.",bad:"Answer C — blockchain ownership means the item is in your wallet. The platform can close; your asset remains."}
+    ]
+  },
+  {
+    id:7, themeKey:'crimson', tag:'Chapter 7 — Now What?',
+    title:'So... Is This the Future?',
+    blurb:"The honest answer to the question everyone's actually asking.",
+    heroImg:R.imgCh7Hero, midImg:R.imgCh7Mid,
+    midCaption:'Nobody knows how this ends. Including the people building it. That\'s the honest answer.',
+    buckOpens:{q:"Okay, real talk. Is this actually going to replace the internet? Or is this another 'technology that was going to change everything' that just kind of... didn't? Because I've been burned by hype before."},
+    buckCloses:{text:"I started this course not fully understanding what Web3 was — just that everyone was arguing about it. Now I get why. It's not really about JPEGs or speculation. It's about who owns the internet. Web2's answer was: the companies do. Web3's answer is: you could. Whether that happens is still being decided. But at least now you know what the argument is actually about. And that's worth something."},
+    facts:[
+      {myth:"Most people think: \"If Web3 was going to work, it would have worked by now.\"",q:"Is Web3 actually behind schedule?",revealed:"The transition from Web1 to Web2 took roughly a decade. Web2 didn't fully mature until the smartphone (2007) made it accessible to most people. Web3 has existed in recognizable form since Ethereum launched in 2015 — about ten years ago. The infrastructure maturation, user experience improvements, and regulatory clarity needed for mass adoption typically take 15–20 years from initial development. By that timeline, Web3 is on schedule, not late."},
+      {myth:"Most people think: \"Web3 will replace Web2 — we'll all switch over at once.\"",q:"Is there going to be a sudden switch?",revealed:"Technology transitions don't happen like that. The car didn't replace the horse in a day. Streaming didn't replace cable in a year. Web3 and Web2 will likely coexist for years, with Web3 infrastructure slowly becoming the backbone of Web2 services — just as most people use the internet without knowing what TCP/IP is. The infrastructure changes first. The user experience follows. Most people won't notice when it happens."}
+    ],
+    blocks:[
+      {t:'cold',text:"Nobody knows how this ends.<br>Including the people building it.<br>Including the people trying to stop it.<br><br><em>But here's what we actually know.</em>"},
+      {t:'body',text:"The honest answer: nobody knows. Web3 could become the foundation of the next internet, with users owning their data and digital assets as standard. Or it could be absorbed into regulated, corporate-controlled versions that keep the aesthetics of decentralization while removing the substance. Or something nobody's predicted yet could emerge. The internet itself didn't develop the way anyone predicted in 1995."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'📡',title:'Think of it like electricity in 1900',text:"In 1900, electricity existed. Some factories used it. Most homes didn't. The technology worked but the infrastructure to make it accessible to everyone took another 30 years. <strong>Web3 is similar: the technology demonstrably works. The question is how long it takes to build the infrastructure, establish trust, and improve the experience enough for regular people to use it without thinking about it.</strong>"},
+      {t:'body',text:"What's clear is that something is changing. The major financial institutions that dismissed crypto are now building crypto products. Governments that ignored blockchain are now developing blockchain-based currencies. The argument that Web3 is irrelevant is harder to make when BlackRock — the world's largest asset manager — is tokenizing funds on Ethereum, and the European Union has passed comprehensive crypto regulation."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Interoperability',def:"The ability of different systems to work together. Web3's vision includes wallets that work across any platform, assets that move between different apps and chains, and identity that you carry everywhere instead of creating a new account for each website. True interoperability would mean your digital life is portable — you own it and can take it anywhere."},
+      {t:'body',text:"What you can do right now: understand how it works (which you now do), watch what's being built, and make informed decisions if and when you decide to participate. You don't have to be an early adopter to benefit from what comes next. You don't have to invest to be informed. Financial literacy about how the internet is changing is valuable whether you're a participant or just a more informed observer of the world you're already living in."},
+      {t:'callout',icon:'🔑',text:"The three things that are actually true: <strong>(1) The internet is changing.</strong> The transition from Web1 to Web2 was invisible to most people while it happened. Web2 to Web3 is the same. <strong>(2) The underlying technology works.</strong> Debate the applications, not the math. <strong>(3) Understanding it is an advantage.</strong> Most people don't. You now do."}
+    ],
+    quizzes:[
+      {q:"How long did the transition from Web1 to Web2 roughly take?",opts:[{id:'a',text:"About 6 months after Facebook launched"},{id:'b',text:"About one decade"},{id:'c',text:"Overnight when the iPhone was released"},{id:'d',text:"It happened simultaneously everywhere"}],correct:'b',good:"About a decade — and even then, most people didn't notice while it was happening. Web3 is on a similar timeline.",bad:"Answer B — the Web1 to Web2 transition took roughly a decade and required smartphone adoption to reach most people."},
+      {q:"What is 'interoperability' in the context of Web3?",opts:[{id:'a',text:"The ability to use crypto in physical stores"},{id:'b',text:"The ability of different systems and chains to work together seamlessly"},{id:'c',text:"Government regulation of blockchain platforms"},{id:'d',text:"Converting Web2 sites to run on blockchain"}],correct:'b',good:"Portability of your digital life across platforms and chains — one wallet, one identity, one set of assets.",bad:"Answer B — interoperability means different systems work together. Your wallet and assets move across platforms instead of being locked in."},
+      {q:"What is the most accurate description of where Web3 is today?",opts:[{id:'a',text:"Fully mature and ready to replace Web2 immediately"},{id:'b',text:"Completely failed — the technology doesn't work"},{id:'c',text:"Early-stage infrastructure that works technically but hasn't reached mainstream adoption"},{id:'d',text:"Only relevant to people who own cryptocurrency"}],correct:'c',good:"Working technology, early adoption, infrastructure still maturing. Like the internet in the mid-90s.",bad:"Answer C — Web3 technology demonstrably works; the challenge is UX, education, and building infrastructure for mainstream use."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'Algorithm',def:"A set of rules used to decide what you see online. Social media algorithms are designed to maximize the time you spend on the platform — not to show you the most accurate or healthiest content. Strong reactions keep you scrolling. That's the goal.",accent:'#FFA500'},
+  {term:'Append-only',def:"A property of blockchains: you can add new information, but you can never change or delete what's already there. Every transaction ever made on a blockchain is permanently visible. This is what makes blockchain records tamper-proof.",accent:'#3AAFA9'},
+  {term:'Bitcoin',def:"The first decentralized cryptocurrency, created in 2009 by the pseudonymous Satoshi Nakamoto. Designed as a peer-to-peer payment system with no bank in the middle. Its supply is capped at 21 million coins — hard-coded from day one.",accent:'#FFD700'},
+  {term:'Blockchain',def:"A shared database distributed across thousands of computers, where records are permanent and public. Nobody owns it, nobody controls it, nobody can erase it. The foundation that makes Web3 ownership possible.",accent:'#9B8DEE'},
+  {term:'CBDC (Central Bank Digital Currency)',def:"A digital form of a country's official currency, issued and controlled by the central bank. Unlike decentralized crypto, every transaction can be monitored, restricted, or reversed by the government. The efficiency of digital money with zero decentralization.",accent:'#4A90E2'},
+  {term:'DAO (Decentralized Autonomous Organization)',def:"An organization governed by token holders voting on proposals instead of a CEO or board. No headquarters, no executives — major decisions require a democratic vote from participants. Web3's answer to traditional company structure.",accent:'#22C55E'},
+  {term:'dApp (Decentralized Application)',def:"An application built on a blockchain that runs via smart contracts instead of a company's servers. Nobody can shut it down, change its rules without a vote, or freeze your access. Uniswap, Aave, and OpenSea are examples.",accent:'#22C55E'},
+  {term:'Decentralization',def:"Distributing control across many participants instead of concentrating it in one place. A decentralized network has no single point of failure and no single company that can be shut down or pressured. The opposite of how every Web2 platform works.",accent:'#3AAFA9'},
+  {term:'DeFi (Decentralized Finance)',def:"Financial services — lending, borrowing, trading, yield — built on blockchains using smart contracts, without banks or intermediaries. The financial system that runs while you sleep, on code instead of people.",accent:'#9B8DEE'},
+  {term:'Ethereum',def:"The second-largest blockchain, and the primary platform for smart contracts, dApps, and Web3 development. Think of it as a global, decentralized computer anyone can build on. Launched in 2015 by Vitalik Buterin.",accent:'#9B8DEE'},
+  {term:'HTML (HyperText Markup Language)',def:"The language used to structure web pages. Every website you've ever visited is built on HTML at its core. Tim Berners-Lee wrote the first version in 1991 to share scientific documents. Still the foundation of the entire web.",accent:'#4A90E2'},
+  {term:'Interoperability',def:"The ability of different systems, blockchains, and platforms to work together. Web3's vision: one wallet that works everywhere, assets that move between apps, and an identity you carry instead of creating a new account for every website.",accent:'#E74C3C'},
+  {term:'NFT (Non-Fungible Token)',def:"A blockchain-verified proof of ownership for a specific digital item — an image, video, piece of music, or game item. Not the image itself, but the certificate proving you own the original. The speculation around NFTs crashed; the technology still functions.",accent:'#FFA500'},
+  {term:'Private Key',def:"A cryptographic code that proves you control a blockchain wallet. Not a password — it cannot be reset, recovered, or replaced. Whoever holds the private key controls the wallet and everything in it. Lose it, lose everything.",accent:'#E74C3C'},
+  {term:'Protocol',def:"In crypto and Web3, a set of rules governing how a blockchain or decentralized platform operates. Protocols are typically open-source — anyone can read, verify, and build on the code. Bitcoin and Ethereum are both protocols.",accent:'#3AAFA9'},
+  {term:'Smart Contract',def:"A self-executing program stored on a blockchain that automatically carries out actions when conditions are met. No middleman, no delays, no human interpretation required. If it's in the code, it happens. The code is law.",accent:'#9B8DEE'},
+  {term:'Stablecoin',def:"A cryptocurrency pegged to a stable asset, usually the US dollar, so it doesn't fluctuate in price. USDC and USDT are centralized stablecoins. DAI is decentralized. They enable DeFi and Web3 transactions without exposure to crypto volatility.",accent:'#22C55E'},
+  {term:'Seed Phrase',def:"12 or 24 random words given to you when you create a self-custody wallet. This is the master key — it can regenerate your private key on any device. Write it on paper. Never type it into any website. Anyone who has it controls your wallet permanently. There is no reset.",accent:'#E74C3C'},
+  {term:'Cold Wallet (Hardware Wallet)',def:"A physical device that stores your private key completely offline. Common examples: Ledger (USB-style device), Trezor (small device with a screen), and Tangem (a tap card the size of a credit card). Your keys never touch the internet, making it the most secure way to hold crypto long-term.",accent:'#FFD700'},
+  {term:'Token',def:"A unit of value that lives on a blockchain. Tokens can represent almost anything — cryptocurrency, ownership in a company, voting rights, a concert ticket, real estate, or a digital collectible. If Bitcoin is digital money, a token is a digital representation of any asset. Your wallet holds your tokens; the blockchain proves they're yours.",accent:'#22C55E'},
+  {term:'Tokenization',def:"Putting a real-world asset onto a blockchain as a token. A building, a painting, a bond, a song's royalties — anything with value can be divided into tokens and traded. BlackRock launched a tokenized fund on Ethereum in 2024. It makes previously inaccessible assets (like commercial real estate) tradeable by anyone with a wallet.",accent:'#22C55E'},
+  {term:'Trustless',def:"A system where you don't need to trust any single person or company because math verifies everything automatically. Trustless doesn't mean untrustworthy — it means the verification happens without requiring faith in a human institution.",accent:'#3AAFA9'},
+  {term:'Wallet',def:"In Web3, a wallet is proof of identity — a cryptographic key pair with a public address and a private key. Whoever holds the private key controls the wallet. Unlike a bank account, no company manages it and there's no customer service if you lose access.",accent:'#9B8DEE'},
+  {term:'Web3',def:"The proposed next era of the internet, built on blockchain technology, where users own their data, content, and digital assets instead of renting access from platforms. Still early-stage. The infrastructure is being built now.",accent:'#4A90E2'}
+];
+
+// STATE
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+// SCREENS
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+// MAP
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  html += '<p style="margin-top:28px;font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+// OPEN CHAPTER
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').textContent = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+// ENTER CHAPTER
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+// BUILD CHAPTER HTML
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar','imgCh6TakeAvatar','imgCh7TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+// GLOSSARY
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+// WIRE UP
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
