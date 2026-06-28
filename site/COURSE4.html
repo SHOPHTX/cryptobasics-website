@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What the F*** Even IS the Case Against Crypto?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:32px 24px;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:contain;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:contain;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:24px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:4/3;max-height:340px;min-height:200px;object-fit:contain;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:contain;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:contain;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Bear Case · Myths · Real Talk</span></div>
+    <h1 class="cover-h1">What the F*** Even IS<br><em>the Case Against Crypto?</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> through every argument against crypto — and find out which ones actually hold up.</p>
+    <button class="cover-cta" id="cover-cta-btn">Meet the Critics → Get Started</button>
+    <p class="cover-meta">7 chapters · 21 quiz questions · glossary · certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 4</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is ready to argue both sides.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every argument, myth, and term — explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You read the bear case.<br><em>All of it.</em></h1>
+      <p class="cert-body">Seven chapters. Twenty-one questions. Every major argument against crypto — examined honestly. You now understand the critics better than most of their fans do.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 4</div>
+    <h2 class="wn-h2">You can now argue<br>both <em>sides</em> of the table.</h2>
+    <div class="wn-buck-quote">"Okay. You've read the critics. You know which arguments actually hold up and which ones fall apart under five seconds of scrutiny. That puts you ahead of most people who are extremely loud on the internet about crypto. Next up: stablecoins, the Genius Act, and why <strong>programmable money might be the biggest financial shift of your lifetime.</strong> Volume 5 is where it gets real." — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../images/cover-hero.webp',
+  imgCh1Avatar:      '../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../images/ch1-take.webp',
+  imgCh1Hero:        '../images/c4-ch1hero.webp',
+  imgCh1Mid:         '../images/c4-ch1mid.webp',
+  imgCh2Avatar:      '../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../images/ch2-take.webp',
+  imgCh2Hero:        '../images/c4-ch2hero.webp',
+  imgCh2Mid:         '../images/c4-ch2mid.webp',
+  imgCh3Avatar:      '../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../images/ch3-take.webp',
+  imgCh3Hero:        '../images/c4-ch3hero.webp',
+  imgCh3Mid:         '../images/c4-ch3mid.webp',
+  imgCh4Avatar:      '../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../images/ch4-take.webp',
+  imgCh4Hero:        '../images/c4-ch4hero.webp',
+  imgCh4Mid:         '../images/c4-ch4mid.webp',
+  imgCh5Avatar:      '../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../images/ch5-take.webp',
+  imgCh5Hero:        '../images/c4-ch5hero.webp',
+  imgCh5Mid:         '../images/c4-ch5mid.webp',
+  imgCh6Avatar:      '../images/ch1-asks.webp',
+  imgCh6TakeAvatar:  '../images/ch1-take.webp',
+  imgCh6Hero:        '../images/c4-ch6hero.webp',
+  imgCh6Mid:         '../images/c4-ch6mid.webp',
+  imgCh7Avatar:      '../images/ch2-asks.webp',
+  imgCh7TakeAvatar:  '../images/ch2-take.webp',
+  imgCh7Hero:        '../images/c4-ch7hero.webp',
+  imgCh7Mid:         '../images/c4-ch7mid.webp',
+  imgGlossary:       '../images/card1.webp',
+  imgCert:           '../images/cert.webp',
+  imgWN:             '../images/visit.webp'
+};
+
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+var THEME = {
+  crimson: {
+    bg:'#190000', topbarBg:'rgba(25,0,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#E74C3C', accentBg:'rgba(231,76,60,0.12)', border:'rgba(231,76,60,0.28)',
+    readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',
+    cardBg:'rgba(231,76,60,0.07)', cardBorder:'rgba(231,76,60,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(231,76,60,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(231,76,60,0.08)', buckBorder:'rgba(231,76,60,0.25)',
+    factBg:'rgba(231,76,60,0.08)', factBorder:'rgba(231,76,60,0.3)',
+    factRevBg:'rgba(231,76,60,0.06)', analogyBg:'rgba(231,76,60,0.07)',
+    navBg:'#190000', navBorder:'rgba(231,76,60,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  teal: {
+    bg:'#061412', topbarBg:'rgba(6,20,18,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#3AAFA9', accentBg:'rgba(58,175,169,0.15)', border:'rgba(58,175,169,0.3)',
+    readFill:'linear-gradient(90deg,#3AAFA9,#7ECECA)',
+    cardBg:'rgba(58,175,169,0.08)', cardBorder:'rgba(58,175,169,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(58,175,169,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(58,175,169,0.1)', buckBorder:'rgba(58,175,169,0.28)',
+    factBg:'rgba(58,175,169,0.1)', factBorder:'rgba(58,175,169,0.32)',
+    factRevBg:'rgba(58,175,169,0.08)', analogyBg:'rgba(58,175,169,0.08)',
+    navBg:'#061412', navBorder:'rgba(58,175,169,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  purple: {
+    bg:'#0d0720', topbarBg:'rgba(13,7,32,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#9B8DEE', accentBg:'rgba(155,141,238,0.15)', border:'rgba(155,141,238,0.3)',
+    readFill:'linear-gradient(90deg,#667eea,#9b8dee)',
+    cardBg:'rgba(155,141,238,0.08)', cardBorder:'rgba(155,141,238,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(155,141,238,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(155,141,238,0.1)', buckBorder:'rgba(155,141,238,0.28)',
+    factBg:'rgba(155,141,238,0.1)', factBorder:'rgba(155,141,238,0.32)',
+    factRevBg:'rgba(155,141,238,0.08)', analogyBg:'rgba(155,141,238,0.08)',
+    navBg:'#0d0720', navBorder:'rgba(155,141,238,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  gold: {
+    bg:'#0f1200', topbarBg:'rgba(15,18,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFD700', accentBg:'rgba(255,215,0,0.12)', border:'rgba(255,215,0,0.25)',
+    readFill:'linear-gradient(90deg,#D4A017,#FFD700)',
+    cardBg:'rgba(255,215,0,0.07)', cardBorder:'rgba(255,215,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,215,0,0.15)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,215,0,0.08)', buckBorder:'rgba(255,215,0,0.25)',
+    factBg:'rgba(255,215,0,0.08)', factBorder:'rgba(255,215,0,0.3)',
+    factRevBg:'rgba(255,215,0,0.06)', analogyBg:'rgba(255,215,0,0.06)',
+    navBg:'#0f1200', navBorder:'rgba(255,215,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  blue: {
+    bg:'#060d1a', topbarBg:'rgba(6,13,26,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#4A90E2', accentBg:'rgba(74,144,226,0.12)', border:'rgba(74,144,226,0.28)',
+    readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',
+    cardBg:'rgba(74,144,226,0.07)', cardBorder:'rgba(74,144,226,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(74,144,226,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(74,144,226,0.08)', buckBorder:'rgba(74,144,226,0.25)',
+    factBg:'rgba(74,144,226,0.08)', factBorder:'rgba(74,144,226,0.3)',
+    factRevBg:'rgba(74,144,226,0.06)', analogyBg:'rgba(74,144,226,0.07)',
+    navBg:'#060d1a', navBorder:'rgba(74,144,226,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  orange: {
+    bg:'#130800', topbarBg:'rgba(19,8,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFA500', accentBg:'rgba(255,165,0,0.12)', border:'rgba(255,165,0,0.28)',
+    readFill:'linear-gradient(90deg,#FFA500,#FFD580)',
+    cardBg:'rgba(255,165,0,0.07)', cardBorder:'rgba(255,165,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,165,0,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,165,0,0.08)', buckBorder:'rgba(255,165,0,0.25)',
+    factBg:'rgba(255,165,0,0.08)', factBorder:'rgba(255,165,0,0.3)',
+    factRevBg:'rgba(255,165,0,0.06)', analogyBg:'rgba(255,165,0,0.07)',
+    navBg:'#130800', navBorder:'rgba(255,165,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  green: {
+    bg:'#041209', topbarBg:'rgba(4,18,9,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#22C55E', accentBg:'rgba(34,197,94,0.15)', border:'rgba(34,197,94,0.3)',
+    readFill:'linear-gradient(90deg,#22C55E,#4ADE80)',
+    cardBg:'rgba(34,197,94,0.08)', cardBorder:'rgba(34,197,94,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(34,197,94,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(34,197,94,0.1)', buckBorder:'rgba(34,197,94,0.28)',
+    factBg:'rgba(34,197,94,0.1)', factBorder:'rgba(34,197,94,0.32)',
+    factRevBg:'rgba(34,197,94,0.08)', analogyBg:'rgba(34,197,94,0.08)',
+    navBg:'#041209', navBorder:'rgba(34,197,94,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  }
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'crimson', tag:'Chapter 1 — The Crime Myth',
+    title:"It's Only Used by Criminals",
+    blurb:"The Silk Road made the headlines. What actually happened next?",
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'Every new technology gets used for bad things first. That has never been the end of the story.',
+    buckOpens:{q:"Okay so I'll be honest. The first time I heard about Bitcoin, it was in a news story about drugs being bought online. And I thought — wait, isn't this just money for criminals? So let's actually look at that. Is it true?"},
+    buckCloses:{text:"The 'criminal money' argument made a lot of sense in 2013. The Silk Road was running. Bitcoin was obscure. The only people who seemed to know about it were either building the future or buying drugs online. But here's what happened next: law enforcement followed the blockchain, arrested the founder, seized the servers — <strong>and did it all using Bitcoin's own permanent public record as evidence.</strong> Turns out the best tool for criminals is still cash."},
+    facts:[
+      {myth:"Most people think: 'Bitcoin is the go-to tool for criminals because transactions are anonymous.'",q:"How anonymous is Bitcoin really?",revealed:"Bitcoin transactions are permanently recorded on a public blockchain visible to anyone on Earth. Every transaction ever made is there forever. Law enforcement agencies have seized billions in crypto using blockchain analysis — including $3.6 billion from the 2016 Bitfinex hack, recovered in 2022 using blockchain forensics. The FBI solved the Silk Road case in 2013 by following the blockchain. Forensic firms like Chainalysis and Elliptic exist entirely to trace crypto flows. Cash is actually far more anonymous than Bitcoin."},
+      {myth:"Most people think: 'The majority of crypto transactions are criminal activity.'",q:"What percentage is actually criminal?",revealed:"According to Chainalysis's annual crypto crime report, criminal activity represented approximately 0.34% of total crypto transaction volume in 2023. The US Treasury has noted that traditional financial systems — particularly cash — facilitate far more money laundering volume than crypto. Some estimates suggest $800 billion to $2 trillion is laundered through traditional banking systems annually. Major banks including HSBC and Deutsche Bank have paid billions in fines for facilitating money laundering through completely ordinary banking channels."}
+    ],
+    blocks:[
+      {t:'cold',text:"Before crypto, criminals used cash.<br>Before cash, they used gold.<br>Before gold — well, crime has always found a way.<br><br><em>Let's look at the actual numbers instead of the headlines.</em>"},
+      {t:'body',text:"In 2013, the FBI took down Silk Road — an online marketplace where people bought drugs using Bitcoin. The story went global. And for a lot of people, that story became their entire mental model of what Bitcoin is for. A drug market. Criminal money. Dark web stuff. The problem with that mental model is what happened next."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🚗',title:'Think of it like blaming cars for bank robberies',text:"When robbers started using getaway cars in the 1920s, nobody argued that cars should be banned. Cars were doing millions of legitimate trips while a tiny fraction were used for crime. The vehicle isn't the problem — the crime is the problem. <strong>The same math applies to Bitcoin. 0.34% of transactions being criminal means 99.66% are not.</strong>"},
+      {t:'body',text:"Ross Ulbricht, who ran Silk Road, is serving two life sentences in prison. The FBI followed the money on the blockchain. The very thing that was supposed to make Bitcoin anonymous created a permanent evidence trail. Every transaction. Every wallet. Timestamped forever and publicly visible. This is how anonymous money does not work."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Blockchain Forensics',def:"The practice of analyzing public blockchain data to trace transactions, identify wallet owners, and follow money flows. Law enforcement agencies around the world use blockchain analytics companies like Chainalysis to solve crypto crimes. Ironically, Bitcoin's permanent public transparency makes it one of the worst tools for serious money laundering."},
+      {t:'body',text:"The 'it's for criminals' argument peaked around 2013-2016. Since then, PayPal, Visa, Mastercard, BlackRock (one of the world's largest investment firms — they manage over $10 trillion in assets, more money than most countries have in their entire economy), and the US government itself have all integrated crypto in various ways. These are not organizations that voluntarily partner with criminal infrastructure."},
+      {t:'callout',icon:'⚠️',text:"<strong>The comparison that matters:</strong> Roughly $800 billion to $2 trillion is laundered through traditional banks every year. Major banks — HSBC, Deutsche Bank, Wachovia — have paid billions in fines for facilitating money laundering through regular banking systems. The 0.34% of crypto volume that's criminal is bad. It's also significantly smaller than traditional finance's own problem."}
+    ],
+    quizzes:[
+      {q:"What made Bitcoin particularly bad for criminals who wanted true anonymity?",opts:[{id:'a',text:"Bitcoin transactions are encrypted and can't be traced"},{id:'b',text:"Every Bitcoin transaction is permanently recorded on a public blockchain"},{id:'c',text:"Governments can freeze Bitcoin wallets easily"},{id:'d',text:"Bitcoin requires government ID to create a wallet"}],correct:'b',good:"Every transaction, forever, publicly visible. The Silk Road founder is serving two life sentences partly because Bitcoin left a permanent trail.",bad:"Answer B — Bitcoin's public blockchain records every transaction permanently. Forensic firms trace crypto transactions every single day."},
+      {q:"According to Chainalysis, what percentage of crypto transactions were criminal in 2023?",opts:[{id:'a',text:"About 15-20%"},{id:'b',text:"About 5-10%"},{id:'c',text:"About 1-3%"},{id:'d',text:"About 0.34%"}],correct:'d',good:"0.34% — less than half of one percent. The headlines make crypto feel like it's majority criminal activity. The data says completely otherwise.",bad:"Answer D — approximately 0.34% of crypto transaction volume was criminal in 2023. Dramatic headlines, small actual percentage."},
+      {q:"How did law enforcement take down the Silk Road criminal marketplace?",opts:[{id:'a',text:"They shut down Bitcoin's network temporarily"},{id:'b',text:"They followed blockchain transaction records to identify the founder"},{id:'c',text:"An anonymous tip led them to physical cash"},{id:'d',text:"The founder voluntarily surrendered"}],correct:'b',good:"Followed the blockchain — the permanent public record that was supposed to make Bitcoin anonymous did the exact opposite.",bad:"Answer B — blockchain analysis traced transactions back to Ross Ulbricht. Crypto's transparency helped close the case, not the criminal."}
+    ]
+  },
+  {
+    id:2, themeKey:'teal', tag:'Chapter 2 — The Planet Argument',
+    title:"It's Destroying the Planet",
+    blurb:"Bitcoin uses a lot of energy. The question is: compared to what?",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Context is everything. How much energy does the existing financial system use?',
+    buckOpens:{q:"Okay so I have seen the headlines. 'Bitcoin uses more electricity than Argentina.' That's a lot. I get why people are upset about this one. But I genuinely want to know — is this as bad as it sounds? And what exactly are we comparing it to?"},
+    buckCloses:{text:"The energy argument is the most honest criticism on this list. Bitcoin DOES use significant energy. Proof-of-Work mining is energy-intensive by design — it's literally what makes the network secure and resistant to attack. <strong>The real question isn't 'is the impact zero?' — nothing is zero impact. The question is whether it's getting cleaner over time and whether the thing being built is worth the tradeoff. Those are legitimate debates without obvious answers.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Bitcoin mining runs almost entirely on dirty fossil fuels.'",q:"What does Bitcoin actually run on?",revealed:"The Cambridge Centre for Alternative Finance estimated in 2023 that approximately 52-76% of Bitcoin mining uses sustainable energy sources. Bitcoin miners actively seek the cheapest energy available — which is increasingly renewable energy that would otherwise go completely unused. Stranded hydroelectric power in places like Iceland, Paraguay, and Canada represents energy that has no other buyer. Bitcoin mining became an unlikely buyer for power plants that would otherwise waste their output. The renewable percentage has been climbing each year."},
+      {myth:"Most people think: 'Ethereum has the same energy problem as Bitcoin.'",q:"Did Ethereum fix its energy use?",revealed:"Quick note before we dive in: Ethereum is the second-largest blockchain network in the world — think of it like Bitcoin's bigger, more complex cousin. Bitcoin was designed to be digital money. Ethereum was built to run programs and 'smart contracts' on a blockchain — basically a global computer no single person controls. You'll hear about it a lot in crypto. Now, back to the energy story. In September 2022, Ethereum completed 'The Merge' — switching from energy-intensive Proof-of-Work mining to Proof-of-Stake validation. This reduced Ethereum's energy consumption by approximately 99.95% overnight. Ethereum now uses roughly the same electricity as a small city — about 2,600 US homes equivalent — compared to Bitcoin's roughly 0.1% of global electricity usage. The two systems now have completely different energy profiles. The environmental argument applies very differently to each."}
+    ],
+    blocks:[
+      {t:'cold',text:"Bitcoin uses electricity.<br>A lot of it.<br>If your comparison point is 'my phone charger,' yeah — that sounds absolutely shocking.<br><br><em>Let's get some actual context.</em>"},
+      {t:'body',text:"The Cambridge Bitcoin Electricity Consumption Index estimates Bitcoin uses roughly 100-150 terawatt-hours of electricity per year. Yes, that's more than many countries. It's also less than gold mining. Less than US Christmas lights. Less than the global financial sector including all its data centers, ATMs, bank branches, and payment processors combined. Comparison doesn't make the number go away — but it matters enormously for understanding what we're actually talking about."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'⛏️',title:'Think of it like judging a city for its electricity use',text:"New York City uses more electricity than most countries. We don't say New York should shut down — we talk about how to power it more cleanly. The question for Bitcoin isn't 'does it use energy?' Everything uses energy. The question is: what is that energy doing, where does it come from, and is the value created worth the cost? <strong>Those are hard questions with real, changing answers.</strong>"},
+      {t:'body',text:"What makes this complicated is that Bitcoin mining is geographically mobile in a way most industries simply aren't. Miners move to wherever electricity is cheapest. The cheapest electricity on earth is usually stranded renewable energy — hydroelectric power in Iceland, solar in West Texas, geothermal in El Salvador — power that has no other buyer and would otherwise be wasted or curtailed."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Proof-of-Work vs. Proof-of-Stake',def:"Two ways blockchains validate transactions. Proof-of-Work (Bitcoin) requires computers to solve math puzzles — energy-intensive by design, since the cost of the work is what makes cheating expensive. Proof-of-Stake (Ethereum post-Merge) requires validators to lock up crypto as collateral instead of burning electricity. PoW uses vastly more energy. PoS is dramatically more efficient but critics argue it trades energy use for potential centralization concerns."},
+      {t:'body',text:"This is the one argument on this list where the critics have a genuinely real point that deserves a real answer — not dismissal. Bitcoin's energy use is intentional and structural. It's the cost of the specific security model Satoshi chose. Whether that's the right trade-off is a legitimate, ongoing debate. What's not accurate is saying crypto as a whole is an environmental disaster — Ethereum proved that isn't structurally inevitable."},
+      {t:'callout',icon:'🌱',text:"<strong>The trajectory matters:</strong> Bitcoin mining's renewable energy percentage has been rising every year. El Salvador uses volcanic geothermal energy for its Bitcoin mining. Mining operations in Texas have begun participating in demand-response programs — voluntarily shutting down during peak grid stress to stabilize the grid. The situation is actively changing, not a static problem."}
+    ],
+    quizzes:[
+      {q:"What happened to Ethereum's energy consumption after 'The Merge' in September 2022?",opts:[{id:'a',text:"It increased slightly due to higher transaction volume"},{id:'b',text:"It stayed roughly the same but became cleaner"},{id:'c',text:"It decreased by approximately 99.95%"},{id:'d',text:"It was unmeasurable after the change"}],correct:'c',good:"99.95% reduction overnight. One of the biggest environmental improvements in tech history — and barely covered by mainstream media.",bad:"Answer C — The Merge reduced Ethereum's energy use by about 99.95% in one day. Proof-of-Stake is dramatically more efficient than mining."},
+      {q:"Why do Bitcoin miners often seek out stranded renewable energy sources?",opts:[{id:'a',text:"Government regulations require a minimum renewable percentage"},{id:'b',text:"It's the cheapest energy available and would otherwise go unused"},{id:'c',text:"Renewable energy makes Bitcoin mining computationally faster"},{id:'d',text:"Mining companies are required to buy carbon offsets by law"}],correct:'b',good:"Cheapest available energy — and often power that would otherwise be wasted entirely. Bitcoin mining accidentally became a buyer of last resort for unused renewables.",bad:"Answer B — Bitcoin miners chase the lowest-cost electricity. That often means stranded renewable energy with no other buyer and no other market."},
+      {q:"What is the most honest way to evaluate Bitcoin's energy impact?",opts:[{id:'a',text:"It is simply bad and should stop, period"},{id:'b',text:"It uses no meaningful energy and critics are completely wrong"},{id:'c',text:"Compare it to alternatives and evaluate whether the renewable percentage is growing"},{id:'d',text:"Divide total energy use by number of Bitcoin transactions for a fair per-unit cost"}],correct:'c',good:"Compare and consider trajectory. Everything uses energy. The question is what the energy is doing and whether it's getting cleaner.",bad:"Answer C — the honest evaluation compares Bitcoin's energy to alternatives and asks whether renewable sourcing is growing over time. It is."}
+    ]
+  },
+  {
+    id:3, themeKey:'purple', tag:'Chapter 3 — The Ponzi Question',
+    title:"It's a Ponzi Scheme",
+    blurb:"Let's actually define what a Ponzi is. Then decide.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:"A Ponzi needs someone running it to keep paying old investors with new money. Bitcoin has nobody running it.",
+    buckOpens:{q:"This one I heard from my uncle at Thanksgiving every single year for like four years straight. 'It's just a Ponzi scheme. When it collapses you'll lose everything.' He says this very confidently while not actually being able to define what a Ponzi scheme is. Let's define it first — then decide if it applies."},
+    buckCloses:{text:"Some crypto projects ARE Ponzis. This is real and documented. Luna/Terra collapsed in 2022 and wiped out $60 billion in weeks. BitConnect. OneCoin. Squid Game token. The crypto space has produced genuinely fraudulent Ponzi schemes. <strong>The question is whether Bitcoin specifically fits the legal and financial definition — and by that definition, it doesn't. It's something else: speculative, volatile, divisive. But structurally different from a Ponzi in every meaningful way.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Anything where early investors profit and later investors lose money is a Ponzi scheme.'",q:"What does a Ponzi actually require?",revealed:"A Ponzi scheme has a very specific legal definition requiring: (1) a central operator who collects investor funds, (2) promises of specific guaranteed returns, (3) using new investor money to pay old investors while lying about where the returns come from. Bernie Madoff ran one for decades, generating fake account statements while using new deposits to pay redemptions. Bitcoin has no operator, makes zero promises of returns, has no central authority receiving funds, and its price is determined by open market supply and demand. 'Early investors profiting' is also a description of every successful company's early shareholders — it doesn't make Apple stock a Ponzi."},
+      {myth:"Most people think: 'If one crypto project is a fraud, they all are basically the same.'",q:"Is all crypto the same thing?",revealed:"The crypto space includes Bitcoin (decentralized, 15+ years of operation), Ethereum (smart contract platform with billions in real economic activity), and thousands of speculative tokens with wildly varying degrees of legitimacy. Luna/Terra was a $60 billion algorithmic stablecoin that collapsed in a mathematical death spiral in 2022 — a genuine disaster. But Tesla stock crashing in 2022 didn't make all publicly traded companies frauds. Individual projects can fail or be fraudulent without that characterizing every asset in an entire category."}
+    ],
+    blocks:[
+      {t:'cold',text:"Bernie Madoff stole $64 billion.<br>He had offices. Employees. Fake account statements.<br>A whole operation pretending returns were real.<br><br><em>Let's see if Bitcoin matches that description.</em>"},
+      {t:'body',text:"A Ponzi scheme has a very specific structure: someone in the middle takes your money, promises you returns, and actually uses new investor money to pay old investors while pocketing the difference. It requires a person or organization running the scheme. It requires promises of specific returns. It requires deception about where the money comes from."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🎭',title:'Think of it like calling poker a Ponzi scheme',text:"When you sit down at a poker table, winners take money from losers. Early players who win take money from later players who lose. Does that make poker a Ponzi? No — because nobody promised you'd win, there's no operator manufacturing fake returns, and the game's rules are completely public. <strong>Bitcoin is closer to poker than to Madoff. High variance. Zero guaranteed returns. Rules everyone can read.</strong>"},
+      {t:'body',text:"Bitcoin's whitepaper (a 'whitepaper' is the original technical document that explains how a new technology works — Bitcoin's was published anonymously in 2008, is only 9 pages long, and anyone can read it for free online; think of it as the blueprint that started all of this) makes zero promises of returns. There is no company receiving your Bitcoin when you buy it — you're buying from another market participant. There is no central operator. The network runs on open-source code that literally anyone on Earth can read and verify. The price going up and down is supply meeting demand, not manufactured fraud."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Ponzi Scheme',def:"A fraudulent investment operation where the operator pays existing investors using money from new investors, while misrepresenting the source of those returns. Requires a central operator, promises of specific returns, and sustained deception. Bernie Madoff's scheme lasted 17 years and defrauded 37,000 people before collapsing."},
+      {t:'body',text:"Here's what IS true: many crypto projects have been Ponzis or outright frauds. Luna/Terra wiped out $60 billion in a design failure that rewarded early holders at the expense of later ones. Squid Game token was an explicit rug pull — the developers just took the money. The space attracts fraud the way any financial gold rush does. This doesn't make all crypto fraudulent — but it's a very real reason to be extremely careful about what you're looking at before putting money in."},
+      {t:'callout',icon:'⚠️',text:"<strong>The honest answer:</strong> Bitcoin ≠ Ponzi scheme, by the actual legal and structural definition. Many altcoins (short for 'alternative coins' — basically any cryptocurrency that isn't Bitcoin; there are thousands of them, ranging from Ethereum to meme coins to outright scams) and projects in the space have been genuine Ponzis or frauds. Both of those things are true at the same time. Learning to tell the difference between the two is the actual skill worth developing."}
+    ],
+    quizzes:[
+      {q:"What is the defining structural characteristic of a Ponzi scheme?",opts:[{id:'a',text:"Any investment that declines in value after an initial price increase"},{id:'b',text:"Any investment where some early buyers profit at the expense of later buyers"},{id:'c',text:"A central operator using new investor money to pay old investors while lying about the source"},{id:'d',text:"Any highly volatile speculative asset with no guaranteed returns"}],correct:'c',good:"Central operator + fake returns + new money paying old investors. No central operator, no promised returns = doesn't fit the definition.",bad:"Answer C — a Ponzi requires a specific structure: central operator, misrepresented returns, new money paying old. Bitcoin has none of these three elements."},
+      {q:"How is Bitcoin's price actually determined?",opts:[{id:'a',text:"A company called Bitcoin Inc. sets the price each day"},{id:'b',text:"Satoshi Nakamoto controls the price through original wallet activity"},{id:'c',text:"Open market supply and demand between buyers and sellers"},{id:'d',text:"The US government pegs the price to protect retail investors"}],correct:'c',good:"Open market supply and demand — exactly like gold, oil, or stocks. No one controls it and no one sets it.",bad:"Answer C — Bitcoin's price is market-driven like any publicly traded asset. No company sets it, no one guarantees anything."},
+      {q:"Why is it inaccurate to say all crypto is a Ponzi because some projects failed?",opts:[{id:'a',text:"All crypto projects are actually legitimate"},{id:'b',text:"Failed projects do not affect the value of other cryptocurrencies"},{id:'c',text:"Individual fraudulent projects do not define an entire asset category"},{id:'d',text:"Ponzi schemes by definition cannot fail"}],correct:'c',good:"Individual frauds don't condemn every asset in the category. Tesla crashing doesn't make all publicly traded stocks Ponzi schemes.",bad:"Answer C — individual bad actors don't define entire categories. The same logic would make all stocks fraudulent because Enron was fraud."}
+    ]
+  },
+  {
+    id:4, themeKey:'gold', tag:'Chapter 4 — The Value Question',
+    title:"It Has No Real Value",
+    blurb:"Neither does paper money. Let's talk about what 'value' actually means.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:"The US dollar is backed by 'trust in the US government.' That is literally the whole thing.",
+    buckOpens:{q:"My dad said this to me. 'You can't hold it, it doesn't DO anything, it's just numbers on a screen. At least gold is REAL.' And I thought — wait, when did I last actually hold a crisp dollar bill in my hand? Like, real paper cash? I went to pull one out and realized I couldn't even remember the last time I used cash. My bank account is just numbers glowing on a screen too. So what exactly is 'real value' and does the dollar have it?"},
+    buckCloses:{text:"Here's the honest answer: Bitcoin's value is partly social consensus and partly real network utility. That sounds like a criticism until you realize it's also the exact description of the US dollar. The dollar has value because enough people agree it does and because the US government says it's legal tender. Bitcoin has value because enough people agree it does and because the network keeps running. <strong>These are different foundations — but they are both foundations. Neither is backed by a pile of gold anymore.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The US dollar has real intrinsic value; Bitcoin is just made up.'",q:"What actually backs the dollar today?",revealed:"The US left the gold standard in 1971. Since then, the dollar has been a fiat currency — its value comes entirely from government decree and collective trust. A $100 bill is a piece of cotton-linen paper with a complex printing job. Its value comes from the fact that the US government declares it legal tender and 330 million Americans plus most global trade agrees. This is called 'fiat' — from the Latin meaning 'let it be done.' It works because enough people believe in it. Exactly like Bitcoin, except Bitcoin's supply is mathematically capped and no government can print more of it."},
+      {myth:"Most people think: 'If something has no physical form, it has no real value.'",q:"What about software, brands, and intellectual property?",revealed:"The most valuable companies on Earth create things you cannot hold. Google is worth over $2 trillion. Its core product is a search algorithm — pure math. Microsoft's value is software — code running on computers. Instagram sold for $1 billion when it had 13 employees and no revenue. Its value was entirely its network of users. Brand value, intellectual property, and network effects are real economic value with no physical form whatsoever. Bitcoin's value argument is similar: a network with 450+ million wallets, secured by more computing power than any other system on Earth, providing censorship-resistant transfer capability globally. Intangible does not mean worthless."}
+    ],
+    blocks:[
+      {t:'cold',text:"This $100 bill in your wallet?<br>It's cotton-linen paper with some very fancy printing.<br>The US stopped backing it with gold in 1971.<br><br><em>So what exactly is 'real value'?</em>"},
+      {t:'body',text:"The question 'does it have real value?' is more complicated than it sounds, because most things we consider valuable have value for reasons that aren't as obvious as they first appear. Gold is shiny and somewhat useful in electronics, but its value as a store of wealth is almost entirely social consensus built over thousands of years. Diamonds are marked up 1000x over their actual scarcity because De Beers ran a successful decades-long marketing campaign. 'Real value' is philosophically complicated."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'📱',title:'Think of it like software vs. a hammer',text:"A hammer has obvious physical utility — you can feel the weight, drive a nail. But Instagram, which has no physical form, sold for $1 billion in 2012. Google Maps' value is mathematical relationships between coordinates. Spotify's value is licensed audio files and a recommendation algorithm. <strong>Our entire modern economy is already built on intangible value. Bitcoin is not unusual in this regard.</strong>"},
+      {t:'body',text:"Bitcoin's specific value proposition: a globally transferable, scarce, censorship-resistant asset with a mathematically-enforced supply cap of 21 million units, running on a decentralized network that has processed transactions continuously for 15 years without any central control. You can debate whether those properties are worth whatever the current market price is. The 'no real value' argument usually isn't doing that analysis — it's just saying 'I can't hold it.'"},
+      {t:'fact',idx:1},
+      {t:'def',term:'Fiat Currency',def:"Money that a government declares to be legal tender, with value not backed by any physical commodity like gold or silver. The dollar, euro, pound, and yen are all fiat currencies. Their value comes from government authority and collective trust — not a physical backing. The US has operated on a pure fiat system since 1971."},
+      {t:'body',text:"Where the 'no value' critics have a legitimate point: most altcoins (remember: altcoins = any crypto that isn't Bitcoin — there are thousands of them, most created purely for speculation) genuinely have no clear value proposition. Thousands of tokens were created purely for speculation with no underlying utility. A meme coin is close to having no foundation beyond social momentum. The criticism lands much harder on speculative tokens than on Bitcoin and Ethereum, which have demonstrated real network utility over many years of actual use."},
+      {t:'callout',icon:'💡',text:"<strong>The question that actually matters:</strong> Not 'does it have physical form?' but 'does it do something useful that enough people value?' A dollar is useful. Email is useful. Google Maps is useful. You cannot hold any of them. Bitcoin being digital doesn't answer the question — what it does with that digital form is the real debate."}
+    ],
+    quizzes:[
+      {q:"What backs the US dollar's value today?",opts:[{id:'a',text:"Gold reserves held at Fort Knox"},{id:'b',text:"Silver reserves managed by the Federal Reserve"},{id:'c',text:"Government decree and collective trust — it is fiat currency"},{id:'d',text:"The total GDP of the United States"}],correct:'c',good:"Fiat currency — the dollar's value is government declaration and collective trust, not physical backing. The gold standard ended in 1971.",bad:"Answer C — the US left the gold standard in 1971. The dollar is backed by government decree and collective agreement, just like most of the world's currencies."},
+      {q:"What is Bitcoin's mathematically-enforced maximum supply?",opts:[{id:'a',text:"100 million Bitcoin"},{id:'b',text:"21 million Bitcoin"},{id:'c',text:"1 billion Bitcoin"},{id:'d',text:"There is no cap — more can always be created by developers"}],correct:'b',good:"21 million, hard-coded from day one and enforced by math. Never changes. That is the entire foundation of the 'digital gold' argument.",bad:"Answer B — Bitcoin's maximum supply is 21 million, written into the protocol. This limit is enforced by code, not by any company or government."},
+      {q:"Why do Bitcoin supporters compare it to companies like Google or Instagram?",opts:[{id:'a',text:"Because Bitcoin runs on the same servers as Google"},{id:'b',text:"To show that enormous value can exist without any physical form"},{id:'c',text:"To argue that Bitcoin should be worth exactly as much as Google"},{id:'d',text:"Because both Bitcoin and Google are regulated as technology companies"}],correct:'b',good:"Intangible value is everywhere in our economy already. The 'I can't hold it' argument applies equally to most of what makes the modern economy run.",bad:"Answer B — software, networks, and brands are worth trillions despite having zero physical form. Bitcoin's digital nature alone does not make it worthless."}
+    ]
+  },
+  {
+    id:5, themeKey:'blue', tag:'Chapter 5 — The Ban Question',
+    title:"The Government Will Just Ban It",
+    blurb:"China tried. Several times. Let's look at what actually happened.",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:"China banned Bitcoin in 2021. Bitcoin hit an all-time high of $69,000 four months later.",
+    buckOpens:{q:"I have heard this one a lot. <em>'The government will just shut it down when it gets too big.'</em> And I get the logic — governments don't love things they can't control. But China literally banned it. Multiple times. And Bitcoin is still here. So what exactly happens when a government bans Bitcoin?"},
+    buckCloses:{text:"Governments have real tools to make crypto harder, more expensive, and more inconvenient. They can ban exchanges, restrict on-ramps and off-ramps, make it legally risky to accept as payment. These tools are effective at slowing adoption. <strong>What they haven't been able to do is shut down the underlying network itself. That's genuinely new — a financial network with no headquarters to raid, no server to seize, and nodes running in over 100 countries simultaneously.</strong>"},
+    facts:[
+      {myth:"Most people think: 'A government ban would immediately destroy Bitcoin's value and usage.'",q:"What actually happened when China banned it?",revealed:"China has banned Bitcoin and crypto multiple times — in 2013, 2017, 2019, and comprehensively in September 2021. Each ban pushed down prices temporarily and pushed Chinese miners to relocate — primarily to Kazakhstan and the United States. But after each ban, the network continued operating without interruption. After the comprehensive 2021 ban, Bitcoin hit an all-time high of roughly $69,000 in November 2021 — about four months later. Chinese citizens continued accessing crypto via VPNs — a VPN, or Virtual Private Network, is a cheap app that reroutes your internet connection through another country, making it look like you're browsing from somewhere else. They cost about $5 a month, take five minutes to set up, and a literal middle schooler can do it. The ban made crypto harder to access, not impossible. The network had no Chinese headquarters to raid. Miners left the country; the blockchain kept producing blocks."},
+      {myth:"Most people think: 'If the US bans crypto, that would be the end of it globally.'",q:"What has the US actually done with crypto?",revealed:"The US approach has been regulation rather than prohibition. The SEC (Securities and Exchange Commission — the government agency that oversees stock markets and investment products, like a referee for Wall Street), the CFTC (Commodity Futures Trading Commission — the agency that regulates commodities like oil, gold, and certain financial contracts), and Treasury (the US Department of the Treasury — the federal agency that manages government money, taxes, and currency policy) have built regulatory frameworks — approving Bitcoin ETFs (an ETF, or Exchange-Traded Fund, is an investment product that trades on the stock market just like a regular stock; a Bitcoin ETF lets you get exposure to Bitcoin's price through your normal brokerage account, no crypto wallet or technical know-how required) in January 2024, creating tax guidance for crypto as property, pursuing enforcement against specific bad actors. The US government itself holds seized crypto worth billions of dollars. Over 50 million Americans own crypto. The IRS requires it to be reported as taxable property. You don't build that regulatory apparatus around something you plan to ban. Most major Western governments have moved in the same direction: regulate, tax, integrate — not prohibit."}
+    ],
+    blocks:[
+      {t:'cold',text:"September 2021: China banned Bitcoin.<br>The price dropped.<br>November 2021: Bitcoin hit $69,000.<br><br><em>Banning something and making it disappear are two very different problems.</em>"},
+      {t:'body',text:"Governments have real power over financial systems. They control banks, regulate exchanges, restrict access to on-ramps and off-ramps, and can make it legally risky to use crypto within their borders. These tools are effective at slowing adoption and making things complicated for regular users. What they're significantly less effective at is shutting down a decentralized network with no central server, no headquarters, and nodes running in over 100 countries simultaneously."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🌊',title:"Think of it like trying to ban the internet in one country",text:"China built the Great Firewall — one of the most sophisticated censorship systems in human history. And VPNs still work — those cheap $5/month apps that reroute your internet through another country. Information still gets through. The most sophisticated digital authoritarian state on Earth couldn't fully contain information flow. <strong>Bitcoin doesn't have a single server to block. To shut it down, you'd have to block all internet traffic everywhere simultaneously. No government controls that.</strong>"},
+      {t:'body',text:"The more interesting development is what's happened instead of bans. The US approved Bitcoin ETFs from BlackRock (the world's largest investment firm, managing over $10 trillion — your grandparents' retirement fund is probably partly invested through them) and Fidelity (one of America's most trusted financial companies, with tens of millions of everyday Americans' retirement accounts). The EU passed MiCA — that stands for Markets in Crypto-Assets, the European Union's official law recognizing and regulating crypto across all 27 member countries — comprehensive regulation rather than prohibition. Japan treats Bitcoin as legal property. El Salvador made it legal tender. Australia, Canada, and Singapore have all built regulatory frameworks around it. The 'government will ban it' prediction hasn't matched the direction major governments have actually taken."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Regulatory Capture vs. Prohibition',def:"Two ways governments respond to new technology they can't fully control: prohibition (outlaw it, like alcohol in the 1920s) or regulatory capture (acknowledge it, regulate it, tax it, integrate it into existing systems). Alcohol prohibition failed spectacularly. The US eventually regulated it instead. Most major economies are currently pursuing regulatory capture with crypto."},
+      {t:'body',text:"The ban argument made more sense in 2013-2016 when Bitcoin was tiny and obscure. Today, the US Treasury holds seized crypto worth billions, the IRS has detailed crypto tax guidance, and BlackRock — the world's largest investment firm managing over $10 trillion in assets — runs a Bitcoin ETF (an Exchange-Traded Fund, essentially a Bitcoin investment product you can buy through any regular stock brokerage) that required direct government approval. The ship has sailed on 'the government will just ban it' in every major Western financial market."},
+      {t:'callout',icon:'⚡',text:"<strong>Where bans still matter:</strong> Cryptocurrency is genuinely banned or heavily restricted in roughly 50 countries. These restrictions do reduce adoption in those markets. A global prohibition would require every government on Earth to coordinate simultaneously — including countries that have already made Bitcoin legal tender or run government-approved ETFs. That coordination has never happened for anything."}
+    ],
+    quizzes:[
+      {q:"What happened to Bitcoin's price after China's comprehensive September 2021 ban?",opts:[{id:'a',text:"It immediately dropped to near zero"},{id:'b',text:"It stayed flat as miners simply relocated"},{id:'c',text:"It dropped temporarily then hit an all-time high of roughly $69,000"},{id:'d',text:"It was completely unaffected since China was a small market"}],correct:'c',good:"Temporary drop, then all-time high. Banning something and making it disappear are two completely different problems.",bad:"Answer C — Bitcoin dipped after China's 2021 ban, then hit roughly $69,000 in November 2021. The network kept producing blocks without interruption."},
+      {q:"What regulatory direction have most major Western economies taken toward crypto?",opts:[{id:'a',text:"Outright prohibition, following China's example"},{id:'b',text:"Ignoring it completely and waiting for it to collapse on its own"},{id:'c',text:"Building regulatory frameworks — ETFs, tax rules, compliance requirements"},{id:'d',text:"Nationalizing crypto networks and operating them as public utilities"}],correct:'c',good:"Regulation over prohibition — ETFs approved, tax frameworks built, compliance requirements established. Integration, not banning.",bad:"Answer C — the US, EU, UK, Japan, and Australia have all moved toward regulating crypto rather than banning it. The trend is clear."},
+      {q:"Why is Bitcoin particularly difficult to ban compared to traditional financial services?",opts:[{id:'a',text:"International law prevents countries from banning financial assets"},{id:'b',text:"Bitcoin companies have powerful lobbying groups protecting them"},{id:'c',text:"The network is decentralized with no central server or headquarters to shut down"},{id:'d',text:"Bitcoin transactions move faster than governments can track them"}],correct:'c',good:"No headquarters, no server, nodes in 100+ countries. You can make using it inconvenient. You cannot unplug a network that has no single plug.",bad:"Answer C — decentralization means no single point of failure. There is no Bitcoin HQ to raid or server to seize. The protocol keeps running."}
+    ]
+  },
+  {
+    id:6, themeKey:'orange', tag:'Chapter 6 — The Death Count',
+    title:"It Already Died (For the 400th Time)",
+    blurb:"Bitcoin has been declared dead 473 times. It has a website tracking every obituary.",
+    heroImg:R.imgCh6Hero, midImg:R.imgCh6Mid,
+    midCaption:"The website 99bitcoins.com has tracked every Bitcoin obituary since 2010. The count keeps climbing.",
+    buckOpens:{q:"They said Bitcoin has crashed again. You've seen the headlines — 'Bitcoin is dead,' 'It's over this time,' 'I told you so.' And every single time, the same confident voices come back to write the obituary. There is actually a website that tracks every time a major publication declared Bitcoin dead. As of 2024? Over 470 times. Nobel Prize winners. Bank CEOs. Finance professors. All said it was finished. At what point do we start questioning the people writing the obituaries?"},
+    buckCloses:{text:"Here's what makes the death declarations interesting: many of them were written by very smart, very credentialed people with very logical reasoning. The 2018 crash looked exactly like a death. The 2022 crash looked exactly like a death. FTX collapsing looked very much like a death. <strong>But the network kept producing blocks. Every 10 minutes, another block added to the chain. Every single time someone declared it dead, the blockchain disagreed and kept going.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Bitcoin crashing 80% is basically the same as dying.'",q:"What has happened after each of Bitcoin's major crashes?",revealed:"Bitcoin has dropped more than 77% from peak prices four distinct times in its history: 2011 (crashed 93%), 2013-2015 (crashed 83%), 2017-2018 (crashed 84%), 2021-2022 (crashed 77%). Each time, major publications declared it dead. Each time, it recovered and eventually set new all-time highs. Bitcoin crossed $100,000 in late 2024, setting a new record after the most recent crash cycle. This pattern does not guarantee it happens a fifth time. But calling each crash 'the death' has been factually wrong every single time so far."},
+      {myth:"Most people think: 'The FTX collapse in 2022 proved crypto itself had no real foundation.'",q:"What exactly collapsed in FTX — the company or the blockchain?",revealed:"FTX was one of the world's largest crypto exchanges — basically a crypto bank where millions of people deposited their Bitcoin and other crypto to trade. It was run by Sam Bankman-Fried, nicknamed 'SBF,' a young billionaire who appeared on the covers of Forbes and Fortune and was celebrated as crypto's responsible face. In November 2022, FTX collapsed because SBF allegedly took billions of dollars in customer deposits and secretly used them for risky bets through his own hedge fund — a straightforward fraud case, not a blockchain failure. SBF was arrested in December 2022 and convicted in 2023. He's currently serving a 25-year prison sentence. During the entire FTX crisis, Bitcoin kept producing blocks. Ethereum kept producing blocks. Smart contracts kept executing. The blockchain produced blocks through every day of the collapse, the arrest, and the trial. What failed was a company that sat on top of crypto, not crypto itself. This distinction is identical to saying 'a bank went under' is the same as 'the US dollar died.' It is not the same thing."}
+    ],
+    blocks:[
+      {t:'cold',text:"May 2011: 'Bitcoin is a joke and it's going to crash.' — Gizmodo.<br>December 2017: 'Bitcoin is a fraud.' — Jamie Dimon, JPMorgan CEO.<br>December 2022: 'Crypto is done.' — Multiple respected economists.<br><br><em>As of 2024: Bitcoin exists. JPMorgan now runs a crypto division.</em>"},
+      {t:'body',text:"The 99bitcoins.com Bitcoin Obituary page tracks every declared death of Bitcoin from reputable sources. By 2024, the count exceeded 470. These are not random Twitter accounts — they include The Economist, Forbes, Business Insider, multiple Nobel Prize-winning economists, and bank CEOs. The consistency of the death declarations is matched only by Bitcoin's consistency of still existing."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🔴',title:"Think of it like 'the internet is a fad' in 1995",text:"In 1995, Newsweek published a piece titled 'The Internet? Bah!' by astronomer Clifford Stoll, who made excellent detailed arguments about why the internet would never replace books, newspapers, or retail stores. He was spectacularly wrong. Smart people with impressive credentials make enormous calls about new technology and miss completely. <strong>Credentials don't protect you from being wrong about paradigm shifts. History is full of experts who missed them.</strong>"},
+      {t:'body',text:"The important distinction is between what died and what didn't. FTX died — $8 billion in customer funds allegedly stolen by its CEO, who is now in prison. Three Arrows Capital died — a massive crypto hedge fund (a hedge fund is a pool of money from wealthy investors, managed by professionals making big bets) that borrowed enormous sums to bet on crypto prices going up; when prices crashed in 2022, they couldn't pay back their debts and collapsed overnight. Luna/Terra died — algorithmic design failure that destroyed $60 billion. BlockFi, Celsius, and Voyager all died — these three were crypto lending platforms, essentially banks for crypto where people deposited their coins to earn interest; when the 2022 market crash hit, all three went bankrupt and locked customers out of their funds. None of these were 'crypto.' They were companies and projects built on top of crypto. The blockchain underneath kept processing blocks through every single one of those collapses."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Centralized Exchange (CEX) vs. Protocol',def:"An exchange like FTX or Coinbase is a company that holds your crypto on your behalf — it can be hacked, go bankrupt, or commit fraud just like any company. The blockchain protocol (Bitcoin, Ethereum) is decentralized code running across thousands of computers simultaneously. When an exchange collapses, the protocol keeps running. These are completely different things that get confused constantly."},
+      {t:'body',text:"There is a pattern to when death declarations spike: they cluster at price bottoms. When Bitcoin dropped from $69,000 to $16,000 in 2022, the obituaries flooded out across mainstream media. These are written by people watching price charts, not blockchain data. The blockchain never showed a flatline. A new block appeared every 10 minutes because that is what the code does, regardless of what CNBC thinks."},
+      {t:'callout',icon:'📊',text:"<strong>The track record:</strong> Everyone who bought Bitcoin at any price before 2020 is in profit as of late 2024. Every 'death' declaration made below the current price was wrong as a sell signal. Past performance absolutely does not guarantee future results. But a pattern of 'declared dead, then recovered' that has now repeated through four complete market cycles is worth noting."}
+    ],
+    quizzes:[
+      {q:"What happened to Bitcoin's price after each of its four major 80%+ crashes?",opts:[{id:'a',text:"It gradually declined toward zero over several years"},{id:'b',text:"It stabilized at a lower permanent price level"},{id:'c',text:"It eventually recovered and set new all-time highs each time"},{id:'d',text:"The crashes were not significant enough to matter"}],correct:'c',good:"Four cycles of 80%+ crash followed by new all-time highs. The obituaries have been wrong every single time so far.",bad:"Answer C — Bitcoin has crashed more than 77% four times and recovered to new all-time highs each time. The pattern has been consistent."},
+      {q:"Why was the FTX collapse fundamentally different from 'Bitcoin dying'?",opts:[{id:'a',text:"FTX was too small to have any real impact on crypto"},{id:'b',text:"FTX failing was company fraud, not a failure of the underlying blockchain"},{id:'c',text:"The US government bailed out FTX so Bitcoin was protected"},{id:'d',text:"FTX was not actually a cryptocurrency company"}],correct:'b',good:"Company fraud does not equal protocol death. Bitcoin kept producing blocks through every second of the FTX collapse, arrest, and trial.",bad:"Answer B — FTX was a company that allegedly committed massive fraud. The Bitcoin blockchain ran uninterrupted throughout the entire crisis."},
+      {q:"What resource tracks every time Bitcoin has been declared dead by mainstream media?",opts:[{id:'a',text:"The Bitcoin Mortality Index maintained at the Federal Reserve"},{id:'b',text:"The Bitcoin Obituary page at 99bitcoins.com"},{id:'c',text:"The Crypto Death Counter published by the SEC"},{id:'d',text:"MIT's Digital Currency Initiative collapse tracker"}],correct:'b',good:"99bitcoins.com has been tracking since 2010. Over 470 deaths declared. Zero deaths actually occurred.",bad:"Answer B — 99bitcoins.com's Bitcoin Obituary page has tracked every declared death since 2010. Over 470 and still counting."}
+    ]
+  },
+  {
+    id:7, themeKey:'green', tag:'Chapter 7 — The Steelman',
+    title:"Warren Buffett Is Right (Kind Of)",
+    blurb:"Here's the strongest version of the bear case. And why smart people still disagree.",
+    heroImg:R.imgCh7Hero, midImg:R.imgCh7Mid,
+    midCaption:"You don't have to invest in something to understand it. But understanding it is required for an actual opinion.",
+    buckOpens:{q:"Okay so Warren Buffett called Bitcoin <em>'rat poison squared.'</em> Charlie Munger called it <em>'disgusting and contrary to the interests of civilization.'</em> These are two of the most successful investors in history with track records that span 60 years. I should at least understand WHY they think this before I decide if they're right or wrong."},
+    buckCloses:{text:"Here's where I land after looking at all of this: Warren Buffett built more real wealth than almost anyone alive by investing in businesses with clear cash flows and durable competitive advantages. His framework literally does not have a slot for 'decentralized network with no cash flow but significant network effects and a fixed supply cap.' That does not mean he's wrong about everything. It means he is using a framework that Bitcoin was not designed to fit into. <strong>Maybe the question isn't whether Buffett is right. Maybe the question is whether his framework is the right tool for evaluating this particular thing.</strong>"},
+    facts:[
+      {myth:"Most people think: 'If Warren Buffett is against crypto, that settles it.'",q:"What does Buffett's record on technology tell us?",revealed:"Warren Buffett famously avoided technology stocks for decades, calling them too hard to value within his framework. He did not invest in Amazon, Google, or Apple until very late in their growth cycles. He has admitted this was a costly mistake — he personally knew Jeff Bezos and watched Amazon build its dominance without investing a dollar. His framework — buy businesses with durable earnings and competitive moats — simply did not accommodate asset classes without predictable cash flows. He later did invest heavily in Apple, acknowledging he had updated his thinking. Being the greatest stock picker of a generation does not make someone right about every asset class or every paradigm shift."},
+      {myth:"Most people think: 'Bitcoin has no real bear case — critics are just uninformed.'",q:"What are the strongest legitimate criticisms of Bitcoin?",revealed:"The honest bear case: (1) Bitcoin generates no cash flow, making traditional valuation frameworks impossible to apply; (2) its security model depends on continued miner participation as block rewards decrease every four years — the long-term incentive structure is an open question; (3) a superior technology could theoretically replace it, though 15 years of network effects argue against easy displacement; (4) regulatory shifts in major markets could dramatically impact accessibility and adoption; (5) adoption has been slower than early optimists predicted. These are real concerns held by serious financial thinkers. They don't prove Bitcoin will fail — but they are genuinely open questions without obvious answers."}
+    ],
+    blocks:[
+      {t:'cold',text:"Warren Buffett. Charlie Munger. Peter Lynch. Paul Krugman.<br>Brilliant people. Long track records. Real accomplishments.<br>All said some version of 'crypto is garbage.'<br><br><em>Let's take that seriously for a minute.</em>"},
+      {t:'body',text:"The strongest version of the bear case isn't 'it's criminal money' or 'it's a Ponzi.' Those arguments fall apart under examination. The strongest version is Buffett's: Bitcoin generates no cash flow, no dividends, no earnings. You cannot value it the way you value a business. Its price is entirely based on what the next person will pay for it. In traditional finance, that's called the 'greater fool theory' — and it is a legitimate, serious criticism."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🔨',title:'Think of it like valuing land before cities existed',text:"Before cities, land had a simple value: what you could grow on it or build on it immediately. A piece of scrubland in what would become Manhattan in 1650 had almost no conventional value by any existing framework. The network effect — the city, the port, the commerce — hadn't materialized yet. <strong>Bitcoin's critics might be like people in 1650 saying Manhattan dirt has no value. They're not wrong about the present framework. They might be entirely wrong about the trajectory.</strong>"},
+      {t:'body',text:"Here's where Buffett's framework genuinely works well: most altcoins and ICO projects DID turn out to be nothing, exactly as his skepticism predicted. The crypto space produced thousands of projects that promised to revolutionize various industries using blockchain, raised hundreds of millions, and delivered nothing. His skepticism about assets with no cash flow and vague utility has been extremely accurate when applied to most of the crypto ecosystem."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Greater Fool Theory',def:"The idea that an asset can be bought at a price above its intrinsic value because there will always be a buyer willing to pay an even higher price later. Critics apply this to Bitcoin — its value depends entirely on future buyers paying more. Supporters point out this applies equally to gold, which also has no cash flow or earnings, and yet has been a store of value for 5,000 years."},
+      {t:'body',text:"The honest position after going through every argument on this list: the bear case for crypto is real and serious people hold it for legitimate reasons. The bull case is also real and serious people hold it for legitimate reasons. The space contains genuine innovation and genuine fraud. The technology is real; many of the valuations are speculative. Understanding where that line actually sits — that is the work. There is no shortcut to doing that work."},
+      {t:'callout',icon:'🔑',text:"<strong>What to take from this entire course:</strong> The critics are not idiots. They are also not all correct. Bitcoin has survived 15 years, four crashes, multiple government bans, exchange collapses, and over 470 declared deaths. The honest answer is: nobody knows exactly how this ends. But you now know enough to follow what's happening without getting swept up by whoever is loudest in the room — on either side."},
+      {t:'protip',title:'The question to ask about every crypto argument',icon:'🧠',text:"Before accepting any argument about crypto — bullish or bearish — ask yourself: 'What would have to be true for this argument to be wrong?' If someone cannot answer that question, they are not analyzing. They are rooting for a team. <strong>The people who navigate this space successfully are the ones who can hold the bull case and the bear case in their heads simultaneously and think through the actual evidence.</strong>"}
+    ],
+    quizzes:[
+      {q:"What is the 'greater fool theory' as applied to Bitcoin?",opts:[{id:'a',text:"The theory that Bitcoin's biggest investors are unsophisticated"},{id:'b',text:"The idea that Bitcoin's value depends on finding a future buyer willing to pay more"},{id:'c',text:"The concept that Bitcoin will always trade at a lower price than gold"},{id:'d',text:"A theory about why crypto regulations are bound to fail"}],correct:'b',good:"Greater fool — value depends on the next buyer's price. Critics apply this to Bitcoin. Supporters note the same logic applies to gold, which has no cash flow either.",bad:"Answer B — the greater fool theory argues an asset's price depends entirely on future buyers paying more. Buffett's framework applies this to Bitcoin."},
+      {q:"What is Warren Buffett's primary investment framework?",opts:[{id:'a',text:"Maximum short-term price appreciation in any asset class"},{id:'b',text:"Government bonds with minimal risk as alternatives to stocks"},{id:'c',text:"Businesses with durable earnings, predictable cash flows, and competitive moats"},{id:'d',text:"Any scarce asset with growing demand and limited supply"}],correct:'c',good:"Cash flows and durable competitive moats — his framework. Bitcoin has neither. So his tools literally cannot value it within his system.",bad:"Answer C — Buffett buys businesses with earnings, cash flows, and durable competitive advantages. Bitcoin simply does not fit this framework."},
+      {q:"After examining all six arguments in this course, what is the most accurate description of crypto?",opts:[{id:'a',text:"A guaranteed investment that will surpass traditional finance within five years"},{id:'b',text:"A complete scam with no legitimate use cases or real technology"},{id:'c',text:"A genuine technological development with real use cases, real risks, and uncertain long-term outcomes"},{id:'d',text:"Exactly like the late 1990s internet bubble, destined to collapse completely"}],correct:'c',good:"Real technology, real risks, uncertain outcomes. That is the honest answer. Anyone who tells you differently is probably selling something.",bad:"Answer C — the honest position is that crypto has genuine utility and genuine risk. Certainty in either direction is usually a signal that someone is not thinking clearly."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'Blockchain Forensics',def:"The practice of analyzing public blockchain data to trace transactions, identify wallet owners, and follow money flows. Firms like Chainalysis and Elliptic specialize in this. Bitcoin's transparency makes it one of the worst tools for serious money laundering.",accent:'#E74C3C'},
+  {term:'Chainalysis',def:"One of the leading blockchain analytics companies. Works with law enforcement globally to trace cryptocurrency transactions. Played a key role in recovering $3.6 billion from the 2016 Bitfinex hack and in closing numerous criminal cases.",accent:'#E74C3C'},
+  {term:'Fiat Currency',def:"Money declared legal tender by a government, with value backed by authority and collective trust rather than a physical commodity like gold. The US dollar has been purely fiat since 1971 when Nixon ended the gold standard.",accent:'#FFD700'},
+  {term:'FTX',def:"A major centralized cryptocurrency exchange that collapsed in November 2022 after its founder, Sam Bankman-Fried, allegedly misused billions in customer deposits. The company failed — the Bitcoin blockchain kept running throughout.",accent:'#FFA500'},
+  {term:'Greater Fool Theory',def:"The idea that an asset bought above its intrinsic value can still be sold profitably because there will be a future buyer willing to pay even more. Critics apply this to Bitcoin. Supporters note the same logic applies to gold, which also generates no cash flow.",accent:'#22C55E'},
+  {term:'Luna / Terra',def:"A $60 billion algorithmic stablecoin ecosystem that collapsed in a mathematical death spiral in May 2022, wiping out an enormous amount of wealth in weeks. A genuine catastrophic failure — and an example of a crypto project that was arguably Ponzi-like in structure.",accent:'#9B8DEE'},
+  {term:'MiCA',def:"Markets in Crypto-Assets — the European Union's comprehensive regulatory framework for cryptocurrency, passed in 2023. One of the most significant examples of governments choosing to regulate crypto rather than prohibit it.",accent:'#4A90E2'},
+  {term:'Ponzi Scheme',def:"A fraudulent investment operation where a central operator uses new investor money to pay old investors while lying about the source of returns. Requires: a central operator, promised returns, and sustained deception. Bernie Madoff ran one for 17 years.",accent:'#9B8DEE'},
+  {term:'Proof-of-Stake',def:"A blockchain validation method where participants lock up ('stake') crypto as collateral to validate transactions, instead of burning electricity. Ethereum switched to this in September 2022, cutting its energy use by 99.95%.",accent:'#3AAFA9'},
+  {term:'Proof-of-Work',def:"The original Bitcoin validation method — computers compete to solve math puzzles, and the winner adds the next block. Energy-intensive by design. The energy cost is what makes attacking the network prohibitively expensive.",accent:'#3AAFA9'},
+  {term:'Regulatory Capture',def:"When a government acknowledges a new industry and builds frameworks to regulate, tax, and integrate it — rather than trying to ban it. Most major Western governments have taken this approach to crypto, building compliance requirements instead of prohibitions.",accent:'#4A90E2'},
+  {term:'Satoshi Nakamoto',def:"The anonymous creator (or creators) of Bitcoin. Published the whitepaper in October 2008, launched the network in January 2009, disappeared completely in 2010. Identity remains unknown. Early wallets associated with Satoshi have never moved.",accent:'#FFD700'},
+  {term:'Silk Road',def:"An online criminal marketplace that operated from 2011-2013 using Bitcoin for transactions. Shut down by the FBI, who traced the founder using Bitcoin's own public blockchain. The founder, Ross Ulbricht, is serving two life sentences.",accent:'#E74C3C'},
+  {term:'Spot Bitcoin ETF',def:"An exchange-traded fund giving investors exposure to Bitcoin's actual price through a regular brokerage account, without requiring self-custody. Approved by the SEC in January 2024 from BlackRock, Fidelity, and others. Marked a major shift in institutional acceptance.",accent:'#FFD700'},
+  {term:'Stranded Energy',def:"Electricity generated by a power plant that has no buyer at that moment — often renewable energy that cannot be stored or transported. Bitcoin mining has become a significant buyer of stranded renewable energy in places like Iceland, Paraguay, and Texas.",accent:'#3AAFA9'},
+  {term:'21 Million Cap',def:"Bitcoin's hard-coded maximum supply. No more than 21 million Bitcoin can ever exist. This limit is enforced by the protocol itself — no company, government, or developer can override it. The cap is central to Bitcoin's 'digital gold' value argument.",accent:'#FFD700'},
+  {term:'Rug Pull',def:"A crypto fraud where developers create a project, attract investment, then suddenly abandon it and take the funds. The Squid Game token (2021) is a famous example — developers disappeared with millions of dollars shortly after launch.",accent:'#FFA500'},
+  {term:'Network Effects',def:"The phenomenon where a network becomes more valuable as more people use it. The phone is a classic example — useless with one person, more valuable with every additional user. Bitcoin supporters argue its 450+ million wallets and 15-year track record represent significant network effects.",accent:'#22C55E'}
+];
+
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').innerHTML = '“' + ch.buckOpens.q + '”';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar','imgCh6TakeAvatar','imgCh7TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
