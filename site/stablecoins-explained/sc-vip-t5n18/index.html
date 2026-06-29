@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What the F*** Even IS a Stablecoin?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:32px 24px;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:cover;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:24px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:16/9;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:cover;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Stablecoins · GENIUS Act · Digital Dollars</span></div>
+    <h1 class="cover-h1">What the F*** Even IS<br><em>a Stablecoin?</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> through stablecoins, the Luna collapse, the GENIUS Act, and the future of programmable money.</p>
+    <button class="cover-cta" id="cover-cta-btn">Follow the Money → Get Started</button>
+    <p class="cover-meta">7 chapters · 21 quiz questions · glossary · certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 5</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is ready to follow the money.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every argument, myth, and term — explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You now understand<br><em>programmable money.</em></h1>
+      <p class="cert-body">Seven chapters. Twenty-one questions. Stablecoins, Tether, Luna, the GENIUS Act, and the digital dollar future — all examined simply. You now understand programmable money better than most people in the room.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 5</div>
+    <h2 class="wn-h2">You understand<br>programmable <em>money.</em></h2>
+    <div class="wn-buck-quote">"Okay. You know what a stablecoin is, how it stays at $1, why Luna wiped out $60 billion in 72 hours, what the GENIUS Act actually does, and the real difference between a private stablecoin and a government digital dollar. That's real financial literacy. Next up: spot Bitcoin ETFs, institutional adoption, and <strong>what happens when Wall Street fully commits.</strong> Volume 6 is where it gets institutional." — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../../images/cover-hero.webp',
+  imgCh1Avatar:      '../../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh1Hero:        '../../images/c5-ch1hero.webp',
+  imgCh1Mid:         '../../images/c5-ch1mid.webp',
+  imgCh2Avatar:      '../../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh2Hero:        '../../images/c5-ch2hero.webp',
+  imgCh2Mid:         '../../images/c5-ch2mid.webp',
+  imgCh3Avatar:      '../../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../../images/ch3-take.webp',
+  imgCh3Hero:        '../../images/c5-ch3hero.webp',
+  imgCh3Mid:         '../../images/c5-ch3mid.webp',
+  imgCh4Avatar:      '../../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../../images/ch4-take.webp',
+  imgCh4Hero:        '../../images/c5-ch4hero.webp',
+  imgCh4Mid:         '../../images/c5-ch4mid.webp',
+  imgCh5Avatar:      '../../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../../images/ch5-take.webp',
+  imgCh5Hero:        '../../images/c5-ch5hero.webp',
+  imgCh5Mid:         '../../images/c5-ch5mid.webp',
+  imgCh6Avatar:      '../../images/ch1-asks.webp',
+  imgCh6TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh6Hero:        '../../images/c5-ch6hero.webp',
+  imgCh6Mid:         '../../images/c5-ch6mid.webp',
+  imgCh7Avatar:      '../../images/ch2-asks.webp',
+  imgCh7TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh7Hero:        '../../images/c5-ch7hero.webp',
+  imgCh7Mid:         '../../images/c5-ch7mid.webp',
+  imgGlossary:       '../../images/card1.webp',
+  imgCert:           '../../images/cert.webp',
+  imgWN:             '../../images/visit.webp'
+};
+
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+var THEME = {
+  crimson: {
+    bg:'#190000', topbarBg:'rgba(25,0,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#E74C3C', accentBg:'rgba(231,76,60,0.12)', border:'rgba(231,76,60,0.28)',
+    readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',
+    cardBg:'rgba(231,76,60,0.07)', cardBorder:'rgba(231,76,60,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(231,76,60,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(231,76,60,0.08)', buckBorder:'rgba(231,76,60,0.25)',
+    factBg:'rgba(231,76,60,0.08)', factBorder:'rgba(231,76,60,0.3)',
+    factRevBg:'rgba(231,76,60,0.06)', analogyBg:'rgba(231,76,60,0.07)',
+    navBg:'#190000', navBorder:'rgba(231,76,60,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  teal: {
+    bg:'#061412', topbarBg:'rgba(6,20,18,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#3AAFA9', accentBg:'rgba(58,175,169,0.15)', border:'rgba(58,175,169,0.3)',
+    readFill:'linear-gradient(90deg,#3AAFA9,#7ECECA)',
+    cardBg:'rgba(58,175,169,0.08)', cardBorder:'rgba(58,175,169,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(58,175,169,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(58,175,169,0.1)', buckBorder:'rgba(58,175,169,0.28)',
+    factBg:'rgba(58,175,169,0.1)', factBorder:'rgba(58,175,169,0.32)',
+    factRevBg:'rgba(58,175,169,0.08)', analogyBg:'rgba(58,175,169,0.08)',
+    navBg:'#061412', navBorder:'rgba(58,175,169,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  purple: {
+    bg:'#0d0720', topbarBg:'rgba(13,7,32,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#9B8DEE', accentBg:'rgba(155,141,238,0.15)', border:'rgba(155,141,238,0.3)',
+    readFill:'linear-gradient(90deg,#667eea,#9b8dee)',
+    cardBg:'rgba(155,141,238,0.08)', cardBorder:'rgba(155,141,238,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(155,141,238,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(155,141,238,0.1)', buckBorder:'rgba(155,141,238,0.28)',
+    factBg:'rgba(155,141,238,0.1)', factBorder:'rgba(155,141,238,0.32)',
+    factRevBg:'rgba(155,141,238,0.08)', analogyBg:'rgba(155,141,238,0.08)',
+    navBg:'#0d0720', navBorder:'rgba(155,141,238,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  gold: {
+    bg:'#0f1200', topbarBg:'rgba(15,18,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFD700', accentBg:'rgba(255,215,0,0.12)', border:'rgba(255,215,0,0.25)',
+    readFill:'linear-gradient(90deg,#D4A017,#FFD700)',
+    cardBg:'rgba(255,215,0,0.07)', cardBorder:'rgba(255,215,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,215,0,0.15)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,215,0,0.08)', buckBorder:'rgba(255,215,0,0.25)',
+    factBg:'rgba(255,215,0,0.08)', factBorder:'rgba(255,215,0,0.3)',
+    factRevBg:'rgba(255,215,0,0.06)', analogyBg:'rgba(255,215,0,0.06)',
+    navBg:'#0f1200', navBorder:'rgba(255,215,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  blue: {
+    bg:'#060d1a', topbarBg:'rgba(6,13,26,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#4A90E2', accentBg:'rgba(74,144,226,0.12)', border:'rgba(74,144,226,0.28)',
+    readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',
+    cardBg:'rgba(74,144,226,0.07)', cardBorder:'rgba(74,144,226,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(74,144,226,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(74,144,226,0.08)', buckBorder:'rgba(74,144,226,0.25)',
+    factBg:'rgba(74,144,226,0.08)', factBorder:'rgba(74,144,226,0.3)',
+    factRevBg:'rgba(74,144,226,0.06)', analogyBg:'rgba(74,144,226,0.07)',
+    navBg:'#060d1a', navBorder:'rgba(74,144,226,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  orange: {
+    bg:'#130800', topbarBg:'rgba(19,8,0,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#FFA500', accentBg:'rgba(255,165,0,0.12)', border:'rgba(255,165,0,0.28)',
+    readFill:'linear-gradient(90deg,#FFA500,#FFD580)',
+    cardBg:'rgba(255,165,0,0.07)', cardBorder:'rgba(255,165,0,0.2)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(255,165,0,0.18)',
+    optBg:'rgba(255,255,255,0.06)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.82)',
+    buckBg:'rgba(255,165,0,0.08)', buckBorder:'rgba(255,165,0,0.25)',
+    factBg:'rgba(255,165,0,0.08)', factBorder:'rgba(255,165,0,0.3)',
+    factRevBg:'rgba(255,165,0,0.06)', analogyBg:'rgba(255,165,0,0.07)',
+    navBg:'#130800', navBorder:'rgba(255,165,0,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  },
+  green: {
+    bg:'#041209', topbarBg:'rgba(4,18,9,0.97)', textPrimary:'#fff', textSecondary:'rgba(255,255,255,0.72)',
+    accent:'#22C55E', accentBg:'rgba(34,197,94,0.15)', border:'rgba(34,197,94,0.3)',
+    readFill:'linear-gradient(90deg,#22C55E,#4ADE80)',
+    cardBg:'rgba(34,197,94,0.08)', cardBorder:'rgba(34,197,94,0.22)',
+    quizBg:'rgba(0,0,0,0.35)', quizText:'#fff', quizBorder:'rgba(34,197,94,0.2)',
+    optBg:'rgba(255,255,255,0.05)', optBorder:'rgba(255,255,255,0.1)', optText:'rgba(255,255,255,0.8)',
+    buckBg:'rgba(34,197,94,0.1)', buckBorder:'rgba(34,197,94,0.28)',
+    factBg:'rgba(34,197,94,0.1)', factBorder:'rgba(34,197,94,0.32)',
+    factRevBg:'rgba(34,197,94,0.08)', analogyBg:'rgba(34,197,94,0.08)',
+    navBg:'#041209', navBorder:'rgba(34,197,94,0.2)',
+    prevColor:'rgba(255,255,255,0.35)', prevBorder:'rgba(255,255,255,0.15)'
+  }
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'gold', tag:'Chapter 1 — What IS a Stablecoin?',
+    title:"The Dollar's Digital Twin",
+    blurb:"Your friend just sent you $47.23. It arrived as exactly $47.23. That's not how Bitcoin works.",
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'A stablecoin is engineered to always be worth $1 — give or take a fraction of a cent.',
+    buckOpens:{q:"Okay so I keep hearing about stablecoins and I genuinely had no idea what they were. My friend sent me USDC to split a dinner bill. It landed in my crypto wallet as exactly $47.23. No price swing. No conversion fee. No bank delay. That's not how Bitcoin works. So what exactly IS a stablecoin — and how does it just stay at a dollar?"},
+    buckCloses:{text:"Here's the key insight: a stablecoin is not trying to go to the moon. It's not a speculative investment. It's a programmable dollar — a dollar that moves with the speed and flexibility of crypto. <strong>The value of that isn't about getting rich. It's about moving money around the world instantly, 24/7, for near-zero cost, without asking a bank's permission.</strong> That's genuinely new infrastructure."},
+    facts:[
+      {myth:"Most people think: 'A stablecoin is just another crypto that goes up and down.'",q:"What actually makes it stable?",revealed:"A stablecoin is designed to maintain a fixed value — almost always $1.00 USD. This is called being 'pegged' to the dollar. The big difference from Bitcoin: Bitcoin's price is driven by market speculation and supply/demand. A stablecoin's price is anchored to a real-world asset. USDC and USDT typically trade between $0.9998 and $1.0002 — closer to a dollar than most dollar bills come from their face value after inflation. The stability is the entire point."},
+      {myth:"Most people think: 'Stablecoins are only used by crypto traders avoiding volatility between trades.'",q:"Who actually uses them and why?",revealed:"Stablecoins processed over $10 trillion in transaction volume in 2023 — comparable to Visa's annual volume. Their use cases go well beyond crypto trading: migrant workers in Latin America and Southeast Asia use USDC to send money home instantly for near-zero fees instead of paying 5-7% to Western Union. Small businesses in Argentina and Turkey use USDT as savings because their local currencies are losing value rapidly. Crypto lending apps (called DeFi — Decentralized Finance — basically banking apps with no bank involved) use stablecoins because nobody wants to lend or borrow in something that swings 10% in a day. International payroll companies are paying contractors in USDC. The use cases have grown far beyond crypto traders."}
+    ],
+    blocks:[
+      {t:'cold',text:"Your friend sends you $47.23 in USDC.<br>It arrives as exactly $47.23.<br>No price swing. No conversion fee. No bank delay.<br><br><em>That's a new thing. Let's understand why.</em>"},
+      {t:'body',text:"A stablecoin is a cryptocurrency designed to maintain a stable value — almost always pegged to $1.00 USD. The most important word is 'pegged.' Pegged means locked. Anchored. The coin is engineered to not move away from $1.00 the way Bitcoin moves 10% in a day. USDC (USD Coin) and USDT (Tether — more on the controversy in Chapter 3) are the two largest stablecoins, and combined they handle trillions of dollars in transaction volume every year."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🎰',title:'Think of it like casino chips',text:"When you walk into a casino and exchange your cash for chips, those chips have a fixed value — $5 chip is always worth $5 inside the casino. You can use them to play, tip dealers, or trade with other players. When you're done, you cash them back in. <strong>A stablecoin is like a casino chip for the entire global internet — programmable, instantly transferable, always worth $1, and redeemable back to regular dollars whenever you want.</strong>"},
+      {t:'body',text:"Why does it matter that it's 'programmable'? Because a regular dollar in your bank can only do what your bank allows, during banking hours, within banking systems. A stablecoin can be programmed to automatically split a payment between three people, move to a wallet in another country in four seconds, earn interest in a lending protocol, or trigger a transaction when specific conditions are met — all without a bank in the middle."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Stablecoin',def:"A cryptocurrency designed to maintain a stable value, almost always pegged to $1.00 USD. Unlike Bitcoin or Ethereum, whose prices fluctuate with market demand, stablecoins are engineered to hold their value. The two largest by volume are USDT (Tether) and USDC (USD Coin). Combined, they process more annual transaction volume than Visa."},
+      {t:'body',text:"The three main types of stablecoins — fiat-backed, crypto-backed, and algorithmic — all try to solve the same problem (staying at $1) in very different ways, with very different track records. Chapter 2 covers all three. Spoiler: one of them wiped out $60 billion in 72 hours."},
+      {t:'callout',icon:'💡',text:"<strong>The simplest way to think about it:</strong> A stablecoin is a dollar with a computer attached to it. Same value as a dollar. But it can do things dollars sitting in a bank account literally cannot do — move anywhere on Earth in seconds, be programmed with conditions, and operate 24/7 without any bank involved."}
+    ],
+    quizzes:[
+      {q:"What is the primary design goal of a stablecoin?",opts:[{id:'a',text:"To increase in value faster than Bitcoin"},{id:'b',text:"To maintain a stable value pegged to $1.00 USD"},{id:'c',text:"To be immune from government regulation"},{id:'d',text:"To replace gold as the world's reserve asset"}],correct:'b',good:"Stable at $1.00 — not to go to the moon. The entire point is that it doesn't move with market speculation.",bad:"Answer B — stablecoins are designed to maintain a fixed $1.00 value. They're programmable dollars, not speculative investments."},
+      {q:"How did stablecoin transaction volume in 2023 compare to Visa?",opts:[{id:'a',text:"Stablecoins were about 1% of Visa's volume"},{id:'b',text:"Stablecoins were about 10% of Visa's volume"},{id:'c',text:"Stablecoins processed roughly the same or more than Visa"},{id:'d',text:"Stablecoins are too small to compare to Visa meaningfully"}],correct:'c',good:"Over $10 trillion — in the same league as or exceeding Visa's volume. Stablecoins are not a niche product anymore.",bad:"Answer C — stablecoins processed over $10 trillion in 2023, comparable to major payment networks."},
+      {q:"What makes a stablecoin 'programmable' in a way regular bank dollars are not?",opts:[{id:'a',text:"It earns interest automatically just by being held"},{id:'b',text:"It can only be used within the crypto ecosystem"},{id:'c',text:"It can be programmed with conditions, move globally in seconds, and operate 24/7 without a bank"},{id:'d',text:"The government programs it to track your spending"}],correct:'c',good:"Programmable conditions, instant global transfers, 24/7 operation — all without a bank's permission or banking hours.",bad:"Answer C — stablecoins can be programmed to move automatically, split payments, and transfer globally in seconds without any bank involvement."}
+    ]
+  },
+  {
+    id:2, themeKey:'teal', tag:'Chapter 2 — How They Stay Stable',
+    title:"Three Ways to Stay at $1",
+    blurb:"Not all stablecoins are built the same. One of these three methods nearly destroyed crypto.",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Fiat-backed. Crypto-backed. Algorithmic. Three very different bets on holding $1.',
+    buckOpens:{q:"Okay so they all claim to be worth a dollar. But I heard some of them are backed by actual dollars in a bank, some are backed by other crypto, and some are backed by... math? And one of those blew up and erased $60 billion. I need someone to walk me through the three types before I touch any of this."},
+    buckCloses:{text:"Here's the honest scorecard: fiat-backed stablecoins (USDC, USDT) have worked for years and processed trillions in volume. Crypto-backed (DAI) has survived multiple crashes through overcollateralization. Algorithmic — the approach that tried to solve this with pure math and no real backing — produced the biggest single collapse in crypto history. <strong>The lesson: stability requires something real behind it. Math alone is not enough when real panic hits.</strong>"},
+    facts:[
+      {myth:"Most people think: 'All stablecoins work basically the same way.'",q:"What are the three actual types?",revealed:"Type 1 — Fiat-Backed: The issuer holds real US dollars (or equivalent Treasuries) in a bank account and issues one stablecoin per dollar held. USDC and USDT are the largest examples. When you redeem, they wire you real dollars. Type 2 — Crypto-Backed: Backed by cryptocurrency as collateral, but overcollateralized to handle volatility. DAI requires you to deposit $150 worth of ETH to borrow $100 in DAI. The extra $50 is a price-drop buffer. Type 3 — Algorithmic: No real collateral at all. An algorithm adjusts supply and demand to maintain the $1 peg. UST (TerraUSD) was the largest example. It maintained $1 for two years. Then it collapsed to fractions of a cent in 72 hours and destroyed $60 billion."},
+      {myth:"Most people think: 'If you hold crypto as collateral, the stablecoin collapses whenever crypto crashes.'",q:"How has DAI survived multiple crypto crashes?",revealed:"DAI, the largest crypto-backed stablecoin, has maintained its $1 peg through every major crypto crash since 2017 — including the 83% crash in 2015, the 84% crash in 2018, and the 77% crash in 2022. The reason is overcollateralization: to borrow 100 DAI you must deposit at least $150 worth of ETH (Ethereum — remember, that's the second-largest blockchain we covered in earlier volumes). If ETH's price drops too far, a piece of code automatically sells your collateral to pay back the loan before it runs out of money — no human needed, no phone call, it just happens instantly. This mechanism has worked through multiple brutal market conditions. Crypto-backed does not mean crypto-fragile — with enough overcollateralization, it's surprisingly robust."}
+    ],
+    blocks:[
+      {t:'cold',text:"Type 1: Actual dollars in a bank. Simple.<br>Type 2: Other crypto as collateral. Engineered.<br>Type 3: Pure math and confidence. Dangerous.<br><br><em>Only two of these have a good track record.</em>"},
+      {t:'body',text:"The most important thing to understand: 'stable' doesn't mean 'safe.' It means 'pegged to $1.' HOW that peg is maintained determines everything — the stability, the risk, and what happens when things go wrong. Three fundamentally different mechanisms exist, with very different track records. Understanding which type you're holding is the basic homework."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏦',title:'Think of it like three ways to guarantee your rent deposit',text:"Fiat-backed is like a landlord who keeps your deposit in an actual bank account — the money is right there. Crypto-backed is like putting your car up as collateral — it's worth more than the deposit, so there's a buffer if something goes wrong. Algorithmic is like promising to guarantee rent with IOUs backed by nothing but a promise that people will always want your IOUs. <strong>The first two have track records. The third one became the biggest financial collapse in crypto history.</strong>"},
+      {t:'body',text:"The fiat-backed model (USDC, USDT) is the simplest and most widely used: the company holds $1 in real assets for every $1 in stablecoins issued. When you redeem USDC for dollars, Circle (the company behind USDC) sends real dollars from their bank account. USDC publishes monthly attestations of their reserves verified by accounting firms. It's as close to a traditional financial product as crypto gets."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Overcollateralization',def:"Depositing more collateral than you borrow, to create a safety buffer against price drops. DAI requires $150 in ETH (Ethereum) to borrow $100 in DAI. If ETH's price drops, the extra $50 provides a buffer before the position goes underwater. It's the same principle banks use for mortgages — your house must be worth more than your loan."},
+      {t:'body',text:"The algorithmic model failed catastrophically because it tried to maintain a $1 peg using only math and a second token — no real dollars, no real crypto reserves. UST (TerraUSD) was the largest algorithmic stablecoin. It maintained its peg for two years and grew to $18 billion. In May 2022, confidence cracked. The algorithm designed to defend the peg instead created a death spiral — the more the peg broke, the worse the fix made it. $60 billion wiped out in 72 hours. Chapter 4 goes deep on exactly what happened."},
+      {t:'callout',icon:'⚠️',text:"<strong>The three types ranked by track record:</strong> USDC (fiat-backed) — maintained $1 through every crisis, monthly reserve audits from a major accounting firm. DAI (crypto-backed) — maintained $1 through multiple 80%+ crashes using overcollateralization. UST (algorithmic) — maintained $1 for two years, then collapsed to fractions of a cent in 72 hours in the largest single loss event in crypto history."}
+    ],
+    quizzes:[
+      {q:"What backs a fiat-backed stablecoin like USDC?",opts:[{id:'a',text:"Pure math and supply/demand algorithms"},{id:'b',text:"Other cryptocurrencies held as collateral"},{id:'c',text:"Actual US dollars and equivalent assets held in reserve"},{id:'d',text:"Gold held in secure vaults"}],correct:'c',good:"Real dollars (or Treasury equivalents) held in bank accounts. One dollar held for every stablecoin issued.",bad:"Answer C — fiat-backed stablecoins like USDC hold real USD in reserve. Redeem your USDC and they send actual dollars."},
+      {q:"Why does DAI require MORE than $100 in ETH to borrow $100 in DAI?",opts:[{id:'a',text:"To generate profit for the DAI protocol"},{id:'b',text:"To create a buffer against ETH price drops without going underwater"},{id:'c',text:"Government regulations require minimum overcollateralization ratios"},{id:'d',text:"To slow down borrowing and reduce DAI's total supply"}],correct:'b',good:"Buffer against price drops. $150 in ETH can absorb a significant price decline before the $100 DAI loan becomes undercollateralized.",bad:"Answer B — overcollateralization creates a safety buffer. $150 of ETH has room to drop before the $100 DAI position goes underwater."},
+      {q:"What caused UST (TerraUSD) to collapse in May 2022?",opts:[{id:'a',text:"The US government banned it specifically"},{id:'b',text:"Its reserves of real dollars were stolen in a hack"},{id:'c',text:"An algorithmic death spiral — the mechanism designed to defend $1 destroyed value instead"},{id:'d',text:"Its founder was arrested and all operations shut down"}],correct:'c',good:"Algorithmic death spiral. The mechanism meant to defend the peg accelerated the collapse — the more it broke, the worse the fix made it.",bad:"Answer C — UST had no real reserves. When confidence cracked, the algorithm amplified the collapse rather than stopping it."}
+    ]
+  },
+  {
+    id:3, themeKey:'purple', tag:'Chapter 3 — The Tether Question',
+    title:"Tether: The Billion Dollar Question",
+    blurb:"The most-used stablecoin on Earth has a complicated history. Here's the honest picture.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:'USDT processes more volume than Bitcoin on many days. Its reserve story is complicated.',
+    buckOpens:{q:"So USDT — Tether — is the most-used stablecoin on Earth. More daily volume than Bitcoin on some days. But there's this whole controversy about whether they actually have the dollars they claim to have. Two government agencies took action against them. And yet it's still running. Can someone explain what the deal is here?"},
+    buckCloses:{text:"Here's where I land: the original Tether controversy was real and serious. They claimed 100% dollar backing for years and weren't accurate. They settled with two regulators for that. Since then, reserves have improved significantly and they've been profitable. <strong>Whether their current disclosures are sufficient is a legitimate open question. What's not appropriate is pretending the history didn't happen OR that a 2018 controversy means USDT is collapsing tomorrow. The honest answer is somewhere in the middle.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Tether (USDT) has always been backed 1:1 by US dollars in a bank.'",q:"What did regulators actually find?",revealed:"In 2021, Tether settled with the New York Attorney General (NYAG) — the chief law enforcement officer of New York State, who has broad authority over financial companies — for $18.5 million after investigators found that Tether had misrepresented its reserves. Tether claimed to be 100% backed by USD at all times. Investigators found this wasn't accurate — at various points, reserves included loans to affiliated companies (including Bitfinex, a related crypto exchange), non-cash assets, and other crypto. That same year, Tether also settled with the CFTC (the Commodity Futures Trading Commission — the US government agency that regulates commodity markets like oil, gold, and futures contracts) for $41 million for the same misrepresentation. Total settlements: $59.5 million. After settling, Tether began publishing quarterly reserve attestations."},
+      {myth:"Most people think: 'Tether is on the verge of collapse right now.'",q:"What do Tether's current reserves actually look like?",revealed:"As of 2024-2025, Tether publishes quarterly attestation reports showing approximately $118+ billion in assets against the stablecoins they've issued — meaning they have slightly more money in the bank than the total value of all USDT in circulation — a small surplus. Their largest holdings are US Treasury bills (short-term government IOUs, one of the safest financial instruments that exist) and cash equivalents. In 2023 and 2024, Tether reported billions in profits, primarily from interest earned on those Treasury holdings. They operate with relatively small staff and are profitable. The risk today is different from 2018 — the question is now about whether attestations are sufficient disclosure, not whether reserves exist at all."}
+    ],
+    blocks:[
+      {t:'cold',text:"2014: Tether launches, claims 100% dollar backing.<br>2021: New York AG disagrees. $18.5M settlement.<br>2021: CFTC disagrees. $41M settlement.<br><br><em>Let's look at where things actually stand today.</em>"},
+      {t:'body',text:"Tether (USDT) was founded in 2014 and is now the largest stablecoin by daily transaction volume. On many days, more dollars flow through Tether than through Bitcoin. It is deeply embedded in global crypto infrastructure — most crypto exchanges use USDT as the main currency people trade with — like how stores price everything in dollars, crypto exchanges price most things in USDT. If you've ever bought cryptocurrency, there's a good chance USDT was part of the plumbing. That makes the reserve question genuinely important."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏛️',title:'Think of it like a bank claiming your deposits are in cash when they invested them',text:"If your bank said your savings were 100% in cash — but actually invested most of it and held the rest in various assets — that would be misleading. It might still be fine (banks legally do something similar, just transparently and within regulated limits). But the original claim would be wrong. <strong>That's essentially what Tether's 2021 settlements were about: not outright theft, but reserves that weren't what they claimed.</strong>"},
+      {t:'body',text:"After the settlements, Tether changed its disclosures. They now publish quarterly reserve attestations — third-party accountants review what Tether says they hold and confirm the numbers match. The attestations show primarily US Treasury bills and cash equivalents. Critics point out that attestations aren't full audits — they confirm what Tether says they hold at a snapshot in time, but don't do the deeper forensic verification a full audit would require. As of 2025, Tether has not completed a full financial audit by a major accounting firm."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Reserve Attestation vs. Full Audit',def:"A reserve attestation means an accountant reviews what a company claims to hold and confirms the numbers match at a specific point in time. A full audit goes deeper — verifying how assets were obtained, checking for undisclosed liabilities, testing internal controls. Tether publishes quarterly attestations. USDC publishes monthly attestations from Grant Thornton, a major firm. Neither has completed the type of full audit required of publicly traded US companies."},
+      {t:'body',text:"The practical question: USDT has operated since 2014 through multiple market crashes, two regulatory settlements, and multiple industry collapses without breaking its $1 peg in any sustained way. The 2021 settlements resolved the original regulatory actions. Whether current disclosures are sufficient is a debate even crypto experts disagree on. The honest answer: the original concerns were valid, the situation has improved, and the remaining concerns are about transparency quality — not obvious immediate fraud."},
+      {t:'callout',icon:'💡',text:"<strong>USDC vs. USDT for everyday users:</strong> USDC (issued by Circle, a US-regulated company) is generally more transparent — monthly attestations from a major accounting firm, US regulatory oversight, reserves in US banks and Treasuries. USDT has more daily volume and deeper global exchange integration, but a more complicated history. For large holdings, the transparency difference is worth considering. For small everyday transactions, the practical difference is minimal."}
+    ],
+    quizzes:[
+      {q:"What did the 2021 regulatory settlements reveal about Tether's reserves?",opts:[{id:'a',text:"Tether had zero assets and was a complete Ponzi scheme"},{id:'b',text:"Tether had misrepresented its reserves — not 100% USD-backed as claimed"},{id:'c',text:"Tether had too many US dollars and was over-collateralized"},{id:'d',text:"The settlements were politically motivated with no factual basis"}],correct:'b',good:"Misrepresented — not the 100% dollar backing they claimed. Settled with both NYAG and CFTC for $59.5M total. Not fraud, but not accurate.",bad:"Answer B — Tether's settlements confirmed they had overstated their USD backing. The reserves existed but weren't the pure dollar holdings they claimed."},
+      {q:"What do Tether's current reserve holdings primarily consist of?",opts:[{id:'a',text:"Bitcoin and Ethereum held in cold storage"},{id:'b',text:"US Treasury bills and cash equivalents"},{id:'c',text:"Gold stored in Swiss vaults"},{id:'d',text:"Loans to affiliated cryptocurrency companies"}],correct:'b',good:"US Treasury bills — short-term government debt, one of the safest financial instruments that exists. A major shift from the original controversy.",bad:"Answer B — as of 2024-2025, Tether's reserves are primarily US Treasury bills and cash equivalents per their quarterly attestation reports."},
+      {q:"What is the main remaining concern about Tether after its 2021 settlements?",opts:[{id:'a',text:"They still have no reserves at all"},{id:'b',text:"They publish attestations, not full audits — less rigorous verification"},{id:'c',text:"They are currently under active criminal investigation"},{id:'d',text:"Their reserves are now only backed by other cryptocurrencies"}],correct:'b',good:"Attestations vs. full audits — the remaining question is about disclosure rigor, not whether reserves exist. The bar for a full audit is higher than what Tether provides.",bad:"Answer B — the current concern is that quarterly attestations are less rigorous than full audits. The question of reserve quality and transparency quality remains open."}
+    ]
+  },
+  {
+    id:4, themeKey:'orange', tag:'Chapter 4 — The Luna Crash',
+    title:"Luna Died So We Could Learn",
+    blurb:"$60 billion. 72 hours. The biggest single collapse in crypto history — explained simply.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:'UST was supposed to be worth $1. In May 2022, it collapsed to fractions of a cent.',
+    buckOpens:{q:"My cousin lost $40,000 in Luna in three days. He thought it was a stablecoin. It was supposed to be worth ONE DOLLAR. How does a coin designed to be worth a dollar go to basically zero in 72 hours? And how did nobody see this coming?"},
+    buckCloses:{text:"Here's the brutal honest answer: the mechanism had worked for two years. Returns were real during good times. Do Kwon was celebrated on magazine covers. <strong>The design flaw was always there — critics warned about it publicly. But bubbles don't feel like bubbles from inside. They feel like genius. Until they don't.</strong> What your cousin experienced was the algorithmic stablecoin experiment failing in the most catastrophic way possible. That experiment is now finished."},
+    facts:[
+      {myth:"Most people think: 'Luna collapsed because of a hack or coordinated external attack.'",q:"What actually caused the death spiral?",revealed:"Luna did not collapse due to a hack. It collapsed due to a fatal design flaw, possibly accelerated by large coordinated selling. The mechanism: UST (the stablecoin, supposed to be $1) was maintained through a relationship with LUNA (a separate token). When UST fell below $1, the protocol let you burn (permanently destroy) $1 of UST to mint (create) $1 worth of LUNA — theoretically creating buying pressure on UST. But when confidence collapsed rapidly, the LUNA supply inflated at catastrophic speed. Everyone burned UST to get LUNA, then immediately sold LUNA — crashing LUNA's price, which reduced confidence further, which caused more UST selling, which created more LUNA — a death spiral. In 72 hours, LUNA went from $80 to $0.00015. UST went from $1.00 to $0.02."},
+      {myth:"Most people think: 'Do Kwon was a businessman who made honest mistakes.'",q:"What happened to Do Kwon legally?",revealed:"Do Kwon, founder of Terraform Labs, faces serious criminal charges across multiple jurisdictions. The US SEC (Securities and Exchange Commission — the government's investment market regulator) charged him with securities fraud in February 2023. South Korean authorities issued criminal warrants. Montenegro arrested him in March 2023 trying to travel on falsified documents — fake passports. Montenegro's courts ordered his extradition; both the US and South Korea are seeking to try him. He faces charges not just for the collapse but for allegedly misleading investors about UST's stability while being aware of the risks. His legal situation remains ongoing as of 2025."}
+    ],
+    blocks:[
+      {t:'cold',text:"May 7, 2022: UST begins losing its $1 peg.<br>May 9, 2022: LUNA has lost 96% of its value.<br>May 12, 2022: LUNA is worth less than $0.001.<br><br><em>Here's what actually happened and why.</em>"},
+      {t:'body',text:"Terra/Luna was one of the most celebrated projects in all of crypto. TerraUSD (UST) was an algorithmic stablecoin — a $1 coin maintained not by real dollar reserves but by a mathematical mechanism involving a companion token called LUNA. At its peak, the combined ecosystem was worth over $60 billion. It attracted serious money from big investment firms, wealthy investors, and millions of regular people who trusted it. Do Kwon, its founder, was a charismatic, confident figure who publicly dismissed critics who warned about the mechanism's fragility."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🎪',title:'Think of it like a line system that only works when nobody panics',text:"Imagine a queue at an amusement park where the management promises: 'If the line gets too long, we'll add more ride cars.' Works fine when crowds are manageable. But when 50,000 people rush the gate at once? Adding ride cars makes no difference. The system wasn't designed for true panic at scale. <strong>Luna's mechanism was mathematically elegant in calm conditions and catastrophically fragile when real panic hit at scale. The panic came.</strong>"},
+      {t:'body',text:"Anchor Protocol made things worse. Anchor was a lending platform in the Terra ecosystem that offered 20% annual yield on UST deposits — paying people essentially 20% interest just to hold a 'dollar.' This attracted billions of dollars from people who weren't interested in the technology at all — they were chasing the yield. When the mechanism began to fail, billions of dollars tried to exit simultaneously, overwhelming the system."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Death Spiral',def:"A self-reinforcing collapse cycle where the mechanism designed to restore stability instead accelerates the decline. Luna's death spiral: UST falls below $1 → users burn UST to get LUNA → LUNA supply inflates rapidly → LUNA price crashes → less confidence in the system → more UST selling → more burning → more LUNA inflation → repeat until both tokens reach zero. Each step made the next step worse with no floor."},
+      {t:'body',text:"The lesson the entire industry absorbed: algorithmic stablecoins without real collateral do not hold up when real panic hits at scale. The 'algorithmic' category has been largely abandoned by serious projects since 2022. Every major stablecoin launched after Luna is either fiat-backed or overcollateralized by real assets. The experiment cost $60 billion to prove a design flaw critics had warned about for years."},
+      {t:'callout',icon:'🔑',text:"<strong>The $40,000 question:</strong> Was UST a stablecoin? Technically yes — categorized and marketed as one. Was it a safe stablecoin? No — its mechanism had no real backing, only math. The word 'stablecoin' does not mean 'safe.' Understanding HOW a stablecoin maintains its peg is the basic question that matters. After Luna, that question got a lot more serious attention."}
+    ],
+    quizzes:[
+      {q:"What was the fundamental mechanism that caused UST to collapse?",opts:[{id:'a',text:"A hack drained Terraform Labs' actual dollar reserves"},{id:'b',text:"The US government seized Terraform Labs' bank accounts"},{id:'c',text:"A death spiral: losing the $1 peg triggered LUNA inflation, crashing LUNA, which worsened the peg"},{id:'d',text:"Do Kwon secretly sold all LUNA before the collapse"}],correct:'c',good:"Death spiral — the mechanism designed to defend $1 instead accelerated the collapse. Each step made the next step worse until both tokens hit zero.",bad:"Answer C — no hack, no government seizure. The collapse was a design flaw: the burn/mint mechanism created a self-reinforcing spiral to zero when panic hit."},
+      {q:"Why did Anchor Protocol's 20% yield make the Luna collapse worse?",opts:[{id:'a',text:"The yield payments drained Terraform Labs' real dollar reserves"},{id:'b',text:"It attracted capital chasing returns, not the technology — capital that fled instantly when panic hit"},{id:'c',text:"20% yield violated SEC regulations, triggering a regulatory shutdown"},{id:'d',text:"The yield attracted only unsophisticated retail investors"}],correct:'b',good:"Yield-chasing money is panic money. Billions came for the 20% return, not because they believed in the mechanism. When cracks appeared, that capital exited at maximum speed.",bad:"Answer B — Anchor's 20% yield attracted billions that cared only about the return. When the mechanism began to fail, that capital tried to exit simultaneously and overwhelmed the system."},
+      {q:"What legal actions has Do Kwon faced since the Luna collapse?",opts:[{id:'a',text:"No charges — courts ruled the collapse was an unfortunate but legal market event"},{id:'b',text:"A small civil fine with no criminal implications"},{id:'c',text:"SEC fraud charges in the US, criminal warrants in South Korea, arrested in Montenegro on falsified passports, extradition proceedings ongoing"},{id:'d',text:"He cooperated with regulators and received full immunity"}],correct:'c',good:"SEC charges, South Korean warrants, arrested in Montenegro on fake passports, extradition sought by two countries. This is treated as criminal conduct, not an accident.",bad:"Answer C — Do Kwon faces serious criminal exposure. Arrested in Montenegro in 2023 with falsified travel documents, facing fraud charges in the US and South Korea."}
+    ]
+  },
+  {
+    id:5, themeKey:'blue', tag:'Chapter 5 — Real World Use',
+    title:"Who's Actually Using These?",
+    blurb:"Remittances. Savings in collapsing currencies. International payroll. It's more than crypto traders.",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'In Argentina and Turkey, holding USDT as savings is not speculation. It is survival.',
+    buckOpens:{q:"Okay I get what stablecoins are. But who's actually using them in the real world right now? Like not crypto traders — actual people doing actual things with them? Because if it's just traders shuffling money between Bitcoin bets, that's interesting but not world-changing. I want to know if these things are doing something real for real people."},
+    buckCloses:{text:"Here's what hits me after looking at this: the use cases driving real stablecoin adoption aren't about getting rich — they're about escaping financial systems that are failing people. People in Argentina aren't using USDT to speculate. They're using it to protect savings from a government that inflated away their purchasing power. Workers in Guatemala aren't using USDC to trade crypto. They're using it to send money home without 6% disappearing in fees. <strong>The most compelling stablecoin story isn't about crypto at all. It's about what happens when regular banking fails regular people.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Stablecoins are primarily used by crypto traders to park money between trades.'",q:"What are the largest real-world use categories?",revealed:"The biggest real-world stablecoin use cases by social impact: (1) Cross-border remittances — migrant workers sending money home using USDC or USDT instead of Western Union, saving 4-6% in fees and getting money there in seconds instead of days. (2) Dollar savings in hyperinflationary countries — in Argentina (where inflation exceeded 200% in 2023), Turkey, Venezuela, and Nigeria, citizens hold USDT as a savings vehicle because their local currencies are losing value rapidly. (3) International business payments — companies paying remote contractors in USDC to bypass banking friction and delays. (4) DeFi lending — USDC and DAI are the primary assets in decentralized lending protocols because you can't build a practical lending market in an asset that moves 10% per day. Crypto trading is a real use case, not the dominant one by social impact."},
+      {myth:"Most people think: 'People in countries with collapsing currencies can just use US dollar bank accounts.'",q:"Why can't Argentinians simply open a US dollar bank account?",revealed:"Opening a US bank account requires US residency, a Social Security number, or documentation most foreign nationals cannot obtain. Argentina's government also imposes strict capital controls — citizens are limited to tiny monthly amounts of official dollar purchases at unfavorable exchange rates. The informal 'blue dollar' market offers better rates but requires physical cash. USDT and USDC bypass both barriers: anyone with a smartphone and internet access can hold digital dollars without a US bank account, without government approval, and without a restricted exchange rate. For tens of millions of people in countries with currency controls, stablecoins are genuinely the most practical way to access dollar savings."}
+    ],
+    blocks:[
+      {t:'cold',text:"A worker in Guatemala sends $200 home.<br>Wire transfer: 3-5 days, $15-25 in fees.<br>USDC transfer: 4 seconds, under $1 in fees.<br><br><em>For some people, that difference is everything.</em>"},
+      {t:'body',text:"Global remittances — money sent by workers in one country to family in another — totaled over $800 billion in 2023. The average international transfer fee is around 6%. That's $48 billion per year extracted from some of the world's most economically vulnerable workers. Stablecoins don't eliminate the entire cost (someone needs to convert USDC to local currency eventually), but they compress the actual transfer to near zero and near-instant — a meaningful improvement for regular small transfers."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🌍',title:'Think of it like email vs. international mail in 1995',text:"Before email, sending a letter internationally took 1-2 weeks and real money in postage. Email made that instant and nearly free — not because it was magic, but because it used different infrastructure. <strong>Stablecoins are doing the same thing for money transfers that email did for letters. The underlying value is the same. The infrastructure for moving it has fundamentally changed.</strong>"},
+      {t:'body',text:"The hyperinflation use case is even more fundamental. When a country's currency is losing 100%+ of its value per year (Argentina exceeded 200% inflation in 2023), citizens face an ugly choice: watch savings evaporate, try to buy official US dollars (often restricted or expensive), or find another way to hold stable value. USDT has quietly become the savings account of choice for millions of people in Argentina, Turkey, Venezuela, and Nigeria — not because of crypto ideology, but because it's a practical solution to a real financial problem."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Remittance',def:"Money transferred by a person working in one country back to family in their home country. Over $800 billion flows globally as remittances annually — larger than foreign direct investment to developing countries. Traditional services like Western Union charge 4-7% fees. Stablecoin transfers cost fractions of a percent and settle in seconds, a meaningful difference for workers sending small regular amounts."},
+      {t:'body',text:"The third major use case — DeFi (Decentralized Finance) lending — is more technical but significant. In crypto lending apps like Aave and Compound — think of them like online banks with no bank employees, just code — people deposit stablecoins to earn interest or borrow against their Bitcoin and Ethereum. USDC and DAI dominate these apps because nobody wants to lend money in something that might be worth 30% less next week. Stablecoins made those apps actually usable by giving everyone a reliable dollar-value to lend and borrow in."},
+      {t:'callout',icon:'📱',text:"<strong>Who's driving adoption:</strong> A crypto trader in California moving between Bitcoin positions is NOT the story. The story is a Guatemalan construction worker saving $200/month on remittance fees — that's $2,400/year that stays with his family instead of going to a transfer service. A Turkish pharmacist holding USDT because the lira lost 80% of its value in three years. An Argentine freelancer receiving payment in USDC because it shows up in seconds and holds its value. That's who's building stablecoin volume."}
+    ],
+    quizzes:[
+      {q:"What is the most impactful real-world use of stablecoins beyond crypto trading?",opts:[{id:'a',text:"Buying NFTs and gaming tokens"},{id:'b',text:"Cross-border remittances, dollar savings in hyperinflationary economies, and international payroll"},{id:'c',text:"Government central banks testing digital currency"},{id:'d',text:"Replacing cash at retail stores in the US"}],correct:'b',good:"Remittances, hyperinflation savings, and international payments. The life-changing use cases are where regular banking is failing people.",bad:"Answer B — remittances, dollar savings in hyperinflationary countries, and international business payments are the high-impact real-world use cases."},
+      {q:"Why can't people in Argentina simply open a US dollar bank account?",opts:[{id:'a',text:"US banks block Argentinians specifically"},{id:'b',text:"Argentine law criminalizes holding foreign bank accounts"},{id:'c',text:"US accounts require US residency/SSN, and Argentina restricts official dollar purchases"},{id:'d',text:"Exchange fees are regulated to be too high to make it worthwhile"}],correct:'c',good:"US residency required for US accounts + Argentina's capital controls limit dollar access. A smartphone and internet is all USDT requires.",bad:"Answer C — US bank accounts need documentation most foreign nationals lack, and Argentina's own capital controls restrict dollar access. Stablecoins bypass both barriers."},
+      {q:"How does a stablecoin transfer compare to a wire transfer for a $200 remittance?",opts:[{id:'a',text:"Similar cost and speed — just different technical infrastructure"},{id:'b',text:"Stablecoins are slower but significantly cheaper"},{id:'c',text:"Stablecoin: seconds and under $1 — vs wire transfer: days and $15-25 fee"},{id:'d',text:"Wire transfers are faster because they use established banking infrastructure"}],correct:'c',good:"Seconds and under $1 vs. days and $15-25. At $200 per month, that difference is $180-300/year that stays with the worker's family.",bad:"Answer C — stablecoin transfers settle in seconds for under $1. Traditional wire transfers take days and charge $15-25. For regular small transfers, the difference is significant."}
+    ]
+  },
+  {
+    id:6, themeKey:'crimson', tag:'Chapter 6 — The GENIUS Act',
+    title:"Congress Actually Did Something",
+    blurb:"The GENIUS Act passed in 2025. Here's what it says, what it does, and why it matters.",
+    heroImg:R.imgCh6Hero, midImg:R.imgCh6Mid,
+    midCaption:'The GENIUS Act is the first major US stablecoin law. It did not ban them.',
+    buckOpens:{q:"The GENIUS Act. Congress passed a law about stablecoins. I'll be honest — I didn't know Congress understood what a stablecoin WAS. So what does this law actually DO? Does it ban them? Restrict them? Help them? And is this good news or bad news if I hold USDC?"},
+    buckCloses:{text:"The GENIUS Act is fundamentally good news for stablecoins used by everyday people — it provides legal clarity, consumer protections, and officially legitimizes the asset class in US law. It's more complicated for offshore issuers like Tether who don't want US regulatory oversight. <strong>The bigger picture: Congress choosing to regulate stablecoins rather than ban them is a significant decision. It signals that digital dollars are becoming part of the permanent financial infrastructure — the question now is who runs them and under what rules.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The GENIUS Act restricts or bans stablecoins in the US.'",q:"What does the GENIUS Act actually do?",revealed:"The GENIUS Act — Guiding and Establishing National Innovation for US Stablecoins Act — does the opposite of banning. Signed into law in 2025, it creates the first formal US legal framework for 'payment stablecoins.' Key provisions: (1) Stablecoin issuers must obtain licenses — either as banks or through a new federal/state licensing system. (2) Reserves must be backed 1:1 by US dollars, Treasury bills, or Federal Reserve deposits — no ambiguous non-cash assets. (3) Monthly reserve disclosures required, verified by independent accountants. (4) Consumer protections: stablecoin holders get priority in bankruptcy over other company creditors — if an issuer goes under, you're first in line. (5) Foreign issuers like Tether must comply with US requirements to access the US market, or be excluded. The law defines what a legal stablecoin looks like — it doesn't restrict using them."},
+      {myth:"Most people think: 'A US stablecoin law only affects big financial companies, not regular users.'",q:"How does the GENIUS Act affect everyday stablecoin holders?",revealed:"For everyday users, the GENIUS Act adds concrete protections: (1) Reserve requirements mean that licensed stablecoins like USDC are now legally required to hold real assets — not just claiming to. (2) Bankruptcy priority protections mean if your stablecoin issuer goes bankrupt, you're first in line to be repaid from reserves, before other company creditors. (3) Monthly disclosure rules give users a legal right to know what backs their stablecoin. What the law does NOT do: it doesn't require users to verify their identity just to hold stablecoins, and it doesn't restrict peer-to-peer transfers. The biggest changes are for issuers, not holders — but those changes create stronger protection for holders downstream."}
+    ],
+    blocks:[
+      {t:'cold',text:"The bill is called the GENIUS Act.<br>That stands for: Guiding and Establishing<br>National Innovation for US Stablecoins.<br><br><em>Yes, someone in Congress spent real time on that acronym.</em>"},
+      {t:'body',text:"The GENIUS Act passed in 2025 and represents the first time Congress created a comprehensive legal framework specifically for stablecoins. Before this law, stablecoins existed in a legal gray zone — companies like Circle (USDC) operated under existing financial regulations, but there was no law that specifically defined what a 'payment stablecoin' was, who could issue one, or what rules they had to follow. The GENIUS Act changes that."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🏗️',title:'Think of it like building codes for a new type of construction',text:"When steel-frame skyscrapers were first built, existing building codes didn't cover them. Cities had to write new rules: minimum steel thickness, safety inspections, fire codes. This didn't ban skyscrapers — it made them safer and gave builders legal clarity. <strong>The GENIUS Act is building codes for stablecoins. It defines what a legal, safe, US-compliant stablecoin looks like. The goal is not to stop them — it's to make them trustworthy enough for broader use.</strong>"},
+      {t:'body',text:"One major implication: foreign stablecoin issuers who want US market access must comply with US rules. Tether (issued by a company in the British Virgin Islands, never subject to US oversight) faces a real choice: comply with GENIUS Act requirements — full reserves, US licensing, monthly disclosures — or lose access to the US market. Given that the US is the world's largest financial market, that's significant pressure on the world's highest-volume stablecoin."},
+      {t:'fact',idx:1},
+      {t:'def',term:'Payment Stablecoin',def:"The specific legal category created by the GENIUS Act. A payment stablecoin is a digital asset that: (1) maintains stable value relative to a fixed monetary value like $1.00, (2) is used for payment or settlement purposes, and (3) is issued by a licensed entity complying with reserve requirements. This legal definition gives stablecoins formal recognition in US federal law for the first time."},
+      {t:'body',text:"The GENIUS Act also addressed what Congress did NOT want: a Federal Reserve digital dollar (CBDC — Central Bank Digital Currency). The law explicitly restricts the Federal Reserve from issuing retail digital dollars directly to the public. This was a deliberate policy choice — Congress decided private regulated stablecoins are preferable to a government-issued digital currency. That decision — and what it means for your money's future — is the subject of Chapter 7."},
+      {t:'callout',icon:'⚖️',text:"<strong>The international context:</strong> The US passing stablecoin regulation creates pressure globally. The EU's MiCA law (Markets in Crypto-Assets — the European Union's comprehensive crypto regulation) already regulates stablecoins across 27 countries. When the world's two largest economic blocs both regulate rather than ban stablecoins, that's a meaningful signal about the direction of digital finance for the rest of the world."}
+    ],
+    quizzes:[
+      {q:"What does GENIUS stand for?",opts:[{id:'a',text:"General Enforcement of New International US Stablecoins"},{id:'b',text:"Guiding and Establishing National Innovation for US Stablecoins"},{id:'c',text:"Government Enforcement of New Institutional US Systems"},{id:'d',text:"Governing Electronic Needs In US Securities"}],correct:'b',good:"Guiding and Establishing National Innovation for US Stablecoins. The first comprehensive US stablecoin law.",bad:"Answer B — GENIUS = Guiding and Establishing National Innovation for US Stablecoins. Passed in 2025."},
+      {q:"What does the GENIUS Act require stablecoin reserves to consist of?",opts:[{id:'a',text:"Gold and precious metals held in secure vaults"},{id:'b',text:"Any mixture of assets including loans to affiliated companies"},{id:'c',text:"US dollars, Treasury bills, or Federal Reserve deposits — 1:1 backing"},{id:'d',text:"A mix of cash and cryptocurrency held by the issuer"}],correct:'c',good:"1:1 in real dollars, Treasuries, or Fed deposits. No ambiguous non-cash assets. This was specifically designed to close the gaps that Tether's reserve controversy exposed.",bad:"Answer C — the GENIUS Act requires 1:1 reserves in actual dollars, Treasury bills, or Fed deposits. No loans to sister companies, no crypto assets as backing."},
+      {q:"What did the GENIUS Act say about a US government digital dollar (CBDC)?",opts:[{id:'a',text:"It instructed the Fed to launch a digital dollar by 2027"},{id:'b',text:"It explicitly restricted the Federal Reserve from issuing retail digital dollars to the public"},{id:'c',text:"It left the CBDC question for future legislation to decide"},{id:'d',text:"It required the Fed to test a digital dollar in limited pilots"}],correct:'b',good:"Explicitly restricted. Congress chose private regulated stablecoins over a government-issued digital dollar. That's a deliberate policy choice with long-term implications.",bad:"Answer B — the GENIUS Act specifically prevents the Fed from issuing retail digital dollars. Congress chose the private stablecoin route instead of a government CBDC."}
+    ]
+  },
+  {
+    id:7, themeKey:'green', tag:'Chapter 7 — The Digital Dollar Future',
+    title:"What Comes Next",
+    blurb:"Private stablecoins vs. government digital dollars. Two very different visions for your money's future.",
+    heroImg:R.imgCh7Hero, midImg:R.imgCh7Mid,
+    midCaption:'A CBDC and a stablecoin are both digital dollars. The difference is who controls them.',
+    buckOpens:{q:"Okay now I'm thinking — if stablecoins are basically programmable digital dollars, why doesn't the government just make an official one? Cut out the middlemen entirely. Turns out there's a massive political and philosophical debate about this, and Congress already made a choice. I want to understand what each path actually means for regular people."},
+    buckCloses:{text:"Here's the honest conclusion: the digital dollar future is coming whether anyone specific wants it to or not. The question being decided right now — mostly without much public input — is what that future looks like. Private stablecoins are programmable dollars controlled by private companies. A CBDC would be a programmable dollar controlled directly by the government. <strong>Both give you a digital dollar. Only one keeps financial privacy and censorship-resistance in the picture. That tradeoff is worth understanding before it's decided for you.</strong>"},
+    facts:[
+      {myth:"Most people think: 'A government digital dollar (CBDC) and a stablecoin are basically the same thing.'",q:"What is the critical difference between the two?",revealed:"The surface similarity: both are digital dollars worth $1. The critical difference: who controls them and what they can do. A stablecoin (USDC, USDT) is a claim on a private company's reserves. The government doesn't directly control what you do with it. A CBDC is issued directly by the Federal Reserve — the government itself is the issuer, the record-keeper, and the rule-setter. A CBDC could theoretically be programmed to expire (use it or lose it — China has tested this with its digital yuan), restricted to certain types of merchants, or frozen by government order without involving any private intermediary. These capabilities don't exist in today's physical cash, and they fundamentally change the power relationship between citizens and governments over money."},
+      {myth:"Most people think: 'The US is actively building a digital dollar right now.'",q:"What has the US actually decided about a digital dollar?",revealed:"The US has explicitly chosen NOT to build a retail CBDC. The GENIUS Act (2025) includes provisions restricting the Federal Reserve from issuing digital dollars directly to the public. Political opposition came from across the spectrum — privacy advocates on the left, libertarians on the right, and financial industry interests in the middle all pushed back against a government-issued digital dollar. The US chose the private stablecoin route instead: regulate private companies to issue dollar-backed digital assets, rather than having the government issue them directly. China, by contrast, has actively deployed its digital yuan (called e-CNY) to over 260 million wallets and has been testing programmable features including expiration dates on digital money."}
+    ],
+    blocks:[
+      {t:'cold',text:"Private stablecoin: a dollar your bank didn't issue.<br>CBDC: a dollar your government issued directly.<br>Same face value. Very different implications.<br><br><em>The difference matters more than most people realize.</em>"},
+      {t:'body',text:"A Central Bank Digital Currency (CBDC) is a digital form of a country's official currency, issued directly by the central bank — in the US, that would be the Federal Reserve. Think of it as a digital dollar that IS the dollar, not a representation of a dollar held by a private company. Over 130 countries are at various stages of CBDC research or development. China has deployed its digital yuan to hundreds of millions of users. The US has explicitly chosen not to go this route — at least under the current GENIUS Act framework."},
+      {t:'fact',idx:0},
+      {t:'analogy',icon:'🔑',title:'Think of it like the difference between Venmo and physical cash',text:"Cash (issued by the government) is privately held — you spend it wherever, and nobody tracks it automatically. Venmo (a private app) is convenient but PayPal can freeze your account or block transactions. A CBDC would be like if the government replaced physical cash with a government-run Venmo they issued directly. <strong>Same spending power. But now the issuer can see every transaction by default, program expiration dates, or restrict where you spend it. That's either reassuring or alarming depending on your trust in government.</strong>"},
+      {t:'body',text:"The privacy concern is the central argument against CBDCs. Every transaction in a CBDC system would be recorded on government infrastructure by default. Governments could see every purchase — who you pay, when, for what. Defenders argue this already happens indirectly through credit card records and bank data that governments can subpoena. Critics argue there's a meaningful difference between data on private company servers (requiring a warrant) versus data on government infrastructure by design."},
+      {t:'fact',idx:1},
+      {t:'def',term:'CBDC (Central Bank Digital Currency)',def:"A digital form of a country's official currency issued directly by the central bank, rather than by commercial banks or private companies. Unlike stablecoins (private company products), CBDCs are government liabilities. China's e-CNY is the most widely deployed CBDC. The US chose private regulated stablecoins via the GENIUS Act instead of a retail CBDC. The debate is really about one question: should the government be able to see and control every dollar you spend?"},
+      {t:'body',text:"The current global landscape: the US chose private regulated stablecoins. The EU chose MiCA regulation (also favoring private stablecoins). China chose a government CBDC. These are fundamentally different visions of what digital money looks like — and they'll compete globally. Understanding the difference between 'a dollar my traditional bank holds,' 'a dollar a private tech company issued,' and 'a dollar my government issued directly' is the financial literacy question of the next decade."},
+      {t:'callout',icon:'🌐',text:"<strong>Where things stand globally:</strong> 3 countries have fully launched CBDCs (Bahamas, Jamaica, Nigeria). China's digital yuan has 260+ million active wallets. The EU is developing a digital euro. The US passed the GENIUS Act choosing private stablecoins instead. India, Brazil, and 40+ countries are in active CBDC pilots. The world is moving toward programmable digital money. The question of who issues it and who controls it is the most important financial infrastructure decision of this generation."},
+      {t:'protip',title:'The question to ask about any digital money',icon:'🧠',text:"Before accepting any digital money system — stablecoin, CBDC, or whatever comes next — ask one question: <em>'Who controls this, what can they do to it, and what happens to my access if they disagree with me?'</em> Cash: government-issued, privately held, can't be frozen. USDC: private company, regulated, can be frozen by Circle or by government order to Circle. A CBDC: government-issued AND government-controlled — no private intermediary stands between you and that control. <strong>Same dollar value. Very different answers to the control question. Know which one you're holding.</strong>"}
+    ],
+    quizzes:[
+      {q:"What is the critical difference between a private stablecoin and a government CBDC?",opts:[{id:'a',text:"Stablecoins earn interest automatically; CBDCs do not"},{id:'b',text:"CBDCs are issued by the government/central bank; stablecoins are issued by private companies"},{id:'c',text:"Stablecoins work globally; CBDCs only work within their home country"},{id:'d',text:"CBDCs always have higher fees than stablecoins"}],correct:'b',good:"Who issues it is the critical difference. Government-issued means government-controlled infrastructure. Private-issued means a private company controls it. Same $1, very different power dynamics.",bad:"Answer B — the issuer is everything. A CBDC is government-issued, government-controlled infrastructure. A stablecoin is a private company's product representing a dollar."},
+      {q:"What did the GENIUS Act decide about a US government digital dollar?",opts:[{id:'a',text:"It mandated the Fed launch a retail CBDC by 2027"},{id:'b',text:"It left the CBDC question open for future legislation"},{id:'c',text:"It explicitly restricted the Fed from issuing retail digital dollars, choosing private stablecoins instead"},{id:'d',text:"It created a hybrid model where the Fed and private companies co-issue digital dollars"}],correct:'c',good:"Explicitly restricted. Congress chose private regulated stablecoins over a government CBDC. A deliberate policy choice with long-term implications for financial privacy.",bad:"Answer C — the GENIUS Act specifically restricts the Fed from issuing retail digital dollars to the public. Congress chose the private stablecoin path deliberately."},
+      {q:"Why do privacy advocates raise concerns about CBDCs that they don't raise about stablecoins?",opts:[{id:'a',text:"CBDCs use older technology that's easier for hackers to breach"},{id:'b',text:"Stablecoins are illegal in most countries so there's nothing to worry about"},{id:'c',text:"CBDC transaction data lives on government infrastructure by default, not private company servers requiring a warrant"},{id:'d',text:"CBDCs are designed to expire while stablecoins last indefinitely"}],correct:'c',good:"Government infrastructure by default = the government sees your transactions without needing a warrant. That's a meaningfully different privacy model from data held by private companies.",bad:"Answer C — with a CBDC, your transaction data lives on government-controlled infrastructure by design, rather than on private company servers that require legal process to access."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'Stablecoin',def:"A cryptocurrency designed to maintain a stable value, almost always pegged to $1.00 USD. Unlike Bitcoin or Ethereum, stablecoins are engineered to not move with market speculation. The two largest are USDT (Tether) and USDC (USD Coin), which together process trillions in annual volume — comparable to Visa.",accent:'#FFD700'},
+  {term:'USDC (USD Coin)',def:"A fiat-backed stablecoin issued by Circle, a US-regulated financial company. Each USDC is backed 1:1 by real US dollars or Treasury bills held in regulated US bank accounts. Circle publishes monthly reserve attestations from Grant Thornton, a major accounting firm. Widely considered the more transparent of the major stablecoins.",accent:'#4A90E2'},
+  {term:'USDT (Tether)',def:"The largest stablecoin by daily transaction volume, issued by Tether Ltd. Settled with the New York AG and CFTC in 2021 for misrepresenting reserves. Now publishes quarterly attestations showing primarily US Treasury holdings. More global trading volume than USDC but a more complicated regulatory history.",accent:'#22C55E'},
+  {term:'DAI',def:"A crypto-backed stablecoin issued by MakerDAO, a decentralized protocol. Backed by cryptocurrency (primarily ETH — Ethereum) as overcollateralized collateral, not real dollars. Has maintained its $1 peg through every major crypto crash since 2017 due to its overcollateralization mechanism.",accent:'#9B8DEE'},
+  {term:'Fiat-Backed Stablecoin',def:"A stablecoin backed 1:1 by actual government currency (dollars, euros) or equivalent cash assets (Treasury bills) held in reserve by the issuer. The simplest model: one dollar held for every stablecoin issued. USDC and USDT are the largest examples. When you redeem, the issuer sends you actual dollars.",accent:'#FFD700'},
+  {term:'Algorithmic Stablecoin',def:"A stablecoin that maintains its $1 peg through algorithmic supply/demand mechanisms — with no real-dollar reserves backing it. UST (TerraUSD) was the largest example. It collapsed in May 2022, wiping out $60 billion in 72 hours via a death spiral. Most serious projects have abandoned this model after the Luna collapse.",accent:'#FFA500'},
+  {term:'Overcollateralization',def:"Depositing more collateral than you borrow, creating a safety buffer against price drops. DAI requires $150 in ETH to borrow $100 in DAI. That extra $50 buffer absorbs price declines before the position goes underwater. Same principle as mortgages — your house must be worth more than your loan balance.",accent:'#3AAFA9'},
+  {term:'Death Spiral',def:"A self-reinforcing collapse cycle where the mechanism meant to restore stability accelerates the decline instead. Luna's death spiral: UST loses peg → burn UST for LUNA → LUNA supply inflates → LUNA price crashes → less confidence → more UST selling → more LUNA minting → lower prices → repeat until both tokens hit zero.",accent:'#FFA500'},
+  {term:'GENIUS Act',def:"Guiding and Establishing National Innovation for US Stablecoins Act — the first US federal law creating a legal framework for payment stablecoins. Passed in 2025. Requires 1:1 reserve backing in dollars or Treasuries, monthly disclosures, and licensing for issuers. Also explicitly restricts the Federal Reserve from issuing retail digital dollars.",accent:'#E74C3C'},
+  {term:'Payment Stablecoin',def:"The legal category created by the GENIUS Act. A digital asset that: (1) maintains stable value relative to $1.00, (2) is used for payment or settlement, and (3) is issued by a licensed entity with proper reserves. First formal US legal recognition of stablecoins as a distinct asset class.",accent:'#E74C3C'},
+  {term:'Reserve Attestation',def:"A process where an independent accountant reviews what a company says they hold and confirms the numbers match at a specific point in time. Less rigorous than a full audit — it confirms stated holdings but doesn't deeply verify how assets were obtained or test internal controls. Both USDC and USDT publish attestations, not full audits.",accent:'#9B8DEE'},
+  {term:'CBDC (Central Bank Digital Currency)',def:"A digital form of a country's official currency issued directly by the central bank — in the US, that would be the Federal Reserve. Unlike stablecoins (private company products), CBDCs are government liabilities on government infrastructure. China's e-CNY has 260+ million wallets. The US chose private stablecoins via the GENIUS Act instead of a retail CBDC.",accent:'#22C55E'},
+  {term:'Remittance',def:"Money sent by a person working in one country back to family in their home country. Over $800 billion flows globally as remittances annually — larger than foreign direct investment to developing countries. Traditional services charge 4-7% fees and take days. Stablecoin transfers cost fractions of a percent and settle in seconds.",accent:'#4A90E2'},
+  {term:'Peg / De-peg',def:"A stablecoin is 'pegged' when its price holds at exactly $1.00. It 'de-pegs' when it trades materially above or below $1. Brief de-pegs are common during market stress. Sustained de-pegs are crises. UST's de-peg in May 2022 never recovered — it went from $1.00 to $0.02 in 72 hours.",accent:'#FFD700'},
+  {term:'Do Kwon',def:"Founder of Terraform Labs and the Luna/Terra ecosystem. Was celebrated as crypto's next major innovator before the UST collapse in May 2022. Charged with securities fraud by the US SEC in 2023. Arrested in Montenegro in March 2023 traveling on falsified passports. Extradition to the US and South Korea ongoing as of 2025.",accent:'#FFA500'},
+  {term:'Terra / UST',def:"TerraUSD (UST) was an algorithmic stablecoin and the centerpiece of the Terra blockchain ecosystem. At its peak, the combined ecosystem was worth over $60 billion. In May 2022, UST lost its $1 peg and collapsed to near zero in 72 hours via an algorithmic death spiral. LUNA, the companion token, went from $80 to $0.00015 in the same period.",accent:'#FFA500'},
+  {term:'DeFi (Decentralized Finance)',def:"Financial services built on public blockchains through smart contracts, without centralized banks or brokers. Includes lending, borrowing, trading, and yield-earning through code rather than institutions. Stablecoins are the primary unit of account in DeFi — you cannot build a practical lending market in an asset that swings 10% per day.",accent:'#3AAFA9'}
+];
+
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').innerHTML = '“' + ch.buckOpens.q + '”';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar','imgCh7Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar','imgCh6TakeAvatar','imgCh7TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
