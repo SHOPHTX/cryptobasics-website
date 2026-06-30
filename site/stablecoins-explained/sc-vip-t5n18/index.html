@@ -49,13 +49,13 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 .ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
 .ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
 .ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
-#buckintro{background:#0c1520;justify-content:flex-start;align-items:center;padding:32px 24px 48px;height:100%;overflow-y:auto;}
+#buckintro{background:#0c1520;justify-content:center;align-items:center;padding:20px 24px 32px;height:100%;overflow-y:auto;}
 .bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;}
 .bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
-.bi-img{width:min(220px,65vw);height:min(220px,65vw);object-fit:cover;border-radius:50%;margin-bottom:24px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+.bi-img{width:min(140px,40vw);height:min(140px,40vw);object-fit:cover;border-radius:50%;margin-bottom:14px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
 @keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
-.bi-question{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:800;line-height:1.45;color:#fff;margin-bottom:28px;text-wrap:pretty;}
+.bi-question{font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;line-height:1.4;color:#fff;margin-bottom:20px;text-wrap:pretty;}
 .bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
 .bi-cta:hover{transform:scale(1.03);}
 #chapterview{}
@@ -69,7 +69,7 @@ body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:
 .read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
 .ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
 .ch-hero{width:100%;position:relative;overflow:hidden;}
-.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:300px;min-height:180px;object-fit:cover;object-position:center;display:block;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;height:52vw;max-height:400px;min-height:180px;object-fit:cover;object-position:center;display:block;}
 .ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 20px;background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,.65) 100%);}
 .ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
 .ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
@@ -613,7 +613,7 @@ var CHAPTERS = [
     blurb:"Private stablecoins vs. government digital dollars. Two very different visions for your money's future.",
     heroImg:R.imgCh7Hero, midImg:R.imgCh7Mid,
     midCaption:'A CBDC and a stablecoin are both digital dollars. The difference is who controls them.',
-    buckOpens:{q:"If stablecoins are basically digital dollars — why doesn't the government just make an official one and cut out the middlemen? Turns out Congress already made a choice. Let's look at what each path means for regular people."},
+    buckOpens:{q:"If stablecoins are digital dollars — why doesn't the government just make their own? Congress already made a choice. Here's what it means for you."},
     buckCloses:{text:"Here's the honest conclusion: the digital dollar future is coming whether anyone specific wants it to or not. The question being decided right now — mostly without much public input — is what that future looks like. Private stablecoins are programmable dollars controlled by private companies. A CBDC would be a programmable dollar controlled directly by the government. <strong>Both give you a digital dollar. Only one keeps financial privacy and censorship-resistance in the picture. That tradeoff is worth understanding before it's decided for you.</strong>"},
     facts:[
       {myth:"Most people think: 'A government digital dollar (CBDC) and a stablecoin are basically the same thing.'",q:"What is the critical difference between the two?",revealed:"The surface similarity: both are digital dollars worth $1. The critical difference: who controls them and what they can do. A stablecoin (USDC, USDT) is a claim on a private company's reserves. The government doesn't directly control what you do with it. A CBDC is issued directly by the Federal Reserve — the government itself is the issuer, the record-keeper, and the rule-setter. A CBDC could theoretically be programmed to expire (use it or lose it — China has tested this with its digital yuan), restricted to certain types of merchants, or frozen by government order without involving any private intermediary. These capabilities don't exist in today's physical cash, and they fundamentally change the power relationship between citizens and governments over money."},
