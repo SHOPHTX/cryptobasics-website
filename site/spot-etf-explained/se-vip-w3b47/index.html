@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What the F*** Even IS a Spot ETF?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;align-items:center;padding:20px 24px 32px;height:100%;overflow-y:auto;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;margin:auto;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(200px,55vw);height:min(200px,55vw);object-fit:cover;border-radius:50%;margin-bottom:14px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;line-height:1.4;color:#fff;margin-bottom:20px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 14px;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:12px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:16/9;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:cover;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Spot ETFs · BlackRock · Institutional Money</span></div>
+    <h1 class="cover-h1">What the F*** Even IS<br><em>a Spot ETF?</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> through Spot ETFs, BlackRock's approval, institutional flows, and what Wall Street's entry changes forever.</p>
+    <button class="cover-cta" id="cover-cta-btn">Follow the Money → Get Started</button>
+    <p class="cover-meta">5 chapters · 15 quiz questions · glossary · certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 6</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is following the institutional money.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every term from Wall Street's crypto takeover — explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You now understand<br><em>institutional crypto.</em></h1>
+      <p class="cert-body">Five chapters. Fifteen questions. Spot ETFs, BlackRock, institutional flows, and what Wall Street's entry actually changes. You understand this market better than most people on Wall Street's own trading floors.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 6</div>
+    <h2 class="wn-h2">You understand<br><em>Wall Street's move.</em></h2>
+    <div class="wn-buck-quote">"You now know what a Spot ETF is, why BlackRock's application changed everything, how institutional flows move Bitcoin's price, and what it means for an asset born outside the system to get absorbed into it. Next up: the banks themselves. <strong>Volume 7 is about the Clarity Act, the banking sector's crypto pivot, and what happens when the people Bitcoin was built to disrupt become its biggest distributors.</strong>" — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../../images/cover-hero.webp',
+  imgCh1Avatar:      '../../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh1Hero:        '../../images/c6-ch1hero.webp',
+  imgCh1Mid:         '../../images/c6-ch1mid.webp',
+  imgCh2Avatar:      '../../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh2Hero:        '../../images/c6-ch2hero.webp',
+  imgCh2Mid:         '../../images/c6-ch2mid.webp',
+  imgCh3Avatar:      '../../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../../images/ch3-take.webp',
+  imgCh3Hero:        '../../images/c6-ch3hero.webp',
+  imgCh3Mid:         '../../images/c6-ch3mid.webp',
+  imgCh4Avatar:      '../../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../../images/ch4-take.webp',
+  imgCh4Hero:        '../../images/c6-ch4hero.webp',
+  imgCh4Mid:         '../../images/c6-ch4mid.webp',
+  imgCh5Avatar:      '../../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../../images/ch5-take.webp',
+  imgCh5Hero:        '../../images/c6-ch5hero.webp',
+  imgCh5Mid:         '../../images/c6-ch5mid.webp',
+  imgGlossary:       '../../images/card1.webp',
+  imgCert:           '../../images/cert.webp',
+  imgWN:             '../../images/visit.webp'
+};
+
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+var THEME = {
+  blue:{bg:'#060d1a',topbarBg:'rgba(6,13,26,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#4A90E2',accentBg:'rgba(74,144,226,0.12)',border:'rgba(74,144,226,0.28)',readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',cardBg:'rgba(74,144,226,0.07)',cardBorder:'rgba(74,144,226,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(74,144,226,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(74,144,226,0.08)',buckBorder:'rgba(74,144,226,0.25)',factBg:'rgba(74,144,226,0.08)',factBorder:'rgba(74,144,226,0.3)',factRevBg:'rgba(74,144,226,0.06)',analogyBg:'rgba(74,144,226,0.07)',navBg:'#060d1a',navBorder:'rgba(74,144,226,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  crimson:{bg:'#190000',topbarBg:'rgba(25,0,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#E74C3C',accentBg:'rgba(231,76,60,0.12)',border:'rgba(231,76,60,0.28)',readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',cardBg:'rgba(231,76,60,0.07)',cardBorder:'rgba(231,76,60,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(231,76,60,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(231,76,60,0.08)',buckBorder:'rgba(231,76,60,0.25)',factBg:'rgba(231,76,60,0.08)',factBorder:'rgba(231,76,60,0.3)',factRevBg:'rgba(231,76,60,0.06)',analogyBg:'rgba(231,76,60,0.07)',navBg:'#190000',navBorder:'rgba(231,76,60,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  purple:{bg:'#0d0720',topbarBg:'rgba(13,7,32,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#9B8DEE',accentBg:'rgba(155,141,238,0.15)',border:'rgba(155,141,238,0.3)',readFill:'linear-gradient(90deg,#667eea,#9b8dee)',cardBg:'rgba(155,141,238,0.08)',cardBorder:'rgba(155,141,238,0.22)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(155,141,238,0.2)',optBg:'rgba(255,255,255,0.05)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.8)',buckBg:'rgba(155,141,238,0.1)',buckBorder:'rgba(155,141,238,0.28)',factBg:'rgba(155,141,238,0.1)',factBorder:'rgba(155,141,238,0.32)',factRevBg:'rgba(155,141,238,0.08)',analogyBg:'rgba(155,141,238,0.08)',navBg:'#0d0720',navBorder:'rgba(155,141,238,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  orange:{bg:'#130800',topbarBg:'rgba(19,8,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFA500',accentBg:'rgba(255,165,0,0.12)',border:'rgba(255,165,0,0.28)',readFill:'linear-gradient(90deg,#FFA500,#FFD580)',cardBg:'rgba(255,165,0,0.07)',cardBorder:'rgba(255,165,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,165,0,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,165,0,0.08)',buckBorder:'rgba(255,165,0,0.25)',factBg:'rgba(255,165,0,0.08)',factBorder:'rgba(255,165,0,0.3)',factRevBg:'rgba(255,165,0,0.06)',analogyBg:'rgba(255,165,0,0.07)',navBg:'#130800',navBorder:'rgba(255,165,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  gold:{bg:'#0f1200',topbarBg:'rgba(15,18,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFD700',accentBg:'rgba(255,215,0,0.12)',border:'rgba(255,215,0,0.25)',readFill:'linear-gradient(90deg,#D4A017,#FFD700)',cardBg:'rgba(255,215,0,0.07)',cardBorder:'rgba(255,215,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,215,0,0.15)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,215,0,0.08)',buckBorder:'rgba(255,215,0,0.25)',factBg:'rgba(255,215,0,0.08)',factBorder:'rgba(255,215,0,0.3)',factRevBg:'rgba(255,215,0,0.06)',analogyBg:'rgba(255,215,0,0.06)',navBg:'#0f1200',navBorder:'rgba(255,215,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'}
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'blue', tag:'Chapter 1 — What IS a Spot ETF?',
+    title:"Your Brokerage Account Just Got Bitcoin",
+    blurb:"You can now hold Bitcoin in your 401(k). No wallet. No seed phrase. Here's how.",
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'A Spot ETF holds real Bitcoin — not a promise about future prices.',
+    buckOpens:{q:"I keep hearing 'Bitcoin ETF' everywhere — my advisor mentioned it, the news covered it, my coworker said it made Bitcoin official. What IS an ETF? And why did this one matter so much?"},
+    buckCloses:{text:"The ETF is a bridge. Millions of people who would never download a crypto wallet can now own Bitcoin exposure through accounts they already have. That's not a small thing — it's access. <strong>Every time an asset becomes easier to own, more capital flows in. The ETF didn't change what Bitcoin is. It changed who can own it.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The SEC had already approved Bitcoin ETFs before 2024, so this was no big deal.'",q:"What's the real difference between a Futures ETF and a Spot ETF?",revealed:"A Futures ETF — like ProShares BITO, approved in 2021 — doesn't hold real Bitcoin. It holds Bitcoin futures contracts, which are agreements to buy Bitcoin at a specific price on a future date. These contracts expire and must be renewed repeatedly, creating what are called 'roll costs' that quietly eat into returns. BITO significantly underperformed actual Bitcoin prices in 2022 because of this drag. A Spot ETF holds real Bitcoin directly. No contracts, no roll costs. What you see is what you get: the actual price of Bitcoin. The difference is real versus a paper promise about the real thing."},
+      {myth:"Most people think: 'An ETF is just for big investors — regular people wouldn't use it.'",q:"Who can actually buy a Bitcoin Spot ETF?",revealed:"Anyone with a brokerage account — including Robinhood — can buy a Bitcoin Spot ETF, sometimes for as little as $1. But the bigger unlock happened at the top: licensed financial advisors (called RIAs — Registered Investment Advisors) can now add Bitcoin to client portfolios as a line item alongside stocks and bonds. 401(k) plan managers can offer Bitcoin exposure to employees. Pension funds can allocate a small percentage to Bitcoin. The ETF opened both the bottom of the market (everyday retail investors) and the top (large institutions managing other people's money) simultaneously."}
+    ],
+    blocks:[
+      {t:'cold',text:"Your coworker can now buy Bitcoin through their 401(k).<br>No crypto wallet. No blockchain. No seed phrase.<br>But they own Bitcoin.<br><br><em>That's what the ETF changed. Let's understand why.</em>"},
+      {t:'body',text:"An ETF (Exchange-Traded Fund) is a basket of assets you can buy and sell on the stock market — just like a regular stock. You don't own the asset directly. You own a share of a fund that holds it on your behalf."},
+      {t:'body',text:"A <strong>Spot ETF</strong> is a specific kind. 'Spot' means the fund holds the actual asset — real Bitcoin — not a futures contract (an agreement to buy Bitcoin at a set price in the future) or a promise. When you buy a share of a Bitcoin Spot ETF, a vault somewhere holds real Bitcoin to back it."},
+      {t:'def',term:'ETF (Exchange-Traded Fund)',def:'A fund that holds a collection of assets and trades on the stock market like a stock. You buy shares of the fund, giving you exposure to whatever it owns — without owning those assets directly.'},
+      {t:'body',text:"Why did this matter? Tens of millions of Americans have 401(k)s and IRAs that can only invest through traditional exchanges. Before Spot ETFs, Bitcoin simply wasn't available through those accounts. The January 2024 approval changed that — Fidelity, Charles Schwab, and every major brokerage suddenly offered Bitcoin exposure."},
+      {t:'analogy',icon:'🏦',title:'Think of it like a gold receipt',text:'When you buy a gold ETF, the fund buys real gold bars and puts them in a vault. You buy a share — a receipt that says you own a piece of those bars. You never touch the gold. A Bitcoin Spot ETF works identically: real Bitcoin in custody, you own a share of it through your regular brokerage app.'},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What does 'Spot' mean in a Spot ETF?",opts:[{id:'a',text:"The ETF can be traded at any time during market hours"},{id:'b',text:"The ETF holds the actual asset — real Bitcoin — rather than contracts about future prices"},{id:'c',text:"The ETF was approved on the spot by regulators"},{id:'d',text:"The ETF only works for a specific allocation in your portfolio"}],correct:'b',good:"Spot = the real thing. A Spot ETF owns actual Bitcoin in a vault, not a promise about what Bitcoin will be worth someday.",bad:"Answer B — 'Spot' refers to holding the actual commodity. Spot price = today's real price. Spot ETF = holds the real asset right now."},
+      {q:"Why couldn't people hold Bitcoin in their 401(k) before 2024?",opts:[{id:'a',text:"Bitcoin was illegal for retirement accounts"},{id:'b',text:"401(k)s invest through traditional exchanges, and Bitcoin had no product listed there"},{id:'c',text:"The IRS charged extra taxes on crypto held in retirement accounts"},{id:'d',text:"Bitcoin's volatility made it legally ineligible for retirement accounts"}],correct:'b',good:"Retirement accounts route through traditional brokerages. Bitcoin needed a product listed on traditional exchanges — an ETF — before those accounts could access it.",bad:"Answer B — 401(k)s and IRAs invest through traditional exchanges. Bitcoin needed an ETF listed on NYSE or Nasdaq to become accessible through those accounts."},
+      {q:"What is the main drawback of a Futures ETF compared to a Spot ETF?",opts:[{id:'a',text:"Futures ETFs have higher trading volumes, making them harder to exit quickly"},{id:'b',text:"Futures ETFs hold contracts that expire and must be renewed, creating 'roll costs' that eat into returns"},{id:'c',text:"Futures ETFs are only available to accredited investors"},{id:'d',text:"Futures ETFs don't track Bitcoin's price at all"}],correct:'b',good:"Roll costs are the hidden drag of Futures ETFs. Renewing expiring contracts repeatedly erodes returns compared to simply holding real Bitcoin.",bad:"Answer B — Futures ETFs create 'roll costs' from constantly renewing expiring contracts. This is why ProShares BITO significantly underperformed actual Bitcoin prices in 2022."}
+    ]
+  },
+  {
+    id:2, themeKey:'crimson', tag:'Chapter 2 — How BlackRock Got In',
+    title:"The Approval That Took 10 Years",
+    blurb:"The SEC rejected Bitcoin ETF applications 20+ times. Then BlackRock filed — and won in months.",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:"BlackRock's IBIT became the fastest ETF in history to reach $50 billion in assets under management.",
+    buckOpens:{q:"The SEC rejected Bitcoin ETF applications over 20 times across 10 years. Then BlackRock filed and got approved in months. What actually changed? And why does it matter who's asking?"},
+    buckCloses:{text:"When the world's biggest asset manager puts their name on something, it changes how institutions see it. This wasn't just regulatory approval — it was a legitimacy stamp. <strong>The same institutions that said 'we can't touch crypto, it's unregulated' suddenly had a regulated, compliant vehicle. The floodgates didn't just open. An entirely new class of buyer entered the market.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The SEC was blocking Bitcoin ETFs because they hate crypto.'",q:"What was the SEC's actual reason for all those rejections?",revealed:"Market manipulation — specifically. The SEC consistently argued that Bitcoin's market was too small and unregulated to prevent large players from artificially moving prices, which would hurt everyday ETF investors. They wanted two things: (1) evidence that Bitcoin's market had grown large and liquid enough to resist manipulation, and (2) surveillance tools to detect it when it happened anyway. By 2023-2024, Bitcoin's market had grown dramatically, and the surveillance sharing agreements provided the compliance framework the SEC had been requiring for years. It wasn't anti-crypto hostility — it was a specific, documented regulatory concern that took time to address."},
+      {myth:"Most people think: 'BlackRock got approved faster just because they have more money.'",q:"What actually made BlackRock's application different?",revealed:"Three things. First, BlackRock had an ETF approval track record of nearly 600 approvals and only 1 rejection — they knew exactly how to structure applications to work within SEC requirements. Second, their application included a 'surveillance sharing agreement' with Coinbase, one of the largest US crypto exchanges, giving regulators a real-time window into trading activity to catch manipulation. Third, BlackRock's name signaled that regulated TradFi (Traditional Finance — banks, brokerages, Wall Street) was ready to participate. When the world's largest asset manager says a market is ready for an ETF, it's hard for the SEC to argue otherwise."}
+    ],
+    blocks:[
+      {t:'cold',text:"The SEC said no to Bitcoin ETFs 20+ times.<br>From 2013 to 2023, every application was rejected.<br>Then BlackRock filed.<br><br><em>This is about more than paperwork.</em>"},
+      {t:'body',text:"BlackRock manages over $10 trillion in assets — more than the GDP of Japan and Germany combined. When they move, markets pay attention."},
+      {t:'body',text:"The first Bitcoin ETF application was filed in 2013 by the Winklevoss twins (yes, the Facebook ones). Rejected. Then came applications from Bitwise, VanEck, WisdomTree, Fidelity, and others over the next decade. All rejected. The SEC's reason was consistent: Bitcoin's market was too susceptible to price manipulation, and there weren't adequate tools to detect and prevent it."},
+      {t:'body',text:"In June 2023, BlackRock filed for IBIT (iShares Bitcoin Trust — their ETF). Two things made it different: their near-perfect ETF approval record, and a surveillance sharing agreement with Coinbase that gave regulators real-time visibility into trading activity across both the ETF and Bitcoin markets."},
+      {t:'def',term:'Surveillance Sharing Agreement',def:"An agreement between an ETF issuer (like BlackRock) and a crypto exchange (like Coinbase) that gives regulators visibility into trading activity across both markets. Designed to detect and prevent price manipulation — the key addition that finally satisfied the SEC's concerns."},
+      {t:'body',text:"On January 10, 2024, the SEC approved 11 Bitcoin Spot ETFs simultaneously — not just BlackRock's, but the entire category. The floodgates opened."},
+      {t:'analogy',icon:'🍽️',title:'The restaurant liquor license analogy',text:"Imagine a neighborhood restaurant trying to get a liquor license for years — denied every time because the city said the area wasn't safe enough. Then Morton's Steakhouse — with powerful lawyers and decades of compliance history — applied. The city approved it. Same license, same neighborhood. Different applicant with the credibility to make the case. That's roughly what happened with BlackRock and the SEC."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"Why did the SEC reject Bitcoin ETF applications for over 10 years?",opts:[{id:'a',text:"The SEC believed Bitcoin had no real value"},{id:'b',text:"The SEC was concerned Bitcoin's market could be manipulated, harming ETF investors"},{id:'c',text:"US law prohibited crypto-based ETFs until 2023"},{id:'d',text:"Bitcoin didn't meet minimum market cap requirements for ETF listing"}],correct:'b',good:"Manipulation risk was the consistent stated reason. The SEC needed both a mature market AND surveillance tools before they'd expose everyday investors to it through an ETF.",bad:"Answer B — market manipulation was the documented concern. The SEC argued large players could artificially move Bitcoin prices, harming ETF investors. They needed maturity and surveillance tools."},
+      {q:"What is IBIT?",opts:[{id:'a',text:"The SEC's internal Bitcoin tracking system"},{id:'b',text:"BlackRock's Bitcoin Spot ETF — the iShares Bitcoin Trust"},{id:'c',text:"A crypto exchange that competed with Coinbase"},{id:'d',text:"The international body that approves crypto regulations"}],correct:'b',good:"IBIT = iShares Bitcoin Trust. BlackRock's ETF. It became the fastest ETF in history to reach $50 billion in assets under management.",bad:"Answer B — IBIT is BlackRock's Bitcoin Spot ETF (iShares Bitcoin Trust). It launched January 11, 2024 and broke every ETF growth record within months."},
+      {q:"How many Bitcoin Spot ETFs did the SEC approve in January 2024?",opts:[{id:'a',text:"1 — only BlackRock's"},{id:'b',text:"3"},{id:'c',text:"11"},{id:'d',text:"50"}],correct:'c',good:"Eleven ETFs at once — BlackRock, Fidelity, Invesco, VanEck, and others. The SEC approved the whole category simultaneously, creating instant competition.",bad:"Answer C — eleven. The SEC approved 11 issuers simultaneously on January 10, 2024, not just BlackRock. Instant competition in a brand new product category."}
+    ]
+  },
+  {
+    id:3, themeKey:'purple', tag:'Chapter 3 — Who Is Actually Buying?',
+    title:"The Big Money Behind the Boom",
+    blurb:"Pension funds. Hedge funds. Morgan Stanley. The list of institutions buying Bitcoin got long — fast.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:"Institutional adoption shows up in quarterly SEC filings — not tweets.",
+    buckOpens:{q:"Everyone says 'institutional money is coming into crypto.' Who exactly is that? A pension fund? A hedge fund? What does it actually look like when big money buys Bitcoin?"},
+    buckCloses:{text:"Institutional money changes the game — but not in the way most people think. It doesn't make Bitcoin safe. It makes it more liquid and creates a sustained demand base that didn't exist before. <strong>But it also means Bitcoin is more connected to traditional markets. When stocks crash and institutions need to sell across their portfolios, Bitcoin can go down with them. The floor rises. The ceiling becomes less unlimited. That's the trade-off of maturation.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Institutions buying Bitcoin means crypto is now safe.'",q:"What does institutional involvement actually signal?",revealed:"Legitimacy and accessibility — not safety. Bitcoin's price can still fall 50-80% in a bear market (a period of major price declines), as it has multiple times historically. What institutions add is structural demand: regular, scheduled purchases tied to portfolio allocation policies, longer holding periods, and a broader investor base. They also add correlation risk — when institutions need to sell assets across their portfolio during a recession or financial crisis, Bitcoin can be sold alongside stocks, meaning Bitcoin may drop when the broader market drops. Institutions in does not equal safe. It means bigger, more connected, and more closely watched."}
+    ],
+    blocks:[
+      {t:'cold',text:"Institutional money doesn't look like retail money.<br>Retail money buys $500 at 2am after reading a post.<br>Institutional money buys $500 million on a spreadsheet approved by a committee.<br><br><em>Both are now in Bitcoin.</em>"},
+      {t:'body',text:"When people say 'institutions,' they mean large organizations that manage money on behalf of others: hedge funds (private investment pools for wealthy investors), pension funds (retirement savings for states, unions, or corporations), RIAs (Registered Investment Advisors — licensed financial advisors managing client money), and endowments (investment funds for universities and nonprofits)."},
+      {t:'body',text:"By mid-2024, the institutional picture became clear. The State of Wisconsin's pension fund disclosed $99 million in Bitcoin ETF holdings in their quarterly filing. The State of Michigan followed with $6.6 million. Morgan Stanley began allowing its financial advisors to offer Bitcoin ETFs to clients with over $1.5 million in accounts."},
+      {t:'callout',icon:'📊',text:"<strong>How to spot institutional activity:</strong> Every institutional investor managing over $100 million must file a 13-F (a quarterly disclosure form) with the SEC, listing exactly what they hold. After Bitcoin ETF approval, these filings became the primary way to track which institutions were buying. Sites like Bitcoin Treasuries track corporate holdings in real time. The 13-F is the institutional receipt."},
+      {t:'body',text:"MicroStrategy (now rebranded as Strategy) pioneered corporate Bitcoin buying starting in 2020, converting its entire corporate treasury to Bitcoin and using borrowed money to buy more. By 2024 they held over 200,000 Bitcoin — effectively becoming a publicly-traded Bitcoin holding company. Over 20 public companies followed a similar approach."},
+      {t:'protip',title:'Why corporate treasuries matter',icon:'🏢',text:"When a company puts Bitcoin on its balance sheet, it creates Bitcoin demand that isn't tied to price speculation — it's a treasury policy. That demand is persistent. Even when price drops, companies with a treasury mandate don't panic-sell the way retail investors often do. <strong>Corporate treasuries add a demand floor that's policy-driven, not sentiment-driven.</strong>"},
+      {t:'fact',idx:0}
+    ],
+    quizzes:[
+      {q:"What is a 13-F filing?",opts:[{id:'a',text:"A tax form crypto investors file with the IRS"},{id:'b',text:"A quarterly disclosure that institutional investors file with the SEC showing their holdings"},{id:'c',text:"The specific SEC form used to apply for an ETF"},{id:'d',text:"A compliance document that crypto exchanges file to show reserves"}],correct:'b',good:"13-Fs are the window into institutional portfolios. Every manager with over $100M must disclose holdings quarterly — which is exactly how we tracked who was buying Bitcoin ETFs.",bad:"Answer B — 13-F filings are required from all investment managers over $100 million, filed quarterly with the SEC. They became the primary tool for tracking institutional Bitcoin ETF adoption."},
+      {q:"What did MicroStrategy (now Strategy) do that was different from most companies?",opts:[{id:'a',text:"They built their own crypto exchange"},{id:'b',text:"They converted their entire corporate treasury to Bitcoin and used borrowed money to keep buying"},{id:'c',text:"They launched their own stablecoin backed by company shares"},{id:'d',text:"They acquired Bitcoin mining companies instead of buying Bitcoin directly"}],correct:'b',good:"MicroStrategy became a leveraged Bitcoin holding company — using the balance sheet and debt to accumulate Bitcoin as a corporate strategy. First of its kind among public companies.",bad:"Answer B — MicroStrategy converted its entire treasury to Bitcoin and used leverage (borrowed money) to keep buying more. It effectively became a publicly-traded Bitcoin holding company."},
+      {q:"When Morgan Stanley allowed advisors to offer Bitcoin ETFs, who qualified?",opts:[{id:'a',text:"Any client, regardless of net worth"},{id:'b',text:"Only clients who already held crypto"},{id:'c',text:"Clients with over $1.5 million in accounts"},{id:'d',text:"Only institutional clients, not individuals"}],correct:'c',good:"Morgan Stanley gated it to wealthy clients first — standard practice when traditional financial firms adopt new asset classes. Access typically expands over time.",bad:"Answer C — Morgan Stanley limited Bitcoin ETF access to clients with $1.5M+ in assets initially. Traditional wealth management firms often introduce new products to higher-net-worth clients first."}
+    ]
+  },
+  {
+    id:4, themeKey:'orange', tag:'Chapter 4 — How ETF Flows Move the Price',
+    title:"Money In. Bitcoin Up. Here's Why.",
+    blurb:"When $800M flows into a Bitcoin ETF, real Bitcoin gets bought. That's not a coincidence.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:"On peak days after approval, ETFs were buying more Bitcoin per day than miners were producing.",
+    buckOpens:{q:"I see headlines like '$800 million in Bitcoin ETF inflows today' and then Bitcoin goes up. Is that actually connected? Does money going into an ETF literally make the price move?"},
+    buckCloses:{text:"ETF flows are now one of the most watched signals in crypto markets. When inflows are high, there's more money chasing a limited supply — and because Spot ETFs hold real Bitcoin, that demand directly hits the market. <strong>On the flip side, large outflow days create selling pressure. 'Follow the flows' became the new 'watch the whales' — and unlike whale wallets, ETF flows are publicly reported every single day.</strong>"},
+    facts:[
+      {myth:"Most people think: 'ETF inflows are just paper — they don't actually affect Bitcoin's price.'",q:"What happens to Bitcoin supply when ETF demand rises?",revealed:"Real Bitcoin is bought and taken off the market. When ETF inflows are sustained, Authorized Participants (APs — large financial firms that create new ETF shares) buy Bitcoin on exchanges to back those new shares. That Bitcoin then goes into cold storage (offline, highly secure vaults) and isn't sold. As exchange supply decreases while demand stays the same or rises, price pressure moves upward. This is simple supply and demand — applied to a digitally scarce asset capped at 21 million coins. In Q1 2024, peak ETF inflow days exceeded the daily number of new Bitcoin being mined. The ETFs were buying faster than Bitcoin was being produced."}
+    ],
+    blocks:[
+      {t:'cold',text:"When you buy a share of a Bitcoin ETF, something has to happen on the back end.<br>The fund has to go buy actual Bitcoin.<br>More buyers = more Bitcoin demand.<br><br><em>That's not a theory. That's mechanics.</em>"},
+      {t:'body',text:"To understand ETF flows, you need to understand how Spot ETFs are created and redeemed. There are specialized firms called Authorized Participants (APs) — large financial institutions like Goldman Sachs or JPMorgan — who are the machinery behind this process."},
+      {t:'body',text:"When demand for ETF shares increases, APs create new shares: they buy Bitcoin on the open market, deliver it to the custodian (Coinbase Custody for BlackRock's IBIT), and receive new ETF shares in return, which go to investors. When investors sell, the process reverses — APs take shares back, receive Bitcoin, and sell it on the market."},
+      {t:'def',term:'Authorized Participant (AP)',def:"A large financial institution authorized to create and redeem ETF shares directly with the fund. They keep ETF prices aligned with actual Bitcoin prices by creating new shares when demand rises and redeeming them when demand falls. Think of them as the engine behind how the ETF actually works."},
+      {t:'def',term:'Inflows / Outflows',def:"Net money moving into (inflows) or out of (outflows) an ETF. A day with $800M in inflows means investors bought $800M more ETF shares than they sold. Because Spot ETFs hold real Bitcoin, sustained inflows create real buying pressure on Bitcoin's price."},
+      {t:'callout',icon:'⚡',text:"<strong>The supply shock of 2024:</strong> In the first year after ETF approval, Bitcoin Spot ETFs accumulated over 1 million Bitcoin. At the same time, in April 2024, the Bitcoin Halving occurred — an event built into Bitcoin's code that cuts the number of new Bitcoin produced by miners in half, roughly every 4 years. Rising ETF demand + sharply reduced new supply = an unprecedented pressure on Bitcoin's price from both directions simultaneously."},
+      {t:'fact',idx:0},
+      {t:'protip',title:'How to track ETF flows yourself',icon:'📈',text:"ETF issuers report their Bitcoin holdings daily. Sites like BitcoinTreasuries.net and ETF.com publish flow data every trading day. A simple habit: if you're trying to understand why Bitcoin moved on a given day, check the ETF flow data first. <strong>Sustained multi-day inflows tend to precede price runs. Multi-day outflows often precede corrections.</strong> It's not a perfect signal, but it's now one of the most transparent ones available."}
+    ],
+    quizzes:[
+      {q:"What is an Authorized Participant (AP) in an ETF?",opts:[{id:'a',text:"A retail investor who gets priority access to new ETF shares"},{id:'b',text:"A government official who approves each ETF transaction"},{id:'c',text:"A large financial institution that creates and redeems ETF shares directly with the fund"},{id:'d',text:"The custodian that physically stores Bitcoin for the ETF"}],correct:'c',good:"APs are the machinery that keeps ETF prices accurate. They create new shares when demand rises and redeem them when demand falls, keeping the ETF price aligned with real Bitcoin prices.",bad:"Answer C — Authorized Participants are large financial institutions (like Goldman Sachs or JPMorgan) who create and redeem ETF shares, keeping prices in line with actual Bitcoin."},
+      {q:"Why do Bitcoin Spot ETF inflows create upward price pressure?",opts:[{id:'a',text:"ETF marketing increases awareness, which brings more retail buyers"},{id:'b',text:"Authorized Participants must buy real Bitcoin to create new shares, reducing available supply on exchanges"},{id:'c',text:"The SEC monitors Bitcoin price as a condition of ETF approval"},{id:'d',text:"ETF inflows are publicly reported, creating a self-fulfilling prophecy"}],correct:'b',good:"The mechanism is mechanical, not psychological. Creating new ETF shares requires buying real Bitcoin. That Bitcoin goes into custody and isn't sold. Reduced supply + sustained demand = upward price pressure.",bad:"Answer B — creating new ETF shares requires buying real Bitcoin. That Bitcoin enters cold storage and is removed from market supply. Less supply + maintained demand = price pressure up."},
+      {q:"What is 'cold storage' in the context of Bitcoin ETFs?",opts:[{id:'a',text:"Bitcoin held in cold climates where electricity costs are lower for mining"},{id:'b',text:"A futures contract that expires during winter months"},{id:'c',text:"An offline, highly secure storage method for holding large amounts of Bitcoin"},{id:'d',text:"The period when Bitcoin prices are low during a bear market"}],correct:'c',good:"Cold storage = offline security. Bitcoin custodied by ETFs is stored in cold storage — physically disconnected from the internet, making remote hacking nearly impossible.",bad:"Answer C — cold storage means Bitcoin is kept in offline wallets, disconnected from the internet. It's how large custodians (like Coinbase Custody) securely hold billions in Bitcoin."}
+    ]
+  },
+  {
+    id:5, themeKey:'gold', tag:'Chapter 5 — What Changes Now?',
+    title:"Bitcoin Was Built Without Wall Street. Now Wall Street Is Selling It.",
+    blurb:"ETFs approved. Institutions in. Flows moving markets. Is this progress — or the thing Bitcoin was built to prevent?",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:"Bitcoin's 21 million coin cap doesn't change. Its code doesn't change. What changes is who holds it.",
+    buckOpens:{q:"ETFs are approved, BlackRock is in, institutions are buying, flows are moving the price. What does this actually change long-term? Is Bitcoin different now — or is it the same thing with more money around it?"},
+    buckCloses:{text:"Here's my honest take: the ETF era doesn't make Bitcoin more or less valuable as technology. It makes it more accessible as an investment. Those are different things. More people can now gain Bitcoin exposure with familiar tools. But fewer of those people are using Bitcoin as its creators intended — as a self-sovereign, peer-to-peer money. <strong>Whether that's progress or compromise depends entirely on what you think Bitcoin is for.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Now that institutions are in, Bitcoin's wild price swings will calm down.'",q:"Does institutional ownership actually reduce Bitcoin's volatility?",revealed:"Over the very long term, possibly — but not immediately, and not without trade-offs. Institutions do hold longer and don't panic-sell at 3am over a tweet. But they also manage diversified portfolios: when a major financial crisis hits and they need cash fast, they sell everything — stocks, bonds, and Bitcoin. This can actually increase short-term volatility during market stress events. The volatility character may change (fewer random crypto-Twitter-driven crashes), but the magnitude can stay extreme. What institutions really add is a demand floor during normal markets — not a ceiling on how far Bitcoin can fall during a crisis."}
+    ],
+    blocks:[
+      {t:'cold',text:"Bitcoin was designed to exist without Wall Street.<br>A peer-to-peer system. No banks required.<br>Now the world's largest banks are selling it.<br><br><em>Is that progress? Is that the point?<br>Or is that the thing it was supposed to prevent?</em>"},
+      {t:'body',text:"The case for institutional adoption being positive: price stability over time, wider accessibility through retirement accounts and financial advisors, and regulatory clarity as a side effect of the ETF approval process."},
+      {t:'body',text:"The case for concern: correlation to traditional markets (when stocks crash, institutions may sell Bitcoin too), custodial concentration (most ETF Bitcoin is held by a single custodian — Coinbase Custody), and departure from Bitcoin's original purpose of self-sovereign money outside the banking system."},
+      {t:'callout',icon:'🔑',text:"<strong>'Not your keys, not your coins':</strong> Bitcoin was designed so individuals could hold their own private keys — the password that proves ownership. When you own an ETF, a custodian holds the keys on your behalf. You own a financial instrument that represents Bitcoin — not Bitcoin itself. Some see this as a feature (security, simplicity). Others see it as missing the entire point of what Bitcoin was built to be."},
+      {t:'fact',idx:0},
+      {t:'protip',title:"The ETF doesn't change Bitcoin's code",icon:'🧠',text:"No matter how many ETFs are created or how many institutions buy in, Bitcoin's underlying code doesn't change. The 21 million coin supply cap remains. The decentralized network keeps running. The Halving schedule is unchanged. <strong>ETFs change who holds Bitcoin and how they hold it — not what Bitcoin fundamentally is at the protocol level. The asset is the same. The wrapper is new.</strong>"}
+    ],
+    quizzes:[
+      {q:"What is 'correlation risk' in the context of Bitcoin and institutional adoption?",opts:[{id:'a',text:"The risk that Bitcoin's price tracks altcoins too closely"},{id:'b',text:"The risk that Bitcoin may fall alongside stocks when institutions need to sell across their portfolios"},{id:'c',text:"The risk that ETF prices don't accurately track Bitcoin's real price"},{id:'d',text:"The risk that too many institutions hold the same ETF, reducing competition"}],correct:'b',good:"Correlation risk: institutions manage diversified portfolios. When forced to sell during a crisis, they sell everything — including Bitcoin. This can make Bitcoin less effective as a hedge against market crashes.",bad:"Answer B — as institutions hold Bitcoin alongside stocks and bonds, Bitcoin's price may move with traditional markets. During broad selloffs, institutions might sell Bitcoin too, reducing its independence."},
+      {q:"What does 'not your keys, not your coins' mean for ETF investors?",opts:[{id:'a',text:"ETF investors don't control the private keys to their Bitcoin — a custodian does"},{id:'b',text:"ETF shares have expiration dates, requiring investors to transfer them periodically"},{id:'c',text:"Only the fund manager can sell the Bitcoin, limiting investor flexibility"},{id:'d',text:"Bitcoin held in ETFs is a different technical type than on-chain Bitcoin"}],correct:'a',good:"ETF investors own a financial instrument — not actual Bitcoin with their own private keys. Coinbase Custody holds the keys, not the investor. It's simpler, but it's a different kind of ownership.",bad:"Answer A — 'not your keys, not your coins' captures Bitcoin's self-custody ethos. ETF investors own a fund that holds Bitcoin. The custodian holds the keys. You own a receipt, not the coin itself."},
+      {q:"What does Bitcoin's 21 million coin cap have to do with ETF adoption?",opts:[{id:'a',text:"ETFs are only allowed to hold up to 21% of the total Bitcoin supply"},{id:'b',text:"Nothing — ETFs are a separate legal instrument that don't interact with Bitcoin's supply"},{id:'c',text:"ETFs don't change Bitcoin's code or supply cap — they change who holds it, not what it is"},{id:'d',text:"The cap means ETFs must eventually stop creating new shares"}],correct:'c',good:"ETFs are a financial layer on top of Bitcoin. They don't modify its code, its supply cap, or its network. Bitcoin is unchanged. What changes is the type of investor holding it and how they access it.",bad:"Answer C — ETFs don't touch Bitcoin's protocol. The 21M cap, the decentralized network, the Halving schedule — all unchanged. ETFs are a financial wrapper. The underlying asset is exactly the same."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'ETF (Exchange-Traded Fund)',def:"A fund that holds a collection of assets and trades on the stock market like a stock. You buy shares of the fund — giving you exposure to what it owns without owning it directly. There are ETFs for gold, stocks, bonds, and now Bitcoin.",accent:'#4A90E2'},
+  {term:'Spot ETF',def:"An ETF that holds the actual underlying asset — real Bitcoin in a vault — rather than contracts about its future price. 'Spot' means the current, real price of the asset today. Approved by the SEC in January 2024 for Bitcoin.",accent:'#4A90E2'},
+  {term:'Futures ETF',def:"An ETF that holds futures contracts — agreements to buy Bitcoin at a set price on a future date — rather than real Bitcoin. These contracts expire and must be renewed repeatedly, creating 'roll costs' that eat into returns over time. ProShares BITO was the first Bitcoin ETF, approved in 2021, and used this model.",accent:'#E74C3C'},
+  {term:'IBIT',def:"BlackRock's Bitcoin Spot ETF — iShares Bitcoin Trust. Launched January 11, 2024. Became the fastest ETF in history to reach $50 billion in assets under management. Custodied by Coinbase Custody.",accent:'#E74C3C'},
+  {term:'AUM (Assets Under Management)',def:"The total value of all assets a fund or financial firm is managing on behalf of investors. BlackRock's $10 trillion AUM makes it the largest asset manager in the world. IBIT's AUM refers to the total value of Bitcoin held in that specific ETF.",accent:'#9B8DEE'},
+  {term:'SEC (Securities and Exchange Commission)',def:"The US government agency that regulates financial markets and protects investors. Responsible for approving or rejecting ETF applications. Rejected Bitcoin Spot ETF applications for over 10 years before approving 11 simultaneously in January 2024.",accent:'#9B8DEE'},
+  {term:'Authorized Participant (AP)',def:"A large financial institution (like Goldman Sachs or JPMorgan) authorized to create and redeem ETF shares directly with the fund. APs are what keep ETF prices aligned with the actual Bitcoin price. They buy real Bitcoin to create new shares, and sell it when shares are redeemed.",accent:'#FFA500'},
+  {term:'Inflows / Outflows',def:"Net money moving into (inflows) or out of (outflows) an ETF. A day with $800M in inflows means investors bought $800M more ETF shares than they sold. Because Spot ETFs hold real Bitcoin, sustained inflows create real buying pressure. Outflows create selling pressure.",accent:'#FFA500'},
+  {term:'Cold Storage',def:"An offline, highly secure method for storing Bitcoin — physically disconnected from the internet, making remote hacking nearly impossible. ETF custodians like Coinbase Custody hold institutional Bitcoin in cold storage. Opposite of 'hot wallet,' which stays connected online.",accent:'#FFD700'},
+  {term:'Custodian',def:"The company responsible for securely storing the actual Bitcoin that backs an ETF. Coinbase Custody is the custodian for most major Bitcoin ETFs. If the custodian were hacked or failed, the ETF's assets would be at risk — which is why custodian security practices are a key part of ETF due diligence.",accent:'#FFD700'},
+  {term:'TradFi (Traditional Finance)',def:"The established financial system: banks, brokerages, hedge funds, pension funds, Wall Street. The system that crypto was partly designed to operate independently of — and the system that is now participating in crypto through regulated vehicles like Spot ETFs.",accent:'#4A90E2'},
+  {term:'Institutional Investor',def:"A large organization that invests money on behalf of others: pension funds, hedge funds, endowments, insurance companies, sovereign wealth funds. They manage millions or billions of dollars, move carefully, and are heavily regulated. Their entry into Bitcoin via ETFs represents structural, sustained demand.",accent:'#9B8DEE'},
+  {term:'13-F Filing',def:"A quarterly disclosure form that all institutional investment managers with over $100 million in assets must file with the SEC. Lists every publicly traded security they hold. After Bitcoin ETF approval, 13-Fs became the primary tool for tracking which institutions were buying Bitcoin exposure.",accent:'#9B8DEE'},
+  {term:'Surveillance Sharing Agreement',def:"An agreement between an ETF issuer and a crypto exchange giving regulators real-time visibility into trading activity across both markets. Designed to detect and prevent price manipulation. BlackRock's agreement with Coinbase was a key factor in finally satisfying the SEC's concerns.",accent:'#E74C3C'},
+  {term:'Correlation Risk',def:"The risk that an asset begins to move in sync with other assets in a portfolio, reducing its value as a diversifier. As institutions add Bitcoin alongside stocks and bonds, Bitcoin may fall alongside them during broad market selloffs — reducing its effectiveness as a hedge against traditional market crashes.",accent:'#FFA500'}
+];
+
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').innerHTML = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
