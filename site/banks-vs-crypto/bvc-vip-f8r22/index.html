@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Banks vs. Crypto: How the Fight Ended</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;align-items:center;padding:20px 24px 32px;height:100%;overflow-y:auto;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;margin:auto;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(200px,55vw);height:min(200px,55vw);object-fit:cover;border-radius:50%;margin-bottom:14px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;line-height:1.4;color:#fff;margin-bottom:20px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 14px;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:12px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:16/9;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:cover;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Clarity Act · Debanking · Securities Law · The Pivot</span></div>
+    <h1 class="cover-h1">The Banks vs.<br><em>Crypto</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> through the war banks waged against crypto — the debanking, the legal battles, the 16-token ruling — and how the same institutions that tried to kill it became its biggest distributors.</p>
+    <button class="cover-cta" id="cover-cta-btn">Follow the Fight → Get Started</button>
+    <p class="cover-meta">6 chapters · 18 quiz questions · glossary · certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 7</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is following the fight from the beginning.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every term from the banks-vs-crypto war — explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You now understand<br><em>the fight — and who won.</em></h1>
+      <p class="cert-body">Six chapters. Eighteen questions. From the war banks waged against crypto, through debanking and legal battles, to the March 2026 commodity ruling and the banks' full reversal. You understand this history better than most people working in finance.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 7</div>
+    <h2 class="wn-h2">You understand<br><em>the great reversal.</em></h2>
+    <div class="wn-buck-quote">"Banks tried to kill crypto through debanking, regulatory pressure, and a decade of public criticism. Then the same banks became its biggest distributors. You now understand why that happened — and how the legal framework got built. <strong>Volume 8 is about what's being built next: real-world assets moving onto blockchains, the $31 billion tokenization market that's already live, and what it means when your stocks, bonds, and real estate move on-chain.</strong>" — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../../images/cover-hero.webp',
+  imgCh1Avatar:      '../../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh1Hero:        '../../images/c7-ch1hero.webp',
+  imgCh1Mid:         '../../images/c7-ch1mid.webp',
+  imgCh2Avatar:      '../../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh2Hero:        '../../images/c7-ch2hero.webp',
+  imgCh2Mid:         '../../images/c7-ch2mid.webp',
+  imgCh3Avatar:      '../../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../../images/ch3-take.webp',
+  imgCh3Hero:        '../../images/c7-ch3hero.webp',
+  imgCh3Mid:         '../../images/c7-ch3mid.webp',
+  imgCh4Avatar:      '../../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../../images/ch4-take.webp',
+  imgCh4Hero:        '../../images/c7-ch4hero.webp',
+  imgCh4Mid:         '../../images/c7-ch4mid.webp',
+  imgCh5Avatar:      '../../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../../images/ch5-take.webp',
+  imgCh5Hero:        '../../images/c7-ch5hero.webp',
+  imgCh5Mid:         '../../images/c7-ch5mid.webp',
+  imgCh6Avatar:      '../../images/ch1-asks.webp',
+  imgCh6TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh6Hero:        '../../images/c7-ch6hero.webp',
+  imgCh6Mid:         '../../images/c7-ch6mid.webp',
+  imgGlossary:       '../../images/card1.webp',
+  imgCert:           '../../images/cert.webp',
+  imgWN:             '../../images/visit.webp'
+};
+
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+var THEME = {
+  blue:{bg:'#060d1a',topbarBg:'rgba(6,13,26,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#4A90E2',accentBg:'rgba(74,144,226,0.12)',border:'rgba(74,144,226,0.28)',readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',cardBg:'rgba(74,144,226,0.07)',cardBorder:'rgba(74,144,226,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(74,144,226,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(74,144,226,0.08)',buckBorder:'rgba(74,144,226,0.25)',factBg:'rgba(74,144,226,0.08)',factBorder:'rgba(74,144,226,0.3)',factRevBg:'rgba(74,144,226,0.06)',analogyBg:'rgba(74,144,226,0.07)',navBg:'#060d1a',navBorder:'rgba(74,144,226,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  crimson:{bg:'#190000',topbarBg:'rgba(25,0,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#E74C3C',accentBg:'rgba(231,76,60,0.12)',border:'rgba(231,76,60,0.28)',readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',cardBg:'rgba(231,76,60,0.07)',cardBorder:'rgba(231,76,60,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(231,76,60,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(231,76,60,0.08)',buckBorder:'rgba(231,76,60,0.25)',factBg:'rgba(231,76,60,0.08)',factBorder:'rgba(231,76,60,0.3)',factRevBg:'rgba(231,76,60,0.06)',analogyBg:'rgba(231,76,60,0.07)',navBg:'#190000',navBorder:'rgba(231,76,60,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  purple:{bg:'#0d0720',topbarBg:'rgba(13,7,32,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#9B8DEE',accentBg:'rgba(155,141,238,0.15)',border:'rgba(155,141,238,0.3)',readFill:'linear-gradient(90deg,#667eea,#9b8dee)',cardBg:'rgba(155,141,238,0.08)',cardBorder:'rgba(155,141,238,0.22)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(155,141,238,0.2)',optBg:'rgba(255,255,255,0.05)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.8)',buckBg:'rgba(155,141,238,0.1)',buckBorder:'rgba(155,141,238,0.28)',factBg:'rgba(155,141,238,0.1)',factBorder:'rgba(155,141,238,0.32)',factRevBg:'rgba(155,141,238,0.08)',analogyBg:'rgba(155,141,238,0.08)',navBg:'#0d0720',navBorder:'rgba(155,141,238,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  orange:{bg:'#130800',topbarBg:'rgba(19,8,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFA500',accentBg:'rgba(255,165,0,0.12)',border:'rgba(255,165,0,0.28)',readFill:'linear-gradient(90deg,#FFA500,#FFD580)',cardBg:'rgba(255,165,0,0.07)',cardBorder:'rgba(255,165,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,165,0,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,165,0,0.08)',buckBorder:'rgba(255,165,0,0.25)',factBg:'rgba(255,165,0,0.08)',factBorder:'rgba(255,165,0,0.3)',factRevBg:'rgba(255,165,0,0.06)',analogyBg:'rgba(255,165,0,0.07)',navBg:'#130800',navBorder:'rgba(255,165,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  gold:{bg:'#0f1200',topbarBg:'rgba(15,18,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFD700',accentBg:'rgba(255,215,0,0.12)',border:'rgba(255,215,0,0.25)',readFill:'linear-gradient(90deg,#D4A017,#FFD700)',cardBg:'rgba(255,215,0,0.07)',cardBorder:'rgba(255,215,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,215,0,0.15)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,215,0,0.08)',buckBorder:'rgba(255,215,0,0.25)',factBg:'rgba(255,215,0,0.08)',factBorder:'rgba(255,215,0,0.3)',factRevBg:'rgba(255,215,0,0.06)',analogyBg:'rgba(255,215,0,0.06)',navBg:'#0f1200',navBorder:'rgba(255,215,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'}
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'blue', tag:'Chapter 1 — The Original Enemy',
+    title:"Why Banks Wanted Crypto Dead",
+    blurb:"Bitcoin was built to replace banks. The banks understood exactly what that meant.",
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'Bitcoin was designed from the ground up to make financial intermediaries optional.',
+    buckOpens:{q:"I know banks and crypto don't get along. But why, exactly? What did Bitcoin do that made the entire banking industry treat it like an enemy?"},
+    buckCloses:{text:"Banks didn't hate crypto because they were confused about it. They hated it because they understood it perfectly. A system designed to make banks optional is an existential threat to a business model that has existed for centuries. <strong>The question was never whether banks would fight back. The question was how — and for how long.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Banks were anti-crypto because they just didn't understand the technology.'",q:"Did banks actually understand what crypto was threatening?",revealed:"Yes — and in detail. JPMorgan filed over 175 blockchain patents between 2013 and 2018 while Jamie Dimon publicly called Bitcoin a 'fraud.' Goldman Sachs opened a cryptocurrency trading desk in 2018. Banks hired blockchain engineers, ran internal proofs of concept, and built private blockchain networks — while simultaneously arguing that public blockchains were worthless. They weren't confused. They were protecting their position. When the CEO of a bank calls Bitcoin a scam while his legal department files blockchain patents, the message isn't confusion — it's strategy."},
+      {myth:"Most people think: 'The main reason banks opposed crypto was that it was used for crime.'",q:"What percentage of crypto transactions are actually illicit?",revealed:"According to Chainalysis, a blockchain analytics firm that sells services to law enforcement and governments, illicit transactions have consistently represented less than 1% of total crypto transaction volume — and the trend is lower as the ecosystem matures. By comparison, the United Nations estimates that 2–5% of global GDP (roughly $800 billion to $2 trillion) is laundered through traditional financial systems annually. Cash, real estate, and shell companies through traditional banks remain the primary vehicles for financial crime globally. Every crypto transaction is permanently recorded on a public ledger — that arguably makes it easier to trace than cash, not harder."}
+    ],
+    blocks:[
+      {t:'cold',text:"In 2008, the global financial system collapsed.<br>Banks got bailed out. Millions of people lost their homes.<br>Nine pages later, Bitcoin was born.<br><br><em>The banks understood immediately what it was.</em>"},
+      {t:'body',text:"Bitcoin's whitepaper, published by the anonymous Satoshi Nakamoto in October 2008, described a 'peer-to-peer electronic cash system' — a way to send money directly between two people without any bank, institution, or government in the middle. No fees. No permission required. No middleman. Banks are middlemen. That's their entire business."},
+      {t:'body',text:"The banking industry earns revenue by sitting between parties to every financial transaction: checking account fees, wire transfer fees, currency conversion fees, credit card interchange fees, and most profitably — lending your deposited money to others at interest while paying you near zero. Bitcoin's design made every one of those revenue streams theoretically unnecessary."},
+      {t:'def',term:'Disintermediation',def:'The removal of the middleman from a transaction. Bitcoin was designed to enable disintermediation of banks — allowing people to transfer value directly to each other without a financial institution facilitating (and charging for) the exchange. It is the single most threatening concept Bitcoin introduced to the financial establishment.'},
+      {t:'body',text:"But Bitcoin alone wasn't what scared banks most. It was what came after. Ethereum introduced smart contracts — code that executes financial agreements automatically, without a bank processing the transaction. DeFi (Decentralized Finance) protocols launched that let people borrow, lend, and earn interest entirely on-chain, without a bank account. The entire traditional financial stack was being rebuilt in open-source code."},
+      {t:'analogy',icon:'📞',title:'The long-distance phone call analogy',text:"Remember when calling someone overseas cost $1 per minute and phone companies got rich on it? Then Skype arrived and those calls became free. The phone companies didn't disappear overnight, but that specific revenue stream evaporated. Crypto threatened to do that to every financial middleman simultaneously — except the stakes are measured in trillions of dollars, not phone bills."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What does 'disintermediation' mean in the context of crypto?",opts:[{id:'a',text:"When governments remove crypto from regulated exchanges"},{id:'b',text:"Removing the financial middleman — allowing direct value transfers without banks"},{id:'c',text:"When crypto prices disconnect from traditional market movements"},{id:'d',text:"The process of converting crypto to traditional currency"}],correct:'b',good:"Disintermediation is the threat crypto posed to banks from day one. Remove the middleman, remove the fee. Banks ARE the middlemen. That's why they paid close attention from the beginning.",bad:"Answer B — disintermediation means removing the intermediary. Banks exist as intermediaries in financial transactions. Bitcoin was designed to make that role optional."},
+      {q:"Why did JPMorgan file 175+ blockchain patents while Jamie Dimon called Bitcoin a fraud?",opts:[{id:'a',text:"The patents were defensive — to prevent competitors from using the technology"},{id:'b',text:"JPMorgan's legal team acted independently of Dimon's public statements"},{id:'c',text:"They understood the technology's value while publicly discouraging retail adoption to control the narrative"},{id:'d',text:"Patent filings are routine and unrelated to executive opinions"}],correct:'c',good:"Protecting your position while criticizing the competition is a classic incumbent strategy. Filing patents signals they took blockchain seriously. They just didn't want competitors or customers getting there first.",bad:"Answer C — simultaneous patents and public criticism suggests strategic positioning. Banks understood blockchain's value and protected their ability to use it, while publicly undermining confidence in public crypto."},
+      {q:"What percentage of crypto transactions are estimated to be illicit, according to blockchain analytics firms?",opts:[{id:'a',text:"30–40%"},{id:'b',text:"10–15%"},{id:'c',text:"5–8%"},{id:'d',text:"Less than 1%"}],correct:'d',good:"Less than 1% — and trending lower. Every transaction is permanently on a public ledger. That's more transparency than cash. The 'crypto is just for criminals' argument doesn't hold up against the data.",bad:"Answer D — Chainalysis data consistently shows illicit crypto transactions below 1% of total volume. Traditional finance handles far more financial crime by dollar value annually."}
+    ]
+  },
+  {
+    id:2, themeKey:'crimson', tag:'Chapter 2 — The Debanking Years',
+    title:"Operation Chokepoint 2.0",
+    blurb:"Crypto companies started losing their bank accounts overnight. No warning. No explanation.",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Three major crypto-friendly banks collapsed in a single week in March 2023.',
+    buckOpens:{q:"I keep seeing posts about 'debanking' and 'Operation Chokepoint 2.0.' Crypto companies losing their bank accounts with no explanation? Was the government actually doing this quietly? What really happened?"},
+    buckCloses:{text:"Operation Chokepoint 2.0 — whether explicitly coordinated or the result of parallel regulatory pressure — achieved what legislation hadn't: it made it genuinely difficult to operate a crypto business in the United States without banking access. <strong>The lesson the industry took away was clear: if you want to operate with regulatory certainty, you need to change the law — not just survive the current enforcement environment. That's what drove the push for the Clarity Act.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The debanking was a direct result of FTX's collapse — the industry earned it.'",q:"Were the companies being debanked actually connected to FTX?",revealed:"Most weren't. FTX's collapse in November 2022 was caused by fraud — Sam Bankman-Fried secretly used customer funds for speculative trading. The companies losing bank accounts in 2023 were mostly legitimate: exchanges, custodians, payment processors, and infrastructure companies with no connection to FTX. Using one company's fraud to deny banking to an entire industry is the regulatory equivalent of closing all restaurants after one food poisoning case. In 2024, when FDIC documents were released under court order, internal communications showed bank examiners were instructed to flag crypto business customers for scrutiny — regardless of their specific activities."},
+      {myth:"Most people think: 'The debanking was a temporary overcorrection that resolved itself quickly.'",q:"How long did debanking effects last, and who ultimately benefited?",revealed:"The effects lasted through most of 2023 and into 2024, pushing significant crypto business activity to: (1) offshore jurisdictions — particularly Dubai, Singapore, and the EU, which passed MiCA (Markets in Crypto Assets), a comprehensive regulatory framework, in 2023; (2) non-bank financial institutions; and (3) entirely on-chain systems that didn't need banking at all. The unintended consequence was accelerating exactly what debanking was meant to slow. Crypto companies built more infrastructure that didn't depend on traditional banks. And the companies that could afford to operate offshore did — taking tax revenue and economic activity with them."}
+    ],
+    blocks:[
+      {t:'cold',text:"Starting in 2022, something strange happened to crypto businesses across the United States.<br>They started losing their bank accounts.<br>No warning. No explanation. No appeal process.<br><br><em>Just a letter saying the relationship was ending.</em>"},
+      {t:'body',text:"Operation Chokepoint was originally a 2013 DOJ initiative that pressured banks to cut off financial services to legal businesses the government found objectionable — payday lenders, firearms dealers, tobacco sellers. The tactic: don't try to legislate them out of existence. Just make it impossible for them to bank. No banking means no payroll, no accounts receivable, no wire transfers. No banking effectively means no business."},
+      {t:'body',text:"Starting after the collapse of FTX in November 2022, banking regulators issued guidance documents warning banks about the 'risks' of serving crypto clients. The FDIC, OCC, and Federal Reserve all published similar warnings within weeks of each other in January 2023. Critics called it Operation Chokepoint 2.0 — the same playbook, new target."},
+      {t:'def',term:'Debanking',def:"The practice of banks closing or refusing to open accounts for legal businesses or individuals, typically without explanation. In the crypto context, debanking was used as a regulatory tool — denying financial services access without legislation or court orders. No bank account meant no payroll processing, no payment rails, and no way to hold US dollars operationally. It effectively made it impossible for targeted companies to function in the US financial system."},
+      {t:'body',text:"The targets weren't fringe operations. Silvergate Bank — which had built a specialized 24/7 payment network called SEN (Silvergate Exchange Network) used by hundreds of crypto companies — was forced to shut down in March 2023. Signature Bank, which held accounts for hundreds of crypto businesses, followed two days later. Silicon Valley Bank collapsed the same week. All three in seven days. Crypto lost three of its primary US banking rails simultaneously."},
+      {t:'callout',icon:'⚠️',text:"<strong>The Silvergate aftermath:</strong> When Silvergate shut down, dozens of crypto companies — including major exchanges and stablecoin issuers — had to find new banking partners simultaneously, in a market where every bank had just been told by regulators that crypto was risky. Some companies couldn't find US banking partners at all and were forced to move operations offshore."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What was the original 'Operation Chokepoint' (the 2013 version)?",opts:[{id:'a',text:"An SEC enforcement campaign targeting early Bitcoin exchanges"},{id:'b',text:"A DOJ initiative that pressured banks to cut off services to legal but politically disfavored businesses"},{id:'c',text:"An international agreement to block cross-border crypto transfers"},{id:'d',text:"A Federal Reserve program to study the risks of digital currencies"}],correct:'b',good:"The original Chokepoint used banking access as an off-the-books regulatory tool. No legislation needed — just pressure on banks to deny services. The same tactic was later applied to crypto.",bad:"Answer B — the original Operation Chokepoint was a DOJ initiative pressuring banks to deny services to legal businesses including payday lenders and firearms dealers, without passing legislation."},
+      {q:"Why was Silvergate Bank's shutdown significant for the crypto industry?",opts:[{id:'a',text:"It was the largest crypto exchange to fail after FTX"},{id:'b',text:"It had built a specialized 24/7 payment network that hundreds of crypto companies relied on"},{id:'c',text:"Its collapse triggered a cascade of crypto token failures"},{id:'d',text:"It was the first US bank to hold Bitcoin as a reserve asset"}],correct:'b',good:"Silvergate's SEN network was critical infrastructure — a 24/7 real-time settlement system built specifically for crypto. When Silvergate shut down, those payment rails disappeared overnight for hundreds of companies.",bad:"Answer B — Silvergate's SEN network was the payment infrastructure for crypto company settlements. Its shutdown meant hundreds of companies lost banking rails simultaneously in a market already hostile to new crypto accounts."},
+      {q:"What was an unintended consequence of debanking US crypto companies?",opts:[{id:'a',text:"Crypto prices collapsed permanently"},{id:'b',text:"Companies shut down rather than move offshore"},{id:'c',text:"Companies moved operations offshore, taking activity and tax revenue with them"},{id:'d',text:"The SEC gained more enforcement authority over crypto"}],correct:'c',good:"You can't debank companies into not existing — you can only change where they operate. Debanking accelerated the offshore migration of crypto business activity, which reduced US regulatory control rather than increasing it.",bad:"Answer C — debanking didn't eliminate crypto companies. It pushed them to Dubai, Singapore, and EU jurisdictions operating under MiCA, taking economic activity and tax revenue out of the United States."}
+    ]
+  },
+  {
+    id:3, themeKey:'purple', tag:'Chapter 3 — The $1 Trillion Question',
+    title:"Security or Commodity? The Label Worth Everything.",
+    blurb:"Four letters determine who regulates crypto — and whether launching a token could land you in prison.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:'The Howey Test has determined what counts as a security since 1946 — now it applies to crypto.',
+    buckOpens:{q:"People keep saying 'is this token a security or a commodity?' and it seems like the entire legal battle over crypto comes down to this question. What's the actual difference? And why does the label matter so much?"},
+    buckCloses:{text:"The security vs. commodity question isn't technical. It's not about the blockchain. It's about what investors expect when they buy a token — and whether they're relying on a team to deliver value. <strong>A token sold with promises of a team building something valuable looks like a security. A token that's already a functioning commodity with genuine utility looks much less like one. That's why the Clarity Act tried to build a legal framework around decentralization as the trigger for when a token graduates from one category to the other.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The SEC has clear authority over all crypto, and the CFTC is irrelevant to this space.'",q:"What's the real jurisdictional battle between the SEC and CFTC over crypto?",revealed:"The turf war between the SEC and CFTC is real and significant. Bitcoin was accepted early as a commodity — CFTC has regulated Bitcoin futures since 2017. Ethereum's status shifted: the SEC initially implied ETH was a security, then gradually moved toward a commodity view, which the CFTC agreed with. Everything else was legal gray zone. The problem: the SEC has thousands of enforcement attorneys and a budget over $2 billion. The CFTC has far fewer resources and is traditionally less aggressive. If crypto is commodity, CFTC wins — lighter regulation, faster innovation. If crypto is securities, SEC wins — heavier requirements, slower development. The industry strongly preferred CFTC oversight, which is partly why the Clarity Act giving CFTC expanded jurisdiction was so significant."},
+      {myth:"Most people think: 'Once a token is launched, its legal classification is fixed forever.'",q:"Can a token's legal status actually change over time?",revealed:"Yes — and the Clarity Act was specifically designed to codify this. The theory is called 'decentralization as a trigger.' When a project first launches, a central team controls the development, marketing, and direction. Token buyers are relying on that team's efforts — that looks like a security under the Howey Test. But if the network becomes genuinely decentralized — open-source development, no controlling team, no one entity driving value — then buyers are no longer relying on others' efforts. At that point, the argument goes, the token becomes a commodity. Bitcoin and Ethereum both went through this transition informally. The Clarity Act would create a formal legal pathway for other tokens to do the same."}
+    ],
+    blocks:[
+      {t:'cold',text:"Two words. Four letters each.<br>Security. Commodity.<br>Which one a crypto token is determines:<br>who has regulatory authority, what rules apply,<br>and whether launching it could land you in federal prison.<br><br><em>Those stakes are why this fight lasted a decade.</em>"},
+      {t:'body',text:"A security is a financial instrument — like a stock or bond — that represents an investment in a common enterprise with an expectation of profit from the efforts of others. Securities are regulated by the SEC (Securities and Exchange Commission), which requires registration, disclosure, and investor protections. The consequences of selling an unregistered security are serious: civil penalties, disgorgement of profits, and criminal charges."},
+      {t:'body',text:"A commodity is a raw good or asset — like gold, oil, or wheat — that has intrinsic use or value. Commodities are regulated by the CFTC (Commodity Futures Trading Commission), which has a much lighter regulatory touch: it focuses primarily on derivatives (futures and options contracts) rather than the underlying asset itself. Far fewer requirements. Far less enforcement exposure."},
+      {t:'def',term:'The Howey Test',def:"The legal standard used since 1946 to determine if something is a 'security' under US law. An investment is a security if: (1) it involves an investment of money, (2) in a common enterprise, (3) with an expectation of profits, (4) derived primarily from the efforts of others. Named after SEC v. W.J. Howey Co. The crypto industry spent a decade arguing about whether tokens met this four-part test."},
+      {t:'body',text:"The stakes: if a token is a security, the company behind it had to register it with the SEC before selling it — filing ongoing disclosures, following strict trading rules, and potentially facing retroactive enforcement for past token sales that weren't registered. Major exchanges that listed unregistered securities would also be liable. The SEC argued in court that XRP, SOL, ADA, and others were securities. The companies argued they were not. Each case was worth billions."},
+      {t:'analogy',icon:'⚖️',title:'The orange grove analogy',text:"The Howey Test came from a 1946 case about Florida orange groves. W.J. Howey Company sold plots of land to investors, who leased the land back to Howey to grow and sell oranges — investors received the profits. The Supreme Court said: that's a security, because investors relied on Howey's efforts for their return. Crypto teams face the same question: are token buyers relying on the development team's efforts to make tokens valuable? If yes — security."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"According to the Howey Test, what makes something a 'security'?",opts:[{id:'a',text:"If it can be bought and sold on a public exchange"},{id:'b',text:"If it's issued by a company and has a ticker symbol"},{id:'c',text:"If it involves money invested in a common enterprise expecting profits from others' efforts"},{id:'d',text:"If it's regulated by any US government agency"}],correct:'c',good:"The Howey Test is about investor expectation — are you relying on someone else's efforts to profit? All four elements must be present. If yes, it's a security. If you're buying something for its direct utility, that argument weakens significantly.",bad:"Answer C — Howey requires all four: money invested, in a common enterprise, expecting profits, from others' efforts. It's about investor reliance on a team's work, not about the asset type itself."},
+      {q:"What is the main practical difference between SEC and CFTC regulation for crypto?",opts:[{id:'a',text:"SEC regulation is voluntary; CFTC regulation is mandatory"},{id:'b',text:"SEC requires registration and heavy disclosures for securities; CFTC mainly regulates derivatives with a lighter touch on the asset itself"},{id:'c',text:"CFTC only regulates crypto; SEC regulates everything else"},{id:'d',text:"There is no practical difference — both agencies apply the same rules"}],correct:'b',good:"CFTC-regulated means lighter requirements on the underlying asset. SEC-regulated means registration, disclosures, and rules designed for stocks — not tokens. That's why the industry strongly preferred CFTC jurisdiction.",bad:"Answer B — the SEC requires registration and ongoing compliance for securities. The CFTC primarily regulates futures and derivatives on commodities, with a much lighter touch on the underlying asset itself."},
+      {q:"What is 'decentralization as a trigger' in the legal context of crypto tokens?",opts:[{id:'a',text:"A mechanism that auto-switches trading pairs when volume decentralizes"},{id:'b',text:"A legal theory that a token could start as a security but become a commodity as its network decentralizes"},{id:'c',text:"A technical standard preventing any entity from holding more than 10% of a token supply"},{id:'d',text:"An SEC rule requiring centralized exchanges to list decentralized alternatives"}],correct:'b',good:"Decentralization as a trigger is the key innovation in the Clarity Act framework. It gives projects a legal pathway to graduate from SEC oversight to CFTC oversight as they become genuinely decentralized — something impossible under existing law.",bad:"Answer B — if early-stage tokens are securities because buyers rely on the team's efforts, decentralization removes that reliance. The Clarity Act codifies this transition from security to commodity as a formal legal pathway."}
+    ]
+  },
+  {
+    id:4, themeKey:'orange', tag:'Chapter 4 — The Law That Changes Everything',
+    title:"What the Clarity Act Actually Says",
+    blurb:"It passed the House. It cleared the Senate committee. Here's what it actually does — and what's still blocking it.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:'The Clarity Act would be the first US law specifically designed for how crypto actually works.',
+    buckOpens:{q:"Everyone keeps saying 'the Clarity Act will change everything for crypto.' It passed the House in July 2025. But what does it actually do? What specifically changes if it becomes law?"},
+    buckCloses:{text:"The Clarity Act doesn't make crypto risk-free or fully deregulated. It makes it legible — understandable within a legal framework that can support long-term institutional participation. <strong>Regulatory clarity is what every serious institution said was the precondition for full commitment to the market. That's what's on the table. Whether it crosses the finish line in 2026 is the political question. What it would change is the structural question — and the structural answer is: almost everything.</strong>"},
+    facts:[
+      {myth:"Most people think: 'The Clarity Act passed — crypto has regulatory clarity now.'",q:"What is the actual status of the Clarity Act as of mid-2026?",revealed:"The Clarity Act passed the House in July 2025 and cleared the Senate Banking Committee 15-9 in May 2026. It has NOT been signed into law. It still requires a full Senate floor vote and presidential signature. As of June 2026, three unresolved issues are blocking the full Senate vote: the stablecoin yield question, the DeFi oversight framework, and an ethics provision about government officials trading crypto. Analysts estimate approximately 50% odds of passage in 2026. Until it's signed into law, the current regulatory environment — with SEC enforcement actions and jurisdictional uncertainty — remains in full effect."},
+      {myth:"Most people think: 'The Clarity Act is universally welcomed by the crypto industry.'",q:"Who opposes the Clarity Act, and why?",revealed:"Multiple groups oppose it or specific provisions. Traditional banks oppose the stablecoin yield provision — if stablecoins can pay interest, they compete directly with savings accounts. Some crypto advocates argue the bill gives regulators too much power, particularly over DeFi protocols with no identifiable operator. Privacy advocates oppose KYC (Know Your Customer) requirements for certain crypto transactions. Some decentralization advocates argue the compliance framework favors large, well-capitalized projects that can afford lawyers over smaller, community-built ones. The banking lobby, SEC (which loses jurisdiction), FDIC, and various crypto factions all have different objections. Bills that touch this many interests rarely pass cleanly."}
+    ],
+    blocks:[
+      {t:'cold',text:"In July 2025, the US House of Representatives passed the Digital Asset Market Clarity Act.<br>The most comprehensive crypto legislation in American history.<br><br><em>If it passes the full Senate, it creates the first regulatory framework specifically designed for how crypto actually works.</em>"},
+      {t:'body',text:"The full name is the Digital Asset Market Clarity Act, referred to as the Clarity Act or DAMCA. It passed the House in July 2025 with bipartisan support and cleared the Senate Banking Committee 15-9 in May 2026. As of mid-2026, it awaits a full Senate floor vote before it can be signed into law."},
+      {t:'body',text:"The core of the Clarity Act: it draws a clear legal line between digital securities and digital commodities — and assigns regulatory jurisdiction accordingly. The SEC keeps authority over tokens that function like investment contracts (the traditional securities definition). The CFTC gets exclusive jurisdiction over digital commodity spot markets — the actual buying and selling of tokens classified as commodities."},
+      {t:'def',term:'Digital Asset Market Clarity Act (Clarity Act)',def:"Federal legislation (H.R. 3633) passed by the US House in July 2025. Creates a legal framework distinguishing digital securities (SEC jurisdiction) from digital commodities (CFTC jurisdiction), establishes a formal decentralization pathway for tokens to graduate regulatory categories, creates safe harbor periods for new projects, and sets rules for stablecoin issuers. The most comprehensive crypto regulatory legislation in US history — pending full Senate passage."},
+      {t:'body',text:"Key provisions: (1) A formal decentralization test — projects can apply for a 'digital commodity' certification once their network meets objective decentralization criteria. (2) Safe harbor periods — new projects get time to build and decentralize before being subject to full securities registration requirements. (3) Stablecoin framework — sets reserve requirements, auditing standards, and issuer rules. (4) Exchange registration — creates a new category of regulated crypto exchange distinct from traditional securities exchanges."},
+      {t:'callout',icon:'⚠️',text:"<strong>What's blocking the full Senate vote:</strong> Three unresolved issues. First, stablecoin yield — whether stablecoin holders should be able to earn interest (the banking lobby opposes this, as interest-bearing stablecoins compete with bank savings accounts). Second, DeFi oversight — how to regulate decentralized protocols with no identifiable operator or company behind them. Third, an ethics provision — whether members of Congress and senior government officials should be prohibited from trading crypto while actively legislating on it. These are political disagreements, not technical ones."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What does the Clarity Act do about the SEC vs. CFTC jurisdictional debate?",opts:[{id:'a',text:"It eliminates the SEC's authority over crypto entirely"},{id:'b',text:"It draws a legal line between digital securities (SEC) and digital commodities (CFTC) with clear jurisdiction"},{id:'c',text:"It creates a brand new agency specifically for crypto regulation"},{id:'d',text:"It gives state governments authority over crypto instead of federal agencies"}],correct:'b',good:"The Clarity Act doesn't eliminate either agency. It divides responsibility cleanly: SEC keeps digital securities, CFTC gets digital commodity spot markets. Clear lines replace the legal gray zones that cost billions in enforcement actions.",bad:"Answer B — the Clarity Act creates a framework assigning digital securities to the SEC and digital commodities (spot markets) to the CFTC. It's about clarity of jurisdiction, not elimination of regulation."},
+      {q:"What is a 'safe harbor period' in the Clarity Act?",opts:[{id:'a',text:"A period when crypto prices are protected from government-ordered selling"},{id:'b',text:"A time window giving new crypto projects room to build and decentralize before facing full securities registration"},{id:'c',text:"A grace period for exchanges to comply with new registration requirements"},{id:'d',text:"A temporary exemption from taxation during transition to the new framework"}],correct:'b',good:"Safe harbors give projects breathing room. Under current law, a token could be a security from launch day — making it nearly impossible to legally build and distribute. Safe harbors allow time to build the decentralization that moves a token out of securities territory.",bad:"Answer B — safe harbor periods give new projects time to build and decentralize before being subject to full securities registration requirements. It's what makes new token launches legally viable under the Clarity Act framework."},
+      {q:"Which three issues are blocking the Clarity Act's full Senate vote as of mid-2026?",opts:[{id:'a',text:"Bitcoin taxation, Ethereum classification, and exchange licensing fees"},{id:'b',text:"Stablecoin yield, DeFi oversight, and an ethics provision about officials trading crypto"},{id:'c',text:"Mining regulation, wallet privacy requirements, and international coordination"},{id:'d',text:"FDIC insurance for crypto, banking reserve requirements, and spot market trading hours"}],correct:'b',good:"Stablecoins vs. banks, DeFi's lack of identifiable operators, and government officials with crypto holdings — three entirely different fights blocking one bill. Political, not technical.",bad:"Answer B — stablecoin yield (banks vs. stablecoins), DeFi oversight (who's responsible when there's no central operator), and an ethics provision (should Congress members trade crypto while writing crypto laws) are the three blocking issues as of mid-2026."}
+    ]
+  },
+  {
+    id:5, themeKey:'gold', tag:'Chapter 5 — The March 2026 Ruling',
+    title:"16 Tokens. One Decision. Everything Changed.",
+    blurb:"The SEC and CFTC jointly named 16 tokens as digital commodities. Here's exactly what that means.",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'The joint March 2026 ruling ended years of legal ambiguity for 16 of the most widely held tokens.',
+    buckOpens:{q:"In March 2026 the SEC and CFTC made a huge joint announcement naming 16 specific tokens as digital commodities. What exactly happened? Does this mean XRP and SOL are officially 'safe' now? And what's actually different?"},
+    buckCloses:{text:"The March 2026 ruling didn't create certainty for every token in existence — thousands of smaller projects remain in ambiguous territory. But it did something important: it drew the first official lines. The 16 largest, most widely used public blockchain networks are no longer legally ambiguous in the United States. <strong>For institutional investors, that clarity wasn't optional — it was the precondition. Now they have it for the most important tokens. The framework being built will extend from here.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Being named a digital commodity means these tokens are now safe investments.'",q:"What does commodity classification actually change about investment risk?",revealed:"Nothing directly. A commodity designation tells you who regulates it and what rules apply — not whether the price will go up. Gold is a commodity. Gold prices have dropped 30–40% in various periods. Oil is a commodity. Oil prices briefly went negative in April 2020 due to a storage crisis. The 16 tokens being classified as digital commodities gives them regulatory clarity and removes specific legal risks (like exchange liability for listing unregistered securities). It does not eliminate price volatility, project risk, liquidity risk, or the possibility of a token losing most of its value. Regulation is about legal structure, not financial performance."},
+      {myth:"Most people think: 'If a token isn't on the 16-token list, it must be a security.'",q:"What is the status of tokens not named in the March 2026 ruling?",revealed:"Ambiguous — which is not the same as 'securities.' The ruling named 16 specific tokens as digital commodities. It did not classify every other token as a security. The thousands of tokens not on the list remain in legal gray zone: possibly commodities, possibly securities, possibly digital tools or collectibles under the new taxonomy, possibly something else entirely. The Clarity Act, if enacted, would create a formal process for additional tokens to seek commodity classification. Until then, unlisted tokens face the same pre-ruling ambiguity — except now there's a framework being built that shows what the finish line looks like."}
+    ],
+    blocks:[
+      {t:'cold',text:"March 17, 2026.<br>The SEC and CFTC issued a joint interpretive release.<br>16 specific tokens: digital commodities. Not securities.<br><br><em>That single document ended years of regulatory ambiguity for some of the most widely held tokens in the world.</em>"},
+      {t:'body',text:"The 16 tokens named as digital commodities: Bitcoin (BTC, already established), Ethereum (ETH), Solana (SOL), Ripple (XRP), Cardano (ADA), Chainlink (LINK), Avalanche (AVAX), Polkadot (DOT), Stellar (XLM), Hedera (HBAR), Litecoin (LTC), Dogecoin (DOGE), Shiba Inu (SHIB), Tezos (XTZ), Bitcoin Cash (BCH), Aptos (APT), and Algorand (ALGO). The ruling became effective March 23, 2026."},
+      {t:'body',text:"The document also introduced a five-category taxonomy for digital assets: digital commodities (the 16 named tokens), digital collectibles (NFTs), digital tools (utility tokens for specific platform access), stablecoins (their own category with distinct rules), and digital securities (tokens that still function as investment contracts under Howey). This is the first time the US government formally categorized the digital asset space."},
+      {t:'def',term:'Digital Asset Taxonomy',def:"The SEC/CFTC joint framework released March 2026 categorizing digital assets into five types: digital commodities (BTC, ETH, SOL, and 13 others), digital collectibles (NFTs), digital tools (platform utility tokens), stablecoins (USD-pegged tokens), and digital securities (tokens qualifying as investment contracts). The first formal US government classification system for the entire crypto asset space."},
+      {t:'body',text:"Why XRP specifically matters: Ripple Labs had been fighting the SEC in federal court since December 2020 — one of the most watched legal battles in crypto history. The SEC argued XRP was an unregistered security. Ripple argued it was a commodity. The March 2026 joint ruling naming XRP a digital commodity effectively validated Ripple's position and resolved the core question the lawsuit was built around."},
+      {t:'callout',icon:'📋',text:"<strong>What the ruling does NOT mean:</strong> Being named a digital commodity does not mean these tokens are unregulated. CFTC jurisdiction still requires exchanges to register, comply with anti-manipulation rules, meet reporting requirements, and implement customer protections. It also doesn't mean these tokens are safe investments — a commodity can still lose 80% of its value. The classification determines the regulator and the rulebook, not the risk level."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"Which five categories did the March 2026 joint taxonomy establish?",opts:[{id:'a',text:"Bitcoin, Ethereum, stablecoins, NFTs, and altcoins"},{id:'b',text:"Digital commodities, digital collectibles, digital tools, stablecoins, and digital securities"},{id:'c',text:"Regulated, unregulated, semi-regulated, foreign, and domestic tokens"},{id:'d',text:"Layer 1, Layer 2, DeFi, NFT, and exchange tokens"}],correct:'b',good:"Digital commodities, collectibles, tools, stablecoins, digital securities — five buckets that give the US government's first formal view on how to categorize the entire crypto universe.",bad:"Answer B — the five categories are: digital commodities (BTC, ETH etc.), digital collectibles (NFTs), digital tools (utility tokens), stablecoins, and digital securities (investment contracts)."},
+      {q:"Why was XRP's inclusion in the commodity list particularly significant?",opts:[{id:'a',text:"XRP had the highest market cap of any token named in the ruling"},{id:'b',text:"Ripple had been fighting an SEC lawsuit claiming XRP was an unregistered security since 2020"},{id:'c',text:"XRP was the first crypto token ever formally classified by US regulators"},{id:'d',text:"The ruling allowed XRP to be listed on US stock exchanges for the first time"}],correct:'b',good:"The Ripple vs. SEC case was one of the most watched legal battles in crypto history. A commodity classification effectively validated Ripple's core argument and resolved the central question of the lawsuit.",bad:"Answer B — Ripple fought a multi-year legal battle with the SEC over whether XRP was an unregistered security. The joint ruling naming XRP a digital commodity validated Ripple's position."},
+      {q:"What did the March 2026 ruling NOT do?",opts:[{id:'a',text:"Name 16 tokens as digital commodities"},{id:'b',text:"Introduce a five-category taxonomy for digital assets"},{id:'c',text:"Guarantee that the 16 named tokens are safe investments"},{id:'d',text:"Signal that XRP was not a security under the agencies' interpretation"}],correct:'c',good:"Regulatory clarity removes legal risk — not price risk. Commodities are volatile. The classification changes who regulates these tokens and what rules apply. It doesn't change whether the investment can lose value.",bad:"Answer C — the ruling determined regulatory classification, not investment safety. Digital commodities can still be highly volatile and lose significant value. Legal clarity and financial safety are different things."}
+    ]
+  },
+  {
+    id:6, themeKey:'blue', tag:'Chapter 6 — The Great Reversal',
+    title:"Banks Are Now Selling Crypto. What Flipped?",
+    blurb:"JPMorgan. Goldman Sachs. Morgan Stanley. The same institutions that tried to kill crypto are now selling it.",
+    heroImg:R.imgCh6Hero, midImg:R.imgCh6Mid,
+    midCaption:'Strategy announced a $1.25B Bitcoin monetization program in June 2026 — the next evolution of corporate treasury management.',
+    buckOpens:{q:"So the same banks that called Bitcoin a fraud, debanked crypto companies, and fought regulation for years are now selling crypto to customers? JPMorgan ran $900 billion in blockchain transactions? What actually changed their minds?"},
+    buckCloses:{text:"The bank reversal isn't ideological. It's commercial. Banks don't hate or love things — they manage risk and revenue. When the risk came down (regulatory clarity) and the revenue potential went up (client demand), the math changed. <strong>But here's the honest version: Strategy just announced it may sell up to $1.25 billion of Bitcoin to fund its obligations. Institutional involvement doesn't mean unconditional support — it means managed exposure. When conditions change, institutions sell. That's the other side of the coin — and it's worth knowing.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Banks are now pro-crypto — they've changed their fundamental position on Bitcoin.'",q:"What's the difference between banks being 'pro-crypto' and banks offering crypto products?",revealed:"Banks don't take ideological positions — they take commercial ones. JPMorgan offering Bitcoin ETFs through their brokerage and running $900 billion in tokenized repos doesn't mean Jamie Dimon now believes in Bitcoin's long-term thesis. It means customer demand and regulatory clarity made the business case compelling. The same week JPMorgan launched retail Bitcoin trading, their research team published a note calling Bitcoin 'not a mature asset class.' These are not contradictions for a bank — one is a product offering driven by client demand, the other is an analyst's market view. Banks will sell you crypto and tell you to be careful about it at the same time. That's not hypocrisy. That's a financial services firm doing its job."},
+      {myth:"Most people think: 'Strategy's (MicroStrategy's) plan to sell Bitcoin signals they no longer believe in it.'",q:"What is Strategy's $1.25 billion Bitcoin monetization program actually about?",revealed:"In June 2026, Strategy announced it may sell up to $1.25 billion of Bitcoin as part of a new Digital Credit Capital Framework — alongside $2 billion in share buyback programs. The purpose: to fund preferred stock dividends, interest payments on debt, and maintain adequate cash reserves. This is not a reversal of their Bitcoin thesis — they still hold hundreds of thousands of Bitcoin, the largest corporate treasury in existence. Strategy pioneered treating Bitcoin as a reserve asset. Now they're demonstrating the next evolution: treating it as a managed balance sheet asset — selling some to meet obligations, buying more when conditions allow. That's how corporations manage any asset on their balance sheet. The distinction between 'treasury management' and 'dumping' is significant. Their stock jumped 13% on the announcement."}
+    ],
+    blocks:[
+      {t:'cold',text:"JPMorgan.<br>The bank whose CEO called Bitcoin a 'fraud' in 2017 and said he'd fire any trader who touched it.<br>They now offer Bitcoin trading to retail customers and have processed $900 billion in tokenized transactions on their own blockchain.<br><br><em>The reversal is total. Here's what changed.</em>"},
+      {t:'body',text:"Three things changed simultaneously: regulatory clarity emerged, the Spot ETF created a compliant institutional product, and the competitive threat became too large to ignore. When BlackRock — the world's largest asset manager — entered Bitcoin ETFs, every bank's wealth management division faced an immediate business problem: their clients wanted Bitcoin exposure, and if the bank didn't offer it, the client would go to BlackRock directly."},
+      {t:'body',text:"The ETF solved the bank's compliance problem. Before the ETF, a bank offering Bitcoin had to touch actual crypto — wallets, private keys, custody — which created regulatory and operational complexity they weren't equipped for. A Spot ETF is just a security. Banks trade securities every day. They already had the infrastructure and compliance frameworks. The ETF gave them a legal bridge into Bitcoin exposure without handling raw crypto."},
+      {t:'analogy',icon:'🔄',title:'The streaming vs. cable analogy',text:"Remember when cable companies called Netflix a fad and tried to protect their bundled channel packages? Then Netflix grew to 200 million subscribers and every cable company launched their own streaming service. The businesses that initially attacked the competition eventually joined it — because the customers demanded it. Banks called Bitcoin a fraud while their customers kept buying it. Eventually, the business case for joining exceeded the business case for fighting."},
+      {t:'def',term:'JPMorgan Onyx',def:"JPMorgan's blockchain division, which processed over $900 billion in tokenized repo transactions as of 2026 — one of the largest institutional blockchain deployments in the world. Operates on a private blockchain for institutional settlement. Represents the same bank whose CEO publicly called Bitcoin a fraud in 2017. The scale of Onyx demonstrates how deeply traditional finance has committed to blockchain infrastructure, independent of public positions on Bitcoin."},
+      {t:'body',text:"The March 2026 regulatory taxonomy formalized what was already happening in practice. Banks can now say: 'We are offering Bitcoin — a federally recognized digital commodity — through a regulated product (a Spot ETF).' Two sentences. Full legal compliance. No gray zone. The Clarity Act, if passed, would extend this clarity to the broader digital asset market — creating the legal foundation for a full suite of bank crypto products."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What business problem did the Spot ETF approval solve for banks wanting to offer Bitcoin?",opts:[{id:'a',text:"It gave banks a new source of interest income from crypto lending"},{id:'b',text:"It gave banks a regulated, familiar product (a security) to offer clients without handling raw crypto directly"},{id:'c',text:"It allowed banks to compete with crypto exchanges on trading fees"},{id:'d',text:"It transferred custody risk from banks to crypto companies"}],correct:'b',good:"The ETF was the compliance bridge banks needed. They couldn't easily handle wallets and private keys, but they trade securities every day. A Bitcoin Spot ETF is a security. Existing infrastructure applies. Problem solved.",bad:"Answer B — Spot ETFs are securities. Banks already had the infrastructure and compliance frameworks to trade securities. The ETF gave them a compliant entry into Bitcoin exposure without touching actual crypto custody."},
+      {q:"What does JPMorgan Onyx represent?",opts:[{id:'a',text:"JPMorgan's retail crypto trading platform launched in 2024"},{id:'b',text:"JPMorgan's blockchain division that processed over $900 billion in tokenized repo transactions"},{id:'c',text:"JPMorgan's Bitcoin custody service for institutional clients"},{id:'d',text:"JPMorgan's name for their corporate Bitcoin reserve fund"}],correct:'b',good:"$900 billion in tokenized transactions — by the bank whose CEO called Bitcoin a fraud. The scale shows how deeply banks committed to blockchain infrastructure while publicly maintaining skepticism about public crypto markets.",bad:"Answer B — Onyx is JPMorgan's blockchain division. Over $900 billion in tokenized repo transactions processed by 2026, representing one of the largest institutional blockchain deployments in existence."},
+      {q:"Why did Strategy announcing potential Bitcoin sales NOT signal abandonment of their Bitcoin strategy?",opts:[{id:'a',text:"The sales are mandatory under SEC rules, not voluntary"},{id:'b',text:"They're selling a portion to fund financial obligations while still holding one of the largest corporate Bitcoin treasuries"},{id:'c',text:"The announcement was later retracted after a negative market reaction"},{id:'d',text:"The sales involve convertible notes, not actual Bitcoin"}],correct:'b',good:"Managing a treasury position — selling some to meet obligations, holding the core — is normal corporate finance. Strategy still holds the largest corporate Bitcoin treasury in existence. One monetization program doesn't change the thesis.",bad:"Answer B — Strategy may sell up to $1.25B of Bitcoin to fund preferred dividends and interest obligations. They still hold a massive Bitcoin treasury. It's treasury management, not abandonment of the Bitcoin strategy."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'Disintermediation',def:"The removal of the middleman from a transaction. Bitcoin was designed to enable disintermediation of banks — allowing people to transfer value directly to each other without a financial institution facilitating (and charging for) the exchange. The single most threatening concept Bitcoin introduced to the financial establishment.",accent:'#4A90E2'},
+  {term:'Smart Contract',def:"Self-executing code stored on a blockchain that automatically carries out the terms of an agreement when conditions are met — without a bank, lawyer, or intermediary needed. Introduced by Ethereum. Enabled DeFi (Decentralized Finance), which threatened to replace banking functions including lending, borrowing, and earning interest.",accent:'#4A90E2'},
+  {term:'DeFi (Decentralized Finance)',def:"Financial services — lending, borrowing, trading, earning yield — built on public blockchains using smart contracts, with no bank or company required to operate them. A direct threat to traditional banking revenue streams. By 2024, DeFi protocols had processed hundreds of billions in transactions without a single bank involved.",accent:'#4A90E2'},
+  {term:'Debanking',def:"The practice of banks closing or refusing to open accounts for legal businesses or individuals, typically without explanation. Used as a regulatory tool against crypto companies in 2022–2024 — denying financial services access without legislation or court orders, effectively making it impossible for targeted companies to function in the US financial system.",accent:'#E74C3C'},
+  {term:'Operation Chokepoint 2.0',def:"The informal name given by critics to the 2022–2024 coordinated regulatory pressure that caused US banks to deny or terminate accounts for crypto businesses. Named after the original 2013 Operation Chokepoint — a DOJ initiative that pressured banks to cut off services to legal but politically disfavored industries. The 2.0 version targeted crypto following the FTX collapse.",accent:'#E74C3C'},
+  {term:'MiCA (Markets in Crypto Assets)',def:"The European Union's comprehensive crypto regulatory framework, passed in 2023. Provided clear rules for crypto issuers and service providers operating in the EU. While the US was debanking crypto companies, the EU was building a framework to attract them — which is exactly what happened, as several US companies moved operations to EU-licensed jurisdictions.",accent:'#E74C3C'},
+  {term:'Security (Financial)',def:"A financial instrument — like a stock or bond — representing an investment in a common enterprise with an expectation of profit from the efforts of others. Securities are regulated by the SEC, which requires registration, disclosures, and investor protections. Selling unregistered securities can result in civil and criminal penalties.",accent:'#9B8DEE'},
+  {term:'Commodity',def:"A raw good or asset with intrinsic use or value as a medium of exchange — like gold, oil, or wheat. Commodities are regulated by the CFTC, which has a lighter regulatory touch than the SEC, primarily focusing on derivatives markets rather than the underlying asset. Bitcoin has been treated as a commodity since CFTC approved Bitcoin futures in 2017.",accent:'#9B8DEE'},
+  {term:'The Howey Test',def:"The legal standard used since 1946 to determine if something is a 'security' under US law. An investment is a security if: (1) money is invested, (2) in a common enterprise, (3) with expectation of profits, (4) from the efforts of others. Named after SEC v. W.J. Howey Co. The four-part test applied to crypto tokens for a decade of legal battles.",accent:'#9B8DEE'},
+  {term:'CFTC (Commodity Futures Trading Commission)',def:"The US regulator for commodity markets and their derivatives. Has regulated Bitcoin futures since 2017. The crypto industry generally preferred CFTC oversight over SEC oversight because CFTC has a lighter regulatory touch — focusing primarily on derivatives rather than imposing registration and disclosure requirements on the underlying asset.",accent:'#FFA500'},
+  {term:'Digital Asset Market Clarity Act (Clarity Act)',def:"Federal legislation (H.R. 3633) passed by the US House in July 2025. Draws a legal line between digital securities (SEC) and digital commodities (CFTC), establishes a formal decentralization pathway for tokens to change regulatory categories, creates safe harbor periods for new projects, and sets stablecoin rules. Cleared the Senate Banking Committee May 2026. Not yet law as of mid-2026.",accent:'#FFA500'},
+  {term:'Safe Harbor Period',def:"A provision in the Clarity Act giving new crypto projects a defined time window to build and decentralize before being subject to full securities registration requirements. Addresses the 'chicken and egg' problem: a project needs to distribute tokens to decentralize, but distributing tokens without registration could be an unregistered securities offering. Safe harbors allow the building phase to happen legally.",accent:'#FFA500'},
+  {term:'Digital Asset Taxonomy',def:"The five-category framework released jointly by the SEC and CFTC in March 2026: digital commodities (BTC, ETH, SOL, and 13 others), digital collectibles (NFTs), digital tools (utility tokens), stablecoins, and digital securities (investment contracts). The first formal US government classification system for the entire crypto asset space.",accent:'#FFD700'},
+  {term:'Digital Commodity',def:"One of the five categories in the March 2026 taxonomy. Tokens classified as digital commodities fall under CFTC jurisdiction, not SEC. The 16 tokens named in the joint March 2026 ruling — including ETH, SOL, XRP, ADA, LINK, and AVAX — are digital commodities. Classification removes securities law exposure from exchanges listing them and companies holding them.",accent:'#FFD700'},
+  {term:'Decentralization as a Trigger',def:"The legal theory — codified in the Clarity Act — that a token can start as a security (when buyers rely on a central team's efforts) and graduate to a commodity (once the network becomes genuinely decentralized and no one entity controls it). Creates a legal pathway from SEC oversight to CFTC oversight for maturing crypto projects.",accent:'#FFD700'},
+  {term:'JPMorgan Onyx',def:"JPMorgan's blockchain division, which processed over $900 billion in tokenized repo transactions as of 2026. Operates on a private blockchain for institutional settlement. Created by the same bank whose CEO publicly called Bitcoin a fraud in 2017 — illustrating how banks committed deeply to blockchain infrastructure while maintaining public skepticism about public crypto markets.",accent:'#4A90E2'},
+  {term:'Tokenized Assets',def:"Real-world assets — stocks, bonds, real estate, commodities — represented as tokens on a blockchain. When an asset is tokenized, ownership can be transferred 24/7, fractionalized (selling 0.001% of a building), and settled in seconds instead of days. By mid-2026, over $31 billion in real-world assets had been tokenized on public blockchains.",accent:'#4A90E2'},
+  {term:'Corporate Treasury (Bitcoin)',def:"A corporate finance strategy where a company holds Bitcoin as a primary or significant reserve asset, rather than (or alongside) cash and bonds. Pioneered by Strategy (formerly MicroStrategy) starting in 2020. By 2026, Strategy held one of the world's largest Bitcoin treasuries and began managing it actively — selling portions to fund obligations while maintaining the core position.",accent:'#4A90E2'}
+];
+
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').innerHTML = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar','imgCh6Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar','imgCh6TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
