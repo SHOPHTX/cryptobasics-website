@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Next Wave: Real World Assets on the Blockchain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;align-items:center;padding:20px 24px 32px;height:100%;overflow-y:auto;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;margin:auto;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(200px,55vw);height:min(200px,55vw);object-fit:cover;border-radius:50%;margin-bottom:14px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;line-height:1.4;color:#fff;margin-bottom:20px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+#chapterview{}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero{background:#000;}.ch-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 14px;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:12px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.body-p strong{font-weight:700;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:16/9;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;background:transparent;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px 18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;font-weight:400;}
+.analogy-card{border-radius:16px;padding:18px 18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px 18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.pro-tip{border-radius:18px;padding:22px 20px;margin:24px 0;border:2px solid;}
+.pro-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pro-tip-badge{border-radius:9999px;padding:4px 14px;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pro-tip-title{font-size:1rem;font-weight:800;}
+.pro-tip-body{font-size:.9rem;line-height:1.75;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;background:rgba(0,0,0,.1);}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:cover;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-primary:hover{transform:scale(1.02);}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;transition:all .15s ease;}
+.cert-btn-ghost:hover{border-color:rgba(255,215,0,.35);color:#FFD700;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 16px;filter:drop-shadow(0 6px 18px rgba(255,215,0,.25));}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;transition:all .2s ease;}
+.wn-btn-primary:hover{transform:scale(1.02);}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;transition:all .15s ease;}
+.wn-btn-secondary:hover{border-color:rgba(255,215,0,.4);color:#FFD700;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;transition:all .15s ease;}
+.wn-btn-ghost:hover{color:rgba(255,255,255,.6);}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img id="img-cover" src="" alt="Course cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Tokenization · RWA · BlackRock · $60 Billion</span></div>
+    <h1 class="cover-h1">The Next<br><em>Wave</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> through the $60 billion revolution quietly moving real-world assets — houses, bonds, gold — onto blockchains. BlackRock is already in. JPMorgan is already in. Here's what it means for everyone else.</p>
+    <button class="cover-cta" id="cover-cta-btn">Follow the Money → Get Started</button>
+    <p class="cover-meta">5 chapters · 15 quiz questions · glossary · certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 8</p>
+  </div>
+</div>
+
+<!-- CHAPTER MAP -->
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Buck is following the money into the new frontier.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<!-- BUCK INTERSTITIAL -->
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="" alt="Buck" />
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<!-- CHAPTER VIEW -->
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll">
+    <div class="ch-scroll-inner" id="ch-inner"></div>
+  </div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="" alt="" /><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every term from the real-world asset revolution — explained like you're a human being.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" id="img-cert" src="" alt="Buck" />
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You now understand<br><em>the next wave.</em></h1>
+      <p class="cert-body">Five chapters. Fifteen questions. From what a real-world asset actually is, through fractionalization and instant settlement, to the $60 billion already on-chain and what BlackRock, JPMorgan, and Franklin Templeton are building right now. You're ahead of most people in finance.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATS NEXT -->
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" id="img-wn" src="" alt="Buck" />
+    <div class="wn-overline">You've graduated Volume 8</div>
+    <h2 class="wn-h2">You see what's<br><em>being built.</em></h2>
+    <div class="wn-buck-quote">"Tokenization is moving $60 billion in real-world assets onto blockchains right now — and the biggest names in finance are the ones doing it. You now understand what's happening, why, and who's leading it. <strong>Volume 9 goes beneath the surface: the whale accumulation patterns retail never sees, the payment rails being quietly laid by the world's largest banks, and what's really happening while everyone watches the price.</strong>" — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.etsy.com/shop/FuelMyCuriosity" target="_blank">Find More on Etsy</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+var WEBSITE_URL = 'https://www.cryptobasics.co';
+var ETSY_URL = 'https://www.etsy.com/shop/FuelMyCuriosity';
+
+function ph(label, accent, bg) {
+  bg = bg || '#0c1520';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="' + bg + '"/><rect x="24" y="24" width="552" height="352" rx="14" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.35"/><text x="300" y="188" text-anchor="middle" font-family="sans-serif" font-size="32" fill="' + accent + '" opacity="0.25">&#128247;</text><text x="300" y="222" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="' + accent + '" opacity="0.7">' + label + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+window.__resources = {
+  imgCover:          '../../images/cover-hero.webp',
+  imgCh1Avatar:      '../../images/ch1-asks.webp',
+  imgCh1TakeAvatar:  '../../images/ch1-take.webp',
+  imgCh1Hero:        '../../images/c8-ch1hero.webp',
+  imgCh1Mid:         '../../images/c8-ch1mid.webp',
+  imgCh2Avatar:      '../../images/ch2-asks.webp',
+  imgCh2TakeAvatar:  '../../images/ch2-take.webp',
+  imgCh2Hero:        '../../images/c8-ch2hero.webp',
+  imgCh2Mid:         '../../images/c8-ch2mid.webp',
+  imgCh3Avatar:      '../../images/ch3-asks.webp',
+  imgCh3TakeAvatar:  '../../images/ch3-take.webp',
+  imgCh3Hero:        '../../images/c8-ch3hero.webp',
+  imgCh3Mid:         '../../images/c8-ch3mid.webp',
+  imgCh4Avatar:      '../../images/ch4-asks.webp',
+  imgCh4TakeAvatar:  '../../images/ch4-take.webp',
+  imgCh4Hero:        '../../images/c8-ch4hero.webp',
+  imgCh4Mid:         '../../images/c8-ch4mid.webp',
+  imgCh5Avatar:      '../../images/ch5-asks.webp',
+  imgCh5TakeAvatar:  '../../images/ch5-take.webp',
+  imgCh5Hero:        '../../images/c8-ch5hero.webp',
+  imgCh5Mid:         '../../images/c8-ch5mid.webp',
+  imgGlossary:       '../../images/card1.webp',
+  imgCert:           '../../images/cert.webp',
+  imgWN:             '../../images/visit.webp'
+};
+
+document.getElementById('img-cover').src = window.__resources.imgCover;
+document.getElementById('img-cert').src = window.__resources.imgCert;
+document.getElementById('img-wn').src = window.__resources.imgWN;
+document.querySelector('.gloss-bg img').src = window.__resources.imgGlossary;
+
+var THEME = {
+  blue:{bg:'#060d1a',topbarBg:'rgba(6,13,26,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#4A90E2',accentBg:'rgba(74,144,226,0.12)',border:'rgba(74,144,226,0.28)',readFill:'linear-gradient(90deg,#2980B9,#4A90E2)',cardBg:'rgba(74,144,226,0.07)',cardBorder:'rgba(74,144,226,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(74,144,226,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(74,144,226,0.08)',buckBorder:'rgba(74,144,226,0.25)',factBg:'rgba(74,144,226,0.08)',factBorder:'rgba(74,144,226,0.3)',factRevBg:'rgba(74,144,226,0.06)',analogyBg:'rgba(74,144,226,0.07)',navBg:'#060d1a',navBorder:'rgba(74,144,226,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  crimson:{bg:'#190000',topbarBg:'rgba(25,0,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#E74C3C',accentBg:'rgba(231,76,60,0.12)',border:'rgba(231,76,60,0.28)',readFill:'linear-gradient(90deg,#C0392B,#E74C3C)',cardBg:'rgba(231,76,60,0.07)',cardBorder:'rgba(231,76,60,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(231,76,60,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(231,76,60,0.08)',buckBorder:'rgba(231,76,60,0.25)',factBg:'rgba(231,76,60,0.08)',factBorder:'rgba(231,76,60,0.3)',factRevBg:'rgba(231,76,60,0.06)',analogyBg:'rgba(231,76,60,0.07)',navBg:'#190000',navBorder:'rgba(231,76,60,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  purple:{bg:'#0d0720',topbarBg:'rgba(13,7,32,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#9B8DEE',accentBg:'rgba(155,141,238,0.15)',border:'rgba(155,141,238,0.3)',readFill:'linear-gradient(90deg,#667eea,#9b8dee)',cardBg:'rgba(155,141,238,0.08)',cardBorder:'rgba(155,141,238,0.22)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(155,141,238,0.2)',optBg:'rgba(255,255,255,0.05)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.8)',buckBg:'rgba(155,141,238,0.1)',buckBorder:'rgba(155,141,238,0.28)',factBg:'rgba(155,141,238,0.1)',factBorder:'rgba(155,141,238,0.32)',factRevBg:'rgba(155,141,238,0.08)',analogyBg:'rgba(155,141,238,0.08)',navBg:'#0d0720',navBorder:'rgba(155,141,238,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  orange:{bg:'#130800',topbarBg:'rgba(19,8,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFA500',accentBg:'rgba(255,165,0,0.12)',border:'rgba(255,165,0,0.28)',readFill:'linear-gradient(90deg,#FFA500,#FFD580)',cardBg:'rgba(255,165,0,0.07)',cardBorder:'rgba(255,165,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,165,0,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,165,0,0.08)',buckBorder:'rgba(255,165,0,0.25)',factBg:'rgba(255,165,0,0.08)',factBorder:'rgba(255,165,0,0.3)',factRevBg:'rgba(255,165,0,0.06)',analogyBg:'rgba(255,165,0,0.07)',navBg:'#130800',navBorder:'rgba(255,165,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'},
+  gold:{bg:'#0f1200',topbarBg:'rgba(15,18,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFD700',accentBg:'rgba(255,215,0,0.12)',border:'rgba(255,215,0,0.25)',readFill:'linear-gradient(90deg,#D4A017,#FFD700)',cardBg:'rgba(255,215,0,0.07)',cardBorder:'rgba(255,215,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizText:'#fff',quizBorder:'rgba(255,215,0,0.15)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,215,0,0.08)',buckBorder:'rgba(255,215,0,0.25)',factBg:'rgba(255,215,0,0.08)',factBorder:'rgba(255,215,0,0.3)',factRevBg:'rgba(255,215,0,0.06)',analogyBg:'rgba(255,215,0,0.06)',navBg:'#0f1200',navBorder:'rgba(255,215,0,0.2)',prevColor:'rgba(255,255,255,0.35)',prevBorder:'rgba(255,255,255,0.15)'}
+};
+
+var R = window.__resources;
+var CHAPTERS = [
+  {
+    id:1, themeKey:'blue', tag:'Chapter 1 — The Basics',
+    title:"What Is a Real World Asset on a Blockchain?",
+    blurb:"The term sounds complicated. The idea is simpler than you think.",
+    heroImg:R.imgCh1Hero, midImg:R.imgCh1Mid,
+    midCaption:'Tokenization creates a digital twin of a physical asset — and that changes everything about how it can be owned and traded.',
+    buckOpens:{q:"I keep hearing 'real world assets on the blockchain' and 'tokenization.' I have no idea what that means. Can you start from the very beginning — like, what is a real world asset, and what does putting it on a blockchain even mean?"},
+    buckCloses:{text:"A real world asset is anything valuable that exists outside of crypto — a house, a bond, a gold bar, a share of stock. Tokenization just means creating a digital record of ownership for that asset on a blockchain. The asset doesn't move. The paperwork does. <strong>And when the paperwork is on a blockchain, it can move instantly, be split into tiny pieces, and be owned by anyone on Earth — without a bank, a broker, or a notary in the middle.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Tokenization means someone is taking a photo of their house and selling it as an NFT.'",q:"Is tokenization just NFTs with a fancy name?",revealed:"Not at all — though the confusion is understandable. NFTs are one type of token, and early NFTs were mostly digital art. Tokenized real-world assets are something entirely different: they represent legal ownership of actual physical or financial assets. When BlackRock tokenizes US Treasury bonds, they're not selling you a picture of a bond. You receive a token that legally represents your share of actual government debt — and you earn actual interest. The legal structure, the regulatory framework, and the purpose are completely different from a profile picture NFT. The underlying technology is similar. The application is not."},
+      {myth:"Most people think: 'The blockchain stores the actual asset — like a house somehow goes into the blockchain.'",q:"What does the blockchain actually store when an asset is tokenized?",revealed:"The blockchain stores a record of ownership — not the asset itself. Think of it like a digital title deed. When you own a house, the house doesn't go into the county records office. The county records office just holds a document that says you own it. Tokenization does the same thing on a blockchain. The house stays where it is. The ownership record — who bought it, what price, when — gets stored on a public, tamper-proof digital ledger instead of in a filing cabinet at city hall. The blockchain replaces the paperwork. It does not absorb the property."}
+    ],
+    blocks:[
+      {t:'cold',text:"Let's start with the simplest possible version.<br><br>A real-world asset is anything that has value in the physical world.<br>Your house. A government bond. A gold bar. A share of stock in Apple.<br><br><em>A blockchain is a digital ledger — a shared record book that thousands of computers all keep a copy of, so no single person can change or fake it.</em>"},
+      {t:'body',text:"Putting a real-world asset 'on a blockchain' doesn't mean the asset teleports into a computer. It means creating a digital record — called a token — that represents ownership of that asset. The asset itself stays wherever it is: a house stays on its lot, gold stays in a vault, a bond stays in a fund. But the ownership record lives on the blockchain."},
+      {t:'def',term:'Real World Asset (RWA)',def:"Any asset with value that exists outside of the crypto world. Examples include: US Treasury bonds (government debt that pays interest), real estate (land and buildings), gold and other commodities, stocks, private credit (loans), and fine art. 'Real world' simply means the asset has a physical or legal existence in traditional finance — as opposed to assets like Bitcoin that exist only on a blockchain."},
+      {t:'body',text:"The word for this process is tokenization. To tokenize an asset means to create a blockchain token that represents it. Think of the token as a digital certificate of ownership. It proves you own a share of the asset, just like a stock certificate used to prove you owned shares in a company — except this certificate lives on a global, public, fraud-resistant blockchain instead of in a brokerage firm's database."},
+      {t:'def',term:'Tokenization',def:"The process of creating a blockchain-based digital token that represents ownership of a real-world asset. When an asset is tokenized, the token becomes the official record of who owns it. Tokens can be transferred instantly, split into fractions (so many people can co-own one asset), and traded 24/7 on global markets — features that traditional asset records (paper, bank databases) cannot provide."},
+      {t:'analogy',icon:'🏠',title:'The digital title deed analogy',text:"When you buy a house, you don't receive the house in a box. You receive a title — a legal document that says the house is yours. That title lives in a county records office. Tokenization replaces that county records office with a blockchain. The house still exists. The ownership record just moved from a government filing cabinet to a tamper-proof digital ledger that anyone can verify, anywhere in the world, instantly."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What does it mean to 'tokenize' a real-world asset?",opts:[{id:'a',text:"To convert a physical asset into cryptocurrency by selling it"},{id:'b',text:"To create a blockchain token that represents legal ownership of the asset"},{id:'c',text:"To photograph an asset and sell the image as an NFT"},{id:'d',text:"To transfer ownership of an asset to a blockchain company"}],correct:'b',good:"Tokenization creates a digital ownership record on a blockchain — not a photo, not a sale, not a transfer to a crypto company. The asset stays where it is. The record of who owns it moves to the blockchain.",bad:"Answer B — tokenization means creating a blockchain token that serves as the official ownership record. The underlying asset doesn't move. The paperwork equivalent does."},
+      {q:"What does a blockchain actually store when an asset is tokenized?",opts:[{id:'a',text:"The physical asset itself, converted to digital data"},{id:'b',text:"A photo or scan of the asset for verification"},{id:'c',text:"A record of ownership — who owns it, when they bought it, and the transaction history"},{id:'d',text:"The monetary value of the asset at time of tokenization"}],correct:'c',good:"The blockchain is a record keeper, not a storage locker. It holds the ownership record — like a digital title deed — not the asset itself. The house, bond, or gold bar stays exactly where it is.",bad:"Answer C — the blockchain stores ownership records. Think of it as a tamper-proof digital filing cabinet that holds title deeds, not a vault that holds physical assets."},
+      {q:"Which of these is an example of a real-world asset?",opts:[{id:'a',text:"Bitcoin"},{id:'b',text:"An Ethereum smart contract"},{id:'c',text:"A US Treasury bond"},{id:'d',text:"A decentralized exchange token"}],correct:'c',good:"A US Treasury bond is a real-world asset — a financial instrument that exists in traditional finance, pays interest, and is backed by the US government. Bitcoin, ETH, and DEX tokens exist only on blockchains.",bad:"Answer C — a US Treasury bond is a real-world asset. It exists in the traditional financial system, has legal standing, and pays interest. The other options are native crypto assets that exist only on blockchains."}
+    ]
+  },
+  {
+    id:2, themeKey:'crimson', tag:'Chapter 2 — The Problem',
+    title:"Why Tokenize? The Problems It Solves",
+    blurb:"The current financial system has four massive inefficiencies. Tokenization fixes all of them.",
+    heroImg:R.imgCh2Hero, midImg:R.imgCh2Mid,
+    midCaption:'Traditional financial settlement takes two business days. Blockchain settlement takes seconds — and works on weekends.',
+    buckOpens:{q:"OK, I get what tokenization is. But why bother? What's wrong with the way we buy stocks and bonds now? Why do we need to put them on a blockchain?"},
+    buckCloses:{text:"Traditional finance has four problems tokenization directly solves: slow settlement, high minimum investments, markets that close, and geographic barriers. None of these feel urgent when you're inside the system — but from the outside, they're enormous. <strong>A farmer in Nigeria and a pension fund in Tokyo shouldn't face different access to US government bonds based solely on geography and paperwork. Tokenization removes those barriers. That's why $60 billion is already on-chain — and why every major institution is building in this space.</strong>"},
+    facts:[
+      {myth:"Most people think: 'T+2 settlement is fast enough — two days isn't a problem.'",q:"What does slow settlement actually cost the financial system?",revealed:"T+2 settlement requires the financial system to hold an enormous amount of capital in reserve just to cover the two-day gap between a trade being agreed and the money actually changing hands. This 'settlement float' is estimated to tie up hundreds of billions of dollars in collateral globally — capital that sits idle, doing nothing, just bridging the two-day gap. The 2021 GameStop trading halt happened partly because of settlement mechanics — Robinhood had to restrict trading not because it ran out of money to buy stocks, but because it didn't have enough collateral to cover two days of pending settlements simultaneously. Blockchain settles in seconds. That collateral requirement disappears."},
+      {myth:"Most people think: 'Fractionalization is just a gimmick — nobody actually wants to own 0.001% of a building.'",q:"What problem does fractionalization actually solve?",revealed:"The real problem fractionalization solves isn't micro-ownership — it's access. Commercial real estate, private equity funds, and certain bond markets have minimum investments of $100,000 to $1,000,000 or more. These asset classes have historically been available only to ultra-wealthy individuals and institutional investors — not because of any technical necessity, but because the paperwork cost of processing small transactions made small tickets uneconomical. Tokenization eliminates the paperwork cost. Suddenly a $500 investment in a $10 million commercial building is just as administratively simple as a $5 million one. Fractionalization doesn't mean people want tiny slices. It means the artificial floor on who can participate gets removed."}
+    ],
+    blocks:[
+      {t:'cold',text:"Here's the honest truth about how traditional finance moves money.<br><br>When you buy a stock on Monday, you don't actually own it until Wednesday.<br>When you try to buy a government bond, the minimum might be $100,000.<br>When you want to trade at 11pm on a Saturday, the market is closed.<br>And if you live outside the United States, good luck getting access at all.<br><br><em>These aren't small inconveniences. They're structural problems worth trillions of dollars.</em>"},
+      {t:'body',text:"Problem one: slow settlement. When you buy a stock, the trade 'settles' in T+2 — that means Trade date plus 2 business days. You agree to buy on Monday, but the shares and money don't actually exchange hands until Wednesday. This is not a technical limitation. It's a legacy of how paper-based financial systems were designed decades ago. Every single day, trillions of dollars in trades are sitting in this two-day limbo, requiring massive amounts of collateral to back them up."},
+      {t:'def',term:'T+2 Settlement',def:"The standard settlement period for most stock and bond trades in traditional finance. 'T' stands for the trade date, '+2' means two business days later. If you agree to buy shares on Monday, the transaction actually completes on Wednesday. This two-day gap requires financial institutions to hold enormous reserves as collateral during the waiting period. Blockchain-based settlement eliminates this gap — transactions can settle in seconds, 24 hours a day, 7 days a week."},
+      {t:'body',text:"Problem two: high minimums. US Treasury bonds — the safest investment on Earth, backed by the full faith and credit of the United States government — have a minimum purchase of $100 in the retail market, but institutional Treasury bonds often require $100,000 or more. Private credit funds, commercial real estate, and hedge funds routinely require $250,000 to $1,000,000 minimum investments. These minimums exist not because of the nature of the assets — but because of the administrative cost of processing paperwork for small transactions."},
+      {t:'def',term:'Fractionalization',def:"The ability to split ownership of an asset into very small pieces so many investors can co-own it. For example, a $10 million office building tokenized on a blockchain could be split into 1,000,000 tokens worth $10 each — allowing thousands of people to invest $10 and own a tiny fraction. Fractionalization doesn't change the underlying asset. It changes who can access it by lowering the minimum investment to almost any amount."},
+      {t:'body',text:"Problem three: market hours. Stock markets open at 9:30am and close at 4pm, Monday through Friday, US Eastern time. If a major geopolitical event happens at 2am on a Sunday, you cannot react until Monday morning. Bond markets are even less liquid — many bonds trade only a handful of times per day, if at all. Blockchain-based assets trade 24/7/365 with no closing bell and no waiting for markets to open."},
+      {t:'callout',icon:'🌍',text:"<strong>Problem four: geography.</strong> A retail investor in Vietnam cannot easily buy US Treasury bonds. A small business in Brazil cannot easily access US private credit markets. A pension fund in Nigeria has limited access to US real estate. These barriers aren't security restrictions — they're paperwork, banking access, and regulatory friction. Tokenized assets on a global blockchain are accessible to anyone with an internet connection and a crypto wallet."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What does 'T+2 settlement' mean?",opts:[{id:'a',text:"Trades execute 2 times faster than traditional markets"},{id:'b',text:"A stock or bond trade takes 2 business days to fully complete after it's agreed"},{id:'c',text:"You must wait 2 days before you can sell a newly purchased asset"},{id:'d',text:"Trades are confirmed within 2 seconds on modern exchanges"}],correct:'b',good:"T+2 means a trade agreed today doesn't actually settle — money and asset exchange hands — until two business days later. That gap requires massive collateral reserves and creates systemic risk. Blockchain eliminates it.",bad:"Answer B — T+2 means 'Trade date plus 2 business days.' A trade agreed on Monday doesn't complete until Wednesday. This two-day gap ties up enormous capital in the financial system as collateral."},
+      {q:"What problem does fractionalization primarily solve?",opts:[{id:'a',text:"It makes assets more secure by spreading ownership across many people"},{id:'b',text:"It reduces the minimum investment required, opening access to asset classes previously only available to the wealthy"},{id:'c',text:"It allows assets to be traded more quickly on blockchain"},{id:'d',text:"It converts illiquid assets into stablecoins automatically"}],correct:'b',good:"Fractionalization's core benefit is access. When a $10M building can be split into $10 tokens, the minimum investment disappears. Asset classes that required $100K+ minimum are suddenly open to anyone.",bad:"Answer B — fractionalization solves the access problem. The administrative cost of processing small transactions made high minimums necessary. Tokenization removes that cost, removing the minimum."},
+      {q:"Which of these is NOT a problem that tokenization solves?",opts:[{id:'a',text:"Markets that close overnight and on weekends"},{id:'b',text:"Two-day settlement delays requiring large collateral reserves"},{id:'c',text:"The volatility risk of underlying assets"},{id:'d',text:"Geographic barriers preventing global investors from accessing certain markets"}],correct:'c',good:"Tokenization improves access, speed, and hours — but it doesn't change what the asset does. A volatile real estate market is still volatile whether it's tokenized or not. The token represents the asset; it doesn't change the asset's risk profile.",bad:"Answer C — tokenization doesn't remove the inherent risk of the underlying asset. A bad real estate market is still bad even if the property is tokenized. Tokenization fixes operational problems, not market risk."}
+    ]
+  },
+  {
+    id:3, themeKey:'purple', tag:'Chapter 3 — Already Happening',
+    title:"The $13 Billion Treasury Market Already Running On-Chain",
+    blurb:"This isn't a future prediction. Tokenized US government bonds already hold $13 billion — and it's growing fast.",
+    heroImg:R.imgCh3Hero, midImg:R.imgCh3Mid,
+    midCaption:'BlackRock BUIDL and Franklin Templeton BENJI are already managing billions in tokenized US Treasuries on public blockchains.',
+    buckOpens:{q:"I hear people say 'tokenization is the future' — but is any of this actually happening right now? Like real money, real institutions, right now?"},
+    buckCloses:{text:"This isn't a concept paper. It isn't a whitepaper. $13 billion in US Treasury bonds — the safest financial instrument on Earth — is already sitting on public blockchains as of mid-2026. BlackRock manages $2.5 billion of it. Franklin Templeton manages nearly $2 billion. JPMorgan's Kinexys platform has processed over $1.5 trillion in tokenized transactions. <strong>When we say the revolution is happening right now, we mean: this morning, at this exact moment, billions of dollars in tokenized real-world assets are settling on-chain while you read this.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Tokenized Treasuries are a niche product only for crypto hedge funds.'",q:"Who is actually using tokenized Treasury products like BUIDL?",revealed:"The primary users of tokenized Treasury products are institutional: DeFi protocols using them as collateral, corporate treasury departments seeking yield, crypto companies looking for a place to park idle cash that earns interest, and asset managers seeking operational efficiency. BlackRock's BUIDL, for example, became the primary collateral backing several major DeFi protocols — meaning the 'yield-bearing stablecoin' backing is actually US government bonds on a blockchain. The use case isn't speculative crypto trading. It's institutional cash management and DeFi infrastructure. The buyers are sophisticated, the scale is enormous, and the underlying asset is among the safest in the world."},
+      {myth:"Most people think: 'A repo transaction is complicated institutional finance that has nothing to do with blockchain.'",q:"What is a repo transaction, and why is JPMorgan putting it on a blockchain?",revealed:"A repurchase agreement — 'repo' — is actually simple: it's a short-term loan between financial institutions. Bank A needs cash overnight. Bank A sells securities (like government bonds) to Bank B with an agreement to buy them back tomorrow at a slightly higher price. The price difference is the interest. This happens trillions of dollars every day. The problem: it currently requires manual settlement, paperwork, and clearing houses that add cost and introduce error. JPMorgan's Kinexys platform (formerly Onyx) puts repos on a blockchain, so settlement is automatic, instant, and transparent — and it's processed over $1.5 trillion in notional value doing exactly this."}
+    ],
+    blocks:[
+      {t:'cold',text:"Let's be specific about what 'already happening' means.<br><br>As of mid-2026, approximately $13 billion in US Treasury bonds —<br>the debt issued by the United States government —<br>exists as tokens on public blockchains.<br><br><em>That's not a pilot program. That's a market.</em>"},
+      {t:'body',text:"First: what is a US Treasury bond? It's how the United States government borrows money. When the government needs to fund itself — pay salaries, build infrastructure, service existing debt — it issues bonds. Investors buy those bonds and lend the government money. In return, the government pays them interest, called yield, at a fixed rate over a fixed period. Treasuries are considered the safest investment on Earth because they're backed by the US government's ability to tax and print dollars."},
+      {t:'def',term:'US Treasury Bond',def:"A debt instrument issued by the United States government to borrow money from investors. When you buy a Treasury, you're lending money to the US government. They pay you interest — called yield — over the life of the bond, then return your principal at maturity. Treasuries are considered risk-free in investment terms because the US government has never defaulted on its debt. They're the benchmark 'safe' asset that all other investments are compared against."},
+      {t:'def',term:'Yield',def:"The interest or income earned from an investment, expressed as a percentage of its value. A Treasury bond yielding 4.5% pays $4.50 per year for every $100 invested. Yield is why tokenized Treasuries are attractive to DeFi protocols and institutional investors — they provide US government-backed interest that earns passively, 24/7, with the token sitting in a wallet rather than a brokerage account."},
+      {t:'body',text:"BlackRock — the world's largest asset manager, managing over $10 trillion in assets — launched BUIDL (BlackRock USD Institutional Digital Liquidity Fund) in March 2024. By mid-2026, BUIDL holds approximately $2.5 billion in assets under management. The fund buys actual US Treasury bills and repos. Investors in BUIDL receive a token on the Ethereum blockchain that represents their share. That token earns yield daily — the interest from the underlying Treasuries — and can be transferred 24/7 to other wallets or used as collateral in DeFi protocols."},
+      {t:'body',text:"Franklin Templeton — one of the oldest and largest asset managers in the world — launched BENJI, the first US-registered mutual fund to use a public blockchain as its official record of ownership. By April 2026, the BENJI suite holds approximately $1.98 billion in assets and has processed over $211 million in peer-to-peer transfers. BENJI operates on the Stellar and Polygon blockchains — and its investor base has grown over 140% since 2024."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What is 'yield' in the context of a Treasury bond?",opts:[{id:'a',text:"The face value printed on the bond certificate"},{id:'b',text:"The interest paid to the investor for lending money to the government"},{id:'c',text:"The price increase of the bond after it is tokenized"},{id:'d',text:"The fee charged by the blockchain for storing the token"}],correct:'b',good:"Yield is the interest the US government pays investors for lending it money via Treasury bonds. Tokenized Treasuries let that yield flow to token holders 24/7 — the interest accrues to your wallet automatically.",bad:"Answer B — yield is the interest paid by the bond issuer (in this case the US government) to the investor. If a Treasury yields 4.5%, you earn $4.50 per year per $100 invested. Tokenized Treasuries pass this yield to token holders."},
+      {q:"What does BlackRock's BUIDL fund actually hold?",opts:[{id:'a',text:"Bitcoin and Ethereum held in a cold wallet for institutional clients"},{id:'b',text:"Actual US Treasury bills and repo agreements, with ownership represented by blockchain tokens"},{id:'c',text:"Tokenized real estate from commercial properties across the US"},{id:'d',text:"Gold bullion stored in secure vaults with blockchain certificates of ownership"}],correct:'b',good:"BUIDL holds real US Treasury bills and repos. The blockchain token is the ownership certificate. Token holders earn the actual yield from the actual government bonds. It's traditional safe finance with a blockchain ledger underneath.",bad:"Answer B — BUIDL buys actual US Treasury bills and repurchase agreements. Investors receive Ethereum tokens representing their share. The token earns yield from the real underlying government bonds."},
+      {q:"What was historically significant about Franklin Templeton's BENJI fund?",opts:[{id:'a',text:"It was the first tokenized fund to be listed on a stock exchange"},{id:'b',text:"It was the first US-registered mutual fund to use a public blockchain as its official ownership record"},{id:'c',text:"It was the first fund to hold Bitcoin in a regulated mutual fund structure"},{id:'d',text:"It was the largest tokenized fund ever launched, exceeding $10 billion"}],correct:'b',good:"BENJI was a historic first: a traditional, SEC-registered US mutual fund using a public blockchain — not a private database — as its official record of who owns what. That's the traditional finance world formally adopting blockchain infrastructure.",bad:"Answer B — Franklin Templeton's BENJI was the first US-registered mutual fund to record ownership on a public blockchain. Not a crypto fund — a traditional registered mutual fund that chose blockchain as its ledger."}
+    ]
+  },
+  {
+    id:4, themeKey:'orange', tag:'Chapter 4 — The Big Players',
+    title:"BlackRock, JPMorgan, Franklin Templeton — Who's Already In",
+    blurb:"The institutions that manage trillions aren't watching from the sidelines. They built the field.",
+    heroImg:R.imgCh4Hero, midImg:R.imgCh4Mid,
+    midCaption:"JPMorgan rebranded its blockchain division to Kinexys in 2025 and has processed over $1.5 trillion in tokenized transactions.",
+    buckOpens:{q:"How deep are the big financial institutions actually committed to tokenization? Are they just dipping a toe in, or is this a real priority for them?"},
+    buckCloses:{text:"JPMorgan is filing for new tokenized funds while its Kinexys platform processes $2 billion per day. BlackRock's BUIDL is the largest tokenized Treasury fund in existence. Franklin Templeton's BENJI has been running since 2021 and now holds nearly $2 billion. These aren't experiments anymore — they're live products with real money, real clients, and real revenue. <strong>When the three largest names in traditional finance all commit simultaneously at this scale, it stops being a trend and starts being infrastructure. The question isn't whether this is happening. It's how fast.</strong>"},
+    facts:[
+      {myth:"Most people think: 'JPMorgan's blockchain work is separate from their core banking business — a side project.'",q:"How central is blockchain to JPMorgan's actual operations today?",revealed:"JPMorgan's Kinexys platform — formerly known as Onyx, rebranded in 2025 — is not a side project. It processes over $2 billion in transactions per day and has handled more than $1.5 trillion in total notional value in tokenized repo transactions. In May 2026, JPMorgan filed for the JPMorgan OnChain Liquidity-Token Money Market Fund (ticker: JLTXX) — a publicly available tokenized money market fund on the Ethereum blockchain. The same bank also announced plans to add on-chain foreign exchange conversions, starting with USD-to-EUR. This is core banking infrastructure. Not a pilot. Not an experiment. JPMorgan is building the next generation of its own financial plumbing on a public blockchain."},
+      {myth:"Most people think: 'Institutions only use private blockchains — not public ones like Ethereum.'",q:"Are major institutions actually building on public blockchains?",revealed:"Yes — and this is a significant shift from 2018-2022, when most institutional blockchain projects ran on private permissioned networks. BlackRock's BUIDL operates on Ethereum, Arbitrum, Avalanche, Polygon, and other public chains. Franklin Templeton's BENJI runs on Stellar and Polygon. JPMorgan's JLTXX was filed for the Ethereum blockchain. The OCC granted bank charters to Circle, Ripple, BitGo, and Paxos in 2026 — stablecoin and crypto infrastructure companies that operate on public blockchains. The institutional narrative has fully shifted: public blockchains, previously dismissed as unsuitable for regulated finance, are now the infrastructure of choice for the world's largest asset managers."}
+    ],
+    blocks:[
+      {t:'cold',text:"There's a word for when the three largest asset managers on Earth all commit to the same technology simultaneously.<br><br>It's not 'trend.'<br><br><em>It's infrastructure.</em>"},
+      {t:'body',text:"Start with JPMorgan — the largest US bank by assets, with over $3 trillion on its balance sheet. In 2025, JPMorgan rebranded its blockchain division from 'Onyx' to 'Kinexys Digital Assets.' By mid-2026, Kinexys processes more than $2 billion in tokenized transactions per day — primarily repurchase agreements (short-term institutional loans). Total notional value processed: over $1.5 trillion. In May 2026, JPMorgan filed with the SEC for the JLTXX — a new tokenized money market fund on Ethereum that will be available to institutional investors."},
+      {t:'def',term:'Kinexys (JPMorgan)',def:"JPMorgan's blockchain and tokenization division, rebranded from 'Onyx' in 2025. Processes over $2 billion per day in tokenized transactions — primarily institutional repo agreements — and has handled more than $1.5 trillion in notional value. In May 2026, JPMorgan filed for JLTXX, a publicly registered tokenized money market fund on Ethereum. Represents one of the most significant institutional blockchain deployments in the world, built by the largest US bank."},
+      {t:'body',text:"BlackRock's position is equally significant. BUIDL — launched in March 2024 — became the world's largest tokenized Treasury fund, reaching $2.5 billion in assets by May 2026. What makes BlackRock's entry uniquely meaningful is scale: BlackRock manages over $10 trillion in traditional assets. When the world's largest asset manager builds blockchain infrastructure for its products, every other asset manager has to decide whether to follow or fall behind. Most are following."},
+      {t:'body',text:"Franklin Templeton has the longest track record in the space. BENJI — the Franklin OnChain US Government Money Fund — launched in 2021, making it the first US-registered mutual fund to record ownership on a public blockchain. By April 2026, the BENJI suite manages $1.98 billion across the Stellar and Polygon blockchains, has processed $211 million in peer-to-peer transfers between investors, and has grown its investor base by 140% since 2024. Five years of live operation with a regulated product."},
+      {t:'callout',icon:'🏦',text:"<strong>The OCC charter wave of 2026:</strong> The Office of the Comptroller of the Currency granted full bank charters to Circle (issuer of USDC stablecoin), Ripple (XRP ecosystem), BitGo (institutional crypto custody), and Paxos (stablecoin infrastructure) in 2026. Bank charters give these companies the same legal standing as traditional banks — the ability to hold customer deposits, issue regulated financial products, and operate under federal banking law. Crypto infrastructure companies becoming regulated banks is the final piece connecting the two financial systems."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What is JPMorgan's Kinexys platform and how active is it?",opts:[{id:'a',text:"A retail crypto trading app JPMorgan launched for individual customers"},{id:'b',text:"JPMorgan's blockchain division that processes over $2 billion per day in tokenized transactions"},{id:'c',text:"A joint venture between JPMorgan and BlackRock for shared blockchain infrastructure"},{id:'d',text:"JPMorgan's internal research team studying blockchain technology"}],correct:'b',good:"Kinexys (formerly Onyx) is JPMorgan's core blockchain platform — not a side project. $2 billion per day, $1.5 trillion+ processed. JPMorgan also filed for a public tokenized money market fund on Ethereum in May 2026.",bad:"Answer B — Kinexys is JPMorgan's operational blockchain division, processing over $2 billion daily in tokenized transactions. It also filed for JLTXX — a public tokenized money market fund on Ethereum — in May 2026."},
+      {q:"Why is BlackRock's entry into tokenization considered particularly significant?",opts:[{id:'a',text:"BlackRock was the first company to ever tokenize a real-world asset"},{id:'b',text:"BlackRock manages over $10 trillion in assets, so its commitment forces every other asset manager to respond"},{id:'c',text:"BlackRock exclusively uses blockchain technology and no longer uses traditional financial infrastructure"},{id:'d',text:"BlackRock's BUIDL is the only tokenized fund available to retail investors"}],correct:'b',good:"When the world's largest asset manager builds in a space, everyone else has to decide: follow or fall behind. BlackRock's $10 trillion AUM means its institutional commitments reshape the entire industry's direction.",bad:"Answer B — BlackRock manages over $10 trillion. Its institutional commitment to tokenization forces every other asset manager to evaluate the technology. At $10 trillion in AUM, BlackRock's direction becomes the industry's direction."},
+      {q:"What did the OCC's 2026 bank charter grants to Circle, Ripple, BitGo, and Paxos represent?",opts:[{id:'a',text:"A government takeover of crypto companies"},{id:'b',text:"Crypto infrastructure companies gaining the same legal standing as traditional banks"},{id:'c',text:"The end of decentralized finance as institutions take control"},{id:'d',text:"Permission for these companies to issue their own government-backed currencies"}],correct:'b',good:"OCC bank charters give crypto infrastructure companies the same legal standing as traditional banks — the ability to hold deposits, issue regulated products, and operate under federal banking law. It's the formal bridge between traditional and crypto finance.",bad:"Answer B — OCC bank charters grant the same legal standing as traditional banks. Circle, Ripple, BitGo, and Paxos can now hold deposits and issue regulated financial products under federal banking law. Crypto infrastructure officially entering the regulated banking system."}
+    ]
+  },
+  {
+    id:5, themeKey:'gold', tag:'Chapter 5 — What It Means for You',
+    title:"What This Means for Regular Investors",
+    blurb:"A $60 billion market. A $18 trillion projection. And the question you actually care about: does any of this matter to someone who isn't a hedge fund?",
+    heroImg:R.imgCh5Hero, midImg:R.imgCh5Mid,
+    midCaption:'Tokenized assets are projected to reach $18.9 trillion by 2033 — but the risks are real and early-stage challenges remain.',
+    buckOpens:{q:"This is all really interesting, but I'm not BlackRock. I'm not JPMorgan. What does RWA tokenization actually mean for a regular person? Can I access any of this? Should I care?"},
+    buckCloses:{text:"The honest answer is: right now, most tokenized RWA products are built for institutions. But the infrastructure being built by those institutions is what makes retail access possible next. The $60 billion on-chain today was $5 billion two years ago. The $18 trillion projection for 2033 isn't guaranteed — it's a projection based on current growth rates and institutional adoption. <strong>What you should take away: the traditional financial system is being rewired. Understanding how it's being rewired puts you ahead of the people who don't. That's what this whole volume was about.</strong>"},
+    facts:[
+      {myth:"Most people think: 'Once RWA tokenization is fully built, all investment risk disappears because everything is on a blockchain.'",q:"What risks remain even when an asset is tokenized?",revealed:"Tokenization changes how an asset is recorded and transferred — it does not change what the asset is or how it performs. A tokenized office building in a struggling real estate market still loses value. A tokenized corporate bond from a company that goes bankrupt is still worthless. Additionally, tokenized assets introduce new risks that traditional assets don't have: smart contract risk (bugs in the code managing the token can cause losses), oracle risk (if the system reporting the real-world asset's value is wrong or manipulated, the token value can be corrupted), regulatory risk (rules around tokenized assets are still being written), and liquidity risk (some tokenized assets have thin markets where selling quickly at a fair price is difficult). Tokenization makes some things better. It doesn't make investment risk disappear."},
+      {myth:"Most people think: 'The $18 trillion projection means tokenization is guaranteed to get there.'",q:"How reliable are long-range market projections for tokenized assets?",revealed:"Projections like 'tokenized RWAs will reach $18.9 trillion by 2033' are models built by firms like Boston Consulting Group and Ripple using extrapolated growth rates and adoption assumptions. They are not forecasts. They are scenarios. Market projections for emerging technologies are notoriously inaccurate — often dramatically overstated in the short term and understated in the long term. The internet was supposed to reach mainstream adoption faster than it did. Many crypto bull cycles have seen projections that never materialized. The $60 billion today is real. The $18 trillion is a model. Understanding the difference matters when making financial decisions."}
+    ],
+    blocks:[
+      {t:'cold',text:"Let's be direct about where we are.<br><br>As of mid-2026, most tokenized RWA products require you to be an institutional investor —<br>a bank, a hedge fund, a corporation.<br><br><em>But that's changing — and understanding the trajectory matters.</em>"},
+      {t:'body',text:"The total tokenized RWA market is approximately $60 billion as of mid-2026, according to data tracking platforms. About $26.7 billion of that is freely transferable on-chain — meaning it can actually move between wallets in real time. The rest is represented on-chain but still moves through traditional processes. Within that $60 billion, tokenized US Treasuries represent about $13 billion — and this specific category is growing fastest because of the combination of safety and yield."},
+      {t:'body',text:"For retail investors, the most accessible entry point is coming through DeFi. Several decentralized lending protocols already use tokenized Treasuries — including BlackRock's BUIDL — as collateral. What this means in practice: if you use a DeFi protocol to borrow against your crypto, there's a growing chance that the 'stable' backing of that protocol is actual US government bonds on a blockchain — not just a stablecoin algorithm. The RWA infrastructure is quietly becoming the foundation of DeFi's stability layer."},
+      {t:'def',term:'Smart Contract Risk',def:"The possibility that the computer code (smart contract) managing a tokenized asset contains bugs or vulnerabilities that can be exploited. Unlike traditional financial agreements enforced by courts and lawyers, smart contracts execute automatically based on their code. If the code has an error, the error executes too — and blockchain transactions generally cannot be reversed. Smart contract risk is one of the new risks that tokenization introduces, alongside the traditional risks of the underlying asset itself."},
+      {t:'body',text:"The projection most cited for where this is going: Boston Consulting Group and Ripple project tokenized assets reaching $18.9 trillion by 2033. Standard Chartered projects $30 trillion by 2034. For context, the entire US stock market is approximately $45 trillion. These projections assume continued regulatory clarity, institutional adoption, and retail product development. None of that is guaranteed — but the baseline has moved dramatically in the past 24 months."},
+      {t:'analogy',icon:'📱',title:'The early internet analogy',text:"In 1995, the internet existed. Businesses were using it. Infrastructure was being built. But the average person couldn't easily buy something online, stream a movie, or call someone via the internet. The pipes were being laid. By 2005, the pipes were functional and the first mass consumer products arrived. By 2015, it was invisible infrastructure everyone used daily. RWA tokenization is somewhere in the 1997–2000 range. The pipes are being laid. The mass consumer products aren't here yet. But they're being built by the same companies that already manage your 401k."},
+      {t:'callout',icon:'⚠️',text:"<strong>What to watch — and what to be cautious about:</strong> Tokenization is real and institutional adoption is accelerating. But it is also early-stage, with regulatory frameworks still being written, smart contract risks in new products, and liquidity that is thin in many tokenized markets. The $60 billion today was $5 billion 24 months ago — that growth is real. The $18 trillion projection is a model, not a guarantee. Engage with this space with curiosity and skepticism in equal measure."},
+      {t:'fact',idx:0},
+      {t:'fact',idx:1}
+    ],
+    quizzes:[
+      {q:"What is 'smart contract risk' in the context of tokenized assets?",opts:[{id:'a',text:"The risk that a smart contract will automatically sell your asset at a loss"},{id:'b',text:"The risk that bugs or vulnerabilities in the code managing a token can cause losses that cannot be reversed"},{id:'c',text:"The risk that a tokenized asset's price drops because of market conditions"},{id:'d',text:"The risk that a government will ban smart contracts and invalidate your token"}],correct:'b',good:"Smart contract risk is unique to blockchain-based assets. The code runs automatically — if there's a bug, the bug runs too. Unlike bank errors that can be reversed with a phone call, blockchain transactions are permanent. It's a new category of risk that doesn't exist with traditional assets.",bad:"Answer B — smart contracts execute automatically based on their code. Bugs in that code can be exploited or cause unintended behavior, and blockchain transactions generally cannot be reversed. This is a risk that doesn't exist with traditional financial assets."},
+      {q:"How much of the total tokenized RWA market (~$60 billion) is freely transferable on-chain as of mid-2026?",opts:[{id:'a',text:"All $60 billion is fully liquid and transferable"},{id:'b',text:"About $26.7 billion — the rest is represented on-chain but still moves through traditional processes"},{id:'c',text:"Only about $1 billion — most tokenized assets are locked up in institutional funds"},{id:'d',text:"None of it — all tokenized assets require bank approval before transfer"}],correct:'b',good:"About $26.7 billion of the $60 billion is truly freely transferable on-chain. The rest is 'represented' — linked to blockchain records but still settling through traditional channels. This distinction matters when evaluating liquidity.",bad:"Answer B — approximately $26.7 billion of the $60 billion total is freely transferable on-chain. The gap between 'represented' and 'transferable' is an important nuance for understanding actual liquidity in the tokenized asset market."},
+      {q:"What is the most honest way to characterize the $18.9 trillion projection for tokenized assets by 2033?",opts:[{id:'a',text:"A guaranteed outcome based on confirmed institutional commitments"},{id:'b',text:"A government-approved forecast published by the SEC and CFTC"},{id:'c',text:"A model or scenario built on extrapolated growth rates — not a forecast or guarantee"},{id:'d',text:"A conservative lower-bound estimate; actual growth will likely exceed it"}],correct:'c',good:"Projections are models, not guarantees. They extrapolate current trends into the future, which is useful for thinking about scenarios but not reliable as a prediction. The $60 billion today is real. The $18 trillion in 2033 is a scenario. Knowing the difference is how you make good financial decisions.",bad:"Answer C — long-range market projections are scenarios built on assumptions. They can be dramatically wrong in either direction. The current market size ($60B) is measurable. The 2033 projection ($18.9T) is a model. Treat them differently when making decisions."}
+    ]
+  }
+];
+
+var GLOSSARY_DATA = [
+  {term:'Real World Asset (RWA)',def:"Any asset with value that exists outside of the crypto world — including US Treasury bonds, real estate, gold, stocks, private credit, and commodities. 'Real world' means the asset has a physical or legal existence in traditional finance, as opposed to native crypto assets like Bitcoin that exist only on a blockchain.",accent:'#4A90E2'},
+  {term:'Tokenization',def:"The process of creating a blockchain-based digital token that represents legal ownership of a real-world asset. The token becomes the official ownership record. It can be transferred instantly, split into fractions, and traded 24/7 — features that traditional paper or database records cannot provide.",accent:'#4A90E2'},
+  {term:'Token',def:"A digital unit stored on a blockchain that represents ownership of something — a share of a fund, a fraction of a bond, a piece of real estate, or any other asset. Tokens can be transferred between wallets instantly, held in digital wallets, and used as collateral in DeFi protocols.",accent:'#4A90E2'},
+  {term:'T+2 Settlement',def:"The standard settlement period for most stock and bond trades in traditional finance. 'T' = trade date, '+2' = two business days later. A trade agreed Monday doesn't complete until Wednesday. This two-day gap requires institutions to hold enormous capital reserves as collateral. Blockchain settles in seconds, 24/7.",accent:'#E74C3C'},
+  {term:'Fractionalization',def:"The ability to split ownership of an asset into very small pieces. A $10 million building tokenized on a blockchain could be split into 1,000,000 tokens worth $10 each. Fractionalization removes minimum investment floors that previously restricted access to certain asset classes to only wealthy or institutional investors.",accent:'#E74C3C'},
+  {term:'Liquidity',def:"How easily an asset can be bought or sold without significantly affecting its price. Cash is perfectly liquid — you can spend it instantly. A rare painting is illiquid — finding a buyer at a fair price takes time. Tokenization improves liquidity for traditionally illiquid assets by creating global, 24/7 markets for them.",accent:'#E74C3C'},
+  {term:'US Treasury Bond',def:"A debt instrument issued by the United States government. Buying a Treasury means lending money to the US government. In return, they pay interest (yield) over the life of the bond and return the principal at maturity. Considered the safest investment on Earth — the benchmark 'risk-free' asset all others are compared against.",accent:'#9B8DEE'},
+  {term:'Yield',def:"The interest or income earned from an investment, expressed as a percentage. A Treasury yielding 4.5% pays $4.50 per year per $100 invested. Tokenized Treasuries pass this yield to token holders, allowing investors to earn US government interest while holding a blockchain token in a crypto wallet.",accent:'#9B8DEE'},
+  {term:'Repo (Repurchase Agreement)',def:"A short-term loan between financial institutions. Bank A sells securities to Bank B and agrees to buy them back the next day at a slightly higher price — the difference is the interest. Repos happen trillions of dollars per day. JPMorgan's Kinexys platform puts repos on a blockchain for instant, automatic settlement.",accent:'#9B8DEE'},
+  {term:'BlackRock BUIDL',def:"BlackRock USD Institutional Digital Liquidity Fund — the world's largest tokenized Treasury fund with approximately $2.5 billion AUM as of May 2026. Launched March 2024 on Ethereum and multiple other chains. Holds actual US Treasury bills and repos. Token holders earn daily yield from the underlying government bonds.",accent:'#FFA500'},
+  {term:'Franklin Templeton BENJI',def:"The Franklin OnChain US Government Money Fund — the first US-registered mutual fund to use a public blockchain as its official ownership record. Launched 2021, now managing approximately $1.98 billion across Stellar and Polygon blockchains with $211M+ in peer-to-peer transfers processed as of April 2026.",accent:'#FFA500'},
+  {term:'Kinexys (JPMorgan)',def:"JPMorgan's blockchain and tokenization division, rebranded from 'Onyx' in 2025. Processes over $2 billion per day in tokenized transactions — primarily institutional repo agreements — and has processed over $1.5 trillion in total notional value. Filed for JLTXX, a tokenized money market fund on Ethereum, in May 2026.",accent:'#FFA500'},
+  {term:'Smart Contract Risk',def:"The risk that bugs or vulnerabilities in the code (smart contract) managing a tokenized asset can be exploited or cause unintended losses. Unlike bank errors, blockchain transactions generally cannot be reversed. Smart contract risk is a new category of risk that tokenized assets carry in addition to the traditional risks of the underlying asset.",accent:'#FFD700'},
+  {term:'Oracle Risk',def:"The risk that the system feeding real-world data (like an asset's price or status) into a blockchain smart contract is wrong or manipulated. A tokenized building's value depends on an external system reporting what the building is worth. If that data source fails or is corrupted, the blockchain record can reflect an incorrect value.",accent:'#FFD700'},
+  {term:'DeFi (Decentralized Finance)',def:"Financial services — lending, borrowing, earning yield — built on public blockchains using smart contracts, with no bank or company required to operate them. Increasingly uses tokenized real-world assets like BlackRock BUIDL as collateral, replacing algorithmic or crypto-backed stability layers with actual US government bonds.",accent:'#FFD700'}
+];
+
+var totalXP = 0;
+var currentIdx = 0;
+var chProgress = {};
+var glossaryFrom = 'chaptermap';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  requestAnimationFrame(function(){ document.getElementById(id).classList.add('active'); });
+  if (id === 'chaptermap') renderMap();
+}
+
+function renderMap() {
+  document.getElementById('map-xp').textContent = totalXP + ' XP';
+  var html = '';
+  CHAPTERS.forEach(function(ch, i) {
+    var t = THEME[ch.themeKey];
+    var done = chProgress[ch.id] === 'done';
+    html += '<button class="ch-item" onclick="openChapter(' + i + ')" style="border-color:' + (done ? t.border : 'rgba(255,255,255,0.07)') + ';background:' + (done ? t.accentBg : 'rgba(255,255,255,0.03)') + ';">';
+    html += '<div class="ch-num-badge" style="background:' + (done ? t.accent : 'rgba(255,255,255,0.08)') + ';color:' + (done ? '#0c1520' : 'rgba(255,255,255,0.4)') + ';">' + (done ? '&#10003;' : ch.id) + '</div>';
+    html += '<div class="ch-text"><div class="ch-item-tag" style="color:' + t.accent + ';">' + ch.tag + '</div><div class="ch-item-name">' + ch.title + '</div><div class="ch-item-blurb">' + ch.blurb + '</div></div>';
+    html += '<div class="ch-arrow" style="color:' + (done ? t.accent : 'rgba(255,255,255,0.2)') + ';">&#8250;</div></button>';
+  });
+  html += '<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;letter-spacing:.03em;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML = html;
+}
+
+function openChapter(idx) {
+  currentIdx = idx;
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var avatarSrc = window.__resources[avatarKeys[idx]];
+  document.getElementById('bi-tag').textContent = ch.tag;
+  document.getElementById('bi-tag').style.background = t.accentBg;
+  document.getElementById('bi-tag').style.color = t.accent;
+  document.getElementById('bi-tag').style.border = '1px solid ' + t.border;
+  document.getElementById('bi-img').src = avatarSrc;
+  document.getElementById('bi-img').style.borderColor = t.accent;
+  document.getElementById('bi-label').style.color = t.accent;
+  document.getElementById('bi-question').innerHTML = '"' + ch.buckOpens.q + '"';
+  document.getElementById('bi-cta').style.background = t.accent;
+  document.getElementById('bi-cta').style.color = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  document.getElementById('bi-cta').onclick = function(){ enterChapter(idx); };
+  showScreen('buckintro');
+}
+
+function enterChapter(idx) {
+  var ch = CHAPTERS[idx];
+  var t = THEME[ch.themeKey];
+  var cv = document.getElementById('chapterview');
+  cv.style.background = t.bg;
+  var topbar = document.getElementById('ch-topbar');
+  topbar.style.background = t.topbarBg;
+  topbar.style.borderBottomColor = t.border;
+  document.getElementById('topbar-label').style.color = t.accent;
+  document.getElementById('topbar-label').textContent = ch.tag;
+  document.getElementById('topbar-title').style.color = t.textPrimary;
+  document.getElementById('topbar-title').textContent = ch.title;
+  document.getElementById('topbar-xp-pill').style.background = t.accentBg;
+  document.getElementById('topbar-xp-pill').style.borderColor = t.border;
+  document.getElementById('topbar-xp-val').style.color = t.accent;
+  document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+  document.getElementById('topbar-back-btn').style.background = t.accentBg;
+  document.getElementById('topbar-back-btn').style.borderColor = t.border;
+  document.getElementById('topbar-back-btn').style.color = t.accent;
+  document.getElementById('read-fill').style.background = t.readFill;
+  var scroller = document.getElementById('ch-scroll');
+  scroller.scrollTop = 0;
+  document.getElementById('read-fill').style.width = '0%';
+  document.getElementById('ch-inner').innerHTML = buildChapterHTML(ch, t);
+  var nav = document.getElementById('nav-row');
+  nav.style.background = t.navBg;
+  nav.style.borderTop = '1px solid ' + t.navBorder;
+  var prevBtn = idx > 0 ? '<button class="btn-prev" onclick="openChapter(' + (idx-1) + ')" style="color:' + t.prevColor + ';border-color:' + t.prevBorder + ';">&#8592; Prev</button>' : '';
+  var nextLabel = idx < CHAPTERS.length - 1 ? 'Next Chapter &#8594;' : 'Next &#8594;';
+  var nextColor = (ch.themeKey === 'gold' || ch.themeKey === 'orange') ? '#0c1520' : '#fff';
+  nav.innerHTML = prevBtn + '<button class="btn-next" onclick="goNext()" style="background:' + t.accent + ';color:' + nextColor + ';">' + nextLabel + '</button>';
+  scroller.onscroll = function() {
+    var pct = Math.round((scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight)) * 100) || 0;
+    document.getElementById('read-fill').style.width = Math.min(pct, 100) + '%';
+  };
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch, t) {
+  var avatarKeys = ['imgCh1Avatar','imgCh2Avatar','imgCh3Avatar','imgCh4Avatar','imgCh5Avatar'];
+  var takeAvatarKeys = ['imgCh1TakeAvatar','imgCh2TakeAvatar','imgCh3TakeAvatar','imgCh4TakeAvatar','imgCh5TakeAvatar'];
+  var avatarSrc = window.__resources[avatarKeys[currentIdx]];
+  var takeAvatarSrc = window.__resources[takeAvatarKeys[currentIdx]] || avatarSrc;
+  var blocksHTML = ch.blocks.map(function(b){ return buildBlock(b, ch, t); }).join('');
+  var quizzesHTML = ch.quizzes.map(function(q, qi){ return buildQuiz(q, t, qi); }).join('');
+  var html = '';
+  html += '<div class="ch-hero"><img src="' + ch.heroImg + '" alt="' + ch.title + '"/>';
+  html += '<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:' + t.accent + ';">' + ch.tag + '</div>';
+  html += '<h1 class="ch-hero-h1">' + ch.title + '</h1></div></div>';
+  html += '<div class="ch-content" style="color:' + t.textPrimary + ';">';
+  html += blocksHTML;
+  html += '<div class="mid-image"><img src="' + ch.midImg + '" alt=""/>';
+  html += '<div class="mid-caption" style="color:' + t.textSecondary + ';background:' + t.cardBg + ';">' + ch.midCaption + '</div></div>';
+  html += '<div class="buck-closes" style="background:' + t.buckBg + ';border:1.5px solid ' + t.buckBorder + ';">';
+  html += '<img class="buck-close-avatar" src="' + takeAvatarSrc + '" alt="Buck" style="border-color:' + t.accent + ';"/>';
+  html += '<div><div class="buck-close-label" style="color:' + t.accent + ';">Buck\'s take</div>';
+  html += '<div class="buck-close-text" style="color:' + t.textPrimary + ';">' + ch.buckCloses.text + '</div></div></div>';
+  html += '<div class="section-rule"><div class="section-rule-line" style="background:' + t.border + ';"></div>';
+  html += '<div class="section-rule-text">Quick Check — 3 Questions</div>';
+  html += '<div class="section-rule-line" style="background:' + t.border + ';"></div></div>';
+  html += quizzesHTML;
+  html += '</div>';
+  return html;
+}
+
+function buildBlock(b, ch, t) {
+  var s = t.textSecondary, p = t.textPrimary, a = t.accent;
+  if (b.t === 'cold') return '<div class="cold-open" style="color:' + p + ';">' + b.text + '</div>';
+  if (b.t === 'body') {
+    var txt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">').replace(/<em>/g,'<em style="color:' + a + ';">');
+    return '<p class="body-p" style="color:' + s + ';">' + txt + '</p>';
+  }
+  if (b.t === 'def') return '<div class="def-card" style="background:' + t.cardBg + ';border-left-color:' + a + ';"><div class="def-term" style="color:' + a + ';">📖 ' + b.term + '</div><div class="def-body" style="color:' + s + ';">' + b.def + '</div></div>';
+  if (b.t === 'callout') {
+    var ctxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="callout" style="background:' + t.cardBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="callout-icon">' + b.icon + '</div><div class="callout-body" style="color:' + s + ';">' + ctxt + '</div></div>';
+  }
+  if (b.t === 'analogy') {
+    var atxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="analogy-card" style="background:' + t.analogyBg + ';border:1.5px solid ' + t.cardBorder + ';"><div class="analogy-icon">' + b.icon + '</div><div><div class="analogy-title" style="color:' + a + ';">🔁 ' + b.title + '</div><div class="analogy-text" style="color:' + s + ';">' + atxt + '</div></div></div>';
+  }
+  if (b.t === 'fact') return buildFact(ch.facts[b.idx], b.idx, t);
+  if (b.t === 'protip') {
+    var ptxt = b.text.replace(/<strong>/g,'<strong style="color:' + p + ';">');
+    return '<div class="pro-tip" style="background:' + t.cardBg + ';border-color:' + a + ';"><div class="pro-tip-header"><span class="pro-tip-badge" style="background:' + a + ';">' + b.icon + ' Pro Tip</span><span class="pro-tip-title" style="color:' + p + ';">' + b.title + '</span></div><div class="pro-tip-body" style="color:' + s + ';">' + ptxt + '</div></div>';
+  }
+  return '';
+}
+
+function buildFact(fact, idx, t) {
+  var fid = 'fact-' + currentIdx + '-' + idx;
+  var html = '<div class="fact-reveal-wrap">';
+  html += '<button class="fact-teaser" id="btn-' + fid + '" onclick="revealFact(\'' + fid + '\')" style="background:' + t.factBg + ';border-color:' + t.factBorder + ';">';
+  html += '<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:' + t.accent + ';">💭 COMMON MYTH</div>';
+  html += '<div class="fact-teaser-q" style="color:' + t.textPrimary + ';">' + fact.myth + '<br><span>🤔 </span><span style="color:' + t.accent + ';font-style:italic;">' + fact.q + '</span></div></div>';
+  html += '<div class="fact-teaser-btn" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Myth Busted 🔍</div></button>';
+  html += '<div class="fact-revealed" id="' + fid + '" style="background:' + t.factRevBg + ';border:1.5px solid ' + t.factBorder + ';">';
+  html += '<div class="fact-revealed-label" style="color:' + t.accent + ';">✅ Reality Check</div>';
+  var rtxt = fact.revealed.replace(/<strong>/g,'<strong style="color:' + t.textPrimary + ';">');
+  html += '<div class="fact-revealed-text" style="color:' + t.textSecondary + ';">' + rtxt + '</div></div></div>';
+  return html;
+}
+
+function revealFact(fid) {
+  var revealed = document.getElementById(fid);
+  var btn = document.getElementById('btn-' + fid);
+  var isOpen = revealed.classList.contains('show');
+  if (isOpen) { revealed.classList.remove('show'); btn.style.opacity = '1'; }
+  else { revealed.classList.add('show'); btn.style.opacity = '0.5'; }
+}
+
+function buildQuiz(q, t, qi) {
+  var pfx = 'ch' + currentIdx + 'q' + qi;
+  var html = '<div class="quiz-section"><div class="quiz-card" style="background:' + t.quizBg + ';border:1px solid ' + t.quizBorder + ';">';
+  html += '<div class="quiz-eyebrow" style="background:' + t.accent + ';color:' + ((t.accent==='#FFD700'||t.accent==='#FFA500') ? '#0c1520' : '#fff') + ';">Question ' + (qi + 1) + ' of 3</div>';
+  html += '<div class="quiz-q" style="color:' + t.quizText + ';">' + q.q + '</div><div class="quiz-options">';
+  q.opts.forEach(function(o) {
+    html += '<button class="quiz-opt" id="' + pfx + 'opt-' + o.id + '" onclick="answerQuiz(\'' + pfx + '\',\'' + o.id + '\',\'' + q.correct + '\')" style="background:' + t.optBg + ';border-color:' + t.optBorder + ';">';
+    html += '<span class="opt-badge" style="color:' + t.quizText + ';">' + o.id.toUpperCase() + '</span>';
+    html += '<span class="opt-text" style="color:' + t.optText + ';">' + o.text + '</span>';
+    html += '<span class="opt-icon" id="' + pfx + 'res-' + o.id + '"></span></button>';
+  });
+  html += '</div><div class="quiz-fb" id="' + pfx + '-fb"></div>';
+  html += '<div class="quiz-xp-row" id="' + pfx + '-xp" style="color:' + t.accent + ';"></div></div></div>';
+  return html;
+}
+
+function answerQuiz(pfx, chosen, correct) {
+  var opts = document.querySelectorAll('[id^="' + pfx + 'opt-"]');
+  opts.forEach(function(b){ b.disabled = true; b.classList.add('dim'); });
+  var ch = CHAPTERS[currentIdx];
+  var qi = parseInt(pfx.replace('ch' + currentIdx + 'q', ''));
+  var qData = ch.quizzes[qi];
+  var isRight = chosen === correct;
+  var chosenEl = document.getElementById(pfx + 'opt-' + chosen);
+  var correctEl = document.getElementById(pfx + 'opt-' + correct);
+  chosenEl.classList.remove('dim');
+  correctEl.classList.remove('dim');
+  if (isRight) {
+    chosenEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✓';
+    totalXP += 50;
+    document.getElementById(pfx + '-fb').className = 'quiz-fb good';
+    document.getElementById(pfx + '-fb').textContent = qData.good;
+    document.getElementById(pfx + '-xp').textContent = '+50 XP — nice one!';
+    document.getElementById(pfx + '-xp').className = 'quiz-xp-row show';
+    document.getElementById('topbar-xp-val').textContent = totalXP + ' XP';
+    confettiPop(THEME[ch.themeKey].accent);
+  } else {
+    chosenEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+    document.getElementById(pfx + 'res-' + chosen).textContent = '✗';
+    document.getElementById(pfx + 'res-' + correct).textContent = '✓';
+    document.getElementById(pfx + '-fb').className = 'quiz-fb bad';
+    document.getElementById(pfx + '-fb').textContent = qData.bad;
+  }
+  chProgress[ch.id] = 'done';
+}
+
+function confettiPop(accent) {
+  var cols = [accent, '#fff', 'rgba(255,255,255,0.6)', accent, '#FFD700'];
+  for (var i = 0; i < 36; i++) {
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.top = (15 + Math.random() * 35) + 'vh';
+    p.style.width = (6 + Math.random() * 6) + 'px';
+    p.style.height = (6 + Math.random() * 6) + 'px';
+    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.2 + Math.random() * 0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 2000);
+  }
+}
+
+function goNext() {
+  if (currentIdx < CHAPTERS.length - 1) {
+    openChapter(currentIdx + 1);
+  } else {
+    document.getElementById('cert-xp').textContent = totalXP;
+    showScreen('certificate');
+  }
+}
+
+var glossaryHTML = '';
+GLOSSARY_DATA.forEach(function(g) {
+  glossaryHTML += '<div class="glossary-item"><div class="g-term" style="color:' + g.accent + ';">' + g.term + '</div><div class="g-def">' + g.def + '</div></div>';
+});
+document.getElementById('glossary-items').innerHTML = glossaryHTML;
+
+document.getElementById('cover-cta-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('map-back-btn').onclick = function(){ showScreen('cover'); };
+document.getElementById('topbar-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('glossary-back-btn').onclick = function(){ showScreen(glossaryFrom); };
+document.getElementById('cert-next-btn').onclick = function(){ document.getElementById('cert-xp').textContent = totalXP; showScreen('whatsnext'); };
+document.getElementById('cert-glossary-btn').onclick = function(){ glossaryFrom = 'certificate'; showScreen('glossary'); };
+document.getElementById('wn-restart-btn').onclick = function(){ totalXP = 0; chProgress = {}; currentIdx = 0; showScreen('cover'); };
+document.getElementById('cert-back-btn').onclick = function(){ showScreen('chaptermap'); };
+document.getElementById('wn-back-btn').onclick = function(){ showScreen('certificate'); };
+
+renderMap();
+</script>
+</body>
+</html>
