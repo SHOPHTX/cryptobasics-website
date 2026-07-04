@@ -141,8 +141,9 @@ h1 span{
 
 .cta-group{
   display:flex;
-  gap:16px;
+  flex-direction:row;
   flex-wrap:wrap;
+  gap:12px;
   animation:slideUp 0.8s ease-out 0.8s backwards;
 }
 
@@ -168,10 +169,10 @@ h1 span{
 .btn-secondary{
   background:transparent;
   color:var(--white);
-  padding:20px 44px;
-  font-size:17px;
+  padding:14px 26px;
+  font-size:14px;
   font-weight:700;
-  border:2px solid rgba(255,255,255,0.2);
+  border:1.5px solid rgba(255,255,255,0.2);
   border-radius:100px;
   text-decoration:none;
   display:inline-block;
@@ -524,9 +525,9 @@ footer{
   .hero{padding:60px 16px;}
   h1{font-size:2.5rem;line-height:1.1;}
   .hero-tagline{font-size:1.1rem;}
-  .btn-primary, .btn-secondary{padding:16px 32px;font-size:15px;}
-  .cta-group{flex-direction:column;gap:12px;}
-  .btn-primary, .btn-secondary{width:100%;}
+  .btn-primary{padding:18px 36px;font-size:16px;width:100%;}
+  .btn-secondary{padding:14px 24px;font-size:14px;width:100%;}
+  .cta-group{flex-direction:column;gap:10px;}
   .section-title{font-size:2rem;}
   .story-grid{grid-template-columns:1fr!important;gap:40px!important;}
   .about{padding:60px 16px!important;}
@@ -610,64 +611,10 @@ footer{
   display:flex;
   align-items:center;
 }
-/* ticker + nav handled in nav CSS */
+/* ticker handled here */
+body{padding-top:34px;}
 
 
-/* ── Site Nav ── */
-#site-nav{
-  position:fixed;
-  top:34px; /* sits right below the price ticker */
-  left:0;right:0;
-  z-index:9998;
-  height:48px;
-  background:rgba(5,8,14,0.92);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-}
-.nav-logo{
-  font-family:'Fraunces',serif;
-  font-size:1rem;
-  font-weight:900;
-  color:#FFD600;
-  text-decoration:none;
-  letter-spacing:-.01em;
-}
-.nav-links{
-  display:flex;
-  align-items:center;
-  gap:28px;
-}
-.nav-links a{
-  font-size:.78rem;
-  font-weight:700;
-  color:rgba(255,255,255,0.6);
-  text-decoration:none;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  transition:color .15s ease;
-}
-.nav-links a:hover{color:#FFD600;}
-.nav-links a.nav-cta{
-  background:#FFD600;
-  color:#000;
-  padding:7px 16px;
-  border-radius:8px;
-  font-size:.72rem;
-}
-.nav-links a.nav-cta:hover{background:#fff;color:#000;}
-/* bump body down for ticker + nav */
-body{padding-top:82px;}
-@media(max-width:600px){
-  #site-nav{padding:0 16px;}
-  .nav-links{gap:14px;}
-  .nav-links a{font-size:.68rem;}
-  .nav-logo{font-size:.9rem;}
-}
 
 </style>
 </head>
@@ -675,18 +622,6 @@ body{padding-top:82px;}
 
 <div id="price-ticker">
   <div id="ticker-label">⚡ LIVE</div>
-
-<nav id="site-nav">
-  <a class="nav-logo" href="/">Crypto Basics</a>
-  <div class="nav-links">
-    <a href="#products">Courses</a>
-    <a href="#guides">Guides</a>
-    <a href="#news">Crypto News</a>
-    <a href="/glossary/">Jargon Buster</a>
-    <a href="/about/">Our Story</a>
-    <a href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank" class="nav-cta">Start Here →</a>
-  </div>
-</nav>
 
   <div id="ticker-inner"><!-- populated by JS --></div>
 </div>
@@ -788,6 +723,9 @@ body{padding-top:82px;}
       
       <div class="cta-group">
         <a href="#products" class="btn-primary">Explore Courses →</a>
+        <a href="#guides" class="btn-secondary">Guides</a>
+        <a href="#news" class="btn-secondary">Crypto News</a>
+        <a href="/glossary/" class="btn-secondary">Jargon Buster</a>
         <a href="/about/" class="btn-secondary">Our Story</a>
       </div>
 
@@ -836,7 +774,7 @@ body{padding-top:82px;}
   </div>
 </section>
 
-<div id="guides" style="position:absolute;top:-82px;"></div>
+<div id="guides" style="position:absolute;top:-34px;"></div>
 <!-- Products -->
 <section class="products" id="products">
   <div class="section-header">
