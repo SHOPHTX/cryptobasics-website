@@ -525,6 +525,16 @@ footer{
   .about-content h2{font-size:2rem;}
   footer{padding:60px 24px 30px;}
   .footer-grid{grid-template-columns:1fr;gap:30px;}
+
+  /* News section mobile fixes */
+  #news{padding:60px 16px!important;}
+  .news-card{padding:18px 16px!important;}
+  .news-card-stat{display:none!important;}
+  .news-card-header{flex-direction:column!important;gap:10px!important;}
+  .news-card h3{font-size:1.05rem!important;}
+  .news-card p{font-size:.86rem!important;line-height:1.7!important;}
+  #jargon-buster{padding:60px 16px!important;}
+  #about{padding:56px 16px!important;}
 }
 
 /* News feed — single column grid, bulletproof */
@@ -747,7 +757,7 @@ footer{
            ========================================== -->
 
       <!-- CARD: Welcome — JUL 3, 2026 -->
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
+      <div class="news-card" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:rgba(255,255,255,0.1);border-radius:4px 0 0 4px;"></div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
           <span style="font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 3, 2026</span>
@@ -759,10 +769,10 @@ footer{
       </div>
 
       <!-- CARD: NYSE Owner Doubles Down on Polymarket — MAR 27, 2026 -->
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
+      <div class="news-card" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle at top right,rgba(74,222,128,0.07),transparent 70%);pointer-events:none;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
+        <div class="news-card-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
           <div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
               <span style="font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">MAR 27, 2026</span>
@@ -771,7 +781,7 @@ footer{
             </div>
             <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1.35;margin:0;">The Owner of the NYSE Just Put $2 Billion Into a Crypto Betting Platform</h3>
           </div>
-          <div style="flex-shrink:0;text-align:center;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
+          <div class="news-card-stat" style="flex-shrink:0;text-align:center;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
             <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#4ADE80;line-height:1;">$2B</div>
             <div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(74,222,128,0.7);margin-top:4px;">Invested</div>
           </div>
@@ -787,10 +797,10 @@ footer{
       </div>
 
       <!-- CARD: Fannie Mae Crypto-Backed Mortgage — MAR 26, 2026 -->
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
+      <div class="news-card" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle at top right,rgba(74,222,128,0.07),transparent 70%);pointer-events:none;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
+        <div class="news-card-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
           <div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
               <span style="font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">MAR 26, 2026</span>
@@ -799,7 +809,7 @@ footer{
             </div>
             <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1.35;margin:0;">You Can Now Use Bitcoin to Buy a House — Fannie Mae Just Made It Official</h3>
           </div>
-          <div style="flex-shrink:0;text-align:center;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
+          <div class="news-card-stat" style="flex-shrink:0;text-align:center;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
             <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#4ADE80;line-height:1;">🏠</div>
             <div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(74,222,128,0.7);margin-top:4px;">First Ever</div>
           </div>
@@ -820,10 +830,10 @@ footer{
       </div>
 
       <!-- CARD: SEC/CFTC 16 Digital Commodities — MAR 17, 2026 -->
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
+      <div class="news-card" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;margin-bottom:28px;display:block;width:100%;box-sizing:border-box;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4A9EFF;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle at top right,rgba(74,158,255,0.07),transparent 70%);pointer-events:none;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
+        <div class="news-card-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px;">
           <div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
               <span style="font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">MAR 17, 2026</span>
@@ -832,7 +842,7 @@ footer{
             </div>
             <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1.35;margin:0;">The U.S. Government Just Officially Named 16 Cryptos as Commodities — Not Securities</h3>
           </div>
-          <div style="flex-shrink:0;text-align:center;background:rgba(74,158,255,0.1);border:1px solid rgba(74,158,255,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
+          <div class="news-card-stat" style="flex-shrink:0;text-align:center;background:rgba(74,158,255,0.1);border:1px solid rgba(74,158,255,0.2);border-radius:12px;padding:12px 18px;min-width:72px;">
             <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#4A9EFF;line-height:1;">16</div>
             <div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(74,158,255,0.7);margin-top:4px;">Coins</div>
           </div>
