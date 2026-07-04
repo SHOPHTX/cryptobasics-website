@@ -680,9 +680,13 @@ footer{
   50%{opacity:.7;box-shadow:0 0 0 8px rgba(239,68,68,0);}
 }
 @keyframes scanline{
-  0%{transform:scaleX(0);opacity:1;}
-  80%{transform:scaleX(1);opacity:1;}
-  100%{transform:scaleX(1);opacity:0;}
+  0%{transform:scaleX(0);opacity:0;}
+  40%{transform:scaleX(1);opacity:1;}
+  100%{transform:scaleX(1);opacity:1;}
+}
+@keyframes scanlinePulse{
+  0%,100%{opacity:1;}
+  50%{opacity:0.35;}
 }
 @keyframes headlineReveal{
   0%{opacity:0;transform:translateY(18px);}
@@ -748,9 +752,10 @@ footer{
   margin:20px auto;
   max-width:600px;
   transform-origin:left center;
-  animation:scanline 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
-  animation-delay:.3s;
+  animation:scanline 1s cubic-bezier(0.4,0,0.2,1) forwards, scanlinePulse 2.4s ease-in-out 1.3s infinite;
+  animation-delay:.3s, 1.3s;
   transform:scaleX(0);
+  box-shadow:0 0 8px rgba(239,68,68,0.5), 0 0 20px rgba(255,214,0,0.2);
 }
 
 /* chyron bar — broadcast lower-third style */
