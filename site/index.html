@@ -860,7 +860,7 @@ footer{
   <div class="vol-list" id="vol-accordion">
 
     <div class="va" id="va-1">
-      <button class="va-trigger" onclick="vaToggle('va-1')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-1')">
         <div class="va-icon"><img src="/images/buck.png" alt="Buck" style="width:36px;height:36px;object-fit:contain;object-position:bottom;display:block;margin:0 auto;"/></div>
         <div class="va-meta">
           <div class="va-tag">Vol. 1 · Start Here</div>
@@ -876,7 +876,7 @@ footer{
     </div>
 
     <div class="va" id="va-2">
-      <button class="va-trigger" onclick="vaToggle('va-2')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-2')">
         <div class="va-icon">🌐</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 2</div>
@@ -892,7 +892,7 @@ footer{
     </div>
 
     <div class="va" id="va-3">
-      <button class="va-trigger" onclick="vaToggle('va-3')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-3')">
         <div class="va-icon">🏦</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 3</div>
@@ -908,7 +908,7 @@ footer{
     </div>
 
     <div class="va" id="va-4">
-      <button class="va-trigger" onclick="vaToggle('va-4')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-4')">
         <div class="va-icon">📈</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 4</div>
@@ -924,7 +924,7 @@ footer{
     </div>
 
     <div class="va" id="va-5">
-      <button class="va-trigger" onclick="vaToggle('va-5')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-5')">
         <div class="va-icon">💵</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 5</div>
@@ -940,7 +940,7 @@ footer{
     </div>
 
     <div class="va" id="va-6">
-      <button class="va-trigger" onclick="vaToggle('va-6')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-6')">
         <div class="va-icon">⛓️</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 6</div>
@@ -956,7 +956,7 @@ footer{
     </div>
 
     <div class="va" id="va-7">
-      <button class="va-trigger" onclick="vaToggle('va-7')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-7')">
         <div class="va-icon">⚖️</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 7</div>
@@ -972,7 +972,7 @@ footer{
     </div>
 
     <div class="va" id="va-8">
-      <button class="va-trigger" onclick="vaToggle('va-8')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-8')">
         <div class="va-icon">🏗️</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 8 · New</div>
@@ -988,7 +988,7 @@ footer{
     </div>
 
     <div class="va" id="va-9">
-      <button class="va-trigger" onclick="vaToggle('va-9')">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-9')">
         <div class="va-icon">👀</div>
         <div class="va-meta">
           <div class="va-tag">Vol. 9 · New</div>
@@ -1019,17 +1019,19 @@ footer{
   <script>
   function vaToggle(id){
     var row = document.getElementById(id);
-    var body = row.querySelector('.va-body');
-    var chevron = row.querySelector('.va-chevron');
+    if(!row) return;
     var isOpen = row.classList.contains('open');
-    // close all
+    // close all first
     document.querySelectorAll('.va').forEach(function(el){
       el.classList.remove('open');
-      el.querySelector('.va-body').style.display = 'none';
+      var b = el.querySelector('.va-body');
+      if(b) b.style.display = 'none';
     });
+    // open clicked one if it was closed
     if(!isOpen){
       row.classList.add('open');
-      body.style.display = 'block';
+      var b = row.querySelector('.va-body');
+      if(b) b.style.display = 'block';
     }
   }
   </script>
