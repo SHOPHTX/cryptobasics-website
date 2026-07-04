@@ -263,139 +263,132 @@ h1 span{
   line-height:1.7;
 }
 
-/* ── Carousel ── */
-.carousel-outer{
-  position:relative;
-  margin:0 -60px;          /* bleed to section edges */
+/* ── Volume Accordion ── */
+.vol-list{
+  max-width:860px;
+  margin:0 auto;
 }
-.carousel-track{
-  display:flex;
-  gap:16px;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-  padding:12px 60px 32px;  /* left pad = section padding so first card aligns */
-  cursor:grab;
-}
-.carousel-track::-webkit-scrollbar{display:none;}
-.carousel-track.grabbing{cursor:grabbing;}
-
-/* fade hint on right edge */
-.carousel-outer::after{
-  content:'';
-  position:absolute;
-  top:0;right:0;bottom:0;
-  width:80px;
-  background:linear-gradient(to right,transparent,#F5C842);
-  pointer-events:none;
-}
-
-.pc{  /* product card — compact */
-  flex:0 0 200px;
-  scroll-snap-align:start;
-  background:#0c1520;
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px;
+.vol-row{
+  border-bottom:1px solid rgba(0,0,0,0.12);
   overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  text-decoration:none;
-  position:relative;
 }
-.pc:hover{
-  transform:translateY(-6px);
-  border-color:rgba(255,214,0,0.4);
-  box-shadow:0 16px 40px rgba(0,0,0,0.35);
+.vol-row:first-child{
+  border-top:1px solid rgba(0,0,0,0.12);
 }
-.pc.vol1{
-  flex:0 0 220px;  /* flagship slightly wider */
-  border-color:rgba(255,214,0,0.25);
-}
-.pc-hero{
-  height:130px;
-  background:#000;
+.vol-trigger{
+  width:100%;
+  background:none;
+  border:none;
+  padding:20px 0;
   display:flex;
   align-items:center;
-  justify-content:center;
-  font-size:3.5rem;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  position:relative;
+  gap:20px;
+  cursor:pointer;
+  font-family:'Poppins',sans-serif;
+  text-align:left;
+  transition:opacity .15s ease;
 }
-.pc-body{
-  padding:16px;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-.pc-tag{
-  font-size:.58rem;
-  font-weight:800;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:rgba(255,214,0,0.7);
-  margin-bottom:6px;
-}
-.pc-title{
+.vol-trigger:hover{opacity:.75;}
+.vol-num{
   font-family:'Fraunces',serif;
-  font-size:.95rem;
-  font-weight:800;
-  color:#fff;
-  line-height:1.25;
-  margin-bottom:8px;
+  font-size:1.5rem;
+  font-weight:900;
+  color:rgba(0,0,0,0.2);
+  width:36px;
+  flex-shrink:0;
+  line-height:1;
+  transition:color .2s ease;
+}
+.vol-row.open .vol-num{color:#000;}
+.vol-emoji{
+  font-size:1.6rem;
+  flex-shrink:0;
+  width:36px;
+  text-align:center;
+}
+.vol-meta{
   flex:1;
+  min-width:0;
 }
-.pc-subtitle{
-  font-size:.68rem;
-  color:rgba(255,255,255,0.35);
-  line-height:1.4;
-  margin-bottom:12px;
-  font-style:italic;
-}
-.pc-cta{
-  font-size:.72rem;
+.vol-tag-inline{
+  font-size:.6rem;
   font-weight:800;
-  color:#FFD600;
-  display:flex;
-  align-items:center;
-  gap:4px;
-  transition:gap .15s ease;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(0,0,0,0.35);
+  margin-bottom:2px;
 }
-.pc:hover .pc-cta{gap:8px;}
-
-/* coming-soon card */
-.pc.coming{
-  border:2px dashed rgba(255,214,0,0.2);
-  background:rgba(255,214,0,0.02);
+.vol-title-inline{
+  font-family:'Fraunces',serif;
+  font-size:1.1rem;
+  font-weight:800;
+  color:#000;
+  line-height:1.2;
 }
-
-/* Carousel nav arrows — desktop only */
-.carousel-btn{
+.vol-chevron{
+  flex-shrink:0;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  color:rgba(0,0,0,0.4);
+  transition:transform .25s ease, background .2s ease, color .2s ease;
+}
+.vol-row.open .vol-chevron{
+  transform:rotate(90deg);
+  background:#000;
+  color:#F5C842;
+}
+.vol-body{
   display:none;
+  padding:0 0 24px 92px;
+  animation:volSlide .25s ease forwards;
 }
-@media(min-width:769px){
-  .carousel-btn{
-    display:flex;
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:2;
-    width:42px;height:42px;
-    border-radius:50%;
-    background:#0c1520;
-    border:1.5px solid rgba(255,255,255,0.15);
-    color:#fff;
-    font-size:1.1rem;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:all .2s ease;
-    box-shadow:0 4px 16px rgba(0,0,0,0.3);
-  }
-  .carousel-btn:hover{background:#FFD600;color:#0c1520;border-color:#FFD600;}
-  .carousel-btn.prev{left:10px;}
-  .carousel-btn.next{right:10px;}
+@keyframes volSlide{
+  from{opacity:0;transform:translateY(-8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.vol-subtitle{
+  font-size:.82rem;
+  font-style:italic;
+  color:rgba(0,0,0,0.4);
+  margin-bottom:10px;
+}
+.vol-desc{
+  font-size:.92rem;
+  color:rgba(0,0,0,0.65);
+  line-height:1.75;
+  margin-bottom:18px;
+  max-width:560px;
+}
+.vol-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#000;
+  color:#F5C842;
+  font-family:'Poppins',sans-serif;
+  font-size:.82rem;
+  font-weight:800;
+  padding:11px 22px;
+  border-radius:10px;
+  text-decoration:none;
+  transition:all .2s ease;
+}
+.vol-cta:hover{background:#FFD600;color:#000;gap:12px;}
+.vol-cta.coming-cta{
+  background:rgba(0,0,0,0.08);
+  color:rgba(0,0,0,0.35);
+  cursor:default;
+}
+
+@media(max-width:768px){
+  .vol-body{padding:0 0 20px 16px;}
+  .vol-title-inline{font-size:.95rem;}
+  .vol-num{font-size:1.2rem;width:28px;}
+  .vol-emoji{font-size:1.3rem;width:28px;}
+  .vol-trigger{gap:12px;}
 }
 
 /* About Section */
@@ -537,9 +530,7 @@ footer{
   .hero-grid{grid-template-columns:1fr;}
   .about-grid{grid-template-columns:1fr;}
   .footer-grid{grid-template-columns:1fr 1fr;gap:40px;}
-  .products{padding:60px 0!important;}
-  .carousel-outer{margin:0!important;}
-  .carousel-track{padding:12px 16px 28px!important;}
+  .products{padding:60px 24px!important;}
 }
 
 @media(max-width:768px){
@@ -670,140 +661,203 @@ footer{
     </div>
   </div>
 
-  <!-- Carousel -->
-  <div class="carousel-outer">
-    <button class="carousel-btn prev" onclick="carouselScroll(-1)" aria-label="Previous">&#8592;</button>
-    <button class="carousel-btn next" onclick="carouselScroll(1)" aria-label="Next">&#8594;</button>
-    <div class="carousel-track" id="carousel-track">
+  <!-- Volume Accordion -->
+  <div class="vol-list" id="vol-list">
 
-      <!-- VOL 1 — Flagship -->
-      <a class="pc vol1" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero" style="background:#0c1520;">
-          <img src="images/buck.png" style="width:90px;height:90px;object-fit:contain;" alt="Buck"/>
-        </div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 1 · Flagship</div>
-          <div class="pc-subtitle">"What the F*** Even IS Cryptocurrency?"</div>
-          <div class="pc-title">Crypto Basics</div>
-          <div class="pc-cta">Start Here ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 2 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>🌐</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 2</div>
-          <div class="pc-subtitle">"What the F*** Even IS the Internet?"</div>
-          <div class="pc-title">The Internet Explained</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 3 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>🏦</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 3</div>
-          <div class="pc-subtitle">"The Banks vs. Crypto: How the Fight Ended"</div>
-          <div class="pc-title">Banks vs. Crypto</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 4 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>📈</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 4</div>
-          <div class="pc-subtitle">"What the F*** Even IS a Spot ETF?"</div>
-          <div class="pc-title">Spot ETF Explained</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 5 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>💵</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 5</div>
-          <div class="pc-subtitle">"What the F*** Even IS a Stablecoin?"</div>
-          <div class="pc-title">Stablecoins Explained</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 6 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>⛓️</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 6</div>
-          <div class="pc-subtitle">"What the F*** Even IS Decentralized Finance?"</div>
-          <div class="pc-title">DeFi Explained</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 7 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>⚖️</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 7</div>
-          <div class="pc-subtitle">"The Case Against Crypto"</div>
-          <div class="pc-title">The Case Against Crypto</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 8 -->
-      <a class="pc" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">
-        <div class="pc-hero"><span>🏗️</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 8 · New</div>
-          <div class="pc-subtitle">"Real World Assets on the Blockchain"</div>
-          <div class="pc-title">RWA Explained</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- VOL 9 -->
-      <a class="pc" href="/while-you-watched/wywtP-vip-k9m37/" target="_blank">
-        <div class="pc-hero"><span>👀</span></div>
-        <div class="pc-body">
-          <div class="pc-tag">Vol. 9 · New</div>
-          <div class="pc-subtitle">"While You Were Watching the Price"</div>
-          <div class="pc-title">Behind the Price</div>
-          <div class="pc-cta">Get It ›</div>
-        </div>
-      </a>
-
-      <!-- Coming Soon -->
-      <div class="pc coming">
-        <div class="pc-hero"><span>🔮</span></div>
-        <div class="pc-body">
-          <div class="pc-tag" style="color:rgba(255,214,0,0.5);">Vol. 10 · Soon</div>
-          <div class="pc-subtitle">Something's brewing...</div>
-          <div class="pc-title" style="color:rgba(255,255,255,0.4);">Coming Next</div>
-          <div class="pc-cta" style="color:rgba(255,255,255,0.2);">Stay tuned</div>
-        </div>
+    <!-- VOL 1 -->
+    <div class="vol-row" id="vol-1">
+      <button class="vol-trigger" onclick="volToggle('vol-1')">
+        <span class="vol-num">01</span>
+        <span class="vol-emoji">🪙</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Flagship · Start Here</div>
+          <div class="vol-title-inline">Crypto Basics</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"What the F*** Even IS Cryptocurrency?"</div>
+        <div class="vol-desc">Where the revolution starts making sense. Buck walks you through what crypto actually is, why it exists, and why every person alive should at least understand the basics.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Start Here →</a>
       </div>
+    </div>
 
-    </div><!-- /carousel-track -->
-  </div><!-- /carousel-outer -->
+    <!-- VOL 2 -->
+    <div class="vol-row" id="vol-2">
+      <button class="vol-trigger" onclick="volToggle('vol-2')">
+        <span class="vol-num">02</span>
+        <span class="vol-emoji">🌐</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 2</div>
+          <div class="vol-title-inline">The Internet Explained</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"What the F*** Even IS the Internet?"</div>
+        <div class="vol-desc">Web1. Web2. Web3. You use it every day — nobody told you how it actually works. Until now. This is the context that makes everything else make sense.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 3 -->
+    <div class="vol-row" id="vol-3">
+      <button class="vol-trigger" onclick="volToggle('vol-3')">
+        <span class="vol-num">03</span>
+        <span class="vol-emoji">🏦</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 3</div>
+          <div class="vol-title-inline">Banks vs. Crypto</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"The Banks vs. Crypto: How the Fight Ended"</div>
+        <div class="vol-desc">They called it a scam. Then they bought it. Here's the full story of how traditional finance went from enemy to investor — and what it means for your money.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 4 -->
+    <div class="vol-row" id="vol-4">
+      <button class="vol-trigger" onclick="volToggle('vol-4')">
+        <span class="vol-num">04</span>
+        <span class="vol-emoji">📈</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 4</div>
+          <div class="vol-title-inline">Spot ETF Explained</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"What the F*** Even IS a Spot ETF?"</div>
+        <div class="vol-desc">Wall Street just opened the door to crypto. BlackRock. Fidelity. Vanguard. Here's what a spot ETF actually is and why it changed everything.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 5 -->
+    <div class="vol-row" id="vol-5">
+      <button class="vol-trigger" onclick="volToggle('vol-5')">
+        <span class="vol-num">05</span>
+        <span class="vol-emoji">💵</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 5</div>
+          <div class="vol-title-inline">Stablecoins Explained</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"What the F*** Even IS a Stablecoin?"</div>
+        <div class="vol-desc">Not all crypto goes up and down. Some is designed to stay put — and that's actually the most important part of this whole thing. USDC. USDT. The dollar's secret global expansion.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 6 -->
+    <div class="vol-row" id="vol-6">
+      <button class="vol-trigger" onclick="volToggle('vol-6')">
+        <span class="vol-num">06</span>
+        <span class="vol-emoji">⛓️</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 6</div>
+          <div class="vol-title-inline">DeFi Explained</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"What the F*** Even IS Decentralized Finance?"</div>
+        <div class="vol-desc">Banks without banks. Loans without loan officers. It sounds insane — until you understand it. Then it sounds inevitable.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 7 -->
+    <div class="vol-row" id="vol-7">
+      <button class="vol-trigger" onclick="volToggle('vol-7')">
+        <span class="vol-num">07</span>
+        <span class="vol-emoji">⚖️</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 7</div>
+          <div class="vol-title-inline">The Case Against Crypto</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"The Strongest Argument Against Crypto"</div>
+        <div class="vol-desc">The critics aren't wrong about everything. Here's the best case against crypto — laid out honestly, without the defensive spin. Make up your own mind.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 8 -->
+    <div class="vol-row" id="vol-8">
+      <button class="vol-trigger" onclick="volToggle('vol-8')">
+        <span class="vol-num">08</span>
+        <span class="vol-emoji">🏗️</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 8 · New</div>
+          <div class="vol-title-inline">RWA Explained</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"The Next Wave: Real World Assets on the Blockchain"</div>
+        <div class="vol-desc">BlackRock. Tokenization. $60 billion on-chain. The biggest money in the world is moving — and most people haven't noticed yet.</div>
+        <a class="vol-cta" href="https://cryptobasicsco.gumroad.com/l/arittb" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- VOL 9 -->
+    <div class="vol-row" id="vol-9">
+      <button class="vol-trigger" onclick="volToggle('vol-9')">
+        <span class="vol-num">09</span>
+        <span class="vol-emoji">👀</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Vol. 9 · New</div>
+          <div class="vol-title-inline">While You Were Watching the Price</div>
+        </span>
+        <span class="vol-chevron">›</span>
+      </button>
+      <div class="vol-body">
+        <div class="vol-subtitle">"The infrastructure being built while retail argues about price targets"</div>
+        <div class="vol-desc">Whale wallets. Payment rails. Stablecoins as dollar infrastructure. OCC bank charters. On-chain data. Six chapters on what's actually happening beneath the charts.</div>
+        <a class="vol-cta" href="/while-you-watched/wywtP-vip-k9m37/" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="vol-row" id="vol-10">
+      <button class="vol-trigger" onclick="volToggle('vol-10')" style="opacity:.5;cursor:default;" disabled>
+        <span class="vol-num">10</span>
+        <span class="vol-emoji">🔮</span>
+        <span class="vol-meta">
+          <div class="vol-tag-inline">Coming Soon</div>
+          <div class="vol-title-inline" style="color:rgba(0,0,0,0.3);">Something's brewing...</div>
+        </span>
+        <span class="vol-chevron" style="opacity:0;"></span>
+      </button>
+    </div>
+
+  </div><!-- /vol-list -->
 
   <script>
-  (function(){
-    var track = document.getElementById('carousel-track');
-    // drag-to-scroll
-    var isDown=false,startX,scrollLeft;
-    track.addEventListener('mousedown',function(e){isDown=true;track.classList.add('grabbing');startX=e.pageX-track.offsetLeft;scrollLeft=track.scrollLeft;});
-    track.addEventListener('mouseleave',function(){isDown=false;track.classList.remove('grabbing');});
-    track.addEventListener('mouseup',function(){isDown=false;track.classList.remove('grabbing');});
-    track.addEventListener('mousemove',function(e){if(!isDown)return;e.preventDefault();var x=e.pageX-track.offsetLeft;track.scrollLeft=scrollLeft-(x-startX)*1.4;});
-  })();
-  function carouselScroll(dir){
-    var track=document.getElementById('carousel-track');
-    track.scrollBy({left:dir*440,behavior:'smooth'});
+  function volToggle(id) {
+    var row = document.getElementById(id);
+    if (!row) return;
+    var body = row.querySelector('.vol-body');
+    if (!body) return;
+    var isOpen = row.classList.contains('open');
+    // close all
+    document.querySelectorAll('.vol-row.open').forEach(function(r) {
+      r.classList.remove('open');
+      r.querySelector('.vol-body').style.display = 'none';
+    });
+    // open clicked if it was closed
+    if (!isOpen) {
+      row.classList.add('open');
+      body.style.display = 'block';
+    }
   }
   </script>
 </section>
