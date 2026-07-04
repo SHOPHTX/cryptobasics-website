@@ -1270,12 +1270,36 @@ footer{
 
     <div style="display:flex;flex-direction:column;gap:12px;">
 
-      <!-- ==========================================
+      <!-- Filter pills -->
+      <div id="nc-filters" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;">
+        <button type="button" onclick="ncFilter('all')" class="ncf active" data-filter="all"
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;">
+          All
+        </button>
+        <button type="button" onclick="ncFilter('regulation')" class="ncf" data-filter="regulation"
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(167,139,250,0.35);background:rgba(167,139,250,0.08);color:#A78BFA;">
+          🟣 Regulation
+        </button>
+        <button type="button" onclick="ncFilter('adoption')" class="ncf" data-filter="adoption"
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(74,222,128,0.35);background:rgba(74,222,128,0.08);color:#4ADE80;">
+          🟢 Adoption
+        </button>
+        <button type="button" onclick="ncFilter('hotgoss')" class="ncf" data-filter="hotgoss"
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(249,115,22,0.35);background:rgba(249,115,22,0.08);color:#f97316;">
+          🍵 Hot Goss
+        </button>
+        <button type="button" onclick="ncFilter('markets')" class="ncf" data-filter="markets"
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.08);color:#ef4444;">
+          🔴 Markets
+        </button>
+      </div>
+
+            <!-- ==========================================
            PASTE NEW NEWS CARDS AT THE TOP
            ========================================== -->
 
       <!-- CARD: Welcome — JUL 3, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="welcome" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:rgba(255,255,255,0.15);border-radius:4px 0 0 4px;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
@@ -1296,7 +1320,7 @@ footer{
       </div>
 
       <!-- CARD: Bitcoin ETF Bleed — JUL 2, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="markets" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#ef4444;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(239,68,68,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1349,7 +1373,7 @@ footer{
       </div>
 
             <!-- CARD: Taiwan Virtual Asset Service Act — JUN 30, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1421,7 +1445,7 @@ footer{
       </div>
 
             <!-- CARD: UK FCA Crypto Rules — JUN 30, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1482,7 +1506,7 @@ footer{
       </div>
 
             <!-- CARD: MiCA Full Enforcement — JUL 1, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1530,7 +1554,7 @@ footer{
       </div>
 
             <!-- CARD: Dimon vs Armstrong — JUN 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#f97316;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(249,115,22,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1613,7 +1637,7 @@ footer{
       </div>
 
             <!-- CARD: DTCC + Stellar — MAY 27, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="adoption" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(74,222,128,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1649,7 +1673,7 @@ footer{
       </div>
 
       <!-- CARD: Solana 100M Daily TXs — APR 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="adoption" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(74,222,128,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1700,7 +1724,7 @@ footer{
       </div>
 
             <!-- CARD: MAS Singapore Crypto Rules — APR 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1760,7 +1784,7 @@ footer{
       </div>
 
             <!-- CARD: NYSE Owner / Polymarket — MAR 27, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="adoption" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(74,222,128,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1795,7 +1819,7 @@ footer{
       </div>
 
       <!-- CARD: Fannie Mae — MAR 26, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="adoption" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(74,222,128,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1831,7 +1855,7 @@ footer{
       </div>
 
       <!-- CARD: SEC/CFTC 16 Commodities — MAR 17, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1881,7 +1905,7 @@ footer{
       </div>
 
       <!-- CARD: GENIUS Act Signed — JUL 18, 2025 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#A78BFA;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(167,139,250,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1939,7 +1963,7 @@ footer{
       </div>
 
             <!-- CARD: FedEx + Hedera — FEB 17, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="adoption" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#4ADE80;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(74,222,128,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -1974,7 +1998,7 @@ footer{
       </div>
 
       <!-- CARD: Tether Wiped from EU — MAR 2025 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#f97316;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(249,115,22,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -2026,7 +2050,7 @@ footer{
       </div>
 
             <!-- CARD: Jane Street 10AM — FEB 26, 2026 -->
-      <div class="nc" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#f97316;border-radius:4px 0 0 4px;"></div>
         <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(249,115,22,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
@@ -2060,6 +2084,14 @@ footer{
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Load more -->
+    <div id="nc-loadmore-wrap" style="text-align:center;margin-top:32px;margin-bottom:8px;">
+      <button type="button" id="nc-loadmore"
+        style="padding:13px 36px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:100px;color:rgba(255,255,255,0.6);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .25s ease;letter-spacing:.04em;">
+        Load more stories ↓
+      </button>
     </div>
 
     <div style="text-align:center;margin-top:40px;">
@@ -2114,6 +2146,83 @@ function ncToggle(btn) {
     });
   }, {threshold: 0.3});
   observer.observe(intro);
+})();
+</script>
+
+
+<script>
+(function(){
+  var SHOW_INITIAL = 5;
+  var currentFilter = 'all';
+  var expanded = false;
+
+  function getCards(){
+    return Array.from(document.querySelectorAll('.nc[data-category]'));
+  }
+
+  function applyState(){
+    var cards = getCards();
+    var visible = cards.filter(function(c){
+      return currentFilter === 'all' || c.dataset.category === currentFilter;
+    });
+    var hidden = cards.filter(function(c){
+      return currentFilter !== 'all' && c.dataset.category !== currentFilter;
+    });
+
+    // Hide filtered-out cards
+    hidden.forEach(function(c){ c.style.display = 'none'; });
+
+    // Show/hide based on load-more state
+    visible.forEach(function(c, i){
+      c.style.display = (expanded || i < SHOW_INITIAL) ? 'block' : 'none';
+    });
+
+    // Load more button
+    var btn = document.getElementById('nc-loadmore');
+    var wrap = document.getElementById('nc-loadmore-wrap');
+    if(!btn) return;
+    if(visible.length <= SHOW_INITIAL || expanded){
+      wrap.style.display = 'none';
+    } else {
+      wrap.style.display = 'block';
+      btn.textContent = 'Load ' + (visible.length - SHOW_INITIAL) + ' more stories ↓';
+    }
+  }
+
+  window.ncFilter = function(cat){
+    currentFilter = cat;
+    expanded = false;
+
+    // Close any open cards when filtering
+    document.querySelectorAll('.nc').forEach(function(el){
+      el.classList.remove('open');
+      var b = el.querySelector('.nc-body');
+      if(b) b.style.display = 'none';
+      var ch = el.querySelector('.nc-chevron');
+      if(ch){ ch.style.transform=''; ch.style.background='rgba(255,255,255,0.06)'; ch.style.borderColor='rgba(255,255,255,0.1)'; ch.style.color='rgba(255,255,255,0.4)'; }
+    });
+
+    // Update pill styles
+    document.querySelectorAll('.ncf').forEach(function(btn){
+      var isActive = btn.dataset.filter === cat;
+      btn.style.opacity = isActive ? '1' : '0.5';
+      btn.style.transform = isActive ? 'scale(1.05)' : 'scale(1)';
+    });
+
+    applyState();
+  };
+
+  // Load more click
+  var lmBtn = document.getElementById('nc-loadmore');
+  if(lmBtn){
+    lmBtn.addEventListener('click', function(){
+      expanded = true;
+      applyState();
+    });
+  }
+
+  // Init on load
+  applyState();
 })();
 </script>
 
