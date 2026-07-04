@@ -526,6 +526,11 @@ footer{
   footer{padding:60px 24px 30px;}
   .footer-grid{grid-template-columns:1fr;gap:30px;}
 }
+
+/* News feed — force single column stacking */
+.news-feed{display:block!important;width:100%!important;}
+.news-feed>div{display:block!important;width:100%!important;box-sizing:border-box;margin-bottom:28px;float:none!important;}
+.news-feed::after{content:'';display:table;clear:both;}
 </style>
 </head>
 <body>
@@ -728,6 +733,7 @@ footer{
 </section>
 
 <!-- News Section -->
+<div style="background:red;color:white;font-size:2rem;padding:20px;text-align:center;font-weight:900;">TEST BANNER — FILE IS LOADING CORRECTLY</div>
 <section id="news" style="padding:100px 60px;background:#0d0d0d;border-top:1px solid rgba(255,255,255,0.06);display:block;">
   <div style="max-width:900px;margin:0 auto;display:block;">
     <div style="text-align:center;margin-bottom:56px;">
@@ -736,7 +742,7 @@ footer{
       <p style="font-size:1.1rem;color:rgba(255,255,255,0.5);max-width:600px;margin:0 auto;line-height:1.7;">The headline. What it actually means. Why you should care. No jargon. No hype.</p>
     </div>
 
-    <div style="display:block;width:100%;">
+    <div class="news-feed">
 
       <!-- ==========================================
            PASTE NEW NEWS CARDS AT THE TOP
