@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Crypto Glossary — Plain English | CryptoBasics</title>
+<meta name="description" content="Every crypto term explained in plain English. No jargon. No condescension. Bitcoin, DeFi, wallets, stablecoins and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Fraunces:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0d0d0d;color:#fff;}
+.container{max-width:760px;margin:0 auto;padding:0 24px;}
+a{color:inherit;text-decoration:none;}
+.topbar{background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,0.08);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-logo{font-size:.9rem;font-weight:900;letter-spacing:.04em;color:#FFD700;}
+.topbar-back{font-size:.8rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:6px;transition:color .15s;}
+.topbar-back:hover{color:#FFD700;}
+.hero-section{padding:72px 24px 56px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);}
+.overline{display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:9999px;padding:5px 16px;font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:18px;}
+.hero-h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,6vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px;}
+.hero-h1 em{font-style:italic;color:#FFD700;}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,0.45);line-height:1.7;max-width:440px;margin:0 auto 32px;}
+.cat-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 24px;}
+.search-wrap{padding:32px 24px 0;max-width:760px;margin:0 auto;}
+.search-input{width:100%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:15px 18px 15px 48px;font-family:'Poppins',sans-serif;font-size:.95rem;color:#fff;outline:none;transition:border-color .2s;}
+.search-input::placeholder{color:rgba(255,255,255,0.25);}
+.search-input:focus{border-color:rgba(255,215,0,0.5);}
+.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1.1rem;pointer-events:none;}
+.glossary-body{padding:48px 24px 100px;}
+.count-label{font-size:.72rem;color:rgba(255,255,255,0.25);letter-spacing:.08em;text-transform:uppercase;margin-bottom:32px;}
+#no-results{display:none;text-align:center;padding:48px 0;color:rgba(255,255,255,0.3);font-size:.95rem;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="topbar-logo">CryptoBasics</span>
+  <a href="/" class="topbar-back">← Back to home</a>
+</nav>
+
+<div class="hero-section">
+  <div class="container">
+    <div class="overline">Plain English Dictionary</div>
+    <h1 class="hero-h1">The A–Z of<br><em>crypto, explained.</em></h1>
+    <p class="hero-sub">Every term you'll encounter — without the gatekeeping. Tap any category to jump, or just scroll.</p>
+  </div>
+</div>
+
+<div class="cat-pills container" style="padding-top:28px;padding-bottom:0;">
+<a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(247,147,26,0.1);border:1px solid rgba(247,147,26,0.3);border-radius:9999px;padding:6px 14px;color:#F7931A;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">₿ Bitcoin Basics</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(45,212,191,0.1);border:1px solid rgba(45,212,191,0.3);border-radius:9999px;padding:6px 14px;color:#2DD4BF;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">🔐 Wallets & Security</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:9999px;padding:6px 14px;color:#4ADE80;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">📈 Trading Terms</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.3);border-radius:9999px;padding:6px 14px;color:#818CF8;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">⚙️ How It Works</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.3);border-radius:9999px;padding:6px 14px;color:#FB7185;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">🏛️ DeFi & Earning</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(163,230,53,0.1);border:1px solid rgba(163,230,53,0.3);border-radius:9999px;padding:6px 14px;color:#A3E635;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">💵 Stablecoins & Payments</a><a href="/jargon-buster/" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:9999px;padding:6px 14px;color:#FFD700;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap;">⚡ New in 2024-2026</a>
+</div>
+
+<div class="search-wrap" style="position:relative;">
+  <span class="search-icon">🔍</span>
+  <input class="search-input" id="gloss-search" type="text" placeholder="Search any term..." autocomplete="off" oninput="glossSearch(this.value)"/>
+</div>
+
+<div class="glossary-body container">
+  <div class="count-label" id="count-label">46 terms — no jargon allowed</div>
+  <div id="gloss-az">
+<div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">A</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🪂 Airdrop</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">When a project distributes free tokens to wallet holders — usually rewarding early users. Sometimes worthless. Occasionally worth thousands. Usually requires having used a protocol before a specific cutoff date.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🪙 Altcoin</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Any cryptocurrency that isn't Bitcoin. Ethereum, Solana, XRP, Dogecoin — all altcoins. Some are serious infrastructure. Others are pure speculation. Most eventually go to zero.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">B</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🐻 Bear Market</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">When prices are falling and pessimism dominates. Crypto bear markets often drop 70-90% from the peak. They last 1-2 years and are when serious builders keep building while retail walks away.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">₿ Bitcoin</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F7931A;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Bitcoin Basics</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The original cryptocurrency, created in 2009. Digital money that runs on a network no single person or company controls. There will only ever be 21 million of them — ever.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">⛓️ Blockchain</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A digital ledger shared across thousands of computers simultaneously. Once something is written on it, nobody can change it. Every Bitcoin transaction ever made lives on one permanently.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🐂 Bull Market</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">When prices are rising and optimism is high. In crypto, bull runs can mean 10x gains over 12-18 months. Usually follows a halving or a wave of new institutional adoption.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">C</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🧊 Cold Wallet</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Crypto storage that's completely offline — a physical device that holds your keys. Can't be hacked remotely because it's never connected to the internet. Best for large amounts.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🤝 Consensus</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">How a blockchain agrees on which transactions are valid. Without consensus, there's no way to agree on who owns what. Bitcoin uses Proof of Work. Ethereum uses Proof of Stake.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">D</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🌐 Decentralization</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">No single person, company, or government controls the network. Thousands of computers worldwide each hold a copy and follow the same rules. This is why Bitcoin can't be shut down — there's no headquarters to raid.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🏛️ DeFi</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Decentralized Finance — financial services like lending, borrowing, and trading that run on blockchains with no bank in the middle. The code runs automatically. No account application, no business hours, no middleman fees.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🔄 DEX</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Decentralized Exchange — trade crypto directly wallet-to-wallet, no company involved. No account or ID required. Uniswap and Jupiter are popular ones. Downside: no customer support if something goes wrong.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">F</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">😰 FOMO</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Fear Of Missing Out — buying because the price is going up and you don't want to miss the gain. One of the most common reasons people make bad trades. Usually peaks right before a reversal.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🍴 Fork</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">When a blockchain splits into two versions — usually because the community disagreed on the rules. Bitcoin Cash forked from Bitcoin in 2017. A 'hard fork' creates a permanent split. A 'soft fork' is backward-compatible.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🌫️ FUD</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Fear, Uncertainty, Doubt — negative news spread to make people panic-sell. Sometimes real, sometimes manufactured. When you see 'crypto is banned in China' for the 15th time, that's FUD.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">G</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">⛽ Gas Fee</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The fee you pay to use the Ethereum network — like a tip to the computers processing your transaction. When the network is busy, gas fees spike. On cheaper blockchains like Solana, it's fractions of a cent.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">⚖️ GENIUS Act</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The first US federal law governing stablecoin issuers, signed in 2025. Requires 1:1 dollar reserves, regular audits, and banking licenses. Explicitly written to preserve US dollar dominance globally.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">H</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">✂️ Halving</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F7931A;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Bitcoin Basics</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Every ~4 years, the amount of new Bitcoin created gets cut in half. This slows supply growth over time. Historically each halving has been followed by a major bull run.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">💎 HODL</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Crypto slang for holding your coins instead of selling — originally a typo in a 2013 forum post that went viral. Now shorthand for a long-term holding strategy no matter what the price does.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🔥 Hot Wallet</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A crypto wallet connected to the internet — like an app on your phone. Convenient for daily use, but more hackable than cold storage. Don't keep life savings here.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">K</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🪪 KYC</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Know Your Customer — the ID verification process exchanges require before you can trade. You submit your ID and a selfie. Required by law for regulated exchanges in most countries.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">L</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🏗️ Layer 2</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A network built on top of a blockchain to make it faster and cheaper. Instead of every transaction hitting Ethereum's slow main chain, Layer 2s bundle thousands and settle them at once. Arbitrum and Base are popular ones.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">💧 Liquidity</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">How easily you can buy or sell without moving the price. Bitcoin is very liquid. A tiny new token is not — even a small sell order can crash its price.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">M</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📊 Market Cap</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Total value of all coins in circulation — price × total supply. The most useful way to compare the size of different cryptocurrencies. Bitcoin's market cap sits around $1-2 trillion.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🐸 Meme Coin</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A cryptocurrency born from a joke or internet meme. Dogecoin was first. Most go to zero. Some briefly hit enormous market caps. Zero underlying utility, pure community hype. Treat as a casino, not an investment.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">⛏️ Mining</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F7931A;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Bitcoin Basics</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">How Bitcoin transactions get verified. Computers race to solve a math puzzle — the winner adds the next batch of transactions to the ledger and earns freshly created Bitcoin as a reward.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">N</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🖼️ NFT</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Non-Fungible Token — a unique digital certificate of ownership stored on a blockchain. 'Non-fungible' means one-of-a-kind (unlike dollars, where any $1 equals any other $1). Proof that you own a specific digital item.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">O</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🏛️ OCC Bank Charter</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A national banking license from the Office of the Comptroller of the Currency. Circle, Ripple, BitGo, and Paxos received OCC charters in 2026 — making them regulated banks, legally equivalent to JPMorgan.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📋 On-Chain</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A3E635;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Stablecoins & Payments</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Anything recorded directly on a blockchain's public ledger. Permanent, visible, and verifiable by anyone. The opposite — off-chain — happens outside the blockchain, usually faster but less transparent.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">P</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🔑 Private Key</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A long string of letters and numbers that proves you own your crypto. Lose it = lose everything. Share it = lose everything. Never store it online, never type it into a website.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🏦 Proof of Stake</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Ethereum's transaction verification system — validators lock up (stake) crypto as collateral to earn the right to add blocks. Far less energy than Bitcoin's mining. Think security deposit vs. competition.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">💪 Proof of Work</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F7931A;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Bitcoin Basics</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Bitcoin's verification system. Computers do hard math to earn the right to add a block. Energy-intensive on purpose — it makes cheating the system extremely expensive.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📡 Protocol</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The rules and software that run a blockchain or crypto application. Bitcoin is a protocol. Uniswap is a protocol. In crypto, 'protocol' roughly means the underlying system everything else runs on.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">S</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📝 Seed Phrase</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">12 or 24 random words given when you create a wallet. Write them on paper and hide them. This is the only way to recover your wallet if your device is lost or broken.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🤖 Smart Contract</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818CF8;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">How It Works</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A self-executing program stored on a blockchain. When conditions are met, it automatically carries out an action — no middleman needed. Nobody can change the rules after it's deployed.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📦 Spot Bitcoin ETF</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">An exchange-traded fund that directly holds Bitcoin, approved by the SEC in January 2024. Trades on normal stock exchanges through any brokerage. BlackRock's version hit $50 billion in assets faster than any ETF in history.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🔒 Stablecoin</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A3E635;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Stablecoins & Payments</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">A cryptocurrency designed to hold a steady value — usually $1 USD. Lets you hold dollar value on the blockchain without the price swings of Bitcoin. USDC and USDT are the biggest.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🌱 Staking</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Locking up your crypto to help run a blockchain — and earning rewards in return. Like a savings account where you earn yield for agreeing to keep money locked for a period. How Ethereum processes transactions.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">T</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🏷️ Tokenization</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A3E635;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Stablecoins & Payments</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Taking a real-world asset — Treasury bills, real estate, stocks — and representing ownership as a token on a blockchain. Makes assets easier to divide, trade, and settle. BlackRock, JPMorgan, and Franklin Templeton are all doing this now.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">U</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🔵 USDC</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A3E635;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Stablecoins & Payments</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">US Dollar Coin — always worth $1, issued by Circle, backed by actual cash and US Treasury bills. A digital dollar that lives on the blockchain and can be sent anywhere in seconds, 24/7.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🟢 USDT</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A3E635;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Stablecoins & Payments</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Tether — the most widely traded stablecoin, worth $1, issued by Tether Ltd. The most traded asset in all of crypto by daily volume. Used heavily for international transfers and crypto trading.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">V</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📈 Volatility</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">How wildly the price swings. Bitcoin dropping 20% in a week is considered normal. For context, a stock dropping 20% in a year is considered a disaster. Volatility is both the risk and the opportunity.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">W</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">👛 Wallet</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2DD4BF;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Wallets & Security</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Not a physical wallet — it's your key to the blockchain. Your wallet address is like an email address (public). Your private key is your password. Whoever has the private key owns the crypto.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">🐋 Whale</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Trading Terms</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Someone holding so much crypto that their trades can move the market price. When whales sell, price drops. When they quietly accumulate, price often stays flat while they buy from retail sellers.</div>
+</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">📄 White Paper</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F7931A;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">Bitcoin Basics</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The original 9-page document Satoshi Nakamoto published in 2008 that described how Bitcoin would work. Every crypto project has one. Reading it before investing is basic due diligence.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">X</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">💠 XRP</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD700;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">New in 2024-2026</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">Ripple's token, built for fast cross-border bank payments. In 2025, a court ruled XRP is not a security. Ripple got an OCC bank charter in 2026. Now used by banks in 50+ countries for international settlement.</div>
+</div></div><div style="margin-bottom:44px;"><div style="font-size:2rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:-.02em;margin-bottom:16px;font-family:Fraunces,serif;">Y</div><div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <span style="font-size:1rem;font-weight:800;color:#fff;">💰 Yield</span>
+    <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FB7185;background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">DeFi & Earning</span>
+  </div>
+  <div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">The return you earn for lending or staking your crypto — shown as an annual percentage. DeFi yields can be higher than traditional banks, but so is the risk. High yield = someone is taking on more risk somewhere.</div>
+</div></div>
+  </div>
+  <div id="no-results">No match found — <a href="mailto:hello@cryptobasics.co" style="color:#FFD700;">suggest a term</a>.</div>
+</div>
+
+<script>
+var ALL_TERMS = [{"cat": "bitcoin", "term": "Bitcoin", "emoji": "₿", "def": "The original cryptocurrency, created in 2009. Digital money that runs on a network no single person or company controls. There will only ever be 21 million of them — ever."}, {"cat": "bitcoin", "term": "Halving", "emoji": "✂️", "def": "Every ~4 years, the amount of new Bitcoin created gets cut in half. This slows supply growth over time. Historically each halving has been followed by a major bull run."}, {"cat": "bitcoin", "term": "Mining", "emoji": "⛏️", "def": "How Bitcoin transactions get verified. Computers race to solve a math puzzle — the winner adds the next batch of transactions to the ledger and earns freshly created Bitcoin as a reward."}, {"cat": "bitcoin", "term": "Proof of Work", "emoji": "💪", "def": "Bitcoin's verification system. Computers do hard math to earn the right to add a block. Energy-intensive on purpose — it makes cheating the system extremely expensive."}, {"cat": "bitcoin", "term": "White Paper", "emoji": "📄", "def": "The original 9-page document Satoshi Nakamoto published in 2008 that described how Bitcoin would work. Every crypto project has one. Reading it before investing is basic due diligence."}, {"cat": "wallets", "term": "Wallet", "emoji": "👛", "def": "Not a physical wallet — it's your key to the blockchain. Your wallet address is like an email address (public). Your private key is your password. Whoever has the private key owns the crypto."}, {"cat": "wallets", "term": "Private Key", "emoji": "🔑", "def": "A long string of letters and numbers that proves you own your crypto. Lose it = lose everything. Share it = lose everything. Never store it online, never type it into a website."}, {"cat": "wallets", "term": "Seed Phrase", "emoji": "📝", "def": "12 or 24 random words given when you create a wallet. Write them on paper and hide them. This is the only way to recover your wallet if your device is lost or broken."}, {"cat": "wallets", "term": "Cold Wallet", "emoji": "🧊", "def": "Crypto storage that's completely offline — a physical device that holds your keys. Can't be hacked remotely because it's never connected to the internet. Best for large amounts."}, {"cat": "wallets", "term": "Hot Wallet", "emoji": "🔥", "def": "A crypto wallet connected to the internet — like an app on your phone. Convenient for daily use, but more hackable than cold storage. Don't keep life savings here."}, {"cat": "wallets", "term": "KYC", "emoji": "🪪", "def": "Know Your Customer — the ID verification process exchanges require before you can trade. You submit your ID and a selfie. Required by law for regulated exchanges in most countries."}, {"cat": "trading", "term": "Bull Market", "emoji": "🐂", "def": "When prices are rising and optimism is high. In crypto, bull runs can mean 10x gains over 12-18 months. Usually follows a halving or a wave of new institutional adoption."}, {"cat": "trading", "term": "Bear Market", "emoji": "🐻", "def": "When prices are falling and pessimism dominates. Crypto bear markets often drop 70-90% from the peak. They last 1-2 years and are when serious builders keep building while retail walks away."}, {"cat": "trading", "term": "HODL", "emoji": "💎", "def": "Crypto slang for holding your coins instead of selling — originally a typo in a 2013 forum post that went viral. Now shorthand for a long-term holding strategy no matter what the price does."}, {"cat": "trading", "term": "FOMO", "emoji": "😰", "def": "Fear Of Missing Out — buying because the price is going up and you don't want to miss the gain. One of the most common reasons people make bad trades. Usually peaks right before a reversal."}, {"cat": "trading", "term": "FUD", "emoji": "🌫️", "def": "Fear, Uncertainty, Doubt — negative news spread to make people panic-sell. Sometimes real, sometimes manufactured. When you see 'crypto is banned in China' for the 15th time, that's FUD."}, {"cat": "trading", "term": "Whale", "emoji": "🐋", "def": "Someone holding so much crypto that their trades can move the market price. When whales sell, price drops. When they quietly accumulate, price often stays flat while they buy from retail sellers."}, {"cat": "trading", "term": "Market Cap", "emoji": "📊", "def": "Total value of all coins in circulation — price × total supply. The most useful way to compare the size of different cryptocurrencies. Bitcoin's market cap sits around $1-2 trillion."}, {"cat": "trading", "term": "Liquidity", "emoji": "💧", "def": "How easily you can buy or sell without moving the price. Bitcoin is very liquid. A tiny new token is not — even a small sell order can crash its price."}, {"cat": "trading", "term": "Volatility", "emoji": "📈", "def": "How wildly the price swings. Bitcoin dropping 20% in a week is considered normal. For context, a stock dropping 20% in a year is considered a disaster. Volatility is both the risk and the opportunity."}, {"cat": "trading", "term": "Altcoin", "emoji": "🪙", "def": "Any cryptocurrency that isn't Bitcoin. Ethereum, Solana, XRP, Dogecoin — all altcoins. Some are serious infrastructure. Others are pure speculation. Most eventually go to zero."}, {"cat": "tech", "term": "Blockchain", "emoji": "⛓️", "def": "A digital ledger shared across thousands of computers simultaneously. Once something is written on it, nobody can change it. Every Bitcoin transaction ever made lives on one permanently."}, {"cat": "tech", "term": "Smart Contract", "emoji": "🤖", "def": "A self-executing program stored on a blockchain. When conditions are met, it automatically carries out an action — no middleman needed. Nobody can change the rules after it's deployed."}, {"cat": "tech", "term": "Proof of Stake", "emoji": "🏦", "def": "Ethereum's transaction verification system — validators lock up (stake) crypto as collateral to earn the right to add blocks. Far less energy than Bitcoin's mining. Think security deposit vs. competition."}, {"cat": "tech", "term": "Layer 2", "emoji": "🏗️", "def": "A network built on top of a blockchain to make it faster and cheaper. Instead of every transaction hitting Ethereum's slow main chain, Layer 2s bundle thousands and settle them at once. Arbitrum and Base are popular ones."}, {"cat": "tech", "term": "Fork", "emoji": "🍴", "def": "When a blockchain splits into two versions — usually because the community disagreed on the rules. Bitcoin Cash forked from Bitcoin in 2017. A 'hard fork' creates a permanent split. A 'soft fork' is backward-compatible."}, {"cat": "tech", "term": "Consensus", "emoji": "🤝", "def": "How a blockchain agrees on which transactions are valid. Without consensus, there's no way to agree on who owns what. Bitcoin uses Proof of Work. Ethereum uses Proof of Stake."}, {"cat": "tech", "term": "Decentralization", "emoji": "🌐", "def": "No single person, company, or government controls the network. Thousands of computers worldwide each hold a copy and follow the same rules. This is why Bitcoin can't be shut down — there's no headquarters to raid."}, {"cat": "tech", "term": "Protocol", "emoji": "📡", "def": "The rules and software that run a blockchain or crypto application. Bitcoin is a protocol. Uniswap is a protocol. In crypto, 'protocol' roughly means the underlying system everything else runs on."}, {"cat": "defi", "term": "DeFi", "emoji": "🏛️", "def": "Decentralized Finance — financial services like lending, borrowing, and trading that run on blockchains with no bank in the middle. The code runs automatically. No account application, no business hours, no middleman fees."}, {"cat": "defi", "term": "DEX", "emoji": "🔄", "def": "Decentralized Exchange — trade crypto directly wallet-to-wallet, no company involved. No account or ID required. Uniswap and Jupiter are popular ones. Downside: no customer support if something goes wrong."}, {"cat": "defi", "term": "Staking", "emoji": "🌱", "def": "Locking up your crypto to help run a blockchain — and earning rewards in return. Like a savings account where you earn yield for agreeing to keep money locked for a period. How Ethereum processes transactions."}, {"cat": "defi", "term": "Yield", "emoji": "💰", "def": "The return you earn for lending or staking your crypto — shown as an annual percentage. DeFi yields can be higher than traditional banks, but so is the risk. High yield = someone is taking on more risk somewhere."}, {"cat": "defi", "term": "Airdrop", "emoji": "🪂", "def": "When a project distributes free tokens to wallet holders — usually rewarding early users. Sometimes worthless. Occasionally worth thousands. Usually requires having used a protocol before a specific cutoff date."}, {"cat": "defi", "term": "Gas Fee", "emoji": "⛽", "def": "The fee you pay to use the Ethereum network — like a tip to the computers processing your transaction. When the network is busy, gas fees spike. On cheaper blockchains like Solana, it's fractions of a cent."}, {"cat": "stablecoins", "term": "Stablecoin", "emoji": "🔒", "def": "A cryptocurrency designed to hold a steady value — usually $1 USD. Lets you hold dollar value on the blockchain without the price swings of Bitcoin. USDC and USDT are the biggest."}, {"cat": "stablecoins", "term": "USDC", "emoji": "🔵", "def": "US Dollar Coin — always worth $1, issued by Circle, backed by actual cash and US Treasury bills. A digital dollar that lives on the blockchain and can be sent anywhere in seconds, 24/7."}, {"cat": "stablecoins", "term": "USDT", "emoji": "🟢", "def": "Tether — the most widely traded stablecoin, worth $1, issued by Tether Ltd. The most traded asset in all of crypto by daily volume. Used heavily for international transfers and crypto trading."}, {"cat": "stablecoins", "term": "Tokenization", "emoji": "🏷️", "def": "Taking a real-world asset — Treasury bills, real estate, stocks — and representing ownership as a token on a blockchain. Makes assets easier to divide, trade, and settle. BlackRock, JPMorgan, and Franklin Templeton are all doing this now."}, {"cat": "stablecoins", "term": "On-Chain", "emoji": "📋", "def": "Anything recorded directly on a blockchain's public ledger. Permanent, visible, and verifiable by anyone. The opposite — off-chain — happens outside the blockchain, usually faster but less transparent."}, {"cat": "new", "term": "Spot Bitcoin ETF", "emoji": "📦", "def": "An exchange-traded fund that directly holds Bitcoin, approved by the SEC in January 2024. Trades on normal stock exchanges through any brokerage. BlackRock's version hit $50 billion in assets faster than any ETF in history."}, {"cat": "new", "term": "GENIUS Act", "emoji": "⚖️", "def": "The first US federal law governing stablecoin issuers, signed in 2025. Requires 1:1 dollar reserves, regular audits, and banking licenses. Explicitly written to preserve US dollar dominance globally."}, {"cat": "new", "term": "OCC Bank Charter", "emoji": "🏛️", "def": "A national banking license from the Office of the Comptroller of the Currency. Circle, Ripple, BitGo, and Paxos received OCC charters in 2026 — making them regulated banks, legally equivalent to JPMorgan."}, {"cat": "new", "term": "XRP", "emoji": "💠", "def": "Ripple's token, built for fast cross-border bank payments. In 2025, a court ruled XRP is not a security. Ripple got an OCC bank charter in 2026. Now used by banks in 50+ countries for international settlement."}, {"cat": "new", "term": "NFT", "emoji": "🖼️", "def": "Non-Fungible Token — a unique digital certificate of ownership stored on a blockchain. 'Non-fungible' means one-of-a-kind (unlike dollars, where any $1 equals any other $1). Proof that you own a specific digital item."}, {"cat": "new", "term": "Meme Coin", "emoji": "🐸", "def": "A cryptocurrency born from a joke or internet meme. Dogecoin was first. Most go to zero. Some briefly hit enormous market caps. Zero underlying utility, pure community hype. Treat as a casino, not an investment."}];
+var CAT_COLOR = {"bitcoin": "#F7931A", "wallets": "#2DD4BF", "trading": "#4ADE80", "tech": "#818CF8", "defi": "#FB7185", "stablecoins": "#A3E635", "new": "#FFD700"};
+var CAT_LABEL = {"bitcoin": "Bitcoin Basics", "wallets": "Wallets & Security", "trading": "Trading Terms", "tech": "How It Works", "defi": "DeFi & Earning", "stablecoins": "Stablecoins & Payments", "new": "New in 2024-2026"};
+
+function glossSearch(q) {
+  var query = q.trim().toLowerCase();
+  var az = document.getElementById('gloss-az');
+  var nr = document.getElementById('no-results');
+  var lbl = document.getElementById('count-label');
+  if (!query) { az.style.display=''; nr.style.display='none'; lbl.textContent='46 terms — no jargon allowed'; return; }
+  var matches = ALL_TERMS.filter(function(t){ return t.term.toLowerCase().includes(query) || t.def.toLowerCase().includes(query); });
+  if (!matches.length) { az.style.display='none'; nr.style.display='block'; return; }
+  nr.style.display='none'; az.style.display='';
+  var hi = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  lbl.textContent = matches.length + ' match' + (matches.length===1?'':'es');
+  az.innerHTML = matches.map(function(t){
+    var col = CAT_COLOR[t.cat] || '#FFD700';
+    var lbl2 = CAT_LABEL[t.cat] || '';
+    var term = t.term.replace(hi,'<mark style="background:rgba(255,215,0,0.2);color:#FFD700;border-radius:2px;padding:0 2px;">$1</mark>');
+    var def2 = t.def.replace(hi,'<mark style="background:rgba(255,215,0,0.1);color:rgba(255,215,0,0.85);border-radius:2px;padding:0 2px;">$1</mark>');
+    return '<div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;"><span style="font-size:1rem;font-weight:800;color:#fff;">'+t.emoji+' '+term+'</span><span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+col+';background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">'+lbl2+'</span></div><div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">'+def2+'</div></div>';
+  }).join('');
+}
+</script>
+
+</body>
+</html>

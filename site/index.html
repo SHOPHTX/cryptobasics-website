@@ -925,6 +925,316 @@ footer{
   </div>
 </section>
 
+<!-- Jargon Buster -->
+<section id="jargon-buster" style="padding:100px 60px;background:#0a0a0a;border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="max-width:820px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:52px;">
+      <div style="display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:9999px;padding:6px 18px;margin-bottom:16px;font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;">Jargon Buster</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:14px;">What does that<br>actually mean?</h2>
+      <p style="font-size:1rem;color:rgba(255,255,255,0.45);line-height:1.7;max-width:460px;margin:0 auto;">Pick a category. No searching required — just tap what sounds confusing.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;" id="jb-cats">
+
+    <div class="jb-cat" id="jb-bitcoin" style="border:1.5px solid rgba(247,147,26,0.3);border-radius:18px;overflow:hidden;background:rgba(247,147,26,0.1);">
+      <button onclick="jbToggle('bitcoin')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">₿</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">Bitcoin Basics</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">5 terms</span>
+        </span>
+        <span id="jb-arrow-bitcoin" style="font-size:1.2rem;color:#F7931A;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-bitcoin" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#F7931A;margin-bottom:5px;">₿ Bitcoin</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The original cryptocurrency, created in 2009. Digital money that runs on a network no single person or company controls. There will only ever be 21 million of them — ever.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#F7931A;margin-bottom:5px;">✂️ Halving</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Every ~4 years, the amount of new Bitcoin created gets cut in half. This slows supply growth over time. Historically each halving has been followed by a major bull run.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#F7931A;margin-bottom:5px;">⛏️ Mining</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">How Bitcoin transactions get verified. Computers race to solve a math puzzle — the winner adds the next batch of transactions to the ledger and earns freshly created Bitcoin as a reward.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#F7931A;margin-bottom:5px;">💪 Proof of Work</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Bitcoin's verification system. Computers do hard math to earn the right to add a block. Energy-intensive on purpose — it makes cheating the system extremely expensive.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#F7931A;margin-bottom:5px;">📄 White Paper</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The original 9-page document Satoshi Nakamoto published in 2008 that described how Bitcoin would work. Every crypto project has one. Reading it before investing is basic due diligence.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-wallets" style="border:1.5px solid rgba(45,212,191,0.3);border-radius:18px;overflow:hidden;background:rgba(45,212,191,0.1);">
+      <button onclick="jbToggle('wallets')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">🔐</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">Wallets & Security</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">6 terms</span>
+        </span>
+        <span id="jb-arrow-wallets" style="font-size:1.2rem;color:#2DD4BF;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-wallets" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">👛 Wallet</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Not a physical wallet — it's your key to the blockchain. Your wallet address is like an email address (public). Your private key is your password. Whoever has the private key owns the crypto.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">🔑 Private Key</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A long string of letters and numbers that proves you own your crypto. Lose it = lose everything. Share it = lose everything. Never store it online, never type it into a website.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">📝 Seed Phrase</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">12 or 24 random words given when you create a wallet. Write them on paper and hide them. This is the only way to recover your wallet if your device is lost or broken.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">🧊 Cold Wallet</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Crypto storage that's completely offline — a physical device that holds your keys. Can't be hacked remotely because it's never connected to the internet. Best for large amounts.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">🔥 Hot Wallet</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A crypto wallet connected to the internet — like an app on your phone. Convenient for daily use, but more hackable than cold storage. Don't keep life savings here.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#2DD4BF;margin-bottom:5px;">🪪 KYC</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Know Your Customer — the ID verification process exchanges require before you can trade. You submit your ID and a selfie. Required by law for regulated exchanges in most countries.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-trading" style="border:1.5px solid rgba(74,222,128,0.3);border-radius:18px;overflow:hidden;background:rgba(74,222,128,0.1);">
+      <button onclick="jbToggle('trading')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">📈</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">Trading Terms</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">10 terms</span>
+        </span>
+        <span id="jb-arrow-trading" style="font-size:1.2rem;color:#4ADE80;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-trading" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">🐂 Bull Market</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">When prices are rising and optimism is high. In crypto, bull runs can mean 10x gains over 12-18 months. Usually follows a halving or a wave of new institutional adoption.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">🐻 Bear Market</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">When prices are falling and pessimism dominates. Crypto bear markets often drop 70-90% from the peak. They last 1-2 years and are when serious builders keep building while retail walks away.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">💎 HODL</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Crypto slang for holding your coins instead of selling — originally a typo in a 2013 forum post that went viral. Now shorthand for a long-term holding strategy no matter what the price does.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">😰 FOMO</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Fear Of Missing Out — buying because the price is going up and you don't want to miss the gain. One of the most common reasons people make bad trades. Usually peaks right before a reversal.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">🌫️ FUD</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Fear, Uncertainty, Doubt — negative news spread to make people panic-sell. Sometimes real, sometimes manufactured. When you see 'crypto is banned in China' for the 15th time, that's FUD.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">🐋 Whale</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Someone holding so much crypto that their trades can move the market price. When whales sell, price drops. When they quietly accumulate, price often stays flat while they buy from retail sellers.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">📊 Market Cap</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Total value of all coins in circulation — price × total supply. The most useful way to compare the size of different cryptocurrencies. Bitcoin's market cap sits around $1-2 trillion.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">💧 Liquidity</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">How easily you can buy or sell without moving the price. Bitcoin is very liquid. A tiny new token is not — even a small sell order can crash its price.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">📈 Volatility</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">How wildly the price swings. Bitcoin dropping 20% in a week is considered normal. For context, a stock dropping 20% in a year is considered a disaster. Volatility is both the risk and the opportunity.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#4ADE80;margin-bottom:5px;">🪙 Altcoin</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Any cryptocurrency that isn't Bitcoin. Ethereum, Solana, XRP, Dogecoin — all altcoins. Some are serious infrastructure. Others are pure speculation. Most eventually go to zero.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-tech" style="border:1.5px solid rgba(129,140,248,0.3);border-radius:18px;overflow:hidden;background:rgba(129,140,248,0.1);">
+      <button onclick="jbToggle('tech')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">⚙️</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">How It Works</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">8 terms</span>
+        </span>
+        <span id="jb-arrow-tech" style="font-size:1.2rem;color:#818CF8;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-tech" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">⛓️ Blockchain</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A digital ledger shared across thousands of computers simultaneously. Once something is written on it, nobody can change it. Every Bitcoin transaction ever made lives on one permanently.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🤖 Smart Contract</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A self-executing program stored on a blockchain. When conditions are met, it automatically carries out an action — no middleman needed. Nobody can change the rules after it's deployed.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🏦 Proof of Stake</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Ethereum's transaction verification system — validators lock up (stake) crypto as collateral to earn the right to add blocks. Far less energy than Bitcoin's mining. Think security deposit vs. competition.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🏗️ Layer 2</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A network built on top of a blockchain to make it faster and cheaper. Instead of every transaction hitting Ethereum's slow main chain, Layer 2s bundle thousands and settle them at once. Arbitrum and Base are popular ones.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🍴 Fork</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">When a blockchain splits into two versions — usually because the community disagreed on the rules. Bitcoin Cash forked from Bitcoin in 2017. A 'hard fork' creates a permanent split. A 'soft fork' is backward-compatible.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🤝 Consensus</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">How a blockchain agrees on which transactions are valid. Without consensus, there's no way to agree on who owns what. Bitcoin uses Proof of Work. Ethereum uses Proof of Stake.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">🌐 Decentralization</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">No single person, company, or government controls the network. Thousands of computers worldwide each hold a copy and follow the same rules. This is why Bitcoin can't be shut down — there's no headquarters to raid.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#818CF8;margin-bottom:5px;">📡 Protocol</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The rules and software that run a blockchain or crypto application. Bitcoin is a protocol. Uniswap is a protocol. In crypto, 'protocol' roughly means the underlying system everything else runs on.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-defi" style="border:1.5px solid rgba(251,113,133,0.3);border-radius:18px;overflow:hidden;background:rgba(251,113,133,0.1);">
+      <button onclick="jbToggle('defi')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">🏛️</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">DeFi & Earning</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">6 terms</span>
+        </span>
+        <span id="jb-arrow-defi" style="font-size:1.2rem;color:#FB7185;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-defi" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">🏛️ DeFi</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Decentralized Finance — financial services like lending, borrowing, and trading that run on blockchains with no bank in the middle. The code runs automatically. No account application, no business hours, no middleman fees.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">🔄 DEX</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Decentralized Exchange — trade crypto directly wallet-to-wallet, no company involved. No account or ID required. Uniswap and Jupiter are popular ones. Downside: no customer support if something goes wrong.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">🌱 Staking</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Locking up your crypto to help run a blockchain — and earning rewards in return. Like a savings account where you earn yield for agreeing to keep money locked for a period. How Ethereum processes transactions.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">💰 Yield</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The return you earn for lending or staking your crypto — shown as an annual percentage. DeFi yields can be higher than traditional banks, but so is the risk. High yield = someone is taking on more risk somewhere.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">🪂 Airdrop</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">When a project distributes free tokens to wallet holders — usually rewarding early users. Sometimes worthless. Occasionally worth thousands. Usually requires having used a protocol before a specific cutoff date.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FB7185;margin-bottom:5px;">⛽ Gas Fee</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The fee you pay to use the Ethereum network — like a tip to the computers processing your transaction. When the network is busy, gas fees spike. On cheaper blockchains like Solana, it's fractions of a cent.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-stablecoins" style="border:1.5px solid rgba(163,230,53,0.3);border-radius:18px;overflow:hidden;background:rgba(163,230,53,0.1);">
+      <button onclick="jbToggle('stablecoins')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">💵</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">Stablecoins & Payments</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">5 terms</span>
+        </span>
+        <span id="jb-arrow-stablecoins" style="font-size:1.2rem;color:#A3E635;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-stablecoins" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#A3E635;margin-bottom:5px;">🔒 Stablecoin</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A cryptocurrency designed to hold a steady value — usually $1 USD. Lets you hold dollar value on the blockchain without the price swings of Bitcoin. USDC and USDT are the biggest.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#A3E635;margin-bottom:5px;">🔵 USDC</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">US Dollar Coin — always worth $1, issued by Circle, backed by actual cash and US Treasury bills. A digital dollar that lives on the blockchain and can be sent anywhere in seconds, 24/7.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#A3E635;margin-bottom:5px;">🟢 USDT</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Tether — the most widely traded stablecoin, worth $1, issued by Tether Ltd. The most traded asset in all of crypto by daily volume. Used heavily for international transfers and crypto trading.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#A3E635;margin-bottom:5px;">🏷️ Tokenization</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Taking a real-world asset — Treasury bills, real estate, stocks — and representing ownership as a token on a blockchain. Makes assets easier to divide, trade, and settle. BlackRock, JPMorgan, and Franklin Templeton are all doing this now.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#A3E635;margin-bottom:5px;">📋 On-Chain</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Anything recorded directly on a blockchain's public ledger. Permanent, visible, and verifiable by anyone. The opposite — off-chain — happens outside the blockchain, usually faster but less transparent.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="jb-cat" id="jb-new" style="border:1.5px solid rgba(255,215,0,0.3);border-radius:18px;overflow:hidden;background:rgba(255,215,0,0.1);">
+      <button onclick="jbToggle('new')" style="width:100%;background:none;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Poppins',sans-serif;">
+        <span style="font-size:1.6rem;flex-shrink:0;">⚡</span>
+        <span style="flex:1;">
+          <span style="display:block;font-size:.95rem;font-weight:800;color:#fff;">New in 2024-2026</span>
+          <span style="font-size:.72rem;color:rgba(255,255,255,0.35);">6 terms</span>
+        </span>
+        <span id="jb-arrow-new" style="font-size:1.2rem;color:#FFD700;transition:transform .25s ease;">›</span>
+      </button>
+      <div id="jb-panel-new" style="display:none;padding:0 22px 20px;display:none;flex-direction:column;gap:10px;">
+        
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">📦 Spot Bitcoin ETF</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">An exchange-traded fund that directly holds Bitcoin, approved by the SEC in January 2024. Trades on normal stock exchanges through any brokerage. BlackRock's version hit $50 billion in assets faster than any ETF in history.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">⚖️ GENIUS Act</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">The first US federal law governing stablecoin issuers, signed in 2025. Requires 1:1 dollar reserves, regular audits, and banking licenses. Explicitly written to preserve US dollar dominance globally.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">🏛️ OCC Bank Charter</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A national banking license from the Office of the Comptroller of the Currency. Circle, Ripple, BitGo, and Paxos received OCC charters in 2026 — making them regulated banks, legally equivalent to JPMorgan.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">💠 XRP</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Ripple's token, built for fast cross-border bank payments. In 2025, a court ruled XRP is not a security. Ripple got an OCC bank charter in 2026. Now used by banks in 50+ countries for international settlement.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">🖼️ NFT</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">Non-Fungible Token — a unique digital certificate of ownership stored on a blockchain. 'Non-fungible' means one-of-a-kind (unlike dollars, where any $1 equals any other $1). Proof that you own a specific digital item.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;cursor:default;">
+            <div style="font-size:.85rem;font-weight:800;color:#FFD700;margin-bottom:5px;">🐸 Meme Coin</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,0.55);line-height:1.65;">A cryptocurrency born from a joke or internet meme. Dogecoin was first. Most go to zero. Some briefly hit enormous market caps. Zero underlying utility, pure community hype. Treat as a casino, not an investment.</div>
+          </div>
+      </div>
+    </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="/glossary/" style="display:inline-flex;align-items:center;gap:10px;background:transparent;border:1.5px solid rgba(255,215,0,0.35);color:#FFD700;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;padding:13px 28px;border-radius:12px;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.background='rgba(255,215,0,0.08)'" onmouseout="this.style.background='transparent'">See the full A–Z Glossary &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function jbToggle(key) {
+  var panel = document.getElementById('jb-panel-' + key);
+  var arrow = document.getElementById('jb-arrow-' + key);
+  var open  = panel.style.display === 'flex';
+  panel.style.display = open ? 'none' : 'flex';
+  panel.style.flexDirection = 'column';
+  panel.style.gap = '10px';
+  arrow.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+}
+</script>
+
 <!-- Footer -->
 <footer>
   <div class="footer-bottom" style="text-align:center;padding:0;">
