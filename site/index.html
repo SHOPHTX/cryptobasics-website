@@ -817,6 +817,65 @@ footer{
 .news-intro.not-visible .news-headline-main{animation:none;opacity:0;}
 .news-intro.not-visible .news-sub{animation:none;opacity:0;}
 
+
+/* ── News Red Ticker ── */
+.news-red-ticker{
+  width:100%;
+  background:#ef4444;
+  overflow:hidden;
+  height:32px;
+  display:flex;
+  align-items:center;
+  margin-bottom:32px;
+  border-radius:6px;
+  position:relative;
+}
+.news-red-ticker::before{
+  content:'LIVE';
+  flex-shrink:0;
+  background:#b91c1c;
+  color:#fff;
+  font-size:.6rem;
+  font-weight:900;
+  letter-spacing:.18em;
+  padding:0 14px;
+  height:100%;
+  display:flex;
+  align-items:center;
+  z-index:2;
+  position:relative;
+}
+.red-ticker-track{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:redTickerScroll 18s linear infinite;
+  gap:0;
+}
+.news-red-ticker:hover .red-ticker-track{
+  animation-play-state:paused;
+}
+@keyframes redTickerScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.red-ticker-item{
+  display:inline-flex;
+  align-items:center;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:0 24px;
+}
+.red-ticker-sep{
+  color:rgba(255,255,255,0.5);
+  font-size:.9rem;
+  padding:0 4px;
+}
+
 </style>
 </head>
 <body>
@@ -1187,10 +1246,23 @@ footer{
   <div style="max-width:900px;margin:0 auto;display:block;">
     <div class="news-intro not-visible" id="news-intro">
 
-      <!-- BREAKING badge -->
-      <div class="breaking-badge">
-        <span class="breaking-dot"></span>
-        Breaking
+      <!-- Scrolling red ticker -->
+      <div class="news-red-ticker">
+        <div class="red-ticker-track">
+          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">No Jargon. No Hype.</span><span class="red-ticker-sep">★</span>
+          <!-- duplicate for seamless loop -->
+          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">No Jargon. No Hype.</span><span class="red-ticker-sep">★</span>
+        </div>
       </div>
 
       <!-- Animated scanline -->
