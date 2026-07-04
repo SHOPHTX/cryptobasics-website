@@ -570,9 +570,9 @@ footer{
 
 /* ── Live Price Ticker ── */
 #price-ticker{
-  position:fixed;
-  top:0;left:0;right:0;
-  z-index:9999;
+  position:relative;
+  top:auto;left:auto;right:auto;
+  z-index:1;
   height:34px;
   background:#0a0f18;
   border-bottom:1px solid rgba(255,214,0,0.18);
@@ -626,9 +626,52 @@ footer{
   align-items:center;
 }
 /* ticker handled here */
-body{padding-top:34px;}
 
 
+
+
+/* ── Bottom Price Ticker ── */
+@keyframes tickerScrollReverse{
+  0%{transform:translateX(-50%);}
+  100%{transform:translateX(0);}
+}
+#price-ticker-bottom{
+  height:34px;
+  background:#0a0f18;
+  border-top:1px solid rgba(255,214,0,0.18);
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+}
+#ticker-inner-bottom{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:tickerScrollReverse 40s linear infinite;
+  gap:0;
+}
+#price-ticker-bottom:hover #ticker-inner-bottom{
+  animation-play-state:paused;
+}
+#ticker-label-bottom{
+  flex-shrink:0;
+  padding:0 12px 0 14px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#FFD600;
+  border-right:1px solid rgba(255,214,0,0.25);
+  white-space:nowrap;
+  background:#0a0f18;
+  z-index:1;
+  height:100%;
+  display:flex;
+  align-items:center;
+}
 
 </style>
 </head>
@@ -687,14 +730,21 @@ body{padding-top:34px;}
       .then(function(r){return r.json();})
       .then(function(data){
         var inner = document.getElementById('ticker-inner');
-        if(!inner) return;
-        var items = buildItems(data);
-        // duplicate for seamless loop
-        inner.innerHTML = items + items;
-        // adjust animation speed based on content width
-        var w = inner.scrollWidth / 2;
-        var speed = Math.max(30, w / 12); // ~12px/s
-        inner.style.animationDuration = speed + 's';
+        if(inner){
+          var items = buildItems(data);
+          inner.innerHTML = items + items;
+          var w = inner.scrollWidth / 2;
+          var speed = Math.max(30, w / 12);
+          inner.style.animationDuration = speed + 's';
+        }
+        var innerB = document.getElementById('ticker-inner-bottom');
+        if(innerB){
+          var items = buildItems(data);
+          innerB.innerHTML = items + items;
+          var w = innerB.scrollWidth / 2;
+          var speed = Math.max(30, w / 12);
+          innerB.style.animationDuration = speed + 's';
+        }
       })
       .catch(function(){
         // silently fail — ticker stays hidden or shows stale
@@ -1157,6 +1207,12 @@ function ncToggle(btn) {
 
 
 
+
+
+<div id="price-ticker-bottom">
+  <div id="ticker-label-bottom">⚡ LIVE</div>
+  <div id="ticker-inner-bottom"><!-- populated by JS --></div>
+</div>
 
 <!-- Footer -->
 <footer>
