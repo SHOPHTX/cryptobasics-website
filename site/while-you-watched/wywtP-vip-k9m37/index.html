@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>While You Were Watching the Price — CryptoBasics Vol. 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Poppins',sans-serif;background:#0c1520;overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(16px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll-area::-webkit-scrollbar{width:3px;}
+.scroll-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px;}
+#cover{background:#0c1520;justify-content:center;align-items:center;overflow:hidden;}
+.cover-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cover-art img{width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.55;}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.3) 0%,rgba(12,21,32,0.55) 50%,rgba(12,21,32,0.75) 100%);pointer-events:none;}
+.cover-content{position:relative;z-index:2;padding:0 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;}
+.cover-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:6px 16px;margin-bottom:18px;}
+.cover-dot{width:7px;height:7px;border-radius:50%;background:#FFD700;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-dot-text{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#FFD700;}
+.cover-h1{font-size:clamp(2.4rem,9vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:#fff;margin-bottom:14px;font-style:italic;}
+.cover-h1 em{font-style:italic;color:#FFD700;}
+.cover-byline{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.65;max-width:340px;margin:0 auto 28px;}
+.cover-byline strong{color:#FFD700;font-weight:700;}
+.cover-cta{display:block;width:100%;max-width:340px;margin:0 auto 12px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;border:none;border-radius:14px;padding:17px;cursor:pointer;box-shadow:0 8px 32px rgba(255,215,0,.3);transition:transform .2s ease,box-shadow .2s ease;}
+.cover-cta:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(255,215,0,.45);}
+.cover-meta{font-size:.72rem;color:rgba(255,255,255,.25);letter-spacing:.06em;}
+#chaptermap{background:#0c1520;}
+.map-top{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:1rem;transition:all .15s ease;}
+.icon-btn:hover{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700;}
+.map-title{font-size:1.4rem;font-weight:900;color:#fff;}
+.map-sub{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:1px;}
+.xp-strip{margin:16px 20px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.xp-label{font-size:.72rem;color:rgba(255,255,255,.35);}
+.xp-val{font-size:1.1rem;font-weight:900;color:#FFD700;}
+.ch-list{padding:12px 20px 48px;display:flex;flex-direction:column;gap:10px;}
+.ch-item{border-radius:18px;padding:16px 18px;cursor:pointer;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);display:flex;gap:14px;align-items:center;transition:all .22s ease;font-family:'Poppins',sans-serif;width:100%;text-align:left;}
+.ch-item:hover{transform:translateX(4px);}
+.ch-num-badge{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;}
+.ch-text{flex:1;min-width:0;}
+.ch-item-tag{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.ch-item-name{font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;}
+.ch-item-blurb{font-size:.72rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.4;}
+.ch-arrow{color:rgba(255,255,255,.2);font-size:1rem;flex-shrink:0;}
+#buckintro{background:#0c1520;align-items:center;padding:20px 24px 32px;height:100%;overflow-y:auto;}
+.bi-wrap{max-width:400px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;margin:auto;}
+.bi-tag{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-radius:9999px;padding:5px 16px;margin-bottom:20px;display:inline-block;}
+.bi-img{width:min(200px,55vw);height:min(200px,55vw);object-fit:cover;border-radius:50%;margin-bottom:14px;border:3px solid;animation:buckFloat 3s ease-in-out infinite;}
+@keyframes buckFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bi-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.bi-question{font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;line-height:1.4;color:#fff;margin-bottom:20px;text-wrap:pretty;}
+.bi-cta{width:100%;max-width:340px;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;transition:all .22s ease;}
+.bi-cta:hover{transform:scale(1.03);}
+.ch-topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;}
+.ch-topbar-info{flex:1;min-width:0;}
+.ch-topbar-label{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1px;}
+.ch-topbar-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-xp-pill{border-radius:9999px;padding:5px 14px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ch-xp-pill span{font-size:.75rem;font-weight:800;}
+.read-bar{height:4px;flex-shrink:0;}
+.read-bar-fill{height:100%;transition:width .4s ease;width:0%;}
+.ch-scroll-inner{max-width:600px;margin:0 auto;padding:0 0 80px;}
+.ch-hero{width:100%;position:relative;overflow:hidden;}
+.ch-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;display:block;}
+.ch-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 14px;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%);}
+.ch-hero-tag{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.ch-hero-h1{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.02em;}
+.ch-content{padding:12px 20px 0;}
+.cold-open{font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:800;line-height:1.45;margin-bottom:20px;text-wrap:pretty;}
+.body-p{font-size:1rem;line-height:1.85;margin-bottom:16px;text-wrap:pretty;font-weight:400;}
+.mid-image{margin:24px 0;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.mid-image img{width:100%;aspect-ratio:16/9;max-height:340px;min-height:200px;object-fit:cover;object-position:center;display:block;}
+.mid-caption{font-size:.78rem;font-style:italic;text-align:center;padding:8px 12px 4px;opacity:.55;}
+.buck-closes{border-radius:18px;padding:18px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.buck-close-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid;}
+.buck-close-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.buck-close-text{font-size:.9rem;line-height:1.65;}
+.analogy-card{border-radius:16px;padding:18px;margin:20px 0;display:flex;gap:14px;align-items:flex-start;}
+.analogy-icon{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.analogy-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.analogy-text{font-size:.88rem;line-height:1.65;}
+.fact-reveal-wrap{margin:22px 0;}
+.fact-teaser{border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;gap:14px;align-items:center;border:2px solid;transition:all .2s ease;width:100%;font-family:'Poppins',sans-serif;text-align:left;}
+.fact-teaser:hover{transform:scale(1.01);}
+.fact-teaser-left{flex:1;}
+.fact-teaser-myth{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.fact-teaser-q{font-size:.92rem;font-weight:700;line-height:1.4;}
+.fact-teaser-btn{border-radius:9999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;color:#fff;}
+.fact-revealed{border-radius:16px;padding:20px 18px;margin-top:8px;display:none;animation:slideDown .4s ease forwards;}
+.fact-revealed.show{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fact-revealed-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.fact-revealed-text{font-size:.9rem;line-height:1.7;}
+.def-card{border-radius:14px;padding:18px;margin:20px 0;border-left:4px solid;}
+.def-term{font-size:1rem;font-weight:800;margin-bottom:5px;}
+.def-body{font-size:.86rem;line-height:1.7;opacity:.75;}
+.callout{border-radius:14px;padding:16px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.callout-body{font-size:.86rem;line-height:1.65;}
+.section-rule{display:flex;align-items:center;gap:12px;margin:32px 0 20px;}
+.section-rule-line{flex:1;height:1px;}
+.section-rule-text{font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.35;}
+.quiz-section{margin:8px 0 20px;}
+.quiz-card{border-radius:18px;padding:22px 20px;}
+.quiz-eyebrow{display:inline-block;border-radius:9999px;padding:4px 14px;margin-bottom:12px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.quiz-q{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.quiz-options{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{display:flex;align-items:center;gap:12px;border-radius:11px;padding:12px 14px;cursor:pointer;transition:all .18s ease;font-family:'Poppins',sans-serif;text-align:left;width:100%;border:1.5px solid;}
+.quiz-opt.correct{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.6)!important;}
+.quiz-opt.wrong{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.5)!important;}
+.quiz-opt.dim{opacity:.3;}
+.opt-badge{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:rgba(255,255,255,0.1);}
+.opt-text{flex:1;font-size:.86rem;line-height:1.4;}
+.opt-icon{font-size:.95rem;flex-shrink:0;}
+.quiz-fb{margin-top:12px;border-radius:11px;padding:11px 14px;font-size:.86rem;font-weight:600;line-height:1.5;display:none;}
+.quiz-fb.good{display:block;background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25);}
+.quiz-fb.bad{display:block;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.25);}
+.quiz-xp-row{margin-top:6px;font-size:.78rem;font-weight:800;display:none;}
+.quiz-xp-row.show{display:block;}
+.nav-row{padding:16px 20px 12px;display:flex;gap:10px;flex-shrink:0;}
+.btn-next{flex:1;border-radius:13px;padding:15px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;}
+.btn-next:hover{transform:scale(1.02);}
+.btn-prev{border-radius:13px;padding:15px 18px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;background:transparent;cursor:pointer;transition:all .15s ease;border:2px solid;}
+#glossary{background:#0c1520;}
+.gloss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gloss-bg img{width:100%;height:100%;object-fit:cover;opacity:.45;}
+.gloss-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,21,32,0.35) 0%,rgba(12,21,32,0.6) 35%,rgba(12,21,32,0.93) 75%);}
+.glossary-hdr{padding:24px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.glossary-overline{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;margin-bottom:4px;}
+.glossary-h2{font-size:1.6rem;font-weight:900;color:#fff;}
+.glossary-sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.glossary-items{padding:8px 22px 60px;}
+.glossary-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.g-term{font-size:.95rem;font-weight:800;margin-bottom:3px;}
+.g-def{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;}
+#certificate{background:#0c1520;justify-content:center;align-items:center;padding:24px;overflow-y:auto;}
+.cert-wrap{max-width:440px;width:100%;text-align:center;}
+.cert-card{border:2px solid rgba(255,215,0,.4);border-radius:24px;padding:36px 28px;margin-bottom:14px;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,transparent 60%);}
+.cert-mascot{width:90px;height:90px;object-fit:cover;border-radius:50%;margin:0 auto 16px;display:block;filter:drop-shadow(0 8px 24px rgba(255,215,0,.3));}
+.cert-eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.7);margin-bottom:10px;}
+.cert-h1{font-size:clamp(1.5rem,5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-bottom:12px;}
+.cert-h1 em{font-style:normal;color:#FFD700;}
+.cert-body{font-size:.86rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:20px;}
+.cert-score-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:9999px;padding:8px 22px;margin-bottom:6px;}
+.cert-score-num{font-size:1.4rem;font-weight:900;color:#FFD700;}
+.cert-score-lbl{font-size:.72rem;color:rgba(255,255,255,.4);}
+.cert-actions{display:flex;flex-direction:column;gap:10px;}
+.cert-btn-primary{background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:15px;cursor:pointer;transition:all .2s ease;}
+.cert-btn-ghost{background:transparent;color:rgba(255,255,255,.45);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:600;border:1.5px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;cursor:pointer;}
+#whatsnext{background:#0c1520;justify-content:center;align-items:center;padding:28px 24px;overflow-y:auto;}
+.wn-wrap{max-width:420px;width:100%;}
+.wn-mascot{width:80px;height:80px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 16px;}
+.wn-overline{font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FFD700;text-align:center;margin-bottom:8px;}
+.wn-h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:900;color:#fff;line-height:1.2;text-align:center;margin-bottom:10px;}
+.wn-h2 em{font-style:normal;color:#FFD700;}
+.wn-buck-quote{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin:16px 0 22px;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.65;font-style:italic;}
+.wn-buck-quote strong{color:#fff;font-style:normal;}
+.wn-actions{display:flex;flex-direction:column;gap:10px;}
+.wn-btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFD700;color:#0c1520;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:13px;padding:16px;cursor:pointer;text-decoration:none;}
+.wn-btn-secondary{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;border:1.5px solid rgba(255,255,255,.15);border-radius:13px;padding:14px;cursor:pointer;text-decoration:none;}
+.wn-btn-ghost{background:transparent;color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;border:none;border-radius:13px;padding:12px;cursor:pointer;}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:2px;animation:cFall 1.4s ease-out forwards;}
+@keyframes cFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<div id="cover" class="screen active">
+  <div class="cover-art">
+    <img src="../../images/c9-ch1hero.jpg" alt="cover"/>
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-eyebrow"><span class="cover-dot"></span><span class="cover-dot-text">Whales · Rails · Stablecoins · On-Chain Data</span></div>
+    <h1 class="cover-h1">While You Were<br><em>Watching the Price</em></h1>
+    <p class="cover-byline">Follow <strong>Buck</strong> behind the charts — into whale wallets, payment rails, and the infrastructure being quietly built while retail argues about price targets.</p>
+    <button class="cover-cta" id="cover-cta-btn">Go Behind the Charts &#8594; Get Started</button>
+    <p class="cover-meta">6 chapters &middot; 18 quiz questions &middot; glossary &middot; certificate</p>
+    <p style="margin-top:18px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,215,0,.5);">Vol. 9</p>
+  </div>
+</div>
+
+<div id="chaptermap" class="screen">
+  <div class="map-top">
+    <button class="icon-btn" id="map-back-btn">&#8592;</button>
+    <div><div class="map-title">Pick a Chapter</div><div class="map-sub">Six things happening while you watched the price.</div></div>
+  </div>
+  <div class="scroll-area">
+    <div class="xp-strip"><span class="xp-label">Total XP earned</span><span class="xp-val" id="map-xp">0 XP</span></div>
+    <div class="ch-list" id="ch-list"></div>
+  </div>
+</div>
+
+<div id="buckintro" class="screen">
+  <div class="bi-wrap">
+    <span class="bi-tag" id="bi-tag">Chapter 1</span>
+    <img class="bi-img" id="bi-img" src="../../images/c9-ch1hero.jpg" alt="Buck"/>
+    <div class="bi-label" id="bi-label">Buck asks...</div>
+    <div class="bi-question" id="bi-question">Loading...</div>
+    <button class="bi-cta" id="bi-cta">Let's find out</button>
+  </div>
+</div>
+
+<div id="chapterview" class="screen">
+  <div class="ch-topbar" id="ch-topbar">
+    <button class="icon-btn" id="topbar-back-btn">&#8592;</button>
+    <div class="ch-topbar-info">
+      <div class="ch-topbar-label" id="topbar-label">Chapter 1</div>
+      <div class="ch-topbar-title" id="topbar-title">Loading...</div>
+    </div>
+    <div class="ch-xp-pill" id="topbar-xp-pill"><span id="topbar-xp-val">0 XP</span></div>
+  </div>
+  <div class="read-bar"><div class="read-bar-fill" id="read-fill"></div></div>
+  <div class="scroll-area" id="ch-scroll"><div class="ch-scroll-inner" id="ch-inner"></div></div>
+  <div class="nav-row" id="nav-row"></div>
+</div>
+
+<div id="glossary" class="screen">
+  <div class="gloss-bg"><img src="../../images/c9-ch3hero.jpg" alt=""/><div class="gloss-overlay"></div></div>
+  <button class="icon-btn" id="glossary-back-btn" style="position:absolute;top:16px;left:16px;z-index:3;">&#8592;</button>
+  <div class="glossary-hdr" style="position:relative;z-index:2;padding-top:68px;">
+    <div class="glossary-overline">Jargon Buster</div>
+    <h2 class="glossary-h2">Plain English, Please.</h2>
+    <p class="glossary-sub">Every term from behind the price chart.</p>
+  </div>
+  <div class="scroll-area" style="position:relative;z-index:2;"><div class="glossary-items" id="glossary-items"></div></div>
+</div>
+
+<div id="certificate" class="screen">
+  <button class="icon-btn" id="cert-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="cert-wrap">
+    <div class="cert-card">
+      <img class="cert-mascot" src="../../images/c9-ch1mid.jpg" alt="Buck" style="object-position:center top;"/>
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <h1 class="cert-h1">You now see what's<br><em>behind the price.</em></h1>
+      <p class="cert-body">Six chapters. Eighteen questions. Whale wallets, payment rails, stablecoins as dollar infrastructure, the bank charter revolution, on-chain data, and what comes next. You understand the layer most people never see.</p>
+      <div class="cert-score-pill"><span class="cert-score-num" id="cert-xp">0</span><span class="cert-score-lbl">XP earned</span></div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-btn-primary" id="cert-next-btn">See What's Next</button>
+      <button class="cert-btn-ghost" id="cert-glossary-btn">Open Jargon Buster</button>
+    </div>
+  </div>
+</div>
+
+<div id="whatsnext" class="screen">
+  <button class="icon-btn" id="wn-back-btn" style="position:absolute;top:16px;left:16px;z-index:1;">&#8592;</button>
+  <div class="wn-wrap">
+    <img class="wn-mascot" src="../../images/c9-ch1mid.jpg" alt="Buck" style="object-position:center top;"/>
+    <div class="wn-overline">You've graduated Volume 9</div>
+    <h2 class="wn-h2">You see what others<br><em>don't even know to look for.</em></h2>
+    <div class="wn-buck-quote">"Most people watch the price and think that's the whole story. You now know it's the headline on page 10. The real story is in the wallets, the rails, the stablecoins, and the data. <strong>You're not a spectator anymore. You're reading the field.</strong>" — Buck</div>
+    <div class="wn-actions">
+      <a class="wn-btn-primary" href="https://www.cryptobasics.co" target="_blank">Visit CryptoBasics.co</a>
+      <a class="wn-btn-secondary" href="https://www.instagram.com/cryptobasics.co" target="_blank">Follow @cryptobasics.co</a>
+      <button class="wn-btn-ghost" id="wn-restart-btn">Start Over</button>
+    </div>
+    <p style="margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.08em;text-transform:uppercase;">A Fuel My Curiosity Production</p>
+  </div>
+</div>
+
+<script>
+
+var THEME = {
+  teal:{bg:'#051412',topbarBg:'rgba(5,20,18,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#2DD4BF',accentBg:'rgba(45,212,191,0.12)',border:'rgba(45,212,191,0.28)',readFill:'linear-gradient(90deg,#0D9488,#2DD4BF)',cardBg:'rgba(45,212,191,0.07)',cardBorder:'rgba(45,212,191,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(45,212,191,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(45,212,191,0.08)',buckBorder:'rgba(45,212,191,0.25)',factBg:'rgba(45,212,191,0.08)',factBorder:'rgba(45,212,191,0.3)',factRevBg:'rgba(45,212,191,0.06)',analogyBg:'rgba(45,212,191,0.07)',navBg:'#051412',navBorder:'rgba(45,212,191,0.2)',prevBorder:'rgba(255,255,255,0.15)'},
+  indigo:{bg:'#08071f',topbarBg:'rgba(8,7,31,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#818CF8',accentBg:'rgba(129,140,248,0.12)',border:'rgba(129,140,248,0.28)',readFill:'linear-gradient(90deg,#4F46E5,#818CF8)',cardBg:'rgba(129,140,248,0.07)',cardBorder:'rgba(129,140,248,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(129,140,248,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(129,140,248,0.08)',buckBorder:'rgba(129,140,248,0.25)',factBg:'rgba(129,140,248,0.08)',factBorder:'rgba(129,140,248,0.3)',factRevBg:'rgba(129,140,248,0.06)',analogyBg:'rgba(129,140,248,0.07)',navBg:'#08071f',navBorder:'rgba(129,140,248,0.2)',prevBorder:'rgba(255,255,255,0.15)'},
+  green:{bg:'#021308',topbarBg:'rgba(2,19,8,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#4ADE80',accentBg:'rgba(74,222,128,0.12)',border:'rgba(74,222,128,0.28)',readFill:'linear-gradient(90deg,#16A34A,#4ADE80)',cardBg:'rgba(74,222,128,0.07)',cardBorder:'rgba(74,222,128,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(74,222,128,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(74,222,128,0.08)',buckBorder:'rgba(74,222,128,0.25)',factBg:'rgba(74,222,128,0.08)',factBorder:'rgba(74,222,128,0.3)',factRevBg:'rgba(74,222,128,0.06)',analogyBg:'rgba(74,222,128,0.07)',navBg:'#021308',navBorder:'rgba(74,222,128,0.2)',prevBorder:'rgba(255,255,255,0.15)'},
+  amber:{bg:'#120a00',topbarBg:'rgba(18,10,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FBB040',accentBg:'rgba(251,176,64,0.12)',border:'rgba(251,176,64,0.28)',readFill:'linear-gradient(90deg,#D97706,#FBB040)',cardBg:'rgba(251,176,64,0.07)',cardBorder:'rgba(251,176,64,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(251,176,64,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(251,176,64,0.08)',buckBorder:'rgba(251,176,64,0.25)',factBg:'rgba(251,176,64,0.08)',factBorder:'rgba(251,176,64,0.3)',factRevBg:'rgba(251,176,64,0.06)',analogyBg:'rgba(251,176,64,0.07)',navBg:'#120a00',navBorder:'rgba(251,176,64,0.2)',prevBorder:'rgba(255,255,255,0.15)'},
+  rose:{bg:'#150008',topbarBg:'rgba(21,0,8,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FB7185',accentBg:'rgba(251,113,133,0.12)',border:'rgba(251,113,133,0.28)',readFill:'linear-gradient(90deg,#E11D48,#FB7185)',cardBg:'rgba(251,113,133,0.07)',cardBorder:'rgba(251,113,133,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(251,113,133,0.18)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(251,113,133,0.08)',buckBorder:'rgba(251,113,133,0.25)',factBg:'rgba(251,113,133,0.08)',factBorder:'rgba(251,113,133,0.3)',factRevBg:'rgba(251,113,133,0.06)',analogyBg:'rgba(251,113,133,0.07)',navBg:'#150008',navBorder:'rgba(251,113,133,0.2)',prevBorder:'rgba(255,255,255,0.15)'},
+  gold:{bg:'#0f1200',topbarBg:'rgba(15,18,0,0.97)',textPrimary:'#fff',textSecondary:'rgba(255,255,255,0.72)',accent:'#FFD700',accentBg:'rgba(255,215,0,0.12)',border:'rgba(255,215,0,0.25)',readFill:'linear-gradient(90deg,#D4A017,#FFD700)',cardBg:'rgba(255,215,0,0.07)',cardBorder:'rgba(255,215,0,0.2)',quizBg:'rgba(0,0,0,0.35)',quizBorder:'rgba(255,215,0,0.15)',optBg:'rgba(255,255,255,0.06)',optBorder:'rgba(255,255,255,0.1)',optText:'rgba(255,255,255,0.82)',buckBg:'rgba(255,215,0,0.08)',buckBorder:'rgba(255,215,0,0.25)',factBg:'rgba(255,215,0,0.08)',factBorder:'rgba(255,215,0,0.3)',factRevBg:'rgba(255,215,0,0.06)',analogyBg:'rgba(255,215,0,0.06)',navBg:'#0f1200',navBorder:'rgba(255,215,0,0.2)',prevBorder:'rgba(255,255,255,0.15)'}
+};
+
+var R={ch1h:'../../images/c9-ch1hero.jpg',ch1m:'../../images/c9-ch1mid.jpg',ch2h:'../../images/c9-ch2hero.jpg',ch2m:'../../images/c9-ch2mid.jpg',ch3h:'../../images/c9-ch3hero.jpg',ch3m:'../../images/c9-ch3mid.jpg',ch4h:'../../images/c9-ch4hero.jpg',ch4m:'../../images/c9-ch4mid.jpg',ch5h:'../../images/c9-ch5hero.jpg',ch5m:'../../images/c9-ch5mid.jpg',ch6h:'../../images/c9-ch6hero.jpg',ch6m:'../../images/c9-ch6mid.jpg'};
+
+var CHAPTERS=[
+{id:1,themeKey:'teal',tag:'Chapter 1 — The Distraction',title:'The Price Is a Distraction',blurb:'Why retail obsesses over charts while smart money watches something else entirely.',heroImg:R.ch1h,midImg:R.ch1m,midCaption:'Whale wallets accumulate for months while price stays flat — then move. By the time retail notices, the setup is already complete.',buckOpens:{q:'Everyone I know talks about the price of Bitcoin. Is it up, is it down, when is it going back up? But I have a feeling the people making real money aren’t watching the same thing everyone else is. What are they actually watching?'},buckCloses:{text:'The price is a lagging indicator — it reflects decisions that were already made. The people who move markets don’t watch charts; they make the charts. <strong>Whale wallets, exchange flows, stablecoin supply, open interest — these numbers move first. The price follows. By the time it shows up on your phone’s widget, someone already positioned for it weeks ago.</strong>'},facts:[{myth:"Most people think: 'If the price is flat, nothing is happening.'",q:'What actually happens in a crypto market during a flat, boring price period?',revealed:'Flat price periods — called consolidation — are often when the most significant positioning happens. On-chain data regularly shows exchange outflows increasing during flat markets, while stablecoin supply grows. Whale wallets accumulate during these quiet periods, absorbing coins from retail sellers who get bored. The price stays flat because large buyers are absorbing sell pressure as fast as it appears. Then, when sell pressure exhausts, price moves sharply. The boring period was the setup. The price move is the outcome being announced.'},{myth:"Most people think: 'Watching the price tells you what the market is doing.'",q:'What does the price actually tell you — and what does it miss?',revealed:'Price tells you the last agreed trade between a buyer and seller at a specific moment. That’s it. It doesn’t tell you who those buyers and sellers are, how much they have left, whether they’re accumulating or distributing, or what the underlying demand structure looks like. Two different markets can have identical prices with completely different underlying dynamics. The price chart looks the same. The on-chain data looks completely different. Price is a summary. On-chain data is the story.'}],blocks:[{t:'cold',text:'Here’s something almost nobody talks about.<br><br>The price of Bitcoin is the least interesting thing about Bitcoin.<br><br><em>It’s the number everyone watches. It’s the number that means the least to the people actually moving it.</em>'},{t:'body',text:'When a large institution decides to buy $50 million in Bitcoin, it doesn’t just market-buy all at once. That would move the price against itself. Instead, it buys slowly, in small pieces, over days or weeks, using algorithms designed to minimize price impact. The price barely moves. The accumulation happens invisibly — until it doesn’t.'},{t:'def',term:'Accumulation',def:'The process of quietly building a large position in an asset over time, in small enough pieces that the price isn’t significantly affected. Whales and institutions accumulate during flat or declining markets when retail is bored or fearful. The goal is to build the position before price moves — because once price moves, accumulation becomes expensive.'},{t:'body',text:'There are things that move before price does. Exchange outflows — coins moving off trading platforms into private wallets — tend to signal that holders are moving to long-term storage. Stablecoin supply on exchanges signals incoming purchase power. Open interest in futures markets signals how leveraged the market is and in which direction.'},{t:'def',term:'Exchange Outflow',def:'When crypto moves off a trading exchange into private wallets. Generally bullish — it means holders are removing coins from the available-to-sell pile into long-term storage. When exchange balances drop significantly over time, it reduces available supply that can be sold, which tends to support price.'},{t:'analogy',icon:'🎲',title:'The poker table analogy',text:'Watching the price is like watching the chips on the table. The experienced player watches the players — their posture, their betting patterns, how they react. The chips are the result of decisions already made. The tells come before the bet. On-chain data is the tell. Price is the bet you already missed.'},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:"What does 'accumulation' mean in the context of crypto markets?",opts:[{id:'a',text:'Rapidly buying a large amount of crypto all at once to push the price up'},{id:'b',text:'Quietly building a large position over time in small pieces to minimize price impact'},{id:'c',text:'Storing crypto in a cold wallet for tax purposes'},{id:'d',text:'The process exchanges use to collect trading fees'}],correct:'b',good:'Accumulation is stealth — done slowly and quietly precisely to avoid moving the price. By the time retail notices the price move, the accumulation phase is already over.',bad:'Answer B — accumulation means building a large position gradually to avoid moving the price against yourself. The goal is to finish buying before the price reacts.'},{q:'What does an exchange outflow generally signal?',opts:[{id:'a',text:'Holders are moving coins to exchanges in preparation to sell'},{id:'b',text:'The exchange is experiencing technical problems'},{id:'c',text:'Holders are removing coins from exchanges into private storage — generally a bullish signal'},{id:'d',text:'Regulators are forcing exchanges to return coins to customers'}],correct:'c',good:'Coins leaving exchanges go into cold storage. It reduces the supply available to sell. When exchange balances shrink over time, it typically signals reduced sell pressure ahead.',bad:'Answer C — exchange outflows mean coins moving off exchanges into private wallets. Reduces available sell supply. The opposite — inflows — can signal upcoming selling.'},{q:'Why does the price of crypto tend to be a lagging indicator?',opts:[{id:'a',text:'Because crypto markets are slower than stock markets'},{id:'b',text:'Because price reflects decisions that were already made — the positioning happened before the price moved'},{id:'c',text:'Because exchanges delay reporting prices by several hours'},{id:'d',text:'Because Bitcoin only updates its price once per day'}],correct:'b',good:'Price is an announcement of something that already happened. The accumulation, the stablecoin build-up, the exchange outflows — those came first. Price just makes it visible to everyone.',bad:'Answer B — price is a lagging indicator because it reflects decisions already made. By the time the chart shows the move, sophisticated participants have already finished positioning.'}]},
+{id:2,themeKey:'indigo',tag:'Chapter 2 — The Infrastructure',title:'The Payment Rails Being Quietly Built',blurb:"While you watched Bitcoin's price, the world's largest banks built new plumbing. Here's what it does.",heroImg:R.ch2h,midImg:R.ch2m,midCaption:'SWIFT moves $5 trillion per day across 200 countries but takes 1-5 days. Blockchain rails settle in seconds, 24/7.',buckOpens:{q:"I keep hearing about 'payment rails' and blockchain being used for payments. But we already have credit cards and bank transfers. What's actually wrong with the current system, and what are they building to replace it?"},buckCloses:{text:'The current system moves money the way we move mail — through a series of middlemen, each taking time and a cut. <strong>What’s being built is a system where value moves the way email moves information — directly, instantly, at almost zero cost, across any border, at any hour. That’s not a small upgrade. That’s a different model of money movement entirely.</strong>'},facts:[{myth:"Most people think: 'International bank transfers are slow because the internet is slow.'",q:'Why does an international wire transfer actually take 3-5 days?',revealed:'International wire transfers are slow because of the correspondent banking system, not technology. When you wire money from a US bank to a bank in Vietnam, your bank likely doesn’t have a direct relationship with that Vietnamese bank. The money goes through a chain: your US bank → a large US correspondent bank → possibly a regional correspondent bank → the Vietnamese bank. Each intermediary needs to verify the transaction, update their books, and pass it on. None of this is technically slow. It’s procedurally slow — each party operates on their own schedule with their own batch processing windows.'},{myth:"Most people think: 'Stablecoins on blockchain are just a crypto version of PayPal.'",q:'What makes blockchain-based payment rails structurally different from existing digital payment systems?',revealed:'PayPal and Venmo are fast interfaces built on slow banking infrastructure. When you send money on Venmo, the dollars don’t actually move instantly — Venmo updates a database and settles with banks in batches through ACH, which takes 1-3 days. Blockchain payment rails are different at the settlement layer. When USDC moves on Ethereum, the settlement IS the movement — there’s no settling later. The ledger update is the final transfer. This is why Visa, Mastercard, and JPMorgan are building on these rails — they’re replacing their own slow settlement infrastructure.'}],blocks:[{t:'cold',text:'Here’s the cost of the current system.<br><br>SWIFT — the network that moves money between banks across 200 countries — processes about $5 trillion per day.<br>It takes 1 to 5 business days.<br>It costs $15 to $50 per transaction.<br>It doesn’t work on weekends.<br><br><em>And this is considered the modern global financial system.</em>'},{t:'body',text:'The correspondent banking system was designed in the 1970s. It works like a relay race: your bank passes the money to a larger bank, which passes it to a regional bank in the destination country, which passes it to the recipient’s bank. Each hand-off takes time. Each hand-off has a fee. The more exotic the currency or destination, the longer the chain.'},{t:'def',term:'Correspondent Banking',def:'The system by which banks route international transfers through chains of intermediary banks. Because no single bank has relationships with every bank in every country, transfers often pass through 2-4 intermediary banks, each adding time and cost. For small or developing-country transfers, correspondent relationships can be especially thin, making transfers expensive or unavailable.'},{t:'body',text:'What’s being built: Visa announced it would use Solana blockchain to settle transactions between banks in real time — replacing its existing 24-48 hour settlement windows. Mastercard partnered with Circle (USDC issuer) to enable real-time cross-border settlement using stablecoins. JPMorgan’s Kinexys platform processes $2 billion per day in tokenized transactions with settlement in minutes instead of days.'},{t:'def',term:'Settlement',def:'The final, irreversible transfer of value that completes a transaction. Traditional finance settles T+2 — two business days after the trade. Blockchain settlement is atomic — the agreement and transfer happen simultaneously. No gap between trade agreed and trade settled. This eliminates counterparty risk and the need for large collateral reserves.'},{t:'callout',icon:'🌐',text:"<strong>The Ripple/XRP thesis:</strong> Ripple was purpose-built as a payment rail for banks — a way to move value across borders in seconds using XRP as a bridge currency. In 2026, Ripple received an OCC bank charter, received SEC clarity that XRP is not a security, and announced partnerships with central banks for cross-border settlement. The payment rail use case is real — Ripple processes billions in cross-border value today."},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:'Why do international bank transfers take 1-5 days when the internet can transmit data in milliseconds?',opts:[{id:'a',text:"Banks use old computer systems that can't process transactions quickly"},{id:'b',text:'Regulators require waiting periods for anti-money laundering checks'},{id:'c',text:'Money travels through a chain of correspondent banks, each adding their own processing time and fees'},{id:'d',text:'International transfers require currency conversion which takes time to execute'}],correct:'c',good:'The internet is fast. The correspondent banking system is slow. Your money takes multiple handoffs through intermediary banks before reaching its destination — each adds time, cost, and a potential failure point.',bad:'Answer C — correspondent banking routes transfers through chains of intermediary banks. Each handoff adds delay. It’s not a technology problem; it’s a structural one built in the 1970s.'},{q:'What makes blockchain settlement structurally different from existing digital payments like Venmo?',opts:[{id:'a',text:'Blockchain is faster at the interface level only'},{id:'b',text:"Blockchain settles at the ledger level instantly — there's no separate 'actual movement' through ACH"},{id:'c',text:'Blockchain payments require no internet connectivity'},{id:'d',text:'Blockchain eliminates all transaction fees'}],correct:'b',good:'Venmo is a fast interface on slow infrastructure — your funds still move through ACH in 1-3 days. Blockchain settlement IS the movement. The ledger update is the final, irreversible transfer.',bad:"Answer B — existing digital payments are fast interfaces on slow settlement infrastructure. Blockchain settlement is instant at the ledger level — the update is the transfer, not a promise to transfer later."},{q:"What was significant about Visa's announcement regarding Solana?",opts:[{id:'a',text:'Visa launched a consumer crypto debit card'},{id:'b',text:'Visa announced it would use Solana to settle transactions between banks in real time'},{id:'c',text:'Visa purchased $1 billion in SOL tokens'},{id:'d',text:'Visa and Solana jointly launched a new cryptocurrency'}],correct:'b',good:'Visa chose Solana as a settlement layer between banks — replacing its own 24-48 hour bank-to-bank settlement windows. Traditional finance adopting crypto infrastructure.',bad:'Answer B — Visa announced real-time bank-to-bank settlement using Solana, replacing traditional 24-48 hour settlement windows.'}]},
+{id:3,themeKey:'green',tag:'Chapter 3 — The Dollar Weapon',title:"Stablecoins: The Dollar's Secret Global Expansion",blurb:'The US dollar is quietly going global in a way no diplomat planned. Stablecoins are doing it.',heroImg:R.ch3h,midImg:R.ch3m,midCaption:'Over $230 billion in stablecoins circulate globally — 99% pegged to the US dollar. They reach places traditional banking cannot.',buckOpens:{q:"Everyone talks about stablecoins as just a safe place to park money in crypto. But I've heard something bigger is happening. Like, stablecoins might actually be doing something for the dollar globally. Can you explain what that actually means?"},buckCloses:{text:'The dollar has been the world’s reserve currency for 80 years because it was the most trusted, most liquid, most widely accepted currency on Earth. Stablecoins are that, plus: borderless, 24/7, accessible to anyone with a smartphone, no bank account required. <strong>In every country where local currency is inflating away, people are finding ways to hold USDC and USDT — digital dollars that don’t require a US bank account. The dollar just got a 5 billion-person new market it never had before.</strong>'},facts:[{myth:"Most people think: 'Stablecoins are mainly used by crypto traders to avoid volatility.'",q:'What are stablecoins actually used for at the global scale?',revealed:'Crypto traders are a tiny fraction of stablecoin usage. The bigger use cases: (1) Remittances — migrant workers sending money home using USDC on Stellar pay near-zero fees vs. 5-8% at Western Union; (2) Inflation hedging — citizens in Argentina, Turkey, Nigeria, and Venezuela use USDT to hold dollar value when local currency devalues rapidly; (3) B2B payments — small businesses in developing markets use stablecoins for international trade invoices to avoid correspondent banking fees; (4) DeFi collateral. The crypto trader use case is real but represents a small slice of total stablecoin activity.'},{myth:"Most people think: 'The US government is worried about stablecoins because they might replace the dollar.'",q:"What is the US government's actual strategic view of dollar-pegged stablecoins?",revealed:"The US government's working view — expressed through Treasury reports and Congressional testimony — is that dollar-pegged stablecoins are a net positive for dollar dominance, not a threat. When someone in Brazil holds USDC instead of reais, they're holding dollars. When a business in Southeast Asia invoices in USDT, they're pricing in dollars. Every stablecoin transaction denominated in USD reinforces the dollar as the global unit of account. The GENIUS Act of 2025 explicitly cited dollar dominance preservation as a goal. The US isn't trying to stop stablecoins — it's trying to make sure the dominant ones are dollar-pegged and US-regulated."}],blocks:[{t:'cold',text:'There are now over $230 billion in stablecoins in circulation globally.<br><br>99% of them are pegged to the US dollar.<br><br><em>The dollar just got a global distribution network that no government planned, no central bank authorized, and no diplomat negotiated.</em>'},{t:'body',text:'In countries with unstable currencies — Argentina, Turkey, Nigeria, Venezuela — people are using USDC and USDT not as a crypto investment, but as a savings account. They hold digital dollars to protect against local currency inflation. A Venezuelan who earned in bol\xedvars and converted to USDT in 2018 preserved their savings. A Venezuelan who held bol\xedvars lost over 99% of their purchasing power.'},{t:'def',term:'Stablecoin',def:'A cryptocurrency designed to maintain a stable value, typically pegged 1:1 to the US dollar. USDC (issued by Circle) and USDT (issued by Tether) are the two largest, together holding over $200 billion. Stablecoins allow value to move on blockchain rails — instantly, 24/7, globally — without crypto price volatility. Regulated stablecoins hold cash and Treasury bills as reserves.'},{t:'body',text:'The GENIUS Act, signed into law in 2025, created the first federal regulatory framework for stablecoin issuers. Key provisions: 1:1 reserves in cash or Treasury bills, regular audits, and OCC or state banking licenses required. Circle and Paxos received OCC bank charters in 2026 under this framework — making them regulated banks, not just crypto companies.'},{t:'def',term:'GENIUS Act',def:"The Guiding and Establishing National Innovation for US Stablecoins Act, signed in 2025 — the first comprehensive US federal law governing stablecoin issuers. Requires 1:1 reserves in cash or short-term Treasuries, federal audits, and OCC or state banking licenses. Explicitly cited preserving US dollar dominance as a policy goal."},{t:'callout',icon:'💵',text:'<strong>The remittance disruption:</strong> The global remittance market moves approximately $800 billion per year. Traditional services like Western Union charge 5-8% per transfer. Sending $200 home costs $10-16 and takes 1-3 days. Sending $200 in USDC on Stellar costs under $0.01 and settles in seconds. At $800B per year in global flow, even a small shift to stablecoin rails represents an enormous disruption.'},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:'What is the primary reserve backing USDC and other regulated stablecoins?',opts:[{id:'a',text:'Bitcoin and Ethereum held by the issuer'},{id:'b',text:'Cash and short-term US Treasury bills held 1:1 against tokens in circulation'},{id:'c',text:'A basket of global currencies weighted by trade volume'},{id:'d',text:'Gold held in federally insured vaults'}],correct:'b',good:'Regulated stablecoins like USDC hold cash and short-term Treasury bills in reserve — 1:1 against every token. The GENIUS Act codified this into law.',bad:'Answer B — regulated stablecoins hold cash and short-term Treasuries at 1:1 ratio. The GENIUS Act of 2025 made this a legal requirement for US-licensed stablecoin issuers.'},{q:'Why do people in countries like Argentina and Venezuela use USDT and USDC?',opts:[{id:'a',text:'To speculate on cryptocurrency price movements'},{id:'b',text:'Because US regulators require it for international transactions'},{id:'c',text:'To hold digital dollars and protect savings from local currency inflation and devaluation'},{id:'d',text:'Because stablecoins earn higher interest than local bank accounts'}],correct:'c',good:'In high-inflation economies, stablecoins function as an inflation hedge — a way to hold dollar value without a US bank account.',bad:'Answer C — stablecoins in high-inflation countries are savings preservation tools. When local currency loses value rapidly, holding USDT means holding digital dollars.'},{q:"What was the US government's primary stated goal in passing the GENIUS Act?",opts:[{id:'a',text:'To ban unregulated stablecoins and protect the US banking system'},{id:'b',text:'To create a US central bank digital currency backed by stablecoins'},{id:'c',text:'To establish a licensing framework for stablecoin issuers while preserving US dollar dominance globally'},{id:'d',text:'To tax stablecoin transactions and generate revenue for the Treasury'}],correct:'c',good:'The GENIUS Act explicitly cited dollar dominance as a policy goal. Dollar-pegged stablecoins expand dollar usage globally — the US wants those stablecoins to be US-regulated.',bad:'Answer C — the GENIUS Act created a licensing framework with the explicit goal of preserving dollar dominance. Dollar-pegged stablecoins expand dollar usage without requiring a US bank account.'}]},
+{id:4,themeKey:'amber',tag:'Chapter 4 — The Charter Wave',title:'When Crypto Companies Became Banks',blurb:'In 2026, the OCC handed bank charters to Circle, Ripple, BitGo, and Paxos. Here is what that actually means.',heroImg:R.ch4h,midImg:R.ch4m,midCaption:'OCC bank charters give crypto infrastructure companies the same legal standing as JPMorgan Chase — the ability to hold deposits and issue regulated financial products.',buckOpens:{q:"I keep seeing headlines about crypto companies getting bank charters. I sort of understand what a bank charter is — it's permission to be a bank. But why does it matter that Circle or Ripple got one? What changes?"},buckCloses:{text:'Before a bank charter, Circle was a money services business — legally similar to Western Union. After a charter, it’s a bank — legally similar to JPMorgan. It can hold customer deposits, issue regulated financial products, access the Federal Reserve payment system, and operate under federal banking law. <strong>When crypto infrastructure companies become regulated banks, the firewall between crypto and traditional finance officially comes down. Not in theory. In law.</strong>'},facts:[{myth:"Most people think: 'A bank charter just means a company can call itself a bank. It's mostly branding.'",q:'What does an OCC bank charter actually grant — and what does it require?',revealed:'An OCC national bank charter grants: (1) The legal right to accept and hold customer deposits; (2) Access to the Federal Reserve’s payment system and discount window; (3) The ability to issue regulated financial products; (4) Federal preemption of most state banking laws. In return, it requires: maintaining specific capital ratios, regular OCC examinations, federal AML and KYC compliance, and FDIC insurance in some charter types. It’s not branding. It’s the most regulated status available in US finance.'},{myth:"Most people think: 'Crypto companies got bank charters because they lobbied the government.'",q:'What did crypto companies have to demonstrate to receive OCC bank charters?',revealed:"OCC charter applications require detailed review of the applicant's business plan, management team, capital adequacy, risk management systems, and compliance infrastructure. The OCC examines whether the applicant can operate as a safe and sound banking institution. For Circle, this meant demonstrating that its USDC reserves are genuinely 1:1, its systems are secure and audited, and its business model is viable as a regulated bank. The 2026 charters followed years of enhanced regulatory compliance — not a sudden political decision."}],blocks:[{t:'cold',text:'In 2026, the Office of the Comptroller of the Currency granted full national bank charters to four crypto infrastructure companies:<br><br>Circle. Ripple. BitGo. Paxos.<br><br><em>These are not household names to most people. But they are the plumbing behind the products you might actually use.</em>'},{t:'body',text:'Circle issues USDC — the second-largest stablecoin, with over $60 billion in circulation. Ripple built the payment rail network used by banks in over 50 countries for cross-border settlement. BitGo is the custody provider for a significant portion of institutional crypto holdings. Paxos issues USDP and powers the stablecoin infrastructure for multiple major financial institutions.'},{t:'def',term:'OCC Bank Charter',def:'A national bank charter issued by the Office of the Comptroller of the Currency. Grants the legal right to accept deposits, access the Federal Reserve payment system, issue regulated financial products, and operate under federal banking law. Comes with strict capital, compliance, and examination requirements. JPMorgan Chase, Bank of America, and Wells Fargo all operate under OCC charters.'},{t:'body',text:'What changes when a crypto company becomes a chartered bank: First, it can hold customer deposits directly. Second, it gains access to Federal Reserve payment and settlement infrastructure. Third, institutional customers legally restricted to working with chartered entities can now use their products. Fourth, it becomes subject to the same examination and capital requirements as any bank.'},{t:'callout',icon:'🏗️',text:'<strong>Why this matters for XRP specifically:</strong> In 2025, a federal court ruled and the SEC confirmed that XRP is not a security — it’s a digital commodity. Combined with Ripple’s OCC bank charter in 2026, XRP can be held by regulated financial institutions, traded on regulated commodity exchanges, and used as a bridge currency in cross-border payments by licensed banks. The legal uncertainty that suppressed XRP for years was formally resolved.'},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:'What is the most significant practical benefit an OCC bank charter gives to a crypto company like Circle?',opts:[{id:'a',text:'The right to market itself as a bank in advertising'},{id:'b',text:'Exemption from all state-level financial regulations'},{id:'c',text:'The ability to accept deposits, access Federal Reserve infrastructure, and offer regulated financial products'},{id:'d',text:'Guaranteed FDIC insurance on all customer stablecoin holdings'}],correct:'c',good:"The charter unlocks the core of banking: accepting deposits, accessing Fed infrastructure, issuing regulated products. It's not branding — it's legal authorization to operate as a full bank under federal supervision.",bad:'Answer C — an OCC charter grants the right to hold deposits, access Federal Reserve payment systems, and issue regulated banking products.'},{q:"Why does Circle's OCC charter matter to institutional investors who want to use USDC?",opts:[{id:'a',text:"The charter allows Circle to guarantee USDC will never lose its peg"},{id:'b',text:'Institutions previously prohibited from dealing with unchartered entities can now legally use Circle’s products'},{id:'c',text:'The charter eliminates counterparty risk in USDC transactions'},{id:'d',text:'Circle can now issue USDC backed by gold instead of Treasury bills'}],correct:'b',good:'Many institutional investors have internal policies or regulatory requirements restricting them to working with chartered financial institutions. Circle’s charter removes that barrier.',bad:"Answer B — regulatory requirements at many institutional investors restrict dealings to chartered financial institutions. Circle's OCC charter removes the legal barrier to institutional adoption of USDC."},{q:'What two legal developments in 2025-2026 resolved the major uncertainty around XRP?',opts:[{id:'a',text:'The SEC classified XRP as a commodity and the CFTC approved XRP futures'},{id:'b',text:'A federal court ruled XRP is not a security, and Ripple received an OCC bank charter'},{id:'c',text:'Congress passed a law exempting XRP from securities law and the Fed approved it as a reserve asset'},{id:'d',text:'The SEC dropped all enforcement actions and approved a XRP spot ETF'}],correct:'b',good:"The federal court ruling removed the legal cloud. The OCC bank charter gave Ripple standing to operate as a bank. Together they resolved years of institutional hesitation around XRP.",bad:'Answer B — a federal court ruling that XRP is not a security, combined with Ripple’s OCC bank charter, resolved the two major legal uncertainties that suppressed institutional use of XRP.'}]},
+{id:5,themeKey:'rose',tag:'Chapter 5 — The Data Layer',title:'On-Chain Data: Reading What the Blockchain Actually Says',blurb:'The blockchain is a public record of everything. Most people ignore it. Here is what to actually look at.',heroImg:R.ch5h,midImg:R.ch5m,midCaption:'On-chain data tools like Glassnode and Arkham show whale movements, exchange flows, and accumulation patterns before they appear in price charts.',buckOpens:{q:"You mentioned on-chain data earlier. I know the blockchain is public — but how does someone actually use that information? What are the specific things to look at, and what do they tell you?"},buckCloses:{text:'The blockchain is the most transparent financial system in history. Every transaction, every wallet balance, every movement of coins — all of it is public. The irony is that most crypto investors never look at it. <strong>The people who consistently understand the market before the crowd are reading the data that’s freely available. It doesn’t guarantee returns. But it shows you the field everyone else is playing on, before they know where they’re standing.</strong>'},facts:[{myth:"Most people think: 'On-chain data is only useful for technical analysts and crypto experts.'",q:'How accessible is on-chain data, and who actually uses it effectively?',revealed:'On-chain data has become significantly more accessible since 2022. Platforms like Glassnode, Arkham Intelligence, Santiment, and CryptoQuant now offer consumer-facing dashboards that translate raw blockchain data into readable metrics — no coding required. Arkham built an intelligence platform that maps wallet addresses to known entities (exchanges, whale wallets, institutional funds) and tracks flows between them in plain English. The limiting factor isn’t technical ability — it’s knowing what questions to ask.'},{myth:"Most people think: 'Blockchain is anonymous, so you can't actually trace what whales are doing.'",q:'How much can on-chain analysis actually reveal about specific wallets and entities?',revealed:"Bitcoin and Ethereum are pseudonymous, not anonymous. Every wallet address is public and every transaction is permanently recorded. Over time, researchers and analytics firms have identified many significant wallet addresses by: (1) Exchange deposits that link wallets to known KYC'd accounts; (2) Large transactions matching known events; (3) Wallet clustering — wallets that transact together repeatedly are likely the same entity; (4) Self-reported disclosures by institutions. Platforms like Arkham maintain databases of labeled wallet addresses. Not every whale is identified, but enough are labeled to provide meaningful signal about institutional flows."}],blocks:[{t:'cold',text:"Every transaction on a public blockchain is permanent and visible to anyone who looks.<br><br>Bitcoin's entire transaction history, from the first block in 2009, is publicly accessible right now.<br>Every wallet balance. Every transfer. Every fee paid.<br><br><em>The stock market doesn't show you this. No other financial system does either.</em>"},{t:'body',text:'The five on-chain metrics that matter most. First: Exchange Net Flow — the difference between coins entering and leaving exchanges. Net outflow (more leaving than entering) is generally bullish — coins moving to cold storage. Net inflow can signal incoming sell pressure. Second: MVRV Ratio — Market Value to Realized Value. Compares current market cap to the average price at which all coins last moved. MVRV above 3.5 = historically overheated. MVRV below 1 = historically undervalued.'},{t:'def',term:'MVRV Ratio',def:"Market Value to Realized Value — compares Bitcoin's current market cap to its realized value (the total of each coin's value at the time it last moved on-chain). High MVRV means most holders sit on significant unrealized profit — historically associated with market tops. Low MVRV (below 1) means the market cap is below the average cost basis of all holders — historically a strong accumulation signal."},{t:'body',text:'Third: Stablecoin Supply Ratio (SSR) — divides Bitcoin market cap by total stablecoin supply. Low SSR means lots of stablecoins (potential buying power) relative to Bitcoin’s size. Fourth: Long-Term Holder (LTH) Supply — the percentage of Bitcoin held by wallets that haven’t moved their coins in over 155 days. LTH supply rising = strong hands accumulating. Fifth: Funding Rate — in perpetual futures, the rate paid between long and short positions. Extremely positive funding = crowded long = possible squeeze coming.'},{t:'def',term:'Long-Term Holder (LTH)',def:'A wallet that has not moved its coins in more than 155 days. LTH supply rising = coins moving into patient, strong hands. LTH supply dropping sharply = long-term holders distributing into strength, often a top signal. One of the most watched metrics for understanding where we are in the market cycle.'},{t:'analogy',icon:'🩺',title:'The vital signs analogy',text:'On-chain metrics are the vital signs of the crypto market. Price is the patient’s face — what you see in the waiting room. Exchange flows are the blood pressure. MVRV is the temperature. LTH supply is the resting heart rate. A doctor who only looks at the patient’s face makes a guess. A doctor who runs bloodwork makes a diagnosis. On-chain data is the bloodwork.'},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:'What does a spike in exchange inflows (coins moving onto exchanges) generally suggest?',opts:[{id:'a',text:'New buyers are entering the market and depositing funds to purchase crypto'},{id:'b',text:'Holders are moving coins to exchanges — possibly to sell — which can signal incoming sell pressure'},{id:'c',text:'Exchanges are upgrading their systems and requesting users consolidate holdings'},{id:'d',text:'Regulatory changes require holders to verify their coins on exchanges'}],correct:'b',good:'Exchange inflows mean coins moving into the selling pool. It doesn’t guarantee selling, but indicates preparation to sell. Inflow spikes before major price drops are a common pattern.',bad:'Answer B — exchange inflows move coins into the selling pool. Holders bring coins to exchanges when they want the option to sell. Sustained inflow spikes are often a distribution signal.'},{q:'What does a very low MVRV ratio (below 1.0) historically indicate?',opts:[{id:'a',text:'The market is overheated and a correction is imminent'},{id:'b',text:'Bitcoin is trading below the average cost basis of all holders — historically a strong accumulation signal'},{id:'c',text:'Long-term holders are distributing and taking profit'},{id:'d',text:'Exchange reserves are at dangerously low levels'}],correct:'b',good:'MVRV below 1 means the current price is below the average price at which all coins last moved. Most holders are underwater. Historically, these periods are when the best risk/reward accumulation has occurred.',bad:'Answer B — MVRV below 1 means the market cap is below the realized value (average cost basis). Most holders are at a loss. Historically these zones have preceded major recoveries.'},{q:"What does a high 'funding rate' in perpetual futures markets indicate?",opts:[{id:'a',text:'Bitcoin miners are being paid more to secure the network'},{id:'b',text:'Long positions dominate and pay short positions to maintain the peg — indicating a crowded long trade'},{id:'c',text:'Exchange fees have increased due to high market volatility'},{id:'d',text:'Institutional investors are moving large amounts into futures contracts'}],correct:'b',good:'High positive funding means longs are paying shorts to stay in the trade. A crowded long position is vulnerable to a squeeze. It’s a caution signal, not a bullish one.',bad:'Answer B — very high positive funding = crowded long = elevated liquidation risk if price dips. When everyone leans the same direction, a small move the other way can cascade.'}]},
+{id:6,themeKey:'gold',tag:'Chapter 6 — What Comes Next',title:'What Happens Next — And What To Actually Do With This',blurb:'Six chapters of infrastructure. One question left: so what?',heroImg:R.ch6h,midImg:R.ch6m,midCaption:'The infrastructure being built in 2024-2026 is the plumbing. The products that run on that plumbing — and the people who use them — come next.',buckOpens:{q:"OK Buck — six chapters in and I understand the whales, the rails, the stablecoins, the charters, and the data. But I'm not a hedge fund. I'm a regular person. What do I actually do with all of this?"},buckCloses:{text:"The practical takeaway isn't 'buy this coin.' It's that the financial system is being rewired around a new set of rails — and understanding the rewiring puts you ahead of the people who don't. <strong>You don't have to be a whale to read whale data. You don't have to be a bank to understand bank charters. Knowing what's actually happening makes you a better decision-maker — whatever decisions you choose to make.</strong>"},facts:[{myth:"Most people think: 'Understanding all of this means I can now time the crypto market perfectly.'",q:'Does understanding on-chain data and crypto infrastructure give you a reliable market timing edge?',revealed:'Understanding on-chain data significantly improves your ability to understand market conditions — it does not give you a reliable timing edge. Market bottoms and tops are only clear in hindsight. MVRV can stay low for months before recovering. What this knowledge does: it reduces the chance of making decisions driven purely by fear or FOMO, it helps you understand what’s structurally happening vs. noise, and it gives you a vocabulary to evaluate claims you’ll encounter. It’s an edge in understanding. Not a crystal ball.'},{myth:"Most people think: 'The crypto space is so complex now that individual investors can't participate meaningfully.'",q:'What can an individual investor actually do with the tools available in 2026?',revealed:"Individual investors in 2026 have access to tools unavailable even to professional analysts five years ago. Glassnode's free tier shows core on-chain metrics. Arkham Intelligence offers wallet tracking. DeFi protocols let individuals earn yields on tokenized Treasuries — the same product institutional investors use. Regulated spot ETFs give Bitcoin exposure through normal brokerages. Stablecoins let anyone hold dollar assets without a US bank account. The barrier now is knowledge, not capital."}],blocks:[{t:'cold',text:"Here's what you know now that you didn't know six chapters ago.<br><br>You know what whales do while retail watches price.<br>You know why international bank transfers are slow — and what's replacing them.<br>You know why stablecoins are expanding the dollar's reach globally.<br>You know what an OCC charter means and why Circle and Ripple got one.<br>You know which five on-chain metrics matter most.<br><br><em>That's significantly more than most people who've been in crypto for years.</em>"},{t:'body',text:'What to watch in the next 12-24 months: The tokenized Treasury market will continue growing — watch for the $100 billion milestone. The first regulated tokenized money market funds available to retail investors will likely launch in 2026-2027. Central bank digital currencies from non-US countries may create competition with dollar stablecoins in certain markets. The spot Bitcoin ETF market will mature — watch for options, lending, and yield products built on top of existing ETF structures.'},{t:'def',term:'Spot Bitcoin ETF',def:'An exchange-traded fund that directly holds Bitcoin — approved by the SEC in January 2024. Trades on standard stock exchanges and is accessible through any brokerage account. BlackRock’s iShares Bitcoin Trust (IBIT) reached $50 billion in assets faster than any ETF in history. Made Bitcoin exposure accessible to pension funds, 401k plans, and any investor with a brokerage account.'},{t:'body',text:'The three most important things to watch: First, on-chain exchange flows — use Glassnode or CryptoQuant free tiers to watch weekly exchange net flow for Bitcoin. Second, institutional ETF flows — Bloomberg and CoinDesk track daily inflows and outflows from spot Bitcoin ETFs. Third, stablecoin supply on exchanges — rising stablecoin supply on exchanges = potential buying power building up.'},{t:'callout',icon:'⚡',text:'<strong>The honest framing:</strong> This volume was about understanding what’s actually being built — not about telling you what to buy or when. The infrastructure is real. The adoption is real. The risks are also real: smart contract bugs, regulatory reversals, market cycles, technology failures. Anyone who tells you crypto is a guaranteed path to wealth is selling something. Anyone who tells you none of this matters is not paying attention. The right approach is curious, skeptical, and informed — which is exactly what you are now.'},{t:'analogy',icon:'🗺️',title:'The map analogy',text:"This volume gave you a map of the territory. A map doesn't tell you where to go — it shows you what's there. You still decide where to walk, how fast, and whether the destination is worth the trip. But walking without a map in unfamiliar territory is how you get lost. You have the map now. The decisions are yours."},{t:'fact',idx:0},{t:'fact',idx:1}],quizzes:[{q:'What does understanding on-chain data primarily help an investor do?',opts:[{id:'a',text:'Predict exact price targets and market timing with high accuracy'},{id:'b',text:'Understand market structure and conditions — reducing decisions driven by fear or FOMO'},{id:'c',text:'Guarantee superior returns compared to investors who ignore on-chain data'},{id:'d',text:'Access institutional trading tools unavailable to retail investors'}],correct:'b',good:"On-chain data is an understanding edge, not a crystal ball. It reduces noise and fear-driven decisions. But markets can stay irrational beyond any metric's signal.",bad:'Answer B — on-chain data improves understanding of market structure, which helps reduce emotional decision-making. It doesn’t guarantee timing or returns.'},{q:'Which of these tools is currently available to individual investors at low or no cost?',opts:[{id:'a',text:'Access to institutional tokenized Treasury funds requiring $1M minimum'},{id:'b',text:'Real-time exchange-level order book data from all major platforms'},{id:'c',text:'On-chain metric dashboards (Glassnode free tier, Arkham Intelligence) and spot Bitcoin ETFs through standard brokerages'},{id:'d',text:"Direct access to JPMorgan's Kinexys platform for institutional repo transactions"}],correct:'c',good:"Glassnode's free tier, Arkham wallet tracking, and spot Bitcoin ETFs through normal brokerages are all accessible to individual investors today.",bad:'Answer C — Glassnode, Arkham Intelligence, and spot Bitcoin ETFs through standard brokerages are all available to individual investors. The knowledge and tools gap has narrowed significantly.'},{q:"What is the most honest framing for what you've learned in this volume?",opts:[{id:'a',text:'A guaranteed system for profiting from crypto markets'},{id:'b',text:'Evidence that crypto will replace traditional finance within 5 years'},{id:'c',text:"A map of what's being built — helping you make informed decisions, not guaranteeing any specific outcome"},{id:'d',text:'Proof that institutional adoption means retail investors will always profit'}],correct:'c',good:"A map shows you the territory. It doesn't tell you where to go or guarantee the trip is safe. Understanding infrastructure makes you a better-informed participant.",bad:'Answer C — this volume is a map, not a guarantee. Understanding infrastructure and data helps you make more informed decisions. Informed and skeptical is the right posture.'}]}
+];
+
+var GLOSSARY=[
+  {term:'Accumulation',def:'Quietly building a large position in an asset over time in small pieces to avoid moving the price. Whales and institutions accumulate during flat or declining markets when retail is bored or fearful. The goal is to finish positioning before price moves.',accent:'#2DD4BF'},
+  {term:'Exchange Outflow',def:'Crypto moving off a trading exchange into private wallets. Generally bullish — removes coins from the available-to-sell pool. When exchange balances drop over time, it signals reduced sell pressure.',accent:'#2DD4BF'},
+  {term:'Correspondent Banking',def:'The system by which banks route international transfers through chains of intermediary banks. Often 2-4 handoffs, each adding time and cost. SWIFT is the messaging network these banks use to communicate.',accent:'#818CF8'},
+  {term:'Settlement',def:'The final, irreversible transfer of value completing a transaction. Traditional finance settles T+2 (two business days). Blockchain settlement is atomic — the agreement and transfer happen simultaneously, eliminating counterparty risk.',accent:'#818CF8'},
+  {term:'SWIFT',def:'Society for Worldwide Interbank Financial Telecommunication — the messaging network used by 11,000+ financial institutions in 200+ countries. Moves ~$5 trillion per day. Takes 1-5 business days. Doesn’t work weekends. The incumbent system blockchain rails aim to replace.',accent:'#818CF8'},
+  {term:'Stablecoin',def:'A cryptocurrency pegged 1:1 to the US dollar. USDC and USDT have combined circulation over $200 billion. Allow value to move on blockchain rails — instantly, 24/7, globally — without crypto price volatility. Regulated stablecoins hold cash and Treasuries as reserves.',accent:'#4ADE80'},
+  {term:'GENIUS Act',def:'The Guiding and Establishing National Innovation for US Stablecoins Act, signed in 2025. First comprehensive US federal law governing stablecoin issuers. Requires 1:1 reserves, audits, and banking licenses. Explicitly cited preserving US dollar dominance as a policy goal.',accent:'#4ADE80'},
+  {term:'OCC Bank Charter',def:'A national bank charter from the Office of the Comptroller of the Currency. Grants the right to accept deposits, access Federal Reserve payment systems, and issue regulated financial products. Circle, Ripple, BitGo, and Paxos received OCC charters in 2026.',accent:'#FBB040'},
+  {term:'MVRV Ratio',def:"Market Value to Realized Value. Compares Bitcoin's current market cap to the average cost basis of all coins. High MVRV (above 3.5) = historically overheated. Low MVRV (below 1) = market below average cost basis = historically strong accumulation signal.",accent:'#FB7185'},
+  {term:'Long-Term Holder (LTH)',def:'A wallet that has not moved its coins in over 155 days. LTH supply rising = coins moving into strong, patient hands. LTH supply dropping sharply = long-term holders distributing into strength, often a top signal.',accent:'#FB7185'},
+  {term:'Funding Rate',def:'In perpetual futures, the payment between long and short positions to keep the contract price anchored to spot. High positive funding = crowded longs paying shorts = overleveraged bullish trade vulnerable to a squeeze.',accent:'#FB7185'},
+  {term:'Spot Bitcoin ETF',def:'An exchange-traded fund directly holding Bitcoin, approved by the SEC in January 2024. Trades on standard exchanges through any brokerage. BlackRock’s IBIT reached $50 billion AUM faster than any ETF in history.',accent:'#FFD700'},
+  {term:'On-Chain Data',def:'Information derived from public blockchain transaction records — wallet balances, transfers, exchange flows, holding periods. All transaction history is publicly accessible. Tools like Glassnode, Arkham, and CryptoQuant make this readable for non-technical users.',accent:'#FFD700'}
+];
+
+var totalXP=0,currentIdx=0,chProgress={},glossaryFrom='chaptermap';
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});requestAnimationFrame(function(){document.getElementById(id).classList.add('active');});if(id==='chaptermap')renderMap();}
+
+function renderMap(){
+  document.getElementById('map-xp').textContent=totalXP+' XP';
+  var html='';
+  CHAPTERS.forEach(function(ch,i){
+    var t=THEME[ch.themeKey],done=chProgress[ch.id]==='done';
+    html+='<button class="ch-item" onclick="openChapter('+i+')" style="border-color:'+(done?t.border:'rgba(255,255,255,0.07)')+';background:'+(done?t.accentBg:'rgba(255,255,255,0.03)')+';">';
+    html+='<div class="ch-num-badge" style="background:'+(done?t.accent:'rgba(255,255,255,0.08)')+';color:'+(done?'#0c1520':'rgba(255,255,255,0.4)')+';font-size:'+(i>8?'.8rem':'1rem')+';">'+(done?'&#10003;':ch.id)+'</div>';
+    html+='<div class="ch-text"><div class="ch-item-tag" style="color:'+t.accent+';">'+ch.tag+'</div><div class="ch-item-name">'+ch.title+'</div><div class="ch-item-blurb">'+ch.blurb+'</div></div>';
+    html+='<div class="ch-arrow" style="color:'+(done?t.accent:'rgba(255,255,255,0.2)')+';">&#8250;</div></button>';
+  });
+  html+='<button onclick="glossaryFrom=\'chaptermap\';showScreen(\'glossary\')" style="width:auto;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);color:#FFD700;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;padding:11px 16px;border-radius:12px;cursor:pointer;margin-top:8px;text-align:left;display:block;">📖 Jargon Buster — Quick Reference</button>';
+  document.getElementById('ch-list').innerHTML=html;
+}
+
+function openChapter(idx){
+  currentIdx=idx;var ch=CHAPTERS[idx],t=THEME[ch.themeKey];
+  var imgs=[R.ch1h,R.ch2h,R.ch3h,R.ch4h,R.ch5h,R.ch6h];
+  document.getElementById('bi-tag').textContent=ch.tag;
+  document.getElementById('bi-tag').style.cssText='background:'+t.accentBg+';color:'+t.accent+';border:1px solid '+t.border+';';
+  document.getElementById('bi-img').src=imgs[idx];
+  document.getElementById('bi-img').style.borderColor=t.accent;
+  document.getElementById('bi-label').style.color=t.accent;
+  document.getElementById('bi-question').innerHTML='"'+ch.buckOpens.q+'"';
+  document.getElementById('bi-cta').style.cssText='background:'+t.accent+';color:'+((ch.themeKey==='gold'||ch.themeKey==='amber')?'#0c1520':'#fff')+';';
+  document.getElementById('bi-cta').onclick=function(){enterChapter(idx);};
+  showScreen('buckintro');
+}
+
+function enterChapter(idx){
+  var ch=CHAPTERS[idx],t=THEME[ch.themeKey];
+  document.getElementById('chapterview').style.background=t.bg;
+  var tb=document.getElementById('ch-topbar');
+  tb.style.background=t.topbarBg;tb.style.borderBottomColor=t.border;
+  document.getElementById('topbar-label').style.color=t.accent;
+  document.getElementById('topbar-label').textContent=ch.tag;
+  document.getElementById('topbar-title').style.color=t.textPrimary;
+  document.getElementById('topbar-title').textContent=ch.title;
+  document.getElementById('topbar-xp-pill').style.cssText='background:'+t.accentBg+';border-color:'+t.border+';';
+  document.getElementById('topbar-xp-val').style.color=t.accent;
+  document.getElementById('topbar-xp-val').textContent=totalXP+' XP';
+  document.getElementById('topbar-back-btn').style.cssText='background:'+t.accentBg+';border-color:'+t.border+';color:'+t.accent+';';
+  document.getElementById('read-fill').style.background=t.readFill;
+  var scroller=document.getElementById('ch-scroll');
+  scroller.scrollTop=0;document.getElementById('read-fill').style.width='0%';
+  document.getElementById('ch-inner').innerHTML=buildChapterHTML(ch,t);
+  var nav=document.getElementById('nav-row');
+  nav.style.background=t.navBg;nav.style.borderTop='1px solid '+t.navBorder;
+  var prev=idx>0?'<button class="btn-prev" onclick="openChapter('+(idx-1)+')" style="color:rgba(255,255,255,.35);border-color:'+t.prevBorder+';">&#8592; Prev</button>':'';
+  var nc=(ch.themeKey==='gold'||ch.themeKey==='amber')?'#0c1520':'#fff';
+  var nl=idx<CHAPTERS.length-1?'Next Chapter &#8594;':'Finish &#8594;';
+  nav.innerHTML=prev+'<button class="btn-next" onclick="goNext()" style="background:'+t.accent+';color:'+nc+';">'+nl+'</button>';
+  scroller.onscroll=function(){var p=Math.round((scroller.scrollTop/(scroller.scrollHeight-scroller.clientHeight))*100)||0;document.getElementById('read-fill').style.width=Math.min(p,100)+'%';};
+  showScreen('chapterview');
+}
+
+function buildChapterHTML(ch,t){
+  var hImgs=[R.ch1h,R.ch2h,R.ch3h,R.ch4h,R.ch5h,R.ch6h];
+  var mImgs=[R.ch1m,R.ch2m,R.ch3m,R.ch4m,R.ch5m,R.ch6m];
+  var blocks=ch.blocks.map(function(b){return buildBlock(b,ch,t);}).join('');
+  var quizzes=ch.quizzes.map(function(q,qi){return buildQuiz(q,t,qi);}).join('');
+  var h='<div class="ch-hero"><img src="'+hImgs[currentIdx]+'" alt="'+ch.title+'"/>';
+  h+='<div class="ch-hero-overlay"><div class="ch-hero-tag" style="color:'+t.accent+';">'+ch.tag+'</div>';
+  h+='<h1 class="ch-hero-h1">'+ch.title+'</h1></div></div>';
+  h+='<div class="ch-content" style="color:'+t.textPrimary+';">'+blocks;
+  h+='<div class="mid-image"><img src="'+mImgs[currentIdx]+'" alt=""/>';
+  h+='<div class="mid-caption" style="color:'+t.textSecondary+';background:'+t.cardBg+';">'+ch.midCaption+'</div></div>';
+  h+='<div class="buck-closes" style="background:'+t.buckBg+';border:1.5px solid '+t.buckBorder+';">';
+  h+='<img class="buck-close-avatar" src="'+mImgs[currentIdx]+'" alt="Buck" style="border-color:'+t.accent+';object-position:center top;"/>';
+  h+='<div><div class="buck-close-label" style="color:'+t.accent+';">Buck\'s take</div>';
+  h+='<div class="buck-close-text" style="color:'+t.textPrimary+';">'+ch.buckCloses.text+'</div></div></div>';
+  h+='<div class="section-rule"><div class="section-rule-line" style="background:'+t.border+';"></div><div class="section-rule-text">Quick Check — 3 Questions</div><div class="section-rule-line" style="background:'+t.border+';"></div></div>';
+  h+=quizzes+'</div>';
+  return h;
+}
+
+function buildBlock(b,ch,t){
+  var s=t.textSecondary,p=t.textPrimary,a=t.accent;
+  if(b.t==='cold')return '<div class="cold-open" style="color:'+p+';">'+b.text+'</div>';
+  if(b.t==='body'){var tx=b.text.replace(/<strong>/g,'<strong style="color:'+p+';">').replace(/<em>/g,'<em style="color:'+a+';">');return '<p class="body-p" style="color:'+s+';">'+tx+'</p>';}
+  if(b.t==='def')return '<div class="def-card" style="background:'+t.cardBg+';border-left-color:'+a+';"><div class="def-term" style="color:'+a+';">📖 '+b.term+'</div><div class="def-body" style="color:'+s+';">'+b.def+'</div></div>';
+  if(b.t==='callout'){var ct=b.text.replace(/<strong>/g,'<strong style="color:'+p+';">');return '<div class="callout" style="background:'+t.cardBg+';border:1.5px solid '+t.cardBorder+';"><div class="callout-icon">'+b.icon+'</div><div class="callout-body" style="color:'+s+';">'+ct+'</div></div>';}
+  if(b.t==='analogy'){var at=b.text.replace(/<strong>/g,'<strong style="color:'+p+';">');return '<div class="analogy-card" style="background:'+t.analogyBg+';border:1.5px solid '+t.cardBorder+';"><div class="analogy-icon">'+b.icon+'</div><div><div class="analogy-title" style="color:'+a+';">🔁 '+b.title+'</div><div class="analogy-text" style="color:'+s+';">'+at+'</div></div></div>';}
+  if(b.t==='fact')return buildFact(ch.facts[b.idx],b.idx,t);
+  return '';
+}
+
+function buildFact(fact,idx,t){
+  var fid='fact-'+currentIdx+'-'+idx;
+  var dark=(t.accent==='#FFD700'||t.accent==='#FBB040')?'#0c1520':'#fff';
+  var h='<div class="fact-reveal-wrap"><button class="fact-teaser" id="btn-'+fid+'" onclick="revealFact(\''+fid+'\')" style="background:'+t.factBg+';border-color:'+t.factBorder+';">';
+  h+='<div class="fact-teaser-left"><div class="fact-teaser-myth" style="color:'+t.accent+';">💭 COMMON MYTH</div>';
+  h+='<div class="fact-teaser-q" style="color:'+t.textPrimary+';">'+fact.myth+'<br><span>🤔 </span><span style="color:'+t.accent+';font-style:italic;">'+fact.q+'</span></div></div>';
+  h+='<div class="fact-teaser-btn" style="background:'+t.accent+';color:'+dark+';">Myth Busted 🔍</div></button>';
+  h+='<div class="fact-revealed" id="'+fid+'" style="background:'+t.factRevBg+';border:1.5px solid '+t.factBorder+';">';
+  h+='<div class="fact-revealed-label" style="color:'+t.accent+'">✅ Reality Check</div>';
+  h+='<div class="fact-revealed-text" style="color:'+t.textSecondary+';">'+fact.revealed.replace(/<strong>/g,'<strong style="color:'+t.textPrimary+';">')+'</div></div></div>';
+  return h;
+}
+
+function revealFact(fid){var el=document.getElementById(fid),btn=document.getElementById('btn-'+fid),open=el.classList.contains('show');if(open){el.classList.remove('show');btn.style.opacity='1';}else{el.classList.add('show');btn.style.opacity='0.5';}}
+
+function buildQuiz(q,t,qi){
+  var pfx='ch'+currentIdx+'q'+qi;
+  var dark=(t.accent==='#FFD700'||t.accent==='#FBB040')?'#0c1520':'#fff';
+  var h='<div class="quiz-section"><div class="quiz-card" style="background:'+t.quizBg+';border:1px solid '+t.quizBorder+';">';
+  h+='<div class="quiz-eyebrow" style="background:'+t.accent+';color:'+dark+';">Question '+(qi+1)+' of 3</div>';
+  h+='<div class="quiz-q" style="color:#fff;">'+q.q+'</div><div class="quiz-options">';
+  q.opts.forEach(function(o){
+    h+='<button class="quiz-opt" id="'+pfx+'opt-'+o.id+'" onclick="answerQuiz(\''+pfx+'\',\''+o.id+'\',\''+q.correct+'\')" style="background:'+t.optBg+';border-color:'+t.optBorder+';">';
+    h+='<span class="opt-badge" style="color:#fff;">'+o.id.toUpperCase()+'</span>';
+    h+='<span class="opt-text" style="color:'+t.optText+';">'+o.text+'</span>';
+    h+='<span class="opt-icon" id="'+pfx+'res-'+o.id+'"></span></button>';
+  });
+  h+='</div><div class="quiz-fb" id="'+pfx+'-fb"></div><div class="quiz-xp-row" id="'+pfx+'-xp" style="color:'+t.accent+';"></div></div></div>';
+  return h;
+}
+
+function answerQuiz(pfx,chosen,correct){
+  var opts=document.querySelectorAll('[id^="'+pfx+'opt-"]');
+  opts.forEach(function(b){b.disabled=true;b.classList.add('dim');});
+  var ch=CHAPTERS[currentIdx],qi=parseInt(pfx.replace('ch'+currentIdx+'q','')),qData=ch.quizzes[qi];
+  var isRight=chosen===correct;
+  var ce=document.getElementById(pfx+'opt-'+chosen),re=document.getElementById(pfx+'opt-'+correct);
+  ce.classList.remove('dim');re.classList.remove('dim');
+  if(isRight){ce.classList.add('correct');document.getElementById(pfx+'res-'+chosen).textContent='✓';totalXP+=50;document.getElementById(pfx+'-fb').className='quiz-fb good';document.getElementById(pfx+'-fb').textContent=qData.good;document.getElementById(pfx+'-xp').textContent='+50 XP — nice one!';document.getElementById(pfx+'-xp').className='quiz-xp-row show';document.getElementById('topbar-xp-val').textContent=totalXP+' XP';confetti(THEME[ch.themeKey].accent);}
+  else{ce.classList.add('wrong');re.classList.add('correct');document.getElementById(pfx+'res-'+chosen).textContent='✗';document.getElementById(pfx+'res-'+correct).textContent='✓';document.getElementById(pfx+'-fb').className='quiz-fb bad';document.getElementById(pfx+'-fb').textContent=qData.bad;}
+  chProgress[ch.id]='done';
+}
+
+function confetti(accent){var cols=[accent,'#fff','rgba(255,255,255,0.6)',accent,'#FFD700'];for(var i=0;i<36;i++){var p=document.createElement('div');p.className='confetti-piece';p.style.left=(10+Math.random()*80)+'vw';p.style.top=(15+Math.random()*35)+'vh';p.style.width=(6+Math.random()*6)+'px';p.style.height=(6+Math.random()*6)+'px';p.style.background=cols[Math.floor(Math.random()*cols.length)];p.style.borderRadius=Math.random()>.5?'50%':'2px';p.style.animationDelay=(Math.random()*.5)+'s';p.style.animationDuration=(1.2+Math.random()*.6)+'s';document.body.appendChild(p);setTimeout(function(){p.remove();},2000);}}
+
+function goNext(){if(currentIdx<CHAPTERS.length-1){openChapter(currentIdx+1);}else{document.getElementById('cert-xp').textContent=totalXP;showScreen('certificate');}}
+
+var ghtml='';
+GLOSSARY.forEach(function(g){ghtml+='<div class="glossary-item"><div class="g-term" style="color:'+g.accent+';">'+g.term+'</div><div class="g-def">'+g.def+'</div></div>';});
+document.getElementById('glossary-items').innerHTML=ghtml;
+
+document.getElementById('cover-cta-btn').onclick=function(){showScreen('chaptermap');};
+document.getElementById('map-back-btn').onclick=function(){showScreen('cover');};
+document.getElementById('topbar-back-btn').onclick=function(){showScreen('chaptermap');};
+document.getElementById('glossary-back-btn').onclick=function(){showScreen(glossaryFrom);};
+document.getElementById('cert-next-btn').onclick=function(){showScreen('whatsnext');};
+document.getElementById('cert-glossary-btn').onclick=function(){glossaryFrom='certificate';showScreen('glossary');};
+document.getElementById('wn-restart-btn').onclick=function(){totalXP=0;chProgress={};currentIdx=0;showScreen('cover');};
+document.getElementById('cert-back-btn').onclick=function(){showScreen('chaptermap');};
+document.getElementById('wn-back-btn').onclick=function(){showScreen('certificate');};
+
+renderMap();
+</script>
+</body>
+</html>
