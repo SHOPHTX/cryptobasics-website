@@ -673,6 +673,150 @@ footer{
   align-items:center;
 }
 
+
+/* ── News Section Intro Animation ── */
+@keyframes breakingPulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(239,68,68,0.7);}
+  50%{opacity:.7;box-shadow:0 0 0 8px rgba(239,68,68,0);}
+}
+@keyframes scanline{
+  0%{transform:scaleX(0);opacity:1;}
+  80%{transform:scaleX(1);opacity:1;}
+  100%{transform:scaleX(1);opacity:0;}
+}
+@keyframes headlineReveal{
+  0%{opacity:0;transform:translateY(18px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+@keyframes chyronSlide{
+  0%{opacity:0;transform:translateX(-30px);}
+  100%{opacity:1;transform:translateX(0);}
+}
+@keyframes staticFlash{
+  0%,100%{opacity:0;}
+  5%,15%{opacity:.06;}
+  10%,20%{opacity:0;}
+}
+
+.news-intro{
+  text-align:center;
+  margin-bottom:56px;
+  position:relative;
+}
+
+/* TV static overlay */
+.news-intro::before{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:180px 180px;
+  opacity:0;
+  pointer-events:none;
+  animation:staticFlash 4s ease-in-out infinite;
+  border-radius:12px;
+}
+
+/* BREAKING badge */
+.breaking-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#ef4444;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:.65rem;
+  font-weight:900;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  padding:5px 14px;
+  border-radius:4px;
+  margin-bottom:20px;
+}
+.breaking-dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#fff;
+  animation:breakingPulse 1.4s ease-in-out infinite;
+}
+
+/* scanline bar that draws across */
+.news-scanline{
+  width:100%;
+  height:2px;
+  background:linear-gradient(to right, transparent, #ef4444 20%, #FFD600 50%, #ef4444 80%, transparent);
+  margin:20px auto;
+  max-width:600px;
+  transform-origin:left center;
+  animation:scanline 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+  animation-delay:.3s;
+  transform:scaleX(0);
+}
+
+/* chyron bar — broadcast lower-third style */
+.news-chyron{
+  display:inline-flex;
+  align-items:stretch;
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:24px;
+  animation:chyronSlide .5s ease forwards;
+  animation-delay:.6s;
+  opacity:0;
+}
+.chyron-label{
+  background:#ef4444;
+  color:#fff;
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:6px 14px;
+  display:flex;
+  align-items:center;
+}
+.chyron-text{
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.7);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  padding:6px 16px;
+  display:flex;
+  align-items:center;
+  border:1px solid rgba(255,255,255,0.08);
+  border-left:none;
+}
+
+/* headline text reveal */
+.news-headline-main{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:900;
+  color:#fff;
+  line-height:1.1;
+  margin-bottom:16px;
+  animation:headlineReveal .7s cubic-bezier(0.4,0,0.2,1) forwards;
+  animation-delay:.2s;
+  opacity:0;
+}
+.news-sub{
+  font-size:1.1rem;
+  color:rgba(255,255,255,0.5);
+  max-width:600px;
+  margin:0 auto;
+  line-height:1.7;
+  animation:headlineReveal .6s ease forwards;
+  animation-delay:.8s;
+  opacity:0;
+}
+
+/* Trigger animation when section scrolls into view */
+.news-intro.not-visible .news-scanline{animation:none;transform:scaleX(0);}
+.news-intro.not-visible .news-chyron{animation:none;opacity:0;}
+.news-intro.not-visible .news-headline-main{animation:none;opacity:0;}
+.news-intro.not-visible .news-sub{animation:none;opacity:0;}
+
 </style>
 </head>
 <body>
@@ -1041,10 +1185,30 @@ footer{
 <!-- News Section -->
 <section id="news" style="padding:100px 60px;background:#0d0d0d;border-top:1px solid rgba(255,255,255,0.06);display:block;">
   <div style="max-width:900px;margin:0 auto;display:block;">
-    <div style="text-align:center;margin-bottom:56px;">
-      <div style="display:inline-block;background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.25);border-radius:9999px;padding:6px 20px;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD600;margin-bottom:16px;">Free · Updated Regularly</div>
-      <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px;">Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span></h2>
-      <p style="font-size:1.1rem;color:rgba(255,255,255,0.5);max-width:600px;margin:0 auto;line-height:1.7;">Tap any headline to read the breakdown. No jargon. No hype.</p>
+    <div class="news-intro not-visible" id="news-intro">
+
+      <!-- BREAKING badge -->
+      <div class="breaking-badge">
+        <span class="breaking-dot"></span>
+        Breaking
+      </div>
+
+      <!-- Animated scanline -->
+      <div class="news-scanline"></div>
+
+      <!-- Main headline -->
+      <h2 class="news-headline-main">
+        Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span>
+      </h2>
+
+      <!-- Broadcast chyron -->
+      <div class="news-chyron">
+        <div class="chyron-label">Free</div>
+        <div class="chyron-text">Updated Regularly &nbsp;·&nbsp; No jargon &nbsp;·&nbsp; No hype</div>
+      </div>
+
+      <p class="news-sub">Tap any headline to read the breakdown.</p>
+
     </div>
 
     <div style="display:flex;flex-direction:column;gap:12px;">
@@ -1222,6 +1386,25 @@ function ncToggle(btn) {
     <p>© 2026 Crypto Basics · A SHOPHTX Production</p>
   </div>
 </footer>
+
+
+<script>
+(function(){
+  var intro = document.getElementById('news-intro');
+  if(!intro) return;
+  var triggered = false;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && !triggered){
+        triggered = true;
+        intro.classList.remove('not-visible');
+        observer.disconnect();
+      }
+    });
+  }, {threshold: 0.3});
+  observer.observe(intro);
+})();
+</script>
 
 </body>
 </html>
