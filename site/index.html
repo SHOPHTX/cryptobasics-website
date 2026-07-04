@@ -553,9 +553,144 @@ footer{
 /* News feed — single column grid, bulletproof */
 .news-feed{display:grid!important;grid-template-columns:1fr!important;gap:28px!important;width:100%!important;}
 .news-feed>div{width:100%!important;min-width:0!important;box-sizing:border-box!important;}
+
+/* ── Live Price Ticker ── */
+#price-ticker{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:9999;
+  height:34px;
+  background:#0a0f18;
+  border-bottom:1px solid rgba(255,214,0,0.18);
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+}
+#ticker-inner{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:tickerScroll 40s linear infinite;
+  gap:0;
+}
+#price-ticker:hover #ticker-inner{
+  animation-play-state:paused;
+}
+@keyframes tickerScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.tk-item{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:0 20px;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+.tk-sym{color:rgba(255,255,255,0.7);letter-spacing:.04em;}
+.tk-price{color:#fff;}
+.tk-up{color:#22c55e;}
+.tk-dn{color:#ef4444;}
+.tk-dot{color:rgba(255,214,0,0.4);font-size:.55rem;}
+#ticker-label{
+  flex-shrink:0;
+  padding:0 12px 0 14px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#FFD600;
+  border-right:1px solid rgba(255,214,0,0.25);
+  white-space:nowrap;
+  background:#0a0f18;
+  z-index:1;
+  height:100%;
+  display:flex;
+  align-items:center;
+}
+/* push page content below fixed ticker */
+body{padding-top:34px;}
+
 </style>
 </head>
 <body>
+
+<div id="price-ticker">
+  <div id="ticker-label">⚡ LIVE</div>
+  <div id="ticker-inner"><!-- populated by JS --></div>
+</div>
+
+<script>
+(function(){
+  var COINS = [
+    {id:'bitcoin',    sym:'BTC', icon:'₿'},
+    {id:'ethereum',   sym:'ETH', icon:'Ξ'},
+    {id:'solana',     sym:'SOL', icon:'◎'},
+    {id:'ripple',     sym:'XRP', icon:'✕'},
+    {id:'cardano',    sym:'ADA', icon:'₳'},
+    {id:'dogecoin',   sym:'DOGE',icon:'Ð'},
+    {id:'chainlink',  sym:'LINK',icon:'⬡'},
+    {id:'avalanche-2',sym:'AVAX',icon:'△'},
+    {id:'polkadot',   sym:'DOT', icon:'●'},
+    {id:'uniswap',    sym:'UNI', icon:'🦄'},
+  ];
+  var ids = COINS.map(function(c){return c.id;}).join(',');
+  var URL = 'https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true';
+
+  function fmt(n){
+    if(n>=1000) return '$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+    if(n>=1)    return '$'+n.toFixed(2);
+    return '$'+n.toFixed(4);
+  }
+
+  function buildItems(data){
+    var items = '';
+    COINS.forEach(function(c){
+      var d = data[c.id];
+      if(!d) return;
+      var price = d.usd;
+      var chg   = d.usd_24h_change;
+      var up    = chg >= 0;
+      var arrow = up ? '▲' : '▼';
+      var cls   = up ? 'tk-up' : 'tk-dn';
+      items += '<span class="tk-item">'
+        + '<span class="tk-sym">'+c.sym+'</span>'
+        + '<span class="tk-price">'+fmt(price)+'</span>'
+        + '<span class="'+cls+'">'+arrow+' '+Math.abs(chg).toFixed(2)+'%</span>'
+        + '</span>';
+    });
+    return items;
+  }
+
+  function load(){
+    fetch(URL)
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var inner = document.getElementById('ticker-inner');
+        if(!inner) return;
+        var items = buildItems(data);
+        // duplicate for seamless loop
+        inner.innerHTML = items + items;
+        // adjust animation speed based on content width
+        var w = inner.scrollWidth / 2;
+        var speed = Math.max(30, w / 12); // ~12px/s
+        inner.style.animationDuration = speed + 's';
+      })
+      .catch(function(){
+        // silently fail — ticker stays hidden or shows stale
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    load();
+    setInterval(load, 60000); // refresh every 60s
+  });
+})();
+</script>
+
 
 <!-- Hero -->
 <section class="hero" style="position:relative;">
