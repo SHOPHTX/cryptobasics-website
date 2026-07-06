@@ -1259,6 +1259,85 @@ footer{
         Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span>
       </h2>
 
+      <!-- Fear & Greed Index -->
+      <div id="fng-widget" style="max-width:440px;margin:32px auto 0;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px 26px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.5);">Crypto Fear &amp; Greed Index</div>
+          <div style="font-size:.65rem;font-weight:700;color:#4ADE80;display:flex;align-items:center;gap:5px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;"></span>LIVE
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:22px;">
+          <svg viewBox="0 0 200 115" width="150" height="86" style="flex-shrink:0;">
+            <path d="M10,100 A90,90 0 0 1 190,100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="14" stroke-linecap="round"/>
+            <path id="fng-arc" d="M10,100 A90,90 0 0 1 190,100" fill="none" stroke="url(#fng-grad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"/>
+            <defs>
+              <linearGradient id="fng-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ef4444"/>
+                <stop offset="35%" stop-color="#f97316"/>
+                <stop offset="55%" stop-color="#FFD600"/>
+                <stop offset="100%" stop-color="#4ADE80"/>
+              </linearGradient>
+            </defs>
+            <line id="fng-needle" x1="100" y1="100" x2="100" y2="26" stroke="#fff" stroke-width="3" stroke-linecap="round" style="transform-origin:100px 100px;transform:rotate(-90deg);transition:transform 1s ease;"/>
+            <circle cx="100" cy="100" r="5" fill="#fff"/>
+          </svg>
+          <div>
+            <div id="fng-value" style="font-size:2.4rem;font-weight:900;color:#fff;line-height:1;">--</div>
+            <div id="fng-label" style="font-size:.95rem;font-weight:700;margin-top:6px;color:rgba(255,255,255,0.7);">Loading…</div>
+            <div id="fng-updated" style="font-size:.68rem;color:rgba(255,255,255,0.35);margin-top:8px;">Fetching latest reading…</div>
+          </div>
+        </div>
+      </div>
+      <script>
+      (function(){
+        var COLORS = {
+          'Extreme Fear':'#ef4444','Fear':'#f97316','Neutral':'#FFD600',
+          'Greed':'#84cc16','Extreme Greed':'#4ADE80'
+        };
+        function load(){
+          fetch('https://api.alternative.me/fng/?limit=1&format=json')
+            .then(function(r){return r.json();})
+            .then(function(json){
+              var d = json.data && json.data[0];
+              if(!d) return;
+              var val = parseInt(d.value, 10);
+              var label = d.value_classification;
+              var valEl = document.getElementById('fng-value');
+              var labelEl = document.getElementById('fng-label');
+              var updEl = document.getElementById('fng-updated');
+              var arc = document.getElementById('fng-arc');
+              var needle = document.getElementById('fng-needle');
+              if(valEl) valEl.textContent = val;
+              if(labelEl){
+                labelEl.textContent = label;
+                labelEl.style.color = COLORS[label] || '#fff';
+              }
+              if(arc){
+                var offset = 283 - (283 * (val/100));
+                arc.style.strokeDashoffset = offset;
+              }
+              if(needle){
+                var angle = -90 + (val/100)*180;
+                needle.style.transform = 'rotate('+angle+'deg)';
+              }
+              if(updEl){
+                var d2 = new Date(parseInt(d.timestamp,10)*1000);
+                updEl.textContent = 'Updated ' + d2.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d2.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+              }
+            })
+            .catch(function(){
+              var labelEl = document.getElementById('fng-label');
+              if(labelEl) labelEl.textContent = 'Unavailable';
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function(){
+          load();
+          setInterval(load, 300000); // refresh every 5 min
+        });
+      })();
+      </script>
+
 
 
     </div>
