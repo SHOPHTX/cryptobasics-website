@@ -928,7 +928,7 @@ footer{
           var items = buildItems(data);
           inner.innerHTML = items + items;
           var w = inner.scrollWidth / 2;
-          var speed = Math.max(30, w / 12);
+          var speed = Math.max(6, w / 80);
           inner.style.animationDuration = speed + 's';
         }
         var innerB = document.getElementById('ticker-inner-bottom');
@@ -936,7 +936,7 @@ footer{
           var items = buildItems(data);
           innerB.innerHTML = items + items;
           var w = innerB.scrollWidth / 2;
-          var speed = Math.max(30, w / 12);
+          var speed = Math.max(6, w / 80);
           innerB.style.animationDuration = speed + 's';
         }
       })
@@ -956,45 +956,45 @@ footer{
 <!-- Hero -->
 <section class="hero" style="position:relative;">
   <!-- Fear & Greed Index (moved here from bottom of page) -->
-  <div id="fng-widget" style="position:absolute;top:16px;right:16px;z-index:10;max-width:180px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:11px 12px;overflow:visible;">
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px;">
+  <div id="fng-widget" style="position:absolute;top:16px;right:16px;z-index:10;max-width:280px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px 20px;overflow:visible;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;">
         <div>
-          <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
-            <div style="font-size:.5rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Fear &amp; Greed</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <div style="font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Fear &amp; Greed</div>
             <div id="fng-info-wrap" style="position:relative;display:inline-block;">
-              <button type="button" id="fng-info-btn" aria-label="What is this?" style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);font-size:7px;font-weight:800;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:'DM Sans',sans-serif;">?</button>
-              <div id="fng-tooltip" style="display:none;position:absolute;top:16px;right:0;width:200px;background:#1a1a1a;border:1px solid rgba(255,214,0,0.25);border-radius:10px;padding:11px 12px;box-shadow:0 12px 30px rgba(0,0,0,0.5);z-index:20;text-align:left;">
-                <div style="font-size:.62rem;font-weight:800;color:#FFD600;margin-bottom:5px;">In plain English:</div>
-                <div style="font-size:.6rem;line-height:1.5;color:rgba(255,255,255,0.75);margin-bottom:6px;">This is basically a mood ring for crypto traders. It measures whether people are panicking or getting greedy right now — nothing more mystical than that.</div>
-                <div style="font-size:.56rem;line-height:1.6;color:rgba(255,255,255,0.6);">
+              <button type="button" id="fng-info-btn" aria-label="What is this?" style="width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);font-size:11px;font-weight:800;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:'DM Sans',sans-serif;">?</button>
+              <div id="fng-tooltip" style="display:none;position:absolute;top:24px;right:0;width:280px;background:#1a1a1a;border:1px solid rgba(255,214,0,0.25);border-radius:12px;padding:16px 17px;box-shadow:0 12px 30px rgba(0,0,0,0.5);z-index:20;text-align:left;">
+                <div style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:7px;">In plain English:</div>
+                <div style="font-size:.8rem;line-height:1.5;color:rgba(255,255,255,0.75);margin-bottom:9px;">This is basically a mood ring for crypto traders. It measures whether people are panicking or getting greedy right now — nothing more mystical than that.</div>
+                <div style="font-size:.75rem;line-height:1.65;color:rgba(255,255,255,0.6);">
                   <div><span style="color:#ef4444;font-weight:700;">0–24 Extreme Fear</span> — everyone's panic selling</div>
                   <div><span style="color:#f97316;font-weight:700;">25–44 Fear</span> — people are nervous</div>
                   <div><span style="color:#FFD600;font-weight:700;">45–55 Neutral</span> — nobody's sure</div>
                   <div><span style="color:#84cc16;font-weight:700;">56–75 Greed</span> — people are getting excited</div>
                   <div><span style="color:#4ADE80;font-weight:700;">76–100 Extreme Greed</span> — euphoria (often a warning, not a green light)</div>
                 </div>
-                <div style="font-size:.54rem;line-height:1.5;color:rgba(255,255,255,0.4);margin-top:6px;font-style:italic;">It's not a crystal ball. It just tells you the crowd's emotional temperature — what people do with that is up to them.</div>
+                <div style="font-size:.72rem;line-height:1.5;color:rgba(255,255,255,0.4);margin-top:8px;font-style:italic;">It's not a crystal ball. It just tells you the crowd's emotional temperature — what people do with that is up to them.</div>
               </div>
             </div>
           </div>
-          <div style="display:flex;align-items:baseline;gap:5px;">
-            <div id="fng-value" style="font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:#fff;line-height:1;">--</div>
-            <div id="fng-label" style="font-size:.55rem;font-weight:700;color:rgba(255,255,255,0.7);">Loading…</div>
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <div id="fng-value" style="font-family:'Fraunces',serif;font-weight:900;font-size:1.9rem;color:#fff;line-height:1;">--</div>
+            <div id="fng-label" style="font-size:.85rem;font-weight:700;color:rgba(255,255,255,0.7);">Loading…</div>
           </div>
         </div>
-        <div style="font-size:.46rem;font-weight:700;color:#4ADE80;display:flex;align-items:center;gap:3px;">
-          <span style="width:4px;height:4px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>LIVE
+        <div style="font-size:.7rem;font-weight:700;color:#4ADE80;display:flex;align-items:center;gap:4px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>LIVE
         </div>
       </div>
 
-      <div style="position:relative;height:5px;border-radius:9999px;background:linear-gradient(90deg,#ef4444 0%,#f97316 30%,#FFD600 55%,#84cc16 75%,#4ADE80 100%);margin-top:6px;">
-        <div id="fng-marker" style="position:absolute;top:50%;left:0%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #111;box-shadow:0 0 0 1px #ef4444,0 1px 4px rgba(0,0,0,0.5);transition:left 1.2s cubic-bezier(.4,0,.2,1), box-shadow 1.2s;"></div>
+      <div style="position:relative;height:8px;border-radius:9999px;background:linear-gradient(90deg,#ef4444 0%,#f97316 30%,#FFD600 55%,#84cc16 75%,#4ADE80 100%);margin-top:9px;">
+        <div id="fng-marker" style="position:absolute;top:50%;left:0%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 0 0 1px #ef4444,0 1px 4px rgba(0,0,0,0.5);transition:left 1.2s cubic-bezier(.4,0,.2,1), box-shadow 1.2s;"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:.42rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.04em;">
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.04em;">
         <span>Fear</span><span>Neutral</span><span>Greed</span>
       </div>
 
-      <div id="fng-updated" style="text-align:right;margin-top:7px;font-size:.46rem;color:rgba(255,255,255,0.3);">Fetching latest reading…</div>
+      <div id="fng-updated" style="text-align:right;margin-top:10px;font-size:.7rem;color:rgba(255,255,255,0.3);">Fetching latest reading…</div>
   </div>
   <style>
   @media (max-width: 640px){
@@ -1084,7 +1084,7 @@ footer{
   (function(){
     var buckQuotes = [
       "Money is just a story everyone agreed to believe. Crypto is the next chapter.",
-      "DYOR is not a personality. It's what people say when they don't want to explain something.",
+      "If someone can't explain it simply, they either don't understand it, or they don't want you to.",
       "Confused people make bad decisions. Bad decisions make other people rich.",
       "Your seed phrase is the only password on Earth with no ‘forgot password’ button.",
       "The crypto industry loves sounding smart more than it loves being clear. I don’t.",
