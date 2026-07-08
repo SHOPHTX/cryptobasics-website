@@ -1332,8 +1332,23 @@ footer{
         Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span>
       </h2>
 
-
-
+      <div id="today-date-widget" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:8px 18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>
+        <span style="font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Today:</span>
+        <span id="today-date-value" style="font-size:.8rem;font-weight:700;color:#fff;"></span>
+      </div>
+      <script>
+      (function(){
+        var el = document.getElementById('today-date-value');
+        if(!el) return;
+        function render(){
+          var d = new Date();
+          el.textContent = d.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        }
+        render();
+        setInterval(render, 60000);
+      })();
+      </script>
 
     </div>
 
@@ -1366,27 +1381,6 @@ footer{
             <!-- ==========================================
            PASTE NEW NEWS CARDS AT THE TOP
            ========================================== -->
-
-      <!-- CARD: Welcome — JUL 3, 2026 -->
-      <div class="nc" data-category="welcome" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:rgba(255,255,255,0.15);border-radius:4px 0 0 4px;"></div>
-        <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 3, 2026</span>
-              <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Welcome</span>
-            </div>
-            <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">We're live. This is where the news lives now.</div>
-          </div>
-          <div class="nc-chevron" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:.9rem;transition:all .25s ease;">›</div>
-        </button>
-        <div class="nc-body" style="display:none;padding:0 24px 20px 28px;animation:ncSlide .25s ease forwards;">
-          <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;">Every time something significant happens in crypto, we drop it here — in plain English. The headline, what it actually means, why a normal person should care, and always at least 3 sources so you can fact-check us. No hype. No "to the moon." Bookmark this page.</p>
-          </div>
-        </div>
-      </div>
 
       <!-- CARD: Bitcoin ETF Bleed — JUL 2, 2026 -->
       <div class="nc" data-category="markets" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
