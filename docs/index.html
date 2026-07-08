@@ -1002,7 +1002,13 @@ footer{
   </div>
   <style>
   @media (max-width: 640px){
-    #fng-widget{ display:none; }
+    #fng-widget{
+      position:static;
+      max-width:none;
+      width:100%;
+      margin:0 auto 20px;
+      z-index:2;
+    }
   }
   </style>
   <img src="images/buck.png" style="
@@ -2285,17 +2291,18 @@ function ncToggle(btn) {
 
 <!-- Testimonials + Contact + IG (shared background wrapper) -->
 <div style="position:relative;overflow:hidden;">
-  <img src="images/Buck_jump.webp" style="
+  <div style="
     position:absolute;
-    top:0; left:50%;
-    transform:translate(-50%,0);
-    width:520px;
-    max-width:80%;
+    inset:0;
+    background-image:url('images/Buck_jump.webp');
+    background-size:cover;
+    background-position:center top;
+    background-repeat:no-repeat;
     opacity:0.15;
     mix-blend-mode:screen;
     pointer-events:none;
     z-index:0;
-  " alt="Buck" />
+  " aria-hidden="true"></div>
 
 <section id="testimonials" style="position:relative;z-index:1;max-width:1000px;margin:70px auto 0;padding:0 20px;">
   <div style="text-align:center;margin-bottom:32px;">
