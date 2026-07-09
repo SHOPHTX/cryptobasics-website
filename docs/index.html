@@ -527,7 +527,8 @@ footer{
 }
 
 @media(max-width:1024px){
-  .hero-grid{grid-template-columns:1fr;}
+  .hero-grid{grid-template-columns:1fr;min-width:0;}
+  .hero-content, .hero-visual{min-width:0;max-width:100%;}
   .about-grid{grid-template-columns:1fr;}
   .footer-grid{grid-template-columns:1fr 1fr;gap:40px;}
   .products{padding:60px 20px!important;}
@@ -545,8 +546,11 @@ footer{
   .section-title{font-size:2rem;}
   .story-grid{grid-template-columns:1fr!important;gap:40px!important;}
   .about{padding:60px 16px!important;}
-  .hero-grid{padding:0;width:100%;}
-  .hero-visual{min-height:unset!important;padding:0!important;}
+  .hero-grid{padding:0;width:100%;min-width:0!important;}
+  .hero-content{width:100%!important;min-width:0!important;max-width:100%!important;}
+  .hero-visual{min-height:unset!important;padding:0!important;min-width:0!important;max-width:100%!important;}
+  h1{max-width:100%!important;word-break:break-word;}
+  .company-badge{max-width:100%!important;white-space:normal!important;}
   .stat-card{display:flex!important;width:100%!important;}
   .stat-card>div{flex:1;}
 
