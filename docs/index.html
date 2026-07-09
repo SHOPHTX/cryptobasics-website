@@ -607,7 +607,7 @@ footer{
 .tk-sym{color:rgba(255,255,255,0.7);letter-spacing:.04em;}
 .tk-price{color:#fff;}
 .tk-up{color:#22c55e;}
-.tk-dn{color:#ef4444;}
+.tk-dn{color:#3B82F6;}
 .tk-dot{color:rgba(255,214,0,0.4);font-size:.55rem;}
 #ticker-label{
   flex-shrink:0;
@@ -676,8 +676,8 @@ footer{
 
 /* ── News Section Intro Animation ── */
 @keyframes breakingPulse{
-  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(239,68,68,0.7);}
-  50%{opacity:.7;box-shadow:0 0 0 8px rgba(239,68,68,0);}
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(59,130,246,0.7);}
+  50%{opacity:.7;box-shadow:0 0 0 8px rgba(59,130,246,0);}
 }
 @keyframes scanline{
   0%{transform:scaleX(0);opacity:0;}
@@ -726,7 +726,7 @@ footer{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  background:#ef4444;
+  background:#3B82F6;
   color:#fff;
   font-family:'DM Sans',sans-serif;
   font-size:.65rem;
@@ -748,14 +748,14 @@ footer{
 .news-scanline{
   width:100%;
   height:2px;
-  background:linear-gradient(to right, transparent, #ef4444 20%, #FFD600 50%, #ef4444 80%, transparent);
+  background:linear-gradient(to right, transparent, #3B82F6 20%, #FFD600 50%, #3B82F6 80%, transparent);
   margin:20px auto;
   max-width:600px;
   transform-origin:left center;
   animation:scanline 1s cubic-bezier(0.4,0,0.2,1) forwards, scanlinePulse 2.4s ease-in-out 1.3s infinite;
   animation-delay:.3s, 1.3s;
   transform:scaleX(0);
-  box-shadow:0 0 8px rgba(239,68,68,0.5), 0 0 20px rgba(255,214,0,0.2);
+  box-shadow:0 0 8px rgba(59,130,246,0.5), 0 0 20px rgba(255,214,0,0.2);
 }
 
 /* chyron bar — broadcast lower-third style */
@@ -770,7 +770,7 @@ footer{
   opacity:0;
 }
 .chyron-label{
-  background:#ef4444;
+  background:#3B82F6;
   color:#fff;
   font-size:.7rem;
   font-weight:900;
@@ -826,7 +826,7 @@ footer{
 /* ── News Red Ticker ── */
 .news-red-ticker{
   width:100%;
-  background:#ef4444;
+  background:#3B82F6;
   overflow:hidden;
   height:32px;
   display:flex;
@@ -1371,8 +1371,8 @@ footer{
           All
         </button>
         <button type="button" onclick="ncFilter('regulation')" class="ncf" data-filter="regulation"
-          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(59,130,246,0.35);background:rgba(59,130,246,0.08);color:#3B82F6;">
-          🟣 Regulation
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(255,214,0,0.35);background:rgba(255,214,0,0.08);color:#FFD600;">
+          🟡 Regulation
         </button>
         <button type="button" onclick="ncFilter('adoption')" class="ncf" data-filter="adoption"
           style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(74,222,128,0.35);background:rgba(74,222,128,0.08);color:#4ADE80;">
@@ -1383,8 +1383,8 @@ footer{
           🍵 Hot Goss
         </button>
         <button type="button" onclick="ncFilter('markets')" class="ncf" data-filter="markets"
-          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.08);color:#ef4444;">
-          🔴 Markets
+          style="padding:7px 18px;border-radius:9999px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s ease;border:1.5px solid rgba(59,130,246,0.35);background:rgba(59,130,246,0.08);color:#3B82F6;">
+          🔵 Markets
         </button>
       </div>
 
@@ -1392,16 +1392,47 @@ footer{
            PASTE NEW NEWS CARDS AT THE TOP
            ========================================== -->
 
+            <!-- CARD: Strategy Sells BTC at a Loss — JUL 6, 2026 -->
+      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FF2D78;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,45,120,0.06),transparent 70%);pointer-events:none;"></div>
+        <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 6, 2026</span>
+              <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FF2D78;background:rgba(255,45,120,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,45,120,0.2);">🍵 Hot Goss</span>
+            </div>
+            <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">The Guy Who Said "Never Sell" Just Sold $216 Million in Bitcoin</div>
+          </div>
+          <div class="nc-chevron" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:.9rem;transition:all .25s ease;">›</div>
+        </button>
+        <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
+          <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
+            <p style="font-size:.85rem;font-weight:800;color:#FF2D78;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Strategy (the company formerly known as MicroStrategy, run by Michael Saylor) sold 3,588 Bitcoin for about $216 million between June 29 and July 5 — a realized loss on those coins. The sale wasn't to cash out on a bet gone wrong; it was to cover dividend payments owed to holders of the company's preferred stock. Strategy still holds a massive 843,775 BTC, so this is a rounding error on their total stack, not a retreat.</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
+            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Saylor built his entire public persona on "never sell Bitcoin" — Strategy's whole strategy has been to keep buying and never blink. This is the first real crack in that story: the company also disclosed an $8.32 billion loss on its digital assets for the quarter. It's a reminder that even the biggest, most aggressive corporate Bitcoin holder still has real-world bills (like dividends) that sometimes have to be paid with real Bitcoin, no matter how bullish the marketing.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.2);">📎 Sources:</span>
+              <a href="https://www.theblock.co/post/407217/strategy-bitcoin-digital-energy" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">The Block</a>
+              <a href="https://thedefiant.io/news/cefi/strategy-sells-3-588-bitcoin-for-216m-to-fund-dividend-payments" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">The Defiant</a>
+              <a href="https://www.cryptotimes.io/2026/07/06/michael-saylors-strategy-liquidates-3588-bitcoin-hours-after-preaching-bitcoin-supremacy/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">CryptoTimes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- CARD: Bitcoin ETF Bleed — JUL 2, 2026 -->
       <div class="nc" data-category="markets" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#ef4444;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(239,68,68,0.06),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 2, 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ef4444;background:rgba(239,68,68,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(239,68,68,0.2);">📉 Markets</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.2);">📉 Markets</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">Bitcoin ETFs Just Had Their Worst Month Ever — $4.5 Billion Walked Out the Door in June</div>
           </div>
@@ -1409,23 +1440,23 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#ef4444;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">When Wall Street approved spot Bitcoin ETFs in January 2024, it was a huge deal — it meant regular investors and institutions could finally buy Bitcoin through a normal brokerage account without touching crypto directly. For most of 2024, money poured in. June 2026 was the opposite. $4.5 billion left Bitcoin ETFs in a single month — the worst outflow since the funds launched. That smashed the previous record of $3.48 billion set in February 2025 by 29%. BlackRock's IBIT — the biggest Bitcoin ETF on the planet — alone saw $3.55 billion exit, including nine straight days of net selling. Bitcoin itself dropped 20.48% in June, its steepest monthly fall since June 2022.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Two things triggered the stampede out. First: SpaceX went public on June 12 — one of the most anticipated IPOs in years — and sucked billions in risk capital out of volatile assets like crypto and into the offering. Second: Fed Chair Kevin Warsh delivered a hawkish surprise, pulling rate cuts off the table entirely. When interest rates stay high, safer assets look more attractive and speculative ones get dumped first. Before you panic though — this is institutions rebalancing, not retail giving up. ETF outflows during macro stress are normal. The infrastructure is still there. The question is what happens when the macro pressure eases.</p>
 
             <!-- The numbers -->
             <div style="margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-              <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.1rem;font-weight:900;color:#ef4444;margin-bottom:2px;">$4.5B</p>
+              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.1rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">$4.5B</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.06em;">June outflows</p>
               </div>
-              <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.1rem;font-weight:900;color:#ef4444;margin-bottom:2px;">-20.5%</p>
+              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.1rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">-20.5%</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.06em;">BTC in June</p>
               </div>
-              <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.1rem;font-weight:900;color:#ef4444;margin-bottom:2px;">9 days</p>
+              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.1rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">9 days</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.06em;">IBIT net selling streak</p>
               </div>
             </div>
@@ -1447,14 +1478,14 @@ footer{
 
             <!-- CARD: MiCA Full Enforcement — JUL 1, 2026 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.07),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 1, 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.25);">🇪🇺 Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);">🇪🇺 Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">Europe Just Dropped the Hammer on Crypto — 83% of Firms Missed the Deadline</div>
           </div>
@@ -1462,21 +1493,21 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">MiCA stands for Markets in Crypto-Assets — it's the European Union's sweeping crypto law, years in the making. On July 1, 2026, the transitional grace period ended and full enforcement went live across all 27 EU member states. Any crypto exchange, broker, or custodian serving EU customers now needs an official CASP license (Crypto-Asset Service Provider) or they're operating illegally. Out of more than 3,000 crypto firms operating in Europe, only 210 made the cut. The other 83% are now in breach of EU law, effective immediately. No extensions. No second chances.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">MiCA is the first major economy in the world to have a comprehensive, functioning crypto law. The US is still fighting about it (see: Dimon vs Armstrong above). Europe just did it. The winners are the exchanges that did the homework — Coinbase, Kraken, OKX, and Crypto.com all hold valid MiCA licenses and now have a massive first-mover advantage across 450 million potential customers. The big loser? Binance — which pulled its Greek license application just 6 days before the deadline on June 24, and is now locked out of the EU while it chases a French license. The precedent being set here is massive: if you want to operate in the world's largest trading bloc, you play by the rules or you don't play at all.</p>
 
             <!-- Scoreboard -->
             <div style="margin-bottom:18px;">
-              <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:10px;">🏆 Who's IN vs Who's OUT</p>
+              <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:10px;">🏆 Who's IN vs Who's OUT</p>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                 <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);border-radius:10px;padding:10px 12px;">
                   <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#4ADE80;margin-bottom:6px;">✅ Licensed</p>
                   <p style="font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.8;">Coinbase<br/>Kraken<br/>OKX<br/>Crypto.com</p>
                 </div>
-                <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:10px 12px;">
-                  <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ef4444;margin-bottom:6px;">🚫 Locked Out</p>
+                <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;">
+                  <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;margin-bottom:6px;">🚫 Locked Out</p>
                   <p style="font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.8;">Binance<br/>+ 2,790 others<br/><span style="font-size:.72rem;color:rgba(255,255,255,0.3);">83% of the market</span></p>
                 </div>
               </div>
@@ -1495,14 +1526,14 @@ footer{
 
             <!-- CARD: Taiwan Virtual Asset Service Act — JUN 30, 2026 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.06),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUN 30, 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.25);">🇹🇼 Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);">🇹🇼 Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">Taiwan Just Passed One of the Strictest Crypto Laws on Earth — With 100% Reserve Rules and 10 Years in Prison for Fraud</div>
           </div>
@@ -1510,23 +1541,23 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">On June 30, 2026 — the same day the UK dropped its FCA rulebook — Taiwan's Legislative Yuan passed the Virtual Asset Service Act (虛擬資產服務法), the country's first dedicated crypto law. It covers seven categories of crypto business: exchanges, trading platforms, transfer services, custodians, underwriters, lending platforms, and a catch-all. Every one of them must get licensed by Taiwan's Financial Supervisory Commission (FSC). Customer assets must be kept completely separate from company funds. Stablecoin issuers must hold 100% reserves — every single dollar backed, in trust, with regular public audits. And if you try to commit fraud or market manipulation? Three to ten years in prison, fines up to NT$200 million (about $6.5 million USD). Operating without a license? Seven years and NT$100 million.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Taiwan passing this law on the exact same day as the UK FCA rulebook and one day before EU MiCA enforcement kicked in was not a coincidence — it's a race. Every major economy is now trying to write the rules before someone else does, because whoever sets the standard first tends to set it for everyone else. Taiwan's law is notable for two reasons. First, the 100% stablecoin reserve requirement is the toughest in the world — the EU requires 60% in bank deposits, the UK requires just 1% capital buffer. Taiwan says: back every token, full stop. Second, the criminal penalties are serious. This isn't a "pay a fine and move on" regime. Taiwan just made crypto fraud a prison sentence offense. For anyone who watched FTX collapse and wondered if anyone would ever be held accountable before it happens again — Taiwan just answered.</p>
 
             <!-- Key numbers -->
             <div style="margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.05rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">100%</p>
+              <div style="background:rgba(255,214,0,0.07);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.05rem;font-weight:900;color:#FFD600;margin-bottom:2px;">100%</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.05em;line-height:1.4;">stablecoin reserve requirement</p>
               </div>
-              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.05rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">10 yrs</p>
+              <div style="background:rgba(255,214,0,0.07);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.05rem;font-weight:900;color:#FFD600;margin-bottom:2px;">10 yrs</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.05em;line-height:1.4;">max prison for fraud</p>
               </div>
-              <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
-                <p style="font-size:1.05rem;font-weight:900;color:#3B82F6;margin-bottom:2px;">7 types</p>
+              <div style="background:rgba(255,214,0,0.07);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:10px 12px;text-align:center;">
+                <p style="font-size:1.05rem;font-weight:900;color:#FFD600;margin-bottom:2px;">7 types</p>
                 <p style="font-size:.65rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.05em;line-height:1.4;">VASP categories licensed</p>
               </div>
             </div>
@@ -1537,15 +1568,15 @@ footer{
               <div style="display:flex;flex-direction:column;gap:6px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.5);">🇹🇼 Taiwan</span>
-                  <span style="font-size:.8rem;font-weight:800;color:#3B82F6;">100% full backing</span>
+                  <span style="font-size:.8rem;font-weight:800;color:#FFD600;">100% full backing</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.5);">🇪🇺 EU (MiCA)</span>
-                  <span style="font-size:.8rem;font-weight:800;color:#3B82F6;">60% in EU banks</span>
+                  <span style="font-size:.8rem;font-weight:800;color:#FFD600;">60% in EU banks</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.5);">🇬🇧 UK (FCA)</span>
-                  <span style="font-size:.8rem;font-weight:800;color:#3B82F6;">1% capital buffer</span>
+                  <span style="font-size:.8rem;font-weight:800;color:#FFD600;">1% capital buffer</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.35);">🇺🇸 US</span>
@@ -1567,14 +1598,14 @@ footer{
 
             <!-- CARD: UK FCA Crypto Rules — JUN 30, 2026 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.07),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUN 30, 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.25);">🇬🇧 Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);">🇬🇧 Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">The UK Just Published Its Full Crypto Rulebook — and Deliberately Made It Less Strict Than Europe's</div>
           </div>
@@ -1582,26 +1613,26 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">On June 30, 2026 — one day before the EU's MiCA enforcement kicked in — the UK's Financial Conduct Authority (FCA) dropped its full crypto regulatory framework. Any company wanting to offer crypto trading, custody, stablecoin issuance, staking, or lending to UK customers must now get FCA authorization. The application window opens September 30, 2026. The full regime goes live October 25, 2027. This covers everything: exchanges, custodians, stablecoin issuers, staking services, even certain DeFi platforms with an identifiable person running them.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">The timing was deliberate. The UK watched MiCA push Tether out of Europe and decided to do things differently. The FCA cut its stablecoin capital reserve requirement from a proposed 2% down to 1% — half of what MiCA demands, and a fraction of the 3% required of major EU issuers. The message to the crypto industry is clear: London is open, and it's easier to operate here than in Brussels. The US is still fighting its CLARITY Act battle. The EU just dropped the hammer on 83% of its crypto firms. The UK is threading the needle — real rules, real consumer protection, but flexible enough to actually attract business. The global race to be the world's crypto capital just got a third serious contender.</p>
 
             <!-- The global regulatory race -->
             <div style="margin-bottom:18px;">
-              <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:10px;">🌍 The Global Reg Race — Where Each Country Stands</p>
+              <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:10px;">🌍 The Global Reg Race — Where Each Country Stands</p>
               <div style="display:flex;flex-direction:column;gap:8px;">
-                <div style="display:flex;align-items:center;gap:12px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 14px;">
+                <div style="display:flex;align-items:center;gap:12px;background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:10px 14px;">
                   <span style="font-size:1.2rem;flex-shrink:0;">🇬🇧</span>
                   <div>
-                    <p style="font-size:.72rem;font-weight:800;color:#3B82F6;margin-bottom:2px;">UK — Rules published, live Oct 2027</p>
+                    <p style="font-size:.72rem;font-weight:800;color:#FFD600;margin-bottom:2px;">UK — Rules published, live Oct 2027</p>
                     <p style="font-size:.78rem;color:rgba(255,255,255,0.5);line-height:1.5;">1% stablecoin capital reserve. Flexible, business-friendly. Actively courting crypto firms.</p>
                   </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:12px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 14px;">
+                <div style="display:flex;align-items:center;gap:12px;background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:10px 14px;">
                   <span style="font-size:1.2rem;flex-shrink:0;">🇪🇺</span>
                   <div>
-                    <p style="font-size:.72rem;font-weight:800;color:#3B82F6;margin-bottom:2px;">EU — MiCA fully live Jul 1, 2026</p>
+                    <p style="font-size:.72rem;font-weight:800;color:#FFD600;margin-bottom:2px;">EU — MiCA fully live Jul 1, 2026</p>
                     <p style="font-size:.78rem;color:rgba(255,255,255,0.5);line-height:1.5;">60% bank reserve rule. Strict. Pushed Tether out. 83% of firms missed the deadline.</p>
                   </div>
                 </div>
@@ -1798,14 +1829,14 @@ footer{
 
             <!-- CARD: MAS Singapore Crypto Rules — APR 2026 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.06),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">APR 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.25);">🇸🇬 Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);">🇸🇬 Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">Singapore's Central Bank Is Quietly Building the World's Most Thorough Crypto Rulebook</div>
           </div>
@@ -1813,14 +1844,14 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">While the US fights about the CLARITY Act and Europe enforces MiCA, Singapore's Monetary Authority (MAS) has been methodically building out its crypto rulebook layer by layer — no drama, no congressional showdowns, just steady regulatory architecture. In April 2026 alone, MAS dropped a major consultation paper (P009-2026) proposing how Singapore's banks should calculate capital requirements for crypto held on public blockchains like Bitcoin and Ethereum — the first framework of its kind to treat public-chain assets differently from private ones based on demonstrated risk management, not a flat penalty. That's on top of rules already in force: 90% of all customer crypto assets must be held in cold storage (offline, unhackable), stablecoin issuers need full reserves, and a wholesale CBDC pilot is running to test government bond settlement on-chain. The bank-level capital rules were originally supposed to go live January 2026 — MAS pushed them to January 2027 after industry feedback, which is what good regulators do.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Singapore doesn't make headlines the way the US and EU do, but it's arguably the most important crypto regulatory jurisdiction in Asia. It's where major global exchanges and crypto firms have chosen to base their Asia operations precisely because the rules are predictable, enforced without political theatre, and updated through genuine industry dialogue. The 90% cold wallet rule is a direct response to FTX — it means exchanges can't secretly lend out your assets. The public blockchain capital framework is a direct response to how banks have been paralysed by uncertainty about how to account for crypto on their balance sheets. Each piece fits a larger picture: Singapore is positioning itself as the place where crypto and traditional finance officially merge — safely, methodically, and ahead of everyone else in the region.</p>
 
             <!-- MAS rule stack -->
             <div style="margin-bottom:18px;">
-              <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:10px;">📋 The MAS Rule Stack — What's Live vs Coming</p>
+              <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:10px;">📋 The MAS Rule Stack — What's Live vs Coming</p>
               <div style="display:flex;flex-direction:column;gap:6px;">
                 <div style="display:flex;align-items:baseline;gap:10px;padding:8px 12px;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12);border-radius:8px;">
                   <span style="font-size:.7rem;color:#4ADE80;flex-shrink:0;font-weight:800;">LIVE</span>
@@ -1834,12 +1865,12 @@ footer{
                   <span style="font-size:.7rem;color:#4ADE80;flex-shrink:0;font-weight:800;">LIVE</span>
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.5;"><strong style="color:rgba(255,255,255,0.8);">CBDC pilot</strong> — wholesale tokenized government bonds settled via central bank digital currency</span>
                 </div>
-                <div style="display:flex;align-items:baseline;gap:10px;padding:8px 12px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:8px;">
-                  <span style="font-size:.7rem;color:#3B82F6;flex-shrink:0;font-weight:800;">2027</span>
+                <div style="display:flex;align-items:baseline;gap:10px;padding:8px 12px;background:rgba(255,214,0,0.05);border:1px solid rgba(255,214,0,0.15);border-radius:8px;">
+                  <span style="font-size:.7rem;color:#FFD600;flex-shrink:0;font-weight:800;">2027</span>
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.5;"><strong style="color:rgba(255,255,255,0.8);">Bank capital rules for crypto</strong> — how banks must account for crypto on their balance sheets; delayed from Jan 2026</span>
                 </div>
-                <div style="display:flex;align-items:baseline;gap:10px;padding:8px 12px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:8px;">
-                  <span style="font-size:.7rem;color:#3B82F6;flex-shrink:0;font-weight:800;">PENDING</span>
+                <div style="display:flex;align-items:baseline;gap:10px;padding:8px 12px;background:rgba(255,214,0,0.05);border:1px solid rgba(255,214,0,0.15);border-radius:8px;">
+                  <span style="font-size:.7rem;color:#FFD600;flex-shrink:0;font-weight:800;">PENDING</span>
                   <span style="font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.5;"><strong style="color:rgba(255,255,255,0.8);">Public blockchain framework (P009-2026)</strong> — risk-based capital treatment for crypto on permissionless chains</span>
                 </div>
               </div>
@@ -1851,37 +1882,6 @@ footer{
               <a href="https://www.twobirds.com/en/insights/2026/singapore/gamechanger-for-how-banks-treat-cryptoassets-mas-proposes-a-flexible-approach-to-cryptoassets-issued" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">Bird & Bird</a>
               <a href="https://finance.yahoo.com/news/singapore-delays-crypto-rules-banks-152437843.html" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">Yahoo Finance</a>
               <a href="https://wcr.legal/singapore-crypto-regulation-mas-framework/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">WCR Legal</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-            <!-- CARD: Strategy Sells BTC at a Loss — JUL 6, 2026 -->
-      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FF2D78;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,45,120,0.06),transparent 70%);pointer-events:none;"></div>
-        <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 6, 2026</span>
-              <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FF2D78;background:rgba(255,45,120,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,45,120,0.2);">🍵 Hot Goss</span>
-            </div>
-            <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">The Guy Who Said "Never Sell" Just Sold $216 Million in Bitcoin</div>
-          </div>
-          <div class="nc-chevron" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:.9rem;transition:all .25s ease;">›</div>
-        </button>
-        <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
-          <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#FF2D78;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
-            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Strategy (the company formerly known as MicroStrategy, run by Michael Saylor) sold 3,588 Bitcoin for about $216 million between June 29 and July 5 — a realized loss on those coins. The sale wasn't to cash out on a bet gone wrong; it was to cover dividend payments owed to holders of the company's preferred stock. Strategy still holds a massive 843,775 BTC, so this is a rounding error on their total stack, not a retreat.</p>
-            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
-            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Saylor built his entire public persona on "never sell Bitcoin" — Strategy's whole strategy has been to keep buying and never blink. This is the first real crack in that story: the company also disclosed an $8.32 billion loss on its digital assets for the quarter. It's a reminder that even the biggest, most aggressive corporate Bitcoin holder still has real-world bills (like dividends) that sometimes have to be paid with real Bitcoin, no matter how bullish the marketing.</p>
-            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.2);">📎 Sources:</span>
-              <a href="https://www.theblock.co/post/407217/strategy-bitcoin-digital-energy" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">The Block</a>
-              <a href="https://thedefiant.io/news/cefi/strategy-sells-3-588-bitcoin-for-216m-to-fund-dividend-payments" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">The Defiant</a>
-              <a href="https://www.cryptotimes.io/2026/07/06/michael-saylors-strategy-liquidates-3588-bitcoin-hours-after-preaching-bitcoin-supremacy/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">CryptoTimes</a>
             </div>
           </div>
         </div>
@@ -1960,14 +1960,14 @@ footer{
 
       <!-- CARD: SEC/CFTC 16 Commodities — MAR 17, 2026 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.06),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.06),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">MAR 17, 2026</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.2);">⚖️ Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.2);">⚖️ Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">The SEC and CFTC Just Officially Named 16 Cryptos as "Digital Commodities"</div>
           </div>
@@ -1975,7 +1975,7 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">The SEC and CFTC — America's two biggest financial regulators — jointly declared that 16 major cryptocurrencies are now officially classified as "digital commodities," treated more like gold or oil than like stocks. The 16: Bitcoin, Ethereum, XRP, Solana, Cardano, Chainlink, Avalanche, Polkadot, Hedera, Stellar, Litecoin, Dogecoin, Shiba Inu, Tezos, Bitcoin Cash, and Aptos.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">For years, crypto companies lived in legal limbo — nobody knew which rules applied to them, so banks and institutions stayed away. This ruling changes that. It's a green light for banks, asset managers, and exchanges to build products around these 16 tokens without fear of getting sued by regulators. If your coin is on the list, it just got a whole lot more legitimate.</p>
@@ -2081,14 +2081,14 @@ footer{
 
       <!-- CARD: GENIUS Act Signed — JUL 18, 2025 -->
       <div class="nc" data-category="regulation" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#3B82F6;border-radius:4px 0 0 4px;"></div>
-        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(59,130,246,0.07),transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FFD600;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,214,0,0.07),transparent 70%);pointer-events:none;"></div>
         <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">JUL 18, 2025</span>
               <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
-              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.25);">🇺🇸 Regulation</span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);">🇺🇸 Regulation</span>
             </div>
             <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">America Finally Did It — Trump Signs the First Major Federal Crypto Law in US History</div>
           </div>
@@ -2096,27 +2096,27 @@ footer{
         </button>
         <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
           <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-            <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">The GENIUS Act — short for Guiding and Establishing National Innovation for U.S. Stablecoins — is the first comprehensive federal crypto law ever passed in the United States. Trump signed it on July 18, 2025. It passed the Senate 68–30, with bipartisan support. The law creates a federal licensing framework specifically for stablecoin issuers — the companies that issue digital dollars like USDC and USDT. Every stablecoin issuer must now be either a federally or state-licensed entity, hold 100% reserves in cash or short-term US Treasuries, publish monthly public disclosures of those reserves, and have the technical ability to freeze or seize stablecoins when legally required. If the issuer goes bankrupt, stablecoin holders get paid out first — before any other creditors. And no, the US government is not backing these coins. The law explicitly bans issuers from claiming otherwise.</p>
             <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
             <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">For years, crypto operated in the US without a single clear federal law. Different agencies — the SEC, CFTC, Treasury, state regulators — all claimed different pieces of it, and companies never knew which rules applied to them. The GENIUS Act ends that ambiguity for stablecoins. And stablecoins matter because they're the bridge between the traditional financial system and crypto — they're how money flows into and out of the whole ecosystem. The stablecoin market was already $267 billion at signing and projected to hit $1.4 trillion by 2030. The GENIUS Act also quietly cements the US dollar's global dominance — because every compliant stablecoin must be backed by dollars or dollar-denominated assets. More stablecoins globally = more dollar demand globally. Trump called it "cementing American dominance of global finance." He wasn't wrong about that part.</p>
 
             <!-- The receipts -->
             <div style="margin-bottom:18px;">
-              <p style="font-size:.85rem;font-weight:800;color:#3B82F6;margin-bottom:12px;">🧾 THE RECEIPTS</p>
+              <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:12px;">🧾 THE RECEIPTS</p>
               <div style="background:rgba(0,0,0,0.3);border-left:3px solid rgba(255,255,255,0.15);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:8px;">
                 <p style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;">Trump — GENIUS Act signing ceremony</p>
                 <p style="font-size:.92rem;color:rgba(255,255,255,0.75);line-height:1.6;font-style:italic;">"This afternoon, we take a giant step to cement American dominance of global finance and crypto technology."</p>
               </div>
-              <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:12px 14px;">
-                <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(59,130,246,0.7);margin-bottom:8px;">What the GENIUS Act actually requires</p>
+              <div style="background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:12px 14px;">
+                <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,214,0,0.7);margin-bottom:8px;">What the GENIUS Act actually requires</p>
                 <div style="display:flex;flex-direction:column;gap:5px;">
                   <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#FFD600;flex-shrink:0;">✓</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">100% reserves in cash or short-term US Treasuries</span></div>
                   <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#FFD600;flex-shrink:0;">✓</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">Monthly public reserve disclosures</span></div>
                   <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#FFD600;flex-shrink:0;">✓</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">Federal or state license required to issue</span></div>
                   <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#FFD600;flex-shrink:0;">✓</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">Must be able to freeze or seize tokens on lawful order</span></div>
                   <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#FFD600;flex-shrink:0;">✓</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">Stablecoin holders paid first in bankruptcy</span></div>
-                  <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#ef4444;flex-shrink:0;">✗</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">No CBDC — banned it explicitly</span></div>
+                  <div style="display:flex;align-items:baseline;gap:8px;"><span style="color:#3B82F6;flex-shrink:0;">✗</span><span style="font-size:.8rem;color:rgba(255,255,255,0.55);">No CBDC — banned it explicitly</span></div>
                 </div>
               </div>
             </div>
@@ -2173,8 +2173,8 @@ footer{
                 <p style="font-size:.92rem;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;">"The European Central Bank is more interested in pushing the digital euro as a way to control people and control how they spend their money."</p>
               </div>
 
-              <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:12px 14px;">
-                <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(59,130,246,0.7);margin-bottom:8px;">🏆 Who quietly won while everyone was watching Tether leave</p>
+              <div style="background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.15);border-radius:10px;padding:12px 14px;">
+                <p style="font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,214,0,0.7);margin-bottom:8px;">🏆 Who quietly won while everyone was watching Tether leave</p>
                 <p style="font-size:.82rem;color:rgba(255,255,255,0.6);line-height:1.7;"><strong style="color:rgba(255,255,255,0.85);">Circle's USDC</strong> — got MiCA authorized, stayed on every EU exchange, and is now the only major dollar stablecoin EU users can trade on regulated platforms. Tether handed them the entire European market on a silver platter.</p>
               </div>
             </div>
