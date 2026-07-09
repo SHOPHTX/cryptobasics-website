@@ -1008,14 +1008,22 @@ footer{
   <style>
   @media (max-width: 640px){
     #fng-widget{
-      position:static !important;
+      position:relative !important;
       top:auto !important;
       right:auto !important;
       max-width:none !important;
       width:auto !important;
-      margin:0 20px 20px !important;
+      margin:0 16px 16px !important;
+      padding:12px 14px !important;
       z-index:2 !important;
     }
+    #fng-widget div[style*="position:absolute"][style*="top:14px"]{
+      top:10px !important;
+      right:12px !important;
+    }
+    #fng-widget #fng-value{ font-size:1.4rem !important; }
+    #fng-widget #fng-label{ font-size:.75rem !important; }
+    #fng-tooltip{ width:calc(100vw - 64px) !important; right:0 !important; }
   }
   </style>
   <img src="images/buck.png" style="
