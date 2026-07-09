@@ -924,14 +924,30 @@ footer{
     return items;
   }
 
+  var retryCount = 0;
+  var MAX_RETRIES = 4;
+
+  function showFallback(){
+    var msg = '<span class="tk-item" style="color:rgba(255,255,255,0.35);">Live prices unavailable right now — retrying…</span>';
+    var inner = document.getElementById('ticker-inner');
+    if(inner && !inner.dataset.loaded) inner.innerHTML = msg;
+    var innerB = document.getElementById('ticker-inner-bottom');
+    if(innerB && !innerB.dataset.loaded) innerB.innerHTML = msg;
+  }
+
   function load(){
     fetch(URL)
-      .then(function(r){return r.json();})
+      .then(function(r){
+        if(!r.ok) throw new Error('bad status ' + r.status);
+        return r.json();
+      })
       .then(function(data){
+        retryCount = 0;
         var inner = document.getElementById('ticker-inner');
         if(inner){
           var items = buildItems(data);
           inner.innerHTML = items + items;
+          inner.dataset.loaded = '1';
           var w = inner.scrollWidth / 2;
           var speed = Math.max(6, w / 80);
           inner.style.animationDuration = speed + 's';
@@ -940,13 +956,21 @@ footer{
         if(innerB){
           var items = buildItems(data);
           innerB.innerHTML = items + items;
+          innerB.dataset.loaded = '1';
           var w = innerB.scrollWidth / 2;
           var speed = Math.max(6, w / 80);
           innerB.style.animationDuration = speed + 's';
         }
       })
       .catch(function(){
-        // silently fail — ticker stays hidden or shows stale
+        // CoinGecko's free tier rate-limits or drops requests fairly often.
+        // Retry a few times with backoff instead of leaving "Loading..." stuck forever.
+        if(retryCount < MAX_RETRIES){
+          retryCount++;
+          setTimeout(load, retryCount * 4000);
+        } else {
+          showFallback();
+        }
       });
   }
 
