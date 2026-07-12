@@ -889,23 +889,10 @@ footer{
   <div style="max-width:900px;margin:0 auto;display:block;">
     <div class="news-intro" id="news-intro">
 
-      <!-- Scrolling red ticker -->
-      <div class="news-red-ticker">
-        <div class="red-ticker-track">
-          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">No Fake News. No Hopium.</span><span class="red-ticker-sep">★</span>
-          <!-- duplicate for seamless loop -->
-          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
-          <span class="red-ticker-item">No Fake News. No Hopium.</span><span class="red-ticker-sep">★</span>
-        </div>
+      <!-- Live crypto price ticker -->
+      <div id="price-ticker" style="position:relative;top:auto;left:auto;right:auto;margin-bottom:20px;border-radius:9999px;border:1px solid rgba(255,214,0,0.18);">
+        <div id="ticker-label">⚡ LIVE</div>
+        <div id="ticker-inner"><span class="tk-item" style="color:rgba(255,255,255,0.35);">Loading live prices…</span></div>
       </div>
 
       <!-- Animated scanline -->
@@ -1965,9 +1952,92 @@ function ncToggle(btn) {
 }
 </script>
 
+<script>
+(function(){
+  var COINS = [
+    {id:'bitcoin',    sym:'BTC', icon:'₿'},
+    {id:'ethereum',   sym:'ETH', icon:'Ξ'},
+    {id:'solana',     sym:'SOL', icon:'◎'},
+    {id:'ripple',     sym:'XRP', icon:'✕'},
+    {id:'cardano',    sym:'ADA', icon:'₳'},
+    {id:'dogecoin',   sym:'DOGE',icon:'Ð'},
+    {id:'chainlink',  sym:'LINK',icon:'⬡'},
+    {id:'avalanche-2',sym:'AVAX',icon:'△'},
+    {id:'polkadot',   sym:'DOT', icon:'●'},
+    {id:'uniswap',    sym:'UNI', icon:'🦄'},
+  ];
+  var ids = COINS.map(function(c){return c.id;}).join(',');
+  var URL = 'https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true';
+
+  function fmt(n){
+    if(n>=1000) return '$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+    if(n>=1)    return '$'+n.toFixed(2);
+    return '$'+n.toFixed(4);
+  }
+
+  function buildItems(data){
+    var items = '';
+    COINS.forEach(function(c){
+      var d = data[c.id];
+      if(!d) return;
+      var price = d.usd;
+      var chg   = d.usd_24h_change;
+      var up    = chg >= 0;
+      var arrow = up ? '▲' : '▼';
+      var cls   = up ? 'tk-up' : 'tk-dn';
+      items += '<span class="tk-item">'
+        + '<span class="tk-sym">'+c.sym+'</span>'
+        + '<span class="tk-price">'+fmt(price)+'</span>'
+        + '<span class="'+cls+'">'+arrow+' '+Math.abs(chg).toFixed(2)+'%</span>'
+        + '</span>';
+    });
+    return items;
+  }
+
+  var retryCount = 0;
+  var MAX_RETRIES = 4;
+
+  function showFallback(){
+    var msg = '<span class="tk-item" style="color:rgba(255,255,255,0.35);">Live prices unavailable right now — retrying…</span>';
+    var inner = document.getElementById('ticker-inner');
+    if(inner && !inner.dataset.loaded) inner.innerHTML = msg;
+  }
+
+  function load(){
+    fetch(URL)
+      .then(function(r){
+        if(!r.ok) throw new Error('bad status ' + r.status);
+        return r.json();
+      })
+      .then(function(data){
+        retryCount = 0;
+        var inner = document.getElementById('ticker-inner');
+        if(inner){
+          var items = buildItems(data);
+          inner.innerHTML = items + items;
+          inner.dataset.loaded = '1';
+          var w = inner.scrollWidth / 2;
+          var speed = Math.max(6, w / 80);
+          inner.style.animationDuration = speed + 's';
+        }
+      })
+      .catch(function(){
+        if(retryCount < MAX_RETRIES){
+          retryCount++;
+          setTimeout(load, retryCount * 4000);
+        } else {
+          showFallback();
+        }
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    load();
+    setInterval(load, 60000);
+  });
+})();
 </script>
 
-<script>
 <script>
 (function(){
   var SHOW_INITIAL = 5;
