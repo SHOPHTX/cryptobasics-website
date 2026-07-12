@@ -890,10 +890,22 @@ footer{
     <div class="news-intro" id="news-intro">
 
       <!-- Live crypto price ticker -->
-      <div id="price-ticker" style="position:relative;top:auto;left:auto;right:auto;margin-bottom:20px;border-radius:9999px;border:1px solid rgba(255,214,0,0.18);">
+      <div id="price-ticker" style="position:relative;top:auto;left:auto;right:auto;margin-bottom:12px;border-radius:9999px;border:1px solid rgba(255,214,0,0.18);">
         <div id="ticker-label">⚡ LIVE</div>
         <div id="ticker-inner"><span class="tk-item" style="color:rgba(255,255,255,0.35);">Loading live prices…</span></div>
       </div>
+
+      <!-- Unconfirmed / rumor ticker -->
+      <div style="position:relative;height:34px;background:#151022;border:1px solid rgba(168,85,247,0.25);border-radius:9999px;display:flex;align-items:center;overflow:hidden;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;margin-bottom:20px;">
+        <div style="flex-shrink:0;padding:0 12px 0 14px;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#c084fc;border-right:1px solid rgba(168,85,247,0.3);white-space:nowrap;background:#151022;z-index:1;height:100%;display:flex;align-items:center;">⚠️ Unconfirmed</div>
+        <div style="display:flex;align-items:center;white-space:nowrap;animation:rumorScroll 22s linear infinite;">
+          <span style="display:inline-flex;align-items:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);">Clarity Act vote — timing still speculative, no confirmed date</span>
+          <span style="display:inline-flex;align-items:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);">Japan's carry-trade unwind — a real historical pattern, not a certainty this time</span>
+          <span style="display:inline-flex;align-items:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);">Clarity Act vote — timing still speculative, no confirmed date</span>
+          <span style="display:inline-flex;align-items:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);">Japan's carry-trade unwind — a real historical pattern, not a certainty this time</span>
+        </div>
+      </div>
+      <style>@keyframes rumorScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}</style>
 
       <!-- Animated scanline -->
       <div class="news-scanline"></div>
