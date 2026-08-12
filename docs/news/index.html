@@ -964,6 +964,38 @@ footer{
             <!-- ==========================================
            PASTE NEW NEWS CARDS AT THE TOP
            ========================================== -->
+            <!-- CARD: Ravencoin Consensus Bug / Chain Reorg — AUG 11, 2026 -->
+      <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FF2D78;border-radius:4px 0 0 4px;"></div>
+        <div style="position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at top right,rgba(255,45,120,0.06),transparent 70%);pointer-events:none;"></div>
+        <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:20px 24px 20px 28px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">AUG 11, 2026</span>
+              <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FF2D78;background:rgba(255,45,120,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,45,120,0.2);">🍵 Hot Goss</span>
+            </div>
+            <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;">A Mining Bug Broke Ravencoin — Miners Are Now Rewinding Three Days of "Permanent" Transactions</div>
+          </div>
+          <div class="nc-chevron" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:.9rem;transition:all .25s ease;">›</div>
+        </button>
+        <div class="nc-body" style="display:none;padding:0 24px 22px 28px;animation:ncSlide .25s ease forwards;">
+          <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
+            <p style="font-size:.85rem;font-weight:800;color:#FF2D78;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Ravencoin is a smaller, bitcoin-based blockchain mined with an algorithm called KAWPOW. On August 7, someone found and used a flaw in how nodes check "block headers" — the ID card each new block carries — that let invalid blocks slip past validation and get accepted onto the chain. Once network watchers caught it, the two mining pools controlling most of Ravencoin's hash power (2Miners and RavenMiner) started mining a separate, "clean" version of the chain that throws out every block built on top of the bug, starting from block 4,487,776. If that clean chain wins out — which, with majority hash power behind it, it's expected to — Ravencoin undergoes a "reorg": roughly three days of transactions on the exploited branch get erased and don't count anymore. Exchanges were told to pause RVN deposits and withdrawals until it's sorted, and the token dropped to a record low.</p>
+            <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
+            <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">"The blockchain is permanent and can't be changed" is one of the first things people learn about crypto — this is the exception that proves the rule. A reorg like this is only possible because a small number of mining pools control most of the network's hash power and could coordinate around the bug; on a chain as decentralized as Bitcoin's, this kind of fix would be far harder to pull off. It's a good reminder that "smaller, cheaper" blockchains often trade off the security and battle-testing that come with size — worth knowing before you hold or transact on any coin outside the handful of major networks.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.2);">📎 Sources:</span>
+              <a href="https://decrypt.co/375330/ravencoin-crashes-critical-exploit-threatens-rollback" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">Decrypt</a>
+              <a href="https://crypto.news/ravencoin-drops-to-record-low-as-miners-move-to-reverse-exploited-chain/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">crypto.news</a>
+              <a href="https://www.kucoin.com/news/flash/ravencoin-network-faces-critical-consensus-vulnerability-risk-of-3-day-chain-reorganization" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">KuCoin News</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
             <!-- CARD: BTCPay Server Lightning Node Exploit — AUG 11, 2026 -->
       <div class="nc" data-category="hotgoss" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FF2D78;border-radius:4px 0 0 4px;"></div>
