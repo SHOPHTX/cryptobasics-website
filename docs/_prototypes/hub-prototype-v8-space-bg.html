@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoBasics — Cinematic Space Background (DEMO ONLY)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#05060c;
+  color:#fff;
+  position:relative;
+}
+canvas{position:fixed;inset:0;z-index:0;display:block;}
+
+.chrome{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;pointer-events:none;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:26px 32px;}
+.logo{font-size:.85rem;font-weight:900;letter-spacing:.05em;}
+.logo span{color:#FFD600;}
+.navcta{font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:#FFD600;color:#0c1520;padding:9px 18px;border-radius:9999px;}
+
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px;}
+.eyebrow{font-size:.68rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:#7FD8FF;margin-bottom:16px;text-shadow:0 0 12px rgba(127,216,255,0.5);}
+.h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2rem,5.5vw,3.6rem);line-height:1.1;max-width:800px;text-shadow:0 4px 30px rgba(0,0,0,0.6);}
+.h1 em{font-style:italic;color:#FFD600;}
+.sub{margin-top:16px;font-size:.9rem;color:rgba(255,255,255,0.5);max-width:480px;}
+
+.demo-note{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;font-size:.68rem;color:rgba(255,255,255,0.3);letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="chrome">
+  <div class="nav">
+    <div class="logo">Crypto<span>Basics</span></div>
+    <div class="navcta">Get Started</div>
+  </div>
+  <div class="hero">
+    <div class="eyebrow">You are here: The Chain</div>
+    <h1 class="h1">Floating in the <em>blockchain</em> —<br>calm, quiet, and yours to explore.</h1>
+    <p class="sub">Background only for now. The chain, the stops, and Buck come next.</p>
+  </div>
+</div>
+
+<div class="demo-note">Just the space background — nothing else built yet.</div>
+
+<script>
+var canvas = document.getElementById('c');
+var ctx = canvas.getContext('2d');
+var W, H, DPR;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio||1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W*DPR; canvas.height = H*DPR;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ===== cinematic starfield — stars hold still, just slowly shining =====
+// (no drift, no streaking — that's the whole ask right now: calm, floating-in-space)
+var STAR_COUNT = 180;
+var stars = [];
+for(var i=0;i<STAR_COUNT;i++){
+  stars.push({
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.5+0.3,
+    tw: Math.random()*Math.PI*2,
+    twSpeed: 0.006 + Math.random()*0.012
+  });
+}
+// a few soft nebula-glow patches, dim and slow, for depth without noise
+var nebulae = [
+  {x:0.18, y:0.28, r:0.42, color:'127,216,255', a:0.10},
+  {x:0.82, y:0.62, r:0.46, color:'255,214,0', a:0.06},
+  {x:0.55, y:0.85, r:0.38, color:'255,107,214', a:0.05}
+];
+
+var t = 0;
+function tick(){
+  t += 1;
+
+  // deep space gradient
+  var g = ctx.createRadialGradient(W*0.5,H*0.35,0,W*0.5,H*0.35,Math.max(W,H)*0.85);
+  g.addColorStop(0,'#0d1830');
+  g.addColorStop(0.55,'#070b18');
+  g.addColorStop(1,'#03040a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+
+  // slow-drifting nebula glow patches
+  for(var i=0;i<nebulae.length;i++){
+    var n = nebulae[i];
+    var nx = n.x*W + Math.sin(t*0.0015 + i*2)*30;
+    var ny = n.y*H + Math.cos(t*0.0012 + i*2)*20;
+    var ng = ctx.createRadialGradient(nx,ny,0,nx,ny,Math.max(W,H)*n.r);
+    ng.addColorStop(0,'rgba('+n.color+','+n.a+')');
+    ng.addColorStop(1,'rgba('+n.color+',0)');
+    ctx.fillStyle = ng;
+    ctx.fillRect(0,0,W,H);
+  }
+
+  // stars — fixed positions, only their brightness breathes
+  for(var i=0;i<stars.length;i++){
+    var s = stars[i];
+    var tw = 0.35 + 0.65*(0.5+0.5*Math.sin(t*s.twSpeed + s.tw));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,'+tw.toFixed(2)+')';
+    ctx.fill();
+    // faint cross-glint on the brighter ones for a bit of cinematic sparkle
+    if(s.r > 1.2 && tw > 0.75){
+      ctx.strokeStyle = 'rgba(255,255,255,'+((tw-0.75)*1.5).toFixed(2)+')';
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(s.x - s.r*3, s.y); ctx.lineTo(s.x + s.r*3, s.y);
+      ctx.moveTo(s.x, s.y - s.r*3); ctx.lineTo(s.x, s.y + s.r*3);
+      ctx.stroke();
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoBasics — Galaxy Blockchain Highway Prototype (DEMO ONLY)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#05060c;
+  color:#fff;
+  position:relative;
+}
+canvas{position:fixed;inset:0;z-index:0;display:block;}
+
+.chrome{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:24px 32px;}
+.logo{font-size:.85rem;font-weight:900;letter-spacing:.05em;}
+.logo span{color:#FFD600;}
+.navlinks{display:flex;gap:26px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+.navlinks a{color:inherit;text-decoration:none;}
+.navcta{font-size:.72rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:#FFD600;color:#0c1520;padding:10px 18px;border-radius:9999px;}
+
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px;}
+.eyebrow{font-size:.68rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:#7FD8FF;margin-bottom:16px;text-shadow:0 0 12px rgba(127,216,255,0.5);}
+.h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;max-width:820px;text-shadow:0 4px 30px rgba(0,0,0,0.6);}
+.h1 em{font-style:italic;background:linear-gradient(90deg,#FFD600,#FF6BD6,#7FD8FF);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.sub{margin-top:18px;font-size:.95rem;color:rgba(255,255,255,0.6);max-width:520px;}
+.ctarow{display:flex;gap:14px;margin-top:32px;}
+.btn{font-family:'DM Sans',sans-serif;font-weight:900;font-size:.9rem;padding:15px 30px;border-radius:9999px;cursor:pointer;border:none;}
+.btn-primary{background:#FFD600;color:#0c1520;box-shadow:0 0 24px rgba(255,214,0,0.35);}
+.btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3);}
+
+.speedmeter{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:4;display:flex;align-items:center;gap:10px;font-size:.68rem;color:rgba(255,255,255,0.4);letter-spacing:.05em;}
+.speedbar{width:140px;height:4px;background:rgba(255,255,255,0.12);border-radius:9999px;overflow:hidden;}
+.speedfill{height:100%;width:20%;background:linear-gradient(90deg,#7FD8FF,#FFD600,#FF6BD6);border-radius:9999px;}
+.demo-note{position:fixed;top:96px;left:50%;transform:translateX(-50%);z-index:4;font-size:.66rem;color:rgba(255,255,255,0.35);letter-spacing:.02em;text-align:center;}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="chrome">
+  <div class="nav">
+    <div class="logo">Crypto<span>Basics</span></div>
+    <div class="navlinks">
+      <a href="#">Courses</a><a href="#">News</a><a href="#">Jargon Buster</a><a href="#">Regulation</a><a href="#">Our Story</a>
+    </div>
+    <div class="navcta">Get Started</div>
+  </div>
+
+  <div class="demo-note">Move your cursor toward the center to slow down · toward the nav or footer to speed up</div>
+
+  <div class="hero">
+    <div class="eyebrow">You are here: The Chain</div>
+    <h1 class="h1">Buck's riding the <em>blockchain highway.</em><br>Come along for the ride.</h1>
+    <p class="sub">Every block is a car on this road. We'll teach you how to read the traffic — no jargon, no headache.</p>
+    <div class="ctarow">
+      <button class="btn btn-primary">Start Learning →</button>
+      <button class="btn btn-ghost">See the Courses</button>
+    </div>
+  </div>
+</div>
+
+<div class="speedmeter">
+  <span>SLOW</span>
+  <div class="speedbar"><div class="speedfill" id="speedFill"></div></div>
+  <span>FAST</span>
+</div>
+
+<script>
+var canvas = document.getElementById('c');
+var ctx = canvas.getContext('2d');
+var W, H, DPR;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio||1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W*DPR; canvas.height = H*DPR;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ===== starfield: the "new galaxy" backdrop =====
+var STAR_COUNT = 160;
+var stars = [];
+for(var i=0;i<STAR_COUNT;i++){
+  stars.push({
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.6+0.3,
+    tw: Math.random()*Math.PI*2,
+    layer: Math.random() < 0.7 ? 1 : 2 // parallax depth
+  });
+}
+
+// ===== blockchain highway: streaming bar-columns, Composio-style =====
+var COLS = 34;
+var palette = ['#7FD8FF','#3B82F6','#FFD600','#FF6BD6','#4ADE80'];
+var cols = [];
+function makeCol(x){
+  var side = x < W/2 ? -1 : 1; // bars on left lean one way, right lean the other (like the reference)
+  return {
+    x: x,
+    h: 60 + Math.random()*260,
+    w: 5 + Math.random()*4,
+    gap: 2,
+    color: palette[Math.floor(Math.random()*palette.length)],
+    alpha: 0.25 + Math.random()*0.55,
+    lean: side,
+    pulsePhase: Math.random()*Math.PI*2
+  };
+}
+for(var i=0;i<COLS;i++){
+  cols.push(makeCol((i/COLS)*W + (Math.random()*40-20)));
+}
+
+// ===== Buck, hopping along the highway =====
+var buck = new Image();
+buck.src = '../images/buck.webp';
+var buckReady = false;
+buck.onload = function(){ buckReady = true; };
+
+// ===== cursor-driven speed (eased, not snapped) =====
+var targetSpeedFactor = 0.4;
+var speedFactor = 0.4;
+var mouseY = H*0.4;
+window.addEventListener('mousemove', function(e){ mouseY = e.clientY; }, {passive:true});
+window.addEventListener('touchmove', function(e){
+  if(e.touches[0]) mouseY = e.touches[0].clientY;
+}, {passive:true});
+
+var speedFillEl = document.getElementById('speedFill');
+var t = 0;
+
+function tick(){
+  t += 1;
+  // distance from vertical center, normalized 0 (center) -> 1 (top/bottom edge)
+  var center = H/2;
+  var dist = Math.abs(mouseY - center) / center;
+  dist = Math.min(dist, 1);
+  // near center = slow (0.15x), near nav/footer = fast (3x)
+  targetSpeedFactor = 0.15 + dist*dist*2.85;
+  speedFactor += (targetSpeedFactor - speedFactor) * 0.05; // ease, no snapping
+
+  speedFillEl.style.width = (10 + (speedFactor/3)*80) + '%';
+
+  ctx.clearRect(0,0,W,H);
+
+  // deep space gradient
+  var g = ctx.createRadialGradient(W*0.5,H*0.35,0,W*0.5,H*0.35,Math.max(W,H)*0.8);
+  g.addColorStop(0,'#0d1830');
+  g.addColorStop(0.55,'#070b18');
+  g.addColorStop(1,'#03040a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+
+  // stars, subtle parallax drift tied to speed
+  for(var i=0;i<stars.length;i++){
+    var s = stars[i];
+    s.x -= speedFactor * 0.25 * s.layer;
+    if(s.x < -2){ s.x = W+2; s.y = Math.random()*H; }
+    var tw = 0.5 + 0.5*Math.sin(t*0.03 + s.tw);
+    ctx.fillStyle = 'rgba(255,255,255,'+(tw*0.7).toFixed(2)+')';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // blockchain highway bars — stream leftward at cursor-controlled speed,
+  // stretch into light-trails the faster they go (motion blur = "video game" feel)
+  var baseline = H*0.72;
+  var stretch = 1 + speedFactor*1.8;
+  for(var i=0;i<cols.length;i++){
+    var c = cols[i];
+    c.x -= (1.4 + speedFactor*9);
+    if(c.x < -20){
+      var newCol = makeCol(W+20);
+      cols[i] = newCol;
+      continue;
+    }
+    var pulse = 0.75 + 0.25*Math.sin(t*0.04 + c.pulsePhase);
+    var barH = c.h * pulse;
+    ctx.save();
+    ctx.globalAlpha = c.alpha;
+    ctx.shadowColor = c.color;
+    ctx.shadowBlur = 14 + speedFactor*10;
+    ctx.fillStyle = c.color;
+    // stretch horizontally with speed so fast = streaking light, slow = clean bars
+    ctx.fillRect(c.x, baseline - barH, c.w*stretch, barH);
+    ctx.restore();
+  }
+
+  // horizon glow line — the "road" Buck rides
+  var hg = ctx.createLinearGradient(0, baseline, W, baseline);
+  hg.addColorStop(0,'rgba(127,216,255,0)');
+  hg.addColorStop(0.5,'rgba(255,214,0,0.55)');
+  hg.addColorStop(1,'rgba(255,107,214,0)');
+  ctx.strokeStyle = hg;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, baseline+4);
+  ctx.lineTo(W, baseline+4);
+  ctx.stroke();
+
+  // Buck: bobs in place, bob speed scales with travel speed
+  if(buckReady){
+    var bx = W*0.28;
+    var bobAmp = 10 + speedFactor*6;
+    var bobSpeed = 0.05 + speedFactor*0.05;
+    var by = baseline - 46 + Math.sin(t*bobSpeed)*bobAmp;
+    var tilt = Math.sin(t*bobSpeed)*0.12*(1+speedFactor*0.3);
+
+    // glow beneath buck
+    var gg = ctx.createRadialGradient(bx, baseline+2, 2, bx, baseline+2, 46);
+    gg.addColorStop(0,'rgba(255,214,0,0.45)');
+    gg.addColorStop(1,'rgba(255,214,0,0)');
+    ctx.fillStyle = gg;
+    ctx.beginPath();
+    ctx.ellipse(bx, baseline+2, 46, 14, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(bx, by);
+    ctx.rotate(tilt);
+    var size = 84;
+    ctx.drawImage(buck, -size/2, -size/2, size, size);
+    ctx.restore();
+  }
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>

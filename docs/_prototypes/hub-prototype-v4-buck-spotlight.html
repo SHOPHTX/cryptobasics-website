@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoBasics — Buck-Centric Hub Prototype, Spotlight Cursor (DEMO ONLY)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#0c1520;
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+
+/* site's actual dark-navy base — the light comes from the cream surfaces, not the page */
+.paper-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,214,0,0.12), transparent 45%),
+    radial-gradient(circle at 92% 85%, rgba(255,45,120,0.08), transparent 40%),
+    #0c1520;
+}
+.dot{position:fixed;border-radius:50%;z-index:0;pointer-events:none;}
+.dot-1{width:14px;height:14px;background:#FFD600;top:18%;left:6%;opacity:.45;}
+.dot-2{width:10px;height:10px;background:#3B82F6;bottom:22%;right:8%;opacity:.4;}
+.dot-3{width:8px;height:8px;background:#FF2D78;top:40%;right:14%;opacity:.4;}
+
+/* ===== SPOTLIGHT CURSOR ===== */
+/* follows the pointer; the color shifts gold→pink→blue as it travels, blended in
+   with soft-light so it warms/brightens whatever it passes over instead of just
+   sitting on top like a sticker. Falls back to a fixed center glow on touch devices. */
+:root{--mx:50vw;--my:40vh;--sl-hue:45;}
+.spotlight{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle 340px at var(--mx) var(--my),
+    hsla(var(--sl-hue),95%,60%,0.55),
+    hsla(var(--sl-hue),95%,55%,0.18) 45%,
+    transparent 72%);
+  mix-blend-mode:soft-light;
+  transition:background-color .2s ease;
+}
+.spotlight-ring{
+  position:fixed;z-index:1;pointer-events:none;
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid hsla(var(--sl-hue),95%,65%,0.8);
+  left:var(--mx);top:var(--my);
+  transform:translate(-50%,-50%);
+  transition:width .18s ease, height .18s ease, border-color .2s ease;
+}
+body.pressing .spotlight-ring{width:40px;height:40px;}
+@media(hover:none){.spotlight,.spotlight-ring{display:none;}}
+
+.logo{position:fixed;top:26px;left:28px;z-index:6;font-size:.85rem;font-weight:900;letter-spacing:.05em;color:#fff;}
+.logo span{color:#FFD600;}
+
+.stage{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:110px 24px 70px;}
+
+/* ===== SCREEN 1: Buck greets you ===== */
+#screen-title{width:100%;max-width:760px;display:flex;align-items:center;gap:40px;justify-content:center;}
+.buck-portrait{
+  width:220px;flex-shrink:0;
+  filter:drop-shadow(10px 14px 0 rgba(42,35,19,0.12));
+}
+.buck-portrait img{width:100%;display:block;border-radius:50%;border:5px solid #FFD600;background:#FFEFC6;}
+.title-copy{text-align:left;}
+.speech-bubble{
+  position:relative;
+  background:#FFFDF7;
+  border:3px solid #2A2313;
+  border-radius:22px;
+  padding:22px 26px;
+  margin-bottom:20px;
+  box-shadow:6px 6px 0 rgba(42,35,19,0.12);
+}
+.speech-bubble::before{
+  content:'';position:absolute;left:-22px;top:38px;
+  border:12px solid transparent;border-right-color:#2A2313;
+}
+.speech-bubble::after{
+  content:'';position:absolute;left:-17px;top:38px;
+  border:11px solid transparent;border-right-color:#FFFDF7;
+}
+.speech-eyebrow{font-size:.68rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#C98A00;margin-bottom:8px;}
+.title-h1{font-family:'Fraunces',serif;font-size:clamp(1.7rem,4.4vw,2.5rem);font-weight:900;line-height:1.15;}
+.title-h1 em{font-style:italic;color:#C98A00;}
+.title-sub{font-size:.9rem;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.6;}
+.start-btn{
+  display:inline-flex;align-items:center;gap:10px;margin-top:22px;
+  background:#FFD600;color:#2A2313;
+  font-family:'DM Sans',sans-serif;font-weight:900;font-size:.95rem;
+  padding:15px 32px;border-radius:9999px;border:3px solid #2A2313;cursor:pointer;
+  box-shadow:4px 4px 0 #2A2313;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.start-btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 #2A2313;}
+.start-btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 #2A2313;}
+@media(max-width:640px){#screen-title{flex-direction:column;text-align:center;gap:22px;}.title-copy{text-align:center;}.speech-bubble::before,.speech-bubble::after{display:none;}}
+
+/* ===== SCREEN 2: Buck points you somewhere ===== */
+#screen-path{width:100%;max-width:780px;text-align:center;display:none;}
+.path-row{display:flex;align-items:flex-end;justify-content:center;gap:18px;margin-bottom:36px;}
+.buck-point{width:130px;flex-shrink:0;filter:drop-shadow(6px 8px 0 rgba(42,35,19,0.12));}
+.buck-point img{width:100%;display:block;border-radius:16px;border:3px solid #FFD600;}
+.path-eyebrow{font-size:.68rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#FFD600;margin-bottom:10px;text-align:left;}
+.path-h1{font-family:'Fraunces',serif;font-size:clamp(1.5rem,3.8vw,2.1rem);font-weight:900;text-align:left;color:#fff;}
+.path-h1 em{font-style:italic;color:#FFD600;}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:540px){.pgrid{grid-template-columns:1fr;}.path-row{flex-direction:column;align-items:center;}.path-eyebrow,.path-h1{text-align:center;}}
+.ptile{
+  position:relative;
+  background:#FFFDF7;
+  border:3px solid #2A2313;
+  border-radius:16px;
+  padding:22px 20px;
+  cursor:pointer;
+  text-align:left;
+  box-shadow:5px 5px 0 rgba(42,35,19,0.15);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.ptile:hover{transform:translate(-3px,-3px); box-shadow:8px 8px 0 rgba(255,214,0,0.55);}
+.ptile:active{transform:translate(1px,1px); box-shadow:2px 2px 0 rgba(42,35,19,0.15);}
+.ptile .pi{font-size:1.6rem;margin-bottom:10px;display:block;}
+.ptile .pt{font-weight:900;font-size:.98rem;margin-bottom:4px;}
+.ptile .pd{font-size:.8rem;color:#5C5136;line-height:1.5;}
+
+/* ===== SCREEN 3: Buck hands you postcards ===== */
+#screen-levels{width:100%;max-width:960px;text-align:center;display:none;}
+.lvl-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:34px;}
+.buck-small{width:64px;height:64px;border-radius:50%;border:3px solid #FFD600;overflow:hidden;flex-shrink:0;background:#FFEFC6;}
+.buck-small img{width:100%;height:100%;object-fit:cover;display:block;}
+.lvl-h2{font-family:'Fraunces',serif;font-size:clamp(1.5rem,3.6vw,2.1rem);font-weight:900;color:#fff;}
+.lvl-h2 em{font-style:italic;color:#FFD600;}
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 18px;}
+@media(max-width:680px){.lgrid{grid-template-columns:1fr 1fr;}}
+
+.postcard{
+  position:relative;
+  background:#FFFDF7;
+  border:3px solid #2A2313;
+  border-radius:6px;
+  padding:20px 16px 18px;
+  box-shadow:5px 5px 0 rgba(42,35,19,0.15);
+  transition:transform .15s ease;
+  cursor:pointer;
+}
+.postcard:nth-child(odd){transform:rotate(-1.4deg);}
+.postcard:nth-child(even){transform:rotate(1.2deg);}
+.postcard:hover{transform:rotate(0deg) translateY(-4px);}
+.postcard .pin{
+  position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  width:16px;height:16px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#FF6B8A,#FF2D78);
+  box-shadow:0 2px 3px rgba(0,0,0,0.25);
+}
+.postcard .lvl-icon{font-size:1.9rem;margin-bottom:8px;}
+.postcard .lvl-title{font-weight:900;font-size:.9rem;margin-bottom:4px;}
+.postcard .lvl-desc{font-size:.74rem;color:#5C5136;line-height:1.45;}
+.postcard.featured{border-color:#C98A00;box-shadow:5px 5px 0 rgba(255,214,0,0.5);}
+.postcard.featured::after{
+  content:'BUCK RECOMMENDS';position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);
+  background:#2A2313;color:#FFD600;font-size:.56rem;font-weight:900;letter-spacing:.05em;
+  padding:4px 10px;border-radius:9999px;white-space:nowrap;
+}
+
+.back-link{margin-top:40px;font-size:.78rem;color:rgba(255,255,255,0.4);cursor:pointer;display:inline-block;font-weight:700;}
+.back-link:hover{color:#FFD600;}
+
+.demo-note{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:.68rem;color:rgba(255,255,255,0.3);z-index:6;letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<div class="paper-bg"></div>
+<div class="dot dot-1"></div>
+<div class="dot dot-2"></div>
+<div class="dot dot-3"></div>
+<div class="spotlight" id="spotlight"></div>
+<div class="spotlight-ring" id="spotlightRing"></div>
+
+<div class="logo">Crypto<span>Basics</span></div>
+
+<div class="stage">
+
+  <div id="screen-title">
+    <div class="buck-portrait"><img src="../images/Buck_coin.webp" alt="Buck the coin"></div>
+    <div class="title-copy">
+      <div class="speech-bubble">
+        <div class="speech-eyebrow">Buck says</div>
+        <h1 class="title-h1">Crypto, without<br>the <em>headache.</em></h1>
+      </div>
+      <p class="title-sub">I'm Buck. Yellow coin, sharp opinions, zero patience for jargon.<br>Let me point you where you actually need to go.</p>
+      <button class="start-btn" onclick="showScreen('path')">Show me around →</button>
+    </div>
+  </div>
+
+  <div id="screen-path">
+    <div class="path-row">
+      <div class="buck-point"><img src="../images/Buck_fingerpoint.webp" alt="Buck pointing"></div>
+      <div>
+        <div class="path-eyebrow">Buck's asking</div>
+        <h1 class="path-h1">What brings you<br><em>here today?</em></h1>
+      </div>
+    </div>
+    <div class="pgrid">
+      <div class="ptile" onclick="showLevels('new')">
+        <span class="pi">🌱</span>
+        <div class="pt">I'm brand new</div>
+        <div class="pd">Never bought crypto — start from zero.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('news')">
+        <span class="pi">📰</span>
+        <div class="pt">Catch me up on news</div>
+        <div class="pd">What's happening right now, plain English.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('jargon')">
+        <span class="pi">🔍</span>
+        <div class="pt">I hit a confusing term</div>
+        <div class="pd">Give me the plain-English version.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('know')">
+        <span class="pi">🧠</span>
+        <div class="pt">I know some, teach me more</div>
+        <div class="pd">I've dabbled — show me everything.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-levels">
+    <div class="lvl-row">
+      <div class="buck-small"><img src="../images/Buck_chart.webp" alt="Buck"></div>
+      <h2 class="lvl-h2">Here's what Buck's <em>handing you.</em></h2>
+    </div>
+    <div class="lgrid" id="lgrid"></div>
+    <div class="back-link" onclick="showScreen('path')">&larr; ask Buck something else</div>
+  </div>
+
+</div>
+
+<div class="demo-note">Prototype only — not the live site. Postcards are illustrated, not photographed.</div>
+
+<script>
+var LEVELS = [
+  {icon:'📚', title:'Courses', desc:'9 volumes, zero to fluent.', key:'courses'},
+  {icon:'📰', title:'Crypto News', desc:'Updated daily, plain English.', key:'news'},
+  {icon:'🔍', title:'Jargon Buster', desc:'Look up any term instantly.', key:'jargon'},
+  {icon:'🏛️', title:'Regulation Tracker', desc:"Who's actually passed laws.", key:'reg'},
+  {icon:'👋', title:'Our Story', desc:'Meet Kenzo (and Buck).', key:'story'}
+];
+var FEATURED_BY_PATH = {new:'courses', news:'news', jargon:'jargon', know:'reg'};
+
+function showScreen(name){
+  document.getElementById('screen-title').style.display = name === 'title' ? 'flex' : 'none';
+  document.getElementById('screen-path').style.display = name === 'path' ? 'block' : 'none';
+  document.getElementById('screen-levels').style.display = name === 'levels' ? 'block' : 'none';
+}
+
+// ===== trailing spotlight cursor =====
+// The glow eases toward the real pointer position instead of snapping to it —
+// a short comet-style lag — and its hue slowly drifts through the brand palette
+// (gold → pink → blue) the longer/farther the pointer travels.
+(function(){
+  var root = document.documentElement;
+  var targetX = window.innerWidth/2, targetY = window.innerHeight*0.4;
+  var curX = targetX, curY = targetY;
+  var hue = 45; // starts gold
+  var lastX = curX, lastY = curY;
+
+  window.addEventListener('mousemove', function(e){
+    targetX = e.clientX; targetY = e.clientY;
+  }, {passive:true});
+
+  document.addEventListener('mousedown', function(){document.body.classList.add('pressing');});
+  document.addEventListener('mouseup', function(){document.body.classList.remove('pressing');});
+
+  function tick(){
+    // ease (lower = more trailing lag)
+    curX += (targetX - curX) * 0.12;
+    curY += (targetY - curY) * 0.12;
+
+    var dist = Math.hypot(curX - lastX, curY - lastY);
+    lastX = curX; lastY = curY;
+    // drift hue based on travel speed + horizontal position: gold(45) -> pink(330) -> blue(217)
+    var posHue = 45 + ((curX / window.innerWidth) * 275);
+    hue += (posHue - hue) * 0.03 + (dist * 0.01);
+    if(hue > 360) hue -= 360;
+    if(hue < 0) hue += 360;
+
+    root.style.setProperty('--mx', curX + 'px');
+    root.style.setProperty('--my', curY + 'px');
+    root.style.setProperty('--sl-hue', hue.toFixed(1));
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+function showLevels(path){
+  var featured = FEATURED_BY_PATH[path];
+  var grid = document.getElementById('lgrid');
+  grid.innerHTML = '';
+  var ordered = LEVELS.slice().sort(function(a,b){
+    if(a.key === featured) return -1;
+    if(b.key === featured) return 1;
+    return 0;
+  });
+  ordered.forEach(function(lv){
+    var card = document.createElement('div');
+    card.className = 'postcard' + (lv.key === featured ? ' featured' : '');
+    card.innerHTML =
+      '<div class="pin"></div>' +
+      '<div class="lvl-icon">'+lv.icon+'</div>' +
+      '<div class="lvl-title">'+lv.title+'</div>' +
+      '<div class="lvl-desc">'+lv.desc+'</div>';
+    grid.appendChild(card);
+  });
+  showScreen('levels');
+}
+</script>
+
+</body>
+</html>
