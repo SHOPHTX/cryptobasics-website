@@ -223,22 +223,47 @@ body{
   setTimeout(function(){ rideElapsed = true; tryReveal(); }, RIDE_MS);
 
   if(video){
-    window.addEventListener('load', function(){
+    // Belt-and-suspenders for mobile autoplay: set both the attribute and
+    // the JS property (some mobile browsers only honor one), and attach
+    // the real src directly rather than via a <source> child, which is
+    // more reliable on iOS/Android than appendChild + load().
+    video.muted = true;
+    video.playsInline = true;
+
+    function attemptPlay(){
+      var p = video.play();
+      if(p && p.catch) p.catch(function(){ /* blocked until a user gesture */ });
+    }
+
+    function attachSrc(){
       var src = video.getAttribute('data-src');
       if(src && !video.currentSrc){
-        var source = document.createElement('source');
-        source.src = src;
-        source.type = 'video/mp4';
-        video.appendChild(source);
+        video.src = src;
         video.load();
+        attemptPlay();
       }
-    });
+    }
+
+    if(document.readyState === 'complete'){
+      attachSrc();
+    } else {
+      window.addEventListener('load', attachSrc);
+    }
+
     video.addEventListener('canplay', function(){
       videoReady = true;
       video.style.opacity = '1';
-      video.play().catch(function(){});
+      attemptPlay();
       tryReveal();
     }, {once:true});
+
+    // If autoplay is blocked outright (e.g. mobile data-saver mode), the
+    // first tap anywhere unlocks it -- browsers always allow play() from
+    // a real user gesture.
+    splash.addEventListener('click', function(){
+      if(video.paused) attemptPlay();
+    });
+
     setTimeout(function(){ videoReady = true; tryReveal(); }, SAFETY_MS);
   } else {
     videoReady = true;
