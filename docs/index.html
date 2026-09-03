@@ -872,9 +872,180 @@ footer{
   padding:0 4px;
 }
 
+/* ── Intro Splash: full-bleed video, then destination-picker cards ── */
+#intro-splash{
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+  background:var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#intro-splash.pre-reveal{ cursor:none; }
+#intro-splash-video-wrap{ position:absolute; inset:0; overflow:hidden; }
+#intro-splash-video{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 1.4s ease;
+}
+#intro-splash-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.15) 100%);
+  opacity:0;
+  transition:opacity 1.1s ease;
+  pointer-events:none;
+}
+#intro-splash.revealed #intro-splash-scrim{ opacity:1; }
+#intro-splash-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 1.1s ease, transform 1.1s ease;
+  padding:40px 24px;
+  max-width:880px;
+}
+#intro-splash.revealed #intro-splash-content{ opacity:1; transform:translateY(0); }
+.intro-splash-title{
+  font-family:'Fraunces',serif;
+  font-weight:900;
+  font-size:clamp(2.2rem,6vw,3.6rem);
+  color:#fff;
+  margin-bottom:12px;
+}
+.intro-splash-tagline{
+  font-size:1.05rem;
+  color:rgba(255,255,255,0.75);
+  margin-bottom:32px;
+}
+.intro-splash-links{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(170px,1fr));
+  gap:16px;
+  max-width:840px;
+  margin:0 auto;
+}
+@media (max-width:760px){
+  .intro-splash-links{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:480px){
+  .intro-splash-links{ grid-template-columns:1fr; }
+}
+.intro-splash-card{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  background:rgba(10,10,10,0.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.16);
+  border-radius:16px;
+  padding:20px 18px;
+  text-decoration:none;
+  text-align:left;
+  transition:border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.intro-splash-card:hover{
+  border-color:var(--accent-primary);
+  background:rgba(255,214,0,0.1);
+  transform:translateY(-3px);
+}
+.intro-splash-card.primary{
+  border-color:rgba(255,214,0,0.55);
+  background:rgba(255,214,0,0.12);
+}
+.intro-splash-card-icon{ font-size:1.5rem; }
+.intro-splash-card-title{
+  font-family:'DM Sans',sans-serif;
+  font-weight:800;
+  font-size:1rem;
+  color:#fff;
+}
+.intro-splash-card.primary .intro-splash-card-title{ color:var(--accent-primary); }
+.intro-splash-card-sub{
+  font-size:.78rem;
+  color:rgba(255,255,255,0.55);
+  line-height:1.4;
+}
+#intro-splash-scrolldown{
+  position:absolute;
+  left:50%;
+  bottom:26px;
+  transform:translateX(-50%);
+  z-index:2;
+  opacity:0;
+  transition:opacity 1s ease .3s;
+  color:rgba(255,255,255,0.5);
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+#intro-splash.revealed #intro-splash-scrolldown{ opacity:1; }
+
 </style>
 </head>
 <body>
+
+<!-- Intro Splash: full-bleed hero video (no overlay), then a destination-picker reveals -->
+<section id="intro-splash">
+  <div id="intro-splash-video-wrap">
+    <video id="intro-splash-video" autoplay muted loop playsinline preload="none"
+      poster="images/hero-bg-poster.webp" data-src="video/hero-bg.mp4"></video>
+  </div>
+  <div id="intro-splash-scrim"></div>
+
+  <div id="intro-splash-content">
+    <div class="intro-splash-title">Crypto Basics</div>
+    <div class="intro-splash-tagline">Learn crypto. Without the headache. Pick where you want to start.</div>
+    <div class="intro-splash-links">
+      <a href="#products" class="intro-splash-card primary">
+        <span class="intro-splash-card-icon">&#127891;</span>
+        <span class="intro-splash-card-title">Explore Courses</span>
+        <span class="intro-splash-card-sub">Start with Vol. 1 &mdash; free, no card required</span>
+      </a>
+      <a href="#guides" class="intro-splash-card">
+        <span class="intro-splash-card-icon">&#128214;</span>
+        <span class="intro-splash-card-title">Guides</span>
+        <span class="intro-splash-card-sub">Plain-English breakdowns, no fluff</span>
+      </a>
+      <a href="#news" class="intro-splash-card">
+        <span class="intro-splash-card-icon">&#128240;</span>
+        <span class="intro-splash-card-title">Crypto News</span>
+        <span class="intro-splash-card-sub">What&rsquo;s actually happening, translated</span>
+      </a>
+      <a href="/glossary/" class="intro-splash-card">
+        <span class="intro-splash-card-icon">&#129504;</span>
+        <span class="intro-splash-card-title">Jargon Buster</span>
+        <span class="intro-splash-card-sub">Decode the terms Wall Street hides behind</span>
+      </a>
+      <a href="/regulation-tracker/" class="intro-splash-card">
+        <span class="intro-splash-card-icon">&#9878;&#65039;</span>
+        <span class="intro-splash-card-title">Regulation Tracker</span>
+        <span class="intro-splash-card-sub">Where the rules stand, country by country</span>
+      </a>
+      <a href="/about/" class="intro-splash-card">
+        <span class="intro-splash-card-icon">&#129309;</span>
+        <span class="intro-splash-card-title">Our Story</span>
+        <span class="intro-splash-card-sub">Why we built this</span>
+      </a>
+    </div>
+  </div>
+
+  <div id="intro-splash-scrolldown">
+    <span>Scroll</span>
+    <span style="font-size:1rem;">&darr;</span>
+  </div>
+</section>
 
 <div id="price-ticker">
   <div id="ticker-label">⚡ LIVE</div>
@@ -1693,6 +1864,50 @@ function ncToggle(btn) {
 })();
 </script>
 
+
+<script>
+(function(){
+  var splash = document.getElementById('intro-splash');
+  var video = document.getElementById('intro-splash-video');
+  if(!splash) return;
+  var rideElapsed = false, videoReady = false, revealed = false;
+  var RIDE_MS = 1400;   // minimum time the pure video plays before options appear
+  var SAFETY_MS = 5000; // reveal anyway if the video stalls/fails
+
+  function tryReveal(){
+    if(revealed || !rideElapsed || !videoReady) return;
+    revealed = true;
+    splash.classList.remove('pre-reveal');
+    splash.classList.add('revealed');
+  }
+
+  splash.classList.add('pre-reveal');
+  setTimeout(function(){ rideElapsed = true; tryReveal(); }, RIDE_MS);
+
+  if(video){
+    window.addEventListener('load', function(){
+      var src = video.getAttribute('data-src');
+      if(src && !video.currentSrc){
+        var source = document.createElement('source');
+        source.src = src;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        video.load();
+      }
+    });
+    video.addEventListener('canplay', function(){
+      videoReady = true;
+      video.style.opacity = '1';
+      video.play().catch(function(){});
+      tryReveal();
+    }, {once:true});
+    setTimeout(function(){ videoReady = true; tryReveal(); }, SAFETY_MS);
+  } else {
+    videoReady = true;
+    tryReveal();
+  }
+})();
+</script>
 
 
 </body>
