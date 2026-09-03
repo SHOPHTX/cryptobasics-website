@@ -872,39 +872,6 @@ footer{
   padding:0 4px;
 }
 
-/* ── Hero background video + "ride" reveal gate ── */
-body.pre-reveal{
-  cursor:none;
-}
-body.pre-reveal #price-ticker,
-body.pre-reveal #fng-widget,
-body.pre-reveal .hero-grid,
-body.pre-reveal .hero-buck-watermark{
-  opacity:0 !important;
-  pointer-events:none !important;
-}
-#price-ticker,
-#fng-widget,
-.hero-grid,
-.hero-buck-watermark{
-  transition:opacity 1.1s ease;
-}
-#hero-bg-video-wrap{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  z-index:0;
-}
-#hero-bg-video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  opacity:0;
-  transition:opacity 1.4s ease;
-}
-
 </style>
 </head>
 <body>
@@ -1017,11 +984,6 @@ body.pre-reveal .hero-buck-watermark{
 
 <!-- Hero -->
 <section class="hero" style="position:relative;">
-  <!-- Full-bleed hero background video: poster shows instantly, real src loads after page load -->
-  <div id="hero-bg-video-wrap">
-    <video id="hero-bg-video" autoplay muted loop playsinline preload="none"
-      poster="images/hero-bg-poster.webp" data-src="video/hero-bg.mp4"></video>
-  </div>
   <!-- Fear & Greed Index (moved here from bottom of page) -->
   <div id="fng-widget" style="position:absolute;top:16px;right:16px;z-index:10;max-width:280px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px 20px;overflow:visible;">
       <div style="position:absolute;top:14px;right:16px;font-size:.6rem;font-weight:700;color:#4ADE80;display:flex;align-items:center;gap:4px;white-space:nowrap;">
@@ -1072,7 +1034,7 @@ body.pre-reveal .hero-buck-watermark{
     #fng-widget{ display:none !important; }
   }
   </style>
-  <img src="images/buck.png" class="hero-buck-watermark" style="
+  <img src="images/buck.png" style="
     position:absolute;
     top:40%; left:50%;
     transform:translate(-28%,-50%);
@@ -1731,49 +1693,6 @@ function ncToggle(btn) {
 })();
 </script>
 
-
-<script>
-(function(){
-  var video = document.getElementById('hero-bg-video');
-  var body = document.body;
-  var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 1400;   // minimum time the "ride" plays before UI fades in
-  var SAFETY_MS = 5000; // reveal anyway if the video stalls/fails
-
-  function tryReveal(){
-    if(revealed || !rideElapsed || !videoReady) return;
-    revealed = true;
-    body.classList.remove('pre-reveal');
-    body.classList.add('reveal-done');
-  }
-
-  body.classList.add('pre-reveal');
-  setTimeout(function(){ rideElapsed = true; tryReveal(); }, RIDE_MS);
-
-  if(video){
-    window.addEventListener('load', function(){
-      var src = video.getAttribute('data-src');
-      if(src && !video.currentSrc){
-        var source = document.createElement('source');
-        source.src = src;
-        source.type = 'video/mp4';
-        video.appendChild(source);
-        video.load();
-      }
-    });
-    video.addEventListener('canplay', function(){
-      videoReady = true;
-      video.style.opacity = '1';
-      video.play().catch(function(){});
-      tryReveal();
-    }, {once:true});
-    setTimeout(function(){ videoReady = true; tryReveal(); }, SAFETY_MS);
-  } else {
-    videoReady = true;
-    tryReveal();
-  }
-})();
-</script>
 
 
 </body>
