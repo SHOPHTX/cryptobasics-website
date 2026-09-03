@@ -40,8 +40,11 @@ body{
   width:100%; height:100%;
   object-fit:cover;
   opacity:0;
+  filter:brightness(1) saturate(1) contrast(1);
+  transition:opacity 1.4s ease, filter 1.3s ease;
+}
+#intro-splash.revealed #intro-splash-video{
   filter:brightness(.5) saturate(.55) contrast(.95);
-  transition:opacity 1.4s ease;
 }
 #intro-splash-scrim{
   position:absolute; inset:0;
@@ -206,7 +209,7 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 1400;   // minimum time the pure video plays before options appear
+  var RIDE_MS = 3200;   // minimum time the pure video plays, undimmed, before options appear
   var SAFETY_MS = 5000; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
