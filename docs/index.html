@@ -103,10 +103,15 @@ body{
 @media (max-width:760px), (hover:none){
   .intro-splash-card:hover .intro-splash-card-inner,
   .intro-splash-card:focus-visible .intro-splash-card-inner{
-    transform:none;
+    transform:none !important;
   }
-  .intro-splash-card-face.front{ display:none; }
-  .intro-splash-card-face.back{ transform:none; }
+  .intro-splash-card{ aspect-ratio:auto !important; }
+  .intro-splash-card-inner{ height:auto !important; }
+  .intro-splash-card-face.front{ display:none !important; }
+  .intro-splash-card-face.back{
+    position:static !important;
+    transform:none !important;
+  }
 }
 .intro-splash-card{
   position:relative;
