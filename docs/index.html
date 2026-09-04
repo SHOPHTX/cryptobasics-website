@@ -194,10 +194,10 @@ body{
   pointer-events:none;
 }
 .intro-caption.c1{ animation:captionFade 2.6s ease forwards; animation-delay:.7s; }
-.intro-caption.c2{ animation:captionFade 2.6s ease forwards; animation-delay:3.7s; }
+.intro-caption.c2{ animation:captionFade 3.6s ease forwards; animation-delay:3.7s; }
 .intro-caption.c3{
   animation:captionFade 2.3s ease forwards;
-  animation-delay:6.9s;
+  animation-delay:7.6s;
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
@@ -273,8 +273,8 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 10200;   // lets all 3 captions play out, plus a beat of pure video, before the dim+reveal
-  var SAFETY_MS = 11800; // reveal anyway if the video stalls/fails
+  var RIDE_MS = 9900;    // reveal lands right as caption 3 finishes fading, no dead pause after
+  var SAFETY_MS = 11500; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
     if(revealed || !rideElapsed || !videoReady) return;
