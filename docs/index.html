@@ -122,7 +122,7 @@ body{
   inset:0;
   display:flex;
   flex-direction:column;
-  border-radius:0;
+  border-radius:20px;
   padding:22px 20px;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
@@ -164,13 +164,33 @@ body{
 #intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(4){ animation-delay:.32s; }
 #intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(5){ animation-delay:.41s; }
 #intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(6){ animation-delay:.5s; }
-.intro-splash-card-icon{ font-size:2.1rem; }
+.intro-splash-card-icon{
+  font-size:2.1rem;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,0.25));
+  transition:filter .25s ease;
+}
+.intro-splash-card:hover .intro-splash-card-icon{
+  filter:drop-shadow(0 0 12px rgba(255,214,0,0.75));
+}
 .intro-splash-card-title{
   font-family:'Fraunces',serif;
   font-weight:600;
   letter-spacing:-.01em;
   font-size:1.2rem;
   color:#fff;
+  text-shadow:
+    0 0 8px rgba(255,255,255,0.45),
+    0 0 20px rgba(255,255,255,0.22),
+    0 2px 10px rgba(0,0,0,0.6);
+  transition:color .25s ease, text-shadow .25s ease;
+}
+.intro-splash-card:hover .intro-splash-card-title{
+  color:var(--accent-light);
+  text-shadow:
+    0 0 10px rgba(255,214,0,0.85),
+    0 0 26px rgba(255,214,0,0.55),
+    0 0 46px rgba(255,214,0,0.3),
+    0 2px 10px rgba(0,0,0,0.6);
 }
 .intro-splash-card-sub{
   font-size:.78rem;
@@ -232,11 +252,11 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.intro-caption.c1{ animation:captionFade 2.6s ease forwards; animation-delay:.7s; }
-.intro-caption.c2{ animation:captionFade 3.6s ease forwards; animation-delay:3.7s; }
+.intro-caption.c1{ animation:captionFade 1.95s ease forwards; animation-delay:.53s; }
+.intro-caption.c2{ animation:captionFade 2.7s ease forwards; animation-delay:2.78s; }
 .intro-caption.c3{
-  animation:captionFade 2.3s ease forwards;
-  animation-delay:7.6s;
+  animation:captionFade 1.73s ease forwards;
+  animation-delay:5.7s;
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
@@ -358,8 +378,8 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 9900;    // reveal lands right as caption 3 finishes fading, no dead pause after
-  var SAFETY_MS = 11500; // reveal anyway if the video stalls/fails
+  var RIDE_MS = 7425;   // reveal lands right as caption 3 finishes fading, no dead pause after (25% faster)
+  var SAFETY_MS = 8625; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
     if(revealed || !rideElapsed || !videoReady) return;
