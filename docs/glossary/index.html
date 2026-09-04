@@ -383,6 +383,18 @@ function glossSearch(q) {
     return '<div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:18px 0;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;"><span style="font-size:1rem;font-weight:800;color:#fff;">'+t.emoji+' '+term+'</span><span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+col+';background:rgba(255,255,255,0.06);border-radius:9999px;padding:3px 10px;">'+lbl2+'</span></div><div style="font-size:.9rem;color:rgba(255,255,255,0.55);line-height:1.75;">'+def2+'</div></div>';
   }).join('');
 }
+
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var q = params.get('q');
+  if (q) {
+    var input = document.getElementById('gloss-search');
+    if (input) {
+      input.value = q;
+      glossSearch(q);
+    }
+  }
+})();
 </script>
 
 </body>
