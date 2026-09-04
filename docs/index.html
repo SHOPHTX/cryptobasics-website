@@ -359,7 +359,10 @@ body{
 <section id="intro-splash">
   <div id="intro-splash-video-wrap">
     <video id="intro-splash-video" muted loop playsinline webkit-playsinline preload="auto"
-      poster="images/hero-bg-poster.webp?v=202609042100" src="video/hero-bg.mp4?v=202609042100"></video>
+      poster="images/hero-bg-poster.webp?v=202609042100">
+      <source media="(max-width:760px)" src="video/hero-bg-mobile.mp4?v=202609042100">
+      <source src="video/hero-bg.mp4?v=202609042100">
+    </video>
   </div>
   <div id="intro-splash-scrim"></div>
   <button type="button" id="intro-splash-skip">Skip &rarr;</button>
@@ -466,6 +469,10 @@ body{
   var splash = document.getElementById('intro-splash');
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
+
+  if(video && window.matchMedia && window.matchMedia('(max-width:760px)').matches){
+    video.poster = 'images/hero-bg-mobile-poster.webp?v=202609042100';
+  }
   var revealed = false, started = false;
   var RIDE_MS = 5250; // reveal lands right as caption 3 finishes fading, once started
 
