@@ -90,10 +90,14 @@ body{
   margin:0 auto;
 }
 @media (max-width:760px){
-  .intro-splash-links{ grid-template-columns:repeat(2,1fr); }
+  .intro-splash-links{ grid-template-columns:repeat(2,1fr); gap:12px; }
 }
 @media (max-width:480px){
-  .intro-splash-links{ grid-template-columns:1fr; }
+  .intro-splash-links{ grid-template-columns:repeat(2,1fr); gap:10px; max-width:360px; }
+  .intro-splash-card-face{ padding:14px 12px; }
+  .intro-splash-card-icon{ width:52px; height:52px; }
+  .intro-splash-card-title{ font-size:.92rem; }
+  .intro-splash-card-sub{ font-size:.66rem; }
 }
 .intro-splash-card{
   position:relative;
@@ -305,8 +309,8 @@ body{
      This is now the site root (cryptobasics.co). The full original homepage lives at /home/. -->
 <section id="intro-splash">
   <div id="intro-splash-video-wrap">
-    <video id="intro-splash-video" autoplay muted loop playsinline preload="none"
-      poster="images/hero-bg-poster.webp?v=202609040122" data-src="video/hero-bg.mp4?v=202609040122"></video>
+    <video id="intro-splash-video" autoplay muted loop playsinline webkit-playsinline preload="auto"
+      poster="images/hero-bg-poster.webp?v=202609042100" src="video/hero-bg.mp4?v=202609042100"></video>
   </div>
   <div id="intro-splash-scrim"></div>
   <button type="button" id="intro-splash-skip">Skip &rarr;</button>
@@ -433,10 +437,11 @@ body{
   }
 
   if(video){
-    // Belt-and-suspenders for mobile autoplay: set both the attribute and
-    // the JS property (some mobile browsers only honor one), and attach
-    // the real src directly rather than via a <source> child, which is
-    // more reliable on iOS/Android than appendChild + load().
+    // Belt-and-suspenders for mobile autoplay: the src is now a real HTML
+    // attribute (set at parse time, not attached later via JS on window
+    // 'load'), so the browser can start decoding immediately instead of
+    // waiting on the whole page to finish loading -- that delay was likely
+    // pushing playback past the window mobile browsers allow autoplay in.
     video.muted = true;
     video.playsInline = true;
 
@@ -445,20 +450,9 @@ body{
       if(p && p.catch) p.catch(function(){ /* blocked until a user gesture */ });
     }
 
-    function attachSrc(){
-      var src = video.getAttribute('data-src');
-      if(src && !video.currentSrc){
-        video.src = src;
-        video.load();
-        attemptPlay();
-      }
-    }
-
-    if(document.readyState === 'complete'){
-      attachSrc();
-    } else {
-      window.addEventListener('load', attachSrc);
-    }
+    // Try right away (covers browsers that need the nudge) and again as
+    // soon as the video actually has data to play.
+    attemptPlay();
 
     video.addEventListener('canplay', function(){
       videoReady = true;
@@ -467,10 +461,13 @@ body{
       tryReveal();
     }, {once:true});
 
-    // If autoplay is blocked outright (e.g. mobile data-saver mode), the
-    // first tap anywhere unlocks it -- browsers always allow play() from
-    // a real user gesture.
+    // If autoplay is blocked outright (e.g. mobile data-saver mode, or an
+    // iOS Safari "Never Auto-Play" setting), the first tap anywhere unlocks
+    // it -- browsers always allow play() from a real user gesture.
     splash.addEventListener('click', function(){
+      if(video.paused) attemptPlay();
+    });
+    splash.addEventListener('touchend', function(){
       if(video.paused) attemptPlay();
     });
 
