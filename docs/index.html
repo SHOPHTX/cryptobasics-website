@@ -74,8 +74,11 @@ body{
 }
 .intro-splash-title span{ color:var(--accent-primary); }
 .intro-splash-tagline{
-  font-size:1.05rem;
-  color:rgba(255,255,255,0.75);
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:1.15rem;
+  color:rgba(255,255,255,0.8);
   margin-bottom:32px;
 }
 .intro-splash-links{
@@ -104,6 +107,7 @@ body{
   padding:20px 18px;
   text-decoration:none;
   text-align:left;
+  opacity:0;
   transition:border-color .2s ease, background .2s ease, transform .2s ease;
 }
 .intro-splash-card:hover{
@@ -115,11 +119,26 @@ body{
   border-color:rgba(255,214,0,0.55);
   background:rgba(255,214,0,0.12);
 }
+@keyframes cardMagicIn{
+  0%{ opacity:0; transform:translateY(16px) scale(.94); filter:blur(4px); }
+  55%{ opacity:1; filter:blur(0); }
+  100%{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+}
+#intro-splash.revealed .intro-splash-card{
+  animation:cardMagicIn .75s cubic-bezier(.22,.9,.32,1) forwards;
+}
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(1){ animation-delay:.05s; }
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(2){ animation-delay:.14s; }
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(3){ animation-delay:.23s; }
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(4){ animation-delay:.32s; }
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(5){ animation-delay:.41s; }
+#intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(6){ animation-delay:.5s; }
 .intro-splash-card-icon{ font-size:1.5rem; }
 .intro-splash-card-title{
-  font-family:'DM Sans',sans-serif;
-  font-weight:800;
-  font-size:1rem;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  letter-spacing:-.01em;
+  font-size:1.05rem;
   color:#fff;
 }
 .intro-splash-card.primary .intro-splash-card-title{ color:var(--accent-primary); }
@@ -171,11 +190,11 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.intro-caption.c1{ animation:captionFade 2.6s ease forwards; animation-delay:.6s; }
-.intro-caption.c2{ animation:captionFade 2.6s ease forwards; animation-delay:3.3s; }
+.intro-caption.c1{ animation:captionFade 2.6s ease forwards; animation-delay:.7s; }
+.intro-caption.c2{ animation:captionFade 2.6s ease forwards; animation-delay:3.7s; }
 .intro-caption.c3{
   animation:captionFade 2.3s ease forwards;
-  animation-delay:6.1s;
+  animation-delay:6.9s;
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
@@ -195,7 +214,7 @@ body{
   <div id="intro-splash-scrim"></div>
 
   <div class="intro-caption c1">Welcome to the blockchain.</div>
-  <div class="intro-caption c2">Trillions moving. Nobody explaining.</div>
+  <div class="intro-caption c2">Built to confuse you. On purpose.</div>
   <div class="intro-caption c3">Let&rsquo;s fix that.</div>
 
   <div id="intro-splash-content">
@@ -247,8 +266,8 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 8400;   // lets all 3 captions play out before the dim+reveal
-  var SAFETY_MS = 9800; // reveal anyway if the video stalls/fails
+  var RIDE_MS = 10200;   // lets all 3 captions play out, plus a beat of pure video, before the dim+reveal
+  var SAFETY_MS = 11800; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
     if(revealed || !rideElapsed || !videoReady) return;
