@@ -147,6 +147,40 @@ body{
   gap:6px;
 }
 #intro-splash.revealed #intro-splash-scrolldown{ opacity:1; }
+
+@keyframes captionFade{
+  0%{ opacity:0; transform:translate(-50%,-46%); }
+  15%{ opacity:1; transform:translate(-50%,-50%); }
+  78%{ opacity:1; }
+  100%{ opacity:0; }
+}
+.intro-caption{
+  position:absolute;
+  z-index:2;
+  left:50%; top:46%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  width:90%;
+  max-width:760px;
+  font-family:'Fraunces',serif;
+  font-weight:700;
+  font-style:italic;
+  font-size:clamp(1.3rem,4vw,2.3rem);
+  color:#fff;
+  text-shadow:0 2px 24px rgba(0,0,0,0.65);
+  opacity:0;
+  pointer-events:none;
+}
+.intro-caption.c1{ animation:captionFade 2.6s ease forwards; animation-delay:.6s; }
+.intro-caption.c2{ animation:captionFade 2.6s ease forwards; animation-delay:3.3s; }
+.intro-caption.c3{
+  animation:captionFade 2.3s ease forwards;
+  animation-delay:6.1s;
+  font-style:normal;
+  font-weight:900;
+  color:var(--accent-primary);
+}
+#intro-splash.revealed .intro-caption{ display:none; }
 </style>
 </head>
 <body>
@@ -159,6 +193,10 @@ body{
       poster="images/hero-bg-poster.webp" data-src="video/hero-bg.mp4"></video>
   </div>
   <div id="intro-splash-scrim"></div>
+
+  <div class="intro-caption c1">Welcome to the blockchain.</div>
+  <div class="intro-caption c2">Trillions moving. Nobody explaining.</div>
+  <div class="intro-caption c3">Let&rsquo;s fix that.</div>
 
   <div id="intro-splash-content">
     <div class="intro-splash-title">Crypto <span>Basics</span></div>
@@ -209,8 +247,8 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 3200;   // minimum time the pure video plays, undimmed, before options appear
-  var SAFETY_MS = 5000; // reveal anyway if the video stalls/fails
+  var RIDE_MS = 8400;   // lets all 3 captions play out before the dim+reveal
+  var SAFETY_MS = 9800; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
     if(revealed || !rideElapsed || !videoReady) return;
