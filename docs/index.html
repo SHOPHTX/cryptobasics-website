@@ -349,9 +349,7 @@ body{
   text-transform:uppercase;
   color:rgba(255,255,255,0.85);
 }
-@media (max-width:760px), (hover:none){
-  #intro-splash.needs-tap #intro-splash-playgate{ display:flex; }
-}
+#intro-splash.needs-tap #intro-splash-playgate{ display:flex; }
 </style>
 </head>
 <body>
@@ -360,7 +358,7 @@ body{
      This is now the site root (cryptobasics.co). The full original homepage lives at /home/. -->
 <section id="intro-splash">
   <div id="intro-splash-video-wrap">
-    <video id="intro-splash-video" autoplay muted loop playsinline webkit-playsinline preload="auto"
+    <video id="intro-splash-video" muted loop playsinline webkit-playsinline preload="auto"
       poster="images/hero-bg-poster.webp?v=202609042100" src="video/hero-bg.mp4?v=202609042100"></video>
   </div>
   <div id="intro-splash-scrim"></div>
@@ -500,22 +498,33 @@ body{
 
   splash.classList.add('pre-reveal');
 
-  if(video){
-    video.muted = true;
-    video.playsInline = true;
-  }
-
-  var needsTap = window.matchMedia('(max-width:760px), (hover:none)').matches;
-
-  if(needsTap){
+  function showTapGate(){
     splash.classList.add('needs-tap');
     // Any tap on the splash starts everything -- not just the button
     // itself, since most of the screen is the video/poster.
     splash.addEventListener('click', startIntro);
     splash.addEventListener('touchend', startIntro);
+  }
+
+  if(video){
+    video.muted = true;
+    video.playsInline = true;
+
+    // Try to autoplay for real and see what actually happens, rather than
+    // guessing from viewport width / hover support. If the browser allows
+    // it, start everything together immediately (desktop, and apparently
+    // some mobile browsers/settings too). If it's rejected, fall back to
+    // the tap gate so the whole sequence starts from a guaranteed-good
+    // user gesture instead.
+    var p = video.play();
+    if(p && p.then){
+      p.then(startIntro).catch(showTapGate);
+    } else {
+      // Old browsers without promise-based play(): assume it worked.
+      startIntro();
+    }
   } else {
     startIntro();
-    if(video) video.addEventListener('canplay', attemptPlay, {once:true});
   }
 
   var skipBtn = document.getElementById('intro-splash-skip');
