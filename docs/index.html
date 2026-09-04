@@ -59,12 +59,13 @@ body{
   z-index:2;
   text-align:center;
   opacity:0;
+  pointer-events:none;
   transform:translateY(18px);
   transition:opacity 1.1s ease, transform 1.1s ease;
   padding:40px 24px;
   max-width:880px;
 }
-#intro-splash.revealed #intro-splash-content{ opacity:1; transform:translateY(0); }
+#intro-splash.revealed #intro-splash-content{ opacity:1; pointer-events:auto; transform:translateY(0); }
 .intro-splash-title{
   font-family:'Fraunces',serif;
   font-weight:900;
