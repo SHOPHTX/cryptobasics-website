@@ -168,9 +168,9 @@ body{
 #intro-splash.revealed #intro-splash-scrolldown{ opacity:1; }
 
 @keyframes captionFade{
-  0%{ opacity:0; transform:translate(-50%,-46%); }
-  15%{ opacity:1; transform:translate(-50%,-50%); }
-  78%{ opacity:1; }
+  0%{ opacity:0; transform:translate(-50%,-44%); filter:blur(8px); }
+  45%{ opacity:1; transform:translate(-50%,-50%); filter:blur(0); }
+  80%{ opacity:1; }
   100%{ opacity:0; }
 }
 .intro-caption{
@@ -186,7 +186,10 @@ body{
   font-style:italic;
   font-size:clamp(1.3rem,4vw,2.3rem);
   color:#fff;
-  text-shadow:0 2px 24px rgba(0,0,0,0.65);
+  text-shadow:
+    0 0 14px rgba(255,255,255,0.4),
+    0 0 32px rgba(255,255,255,0.2),
+    0 2px 24px rgba(0,0,0,0.7);
   opacity:0;
   pointer-events:none;
 }
@@ -198,6 +201,10 @@ body{
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
+  text-shadow:
+    0 0 16px rgba(255,214,0,0.7),
+    0 0 36px rgba(255,214,0,0.4),
+    0 2px 20px rgba(0,0,0,0.65);
 }
 #intro-splash.revealed .intro-caption{ display:none; }
 </style>
@@ -214,7 +221,7 @@ body{
   <div id="intro-splash-scrim"></div>
 
   <div class="intro-caption c1">Welcome to the blockchain.</div>
-  <div class="intro-caption c2">Built to confuse you. On purpose.</div>
+  <div class="intro-caption c2">Nobody explains it because confused people don&rsquo;t ask questions.</div>
   <div class="intro-caption c3">Let&rsquo;s fix that.</div>
 
   <div id="intro-splash-content">
