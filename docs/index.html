@@ -166,8 +166,8 @@ body{
 #intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(5){ animation-delay:.41s; }
 #intro-splash.revealed .intro-splash-links .intro-splash-card:nth-child(6){ animation-delay:.5s; }
 .intro-splash-card-icon{
-  width:60px;
-  height:60px;
+  width:84px;
+  height:84px;
   object-fit:contain;
   filter:drop-shadow(0 0 6px rgba(255,255,255,0.25));
   transition:filter .25s ease;
@@ -256,11 +256,11 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.intro-caption.c1{ animation:captionFade 1.95s ease forwards; animation-delay:.53s; }
-.intro-caption.c2{ animation:captionFade 2.7s ease forwards; animation-delay:2.78s; }
+.intro-caption.c1{ animation:captionFade 1.05s ease forwards; animation-delay:.29s; }
+.intro-caption.c2{ animation:captionFade 1.45s ease forwards; animation-delay:1.5s; }
 .intro-caption.c3{
-  animation:captionFade 1.73s ease forwards;
-  animation-delay:5.7s;
+  animation:captionFade .93s ease forwards;
+  animation-delay:3.07s;
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
@@ -410,8 +410,8 @@ body{
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
   var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 7425;   // reveal lands right as caption 3 finishes fading, no dead pause after (25% faster)
-  var SAFETY_MS = 8625; // reveal anyway if the video stalls/fails
+  var RIDE_MS = 4000;   // reveal lands right as caption 3 finishes fading, no dead pause after
+  var SAFETY_MS = 5200; // reveal anyway if the video stalls/fails
 
   function tryReveal(){
     if(revealed || !rideElapsed || !videoReady) return;
