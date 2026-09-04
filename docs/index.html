@@ -274,11 +274,7 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.intro-caption.c1{ animation:captionFade 1.55s ease forwards; animation-delay:.29s; }
-.intro-caption.c2{ animation:captionFade 1.45s ease forwards; animation-delay:2s; }
 .intro-caption.c3{
-  animation:captionFade 1.68s ease forwards;
-  animation-delay:3.57s;
   font-style:normal;
   font-weight:900;
   color:var(--accent-primary);
@@ -287,6 +283,9 @@ body{
     0 0 36px rgba(255,214,0,0.4),
     0 2px 20px rgba(0,0,0,0.65);
 }
+#intro-splash.started .intro-caption.c1{ animation:captionFade 1.55s ease forwards; animation-delay:.29s; }
+#intro-splash.started .intro-caption.c2{ animation:captionFade 1.45s ease forwards; animation-delay:2s; }
+#intro-splash.started .intro-caption.c3{ animation:captionFade 1.68s ease forwards; animation-delay:3.57s; }
 #intro-splash.revealed .intro-caption{ display:none; }
 
 #intro-splash-skip{
@@ -315,6 +314,44 @@ body{
   color:#fff;
 }
 #intro-splash.revealed #intro-splash-skip{ display:none; }
+
+#intro-splash-playgate{
+  position:absolute;
+  z-index:4;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  background:none;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  padding:0;
+}
+#intro-splash-playgate .icon{
+  width:64px; height:64px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.5);
+  border:2px solid rgba(255,255,255,0.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.6rem;
+  padding-left:4px;
+}
+#intro-splash-playgate .label{
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.85);
+}
+@media (max-width:760px), (hover:none){
+  #intro-splash.needs-tap #intro-splash-playgate{ display:flex; }
+}
 </style>
 </head>
 <body>
@@ -328,6 +365,10 @@ body{
   </div>
   <div id="intro-splash-scrim"></div>
   <button type="button" id="intro-splash-skip">Skip &rarr;</button>
+  <button type="button" id="intro-splash-playgate">
+    <span class="icon">&#9654;</span>
+    <span class="label">Tap to begin</span>
+  </button>
 
   <div class="intro-caption c1">Welcome to the blockchain.</div>
   <div class="intro-caption c2">Nobody explains it because confused people don&rsquo;t ask questions.</div>
@@ -427,8 +468,8 @@ body{
   var splash = document.getElementById('intro-splash');
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
-  var revealed = false;
-  var RIDE_MS = 5250; // reveal lands right as caption 3 finishes fading
+  var revealed = false, started = false;
+  var RIDE_MS = 5250; // reveal lands right as caption 3 finishes fading, once started
 
   function tryReveal(){
     if(revealed) return;
@@ -437,41 +478,52 @@ body{
     splash.classList.add('revealed');
   }
 
-  // The reveal runs purely on this timer now -- it never waits on the
-  // video. Some mobile browsers block autoplay/preload outright (no
-  // canplay event ever fires there), and gating the cards on that left
-  // people stuck on a blank screen until they happened to tap it.
+  function attemptPlay(){
+    if(!video) return;
+    var p = video.play();
+    if(p && p.catch) p.catch(function(){ /* blocked until a user gesture */ });
+  }
+
+  // Starts the whole sequence -- captions, the reveal timer, and the video
+  // -- together. On desktop this runs immediately on load, same as always.
+  // On mobile it only runs from a real tap, so video.play() is always
+  // called from inside a genuine user gesture: no dependence on autoplay,
+  // Reduce Motion, Low Power Mode, or any other device setting.
+  function startIntro(){
+    if(started) return;
+    started = true;
+    splash.classList.remove('needs-tap');
+    splash.classList.add('started');
+    setTimeout(tryReveal, RIDE_MS);
+    attemptPlay();
+  }
+
   splash.classList.add('pre-reveal');
-  setTimeout(tryReveal, RIDE_MS);
+
+  if(video){
+    video.muted = true;
+    video.playsInline = true;
+  }
+
+  var needsTap = window.matchMedia('(max-width:760px), (hover:none)').matches;
+
+  if(needsTap){
+    splash.classList.add('needs-tap');
+    // Any tap on the splash starts everything -- not just the button
+    // itself, since most of the screen is the video/poster.
+    splash.addEventListener('click', startIntro);
+    splash.addEventListener('touchend', startIntro);
+  } else {
+    startIntro();
+    if(video) video.addEventListener('canplay', attemptPlay, {once:true});
+  }
 
   var skipBtn = document.getElementById('intro-splash-skip');
   if(skipBtn){
-    skipBtn.addEventListener('click', tryReveal);
-  }
-
-  if(video){
-    // Belt-and-suspenders for mobile autoplay: the src is a real HTML
-    // attribute set at parse time (preload=auto), so the browser can start
-    // decoding immediately. It keeps trying independently of the reveal --
-    // if a phone blocks autoplay entirely, the poster stays visible and the
-    // first tap anywhere (click or touchend) starts it, same as tapping the
-    // browser's own native play button would.
-    video.muted = true;
-    video.playsInline = true;
-
-    function attemptPlay(){
-      var p = video.play();
-      if(p && p.catch) p.catch(function(){ /* blocked until a user gesture */ });
-    }
-
-    attemptPlay();
-    video.addEventListener('canplay', attemptPlay, {once:true});
-
-    splash.addEventListener('click', function(){
-      if(video.paused) attemptPlay();
-    });
-    splash.addEventListener('touchend', function(){
-      if(video.paused) attemptPlay();
+    skipBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      attemptPlay(); // the click itself is a valid gesture, may as well use it
+      tryReveal();
     });
   }
 })();
