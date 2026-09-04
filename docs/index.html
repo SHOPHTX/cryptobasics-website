@@ -99,6 +99,16 @@ body{
   .intro-splash-card-title{ font-size:.92rem; }
   .intro-splash-card-sub{ font-size:.66rem; }
 }
+/* No hover on touch devices, so the flip never resolves cleanly there --
+   skip the animation and just show the detail (back) face always. */
+@media (max-width:760px), (hover:none){
+  .intro-splash-card:hover .intro-splash-card-inner,
+  .intro-splash-card:focus-visible .intro-splash-card-inner{
+    transform:none;
+  }
+  .intro-splash-card-face.front{ display:none; }
+  .intro-splash-card-face.back{ transform:none; }
+}
 .intro-splash-card{
   position:relative;
   display:block;
