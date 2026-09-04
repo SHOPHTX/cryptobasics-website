@@ -39,9 +39,8 @@ body{
   position:absolute; inset:0;
   width:100%; height:100%;
   object-fit:cover;
-  opacity:0;
   filter:brightness(1) saturate(1) contrast(1);
-  transition:opacity 1.4s ease, filter 1.3s ease;
+  transition:filter 1.3s ease;
 }
 #intro-splash.revealed #intro-splash-video{
   filter:brightness(.5) saturate(.55) contrast(.95);
@@ -423,35 +422,35 @@ body{
   var splash = document.getElementById('intro-splash');
   var video = document.getElementById('intro-splash-video');
   if(!splash) return;
-  var rideElapsed = false, videoReady = false, revealed = false;
-  var RIDE_MS = 5250;   // reveal lands right as caption 3 finishes fading, no dead pause after
-  var SAFETY_MS = 6450; // reveal anyway if the video stalls/fails
+  var revealed = false;
+  var RIDE_MS = 5250; // reveal lands right as caption 3 finishes fading
 
   function tryReveal(){
-    if(revealed || !rideElapsed || !videoReady) return;
+    if(revealed) return;
     revealed = true;
     splash.classList.remove('pre-reveal');
     splash.classList.add('revealed');
   }
 
+  // The reveal runs purely on this timer now -- it never waits on the
+  // video. Some mobile browsers block autoplay/preload outright (no
+  // canplay event ever fires there), and gating the cards on that left
+  // people stuck on a blank screen until they happened to tap it.
   splash.classList.add('pre-reveal');
-  setTimeout(function(){ rideElapsed = true; tryReveal(); }, RIDE_MS);
+  setTimeout(tryReveal, RIDE_MS);
 
   var skipBtn = document.getElementById('intro-splash-skip');
   if(skipBtn){
-    skipBtn.addEventListener('click', function(){
-      rideElapsed = true;
-      videoReady = true;
-      tryReveal();
-    });
+    skipBtn.addEventListener('click', tryReveal);
   }
 
   if(video){
-    // Belt-and-suspenders for mobile autoplay: the src is now a real HTML
-    // attribute (set at parse time, not attached later via JS on window
-    // 'load'), so the browser can start decoding immediately instead of
-    // waiting on the whole page to finish loading -- that delay was likely
-    // pushing playback past the window mobile browsers allow autoplay in.
+    // Belt-and-suspenders for mobile autoplay: the src is a real HTML
+    // attribute set at parse time (preload=auto), so the browser can start
+    // decoding immediately. It keeps trying independently of the reveal --
+    // if a phone blocks autoplay entirely, the poster stays visible and the
+    // first tap anywhere (click or touchend) starts it, same as tapping the
+    // browser's own native play button would.
     video.muted = true;
     video.playsInline = true;
 
@@ -460,31 +459,15 @@ body{
       if(p && p.catch) p.catch(function(){ /* blocked until a user gesture */ });
     }
 
-    // Try right away (covers browsers that need the nudge) and again as
-    // soon as the video actually has data to play.
     attemptPlay();
+    video.addEventListener('canplay', attemptPlay, {once:true});
 
-    video.addEventListener('canplay', function(){
-      videoReady = true;
-      video.style.opacity = '1';
-      attemptPlay();
-      tryReveal();
-    }, {once:true});
-
-    // If autoplay is blocked outright (e.g. mobile data-saver mode, or an
-    // iOS Safari "Never Auto-Play" setting), the first tap anywhere unlocks
-    // it -- browsers always allow play() from a real user gesture.
     splash.addEventListener('click', function(){
       if(video.paused) attemptPlay();
     });
     splash.addEventListener('touchend', function(){
       if(video.paused) attemptPlay();
     });
-
-    setTimeout(function(){ videoReady = true; tryReveal(); }, SAFETY_MS);
-  } else {
-    videoReady = true;
-    tryReveal();
   }
 })();
 </script>
