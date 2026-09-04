@@ -270,6 +270,33 @@ body{
     0 2px 20px rgba(0,0,0,0.65);
 }
 #intro-splash.revealed .intro-caption{ display:none; }
+
+#intro-splash-skip{
+  position:absolute;
+  top:20px;
+  right:20px;
+  z-index:3;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.25);
+  color:rgba(255,255,255,0.75);
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:8px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  opacity:0;
+  transition:opacity .6s ease .8s, border-color .2s ease, background .2s ease, color .2s ease;
+}
+#intro-splash.pre-reveal #intro-splash-skip{ opacity:1; }
+#intro-splash-skip:hover{
+  border-color:var(--accent-primary);
+  background:rgba(255,214,0,0.12);
+  color:#fff;
+}
+#intro-splash.revealed #intro-splash-skip{ display:none; }
 </style>
 </head>
 <body>
@@ -282,6 +309,7 @@ body{
       poster="images/hero-bg-poster.webp?v=202609040122" data-src="video/hero-bg.mp4?v=202609040122"></video>
   </div>
   <div id="intro-splash-scrim"></div>
+  <button type="button" id="intro-splash-skip">Skip &rarr;</button>
 
   <div class="intro-caption c1">Welcome to the blockchain.</div>
   <div class="intro-caption c2">Nobody explains it because confused people don&rsquo;t ask questions.</div>
@@ -394,6 +422,15 @@ body{
 
   splash.classList.add('pre-reveal');
   setTimeout(function(){ rideElapsed = true; tryReveal(); }, RIDE_MS);
+
+  var skipBtn = document.getElementById('intro-splash-skip');
+  if(skipBtn){
+    skipBtn.addEventListener('click', function(){
+      rideElapsed = true;
+      videoReady = true;
+      tryReveal();
+    });
+  }
 
   if(video){
     // Belt-and-suspenders for mobile autoplay: set both the attribute and
