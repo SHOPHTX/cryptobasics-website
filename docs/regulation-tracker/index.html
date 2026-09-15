@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
+.site-nav-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
+.site-nav-link{font-size:.8rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .15s;white-space:nowrap;}
+.site-nav-link:hover{color:#FFD600;}
+.site-nav-link.home{display:flex;align-items:center;gap:6px;}
+
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   /* Primary Accent - Cyber Yellow */
@@ -878,7 +883,13 @@ footer{
 <body>
 <nav style="background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,0.07);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;">
   <span style="font-size:.9rem;font-weight:900;letter-spacing:.04em;color:#FFD600;">CryptoBasics</span>
-  <a href="/" style="font-size:.8rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:6px;text-decoration:none;">&larr; Back to home</a>
+  <div class="site-nav-links">
+    <a href="/#products" class="site-nav-link">Courses</a>
+    <a href="/news/" class="site-nav-link">News</a>
+    <a href="/glossary/" class="site-nav-link">Glossary</a>
+    <a href="/about/" class="site-nav-link">Our Story</a>
+    <a href="/" class="site-nav-link home">&larr; Home</a>
+  </div>
 </nav>
 
 <section style="padding:60px 40px 20px;max-width:900px;margin:0 auto;text-align:center;">

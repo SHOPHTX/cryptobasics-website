@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 <style>
+.site-nav-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
+.site-nav-link{font-size:.8rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .15s;white-space:nowrap;}
+.site-nav-link:hover{color:#FFD600;}
+.site-nav-link.home{display:flex;align-items:center;gap:6px;}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:16px;-webkit-font-smoothing:antialiased;}
 body{font-family:'Poppins',sans-serif;background:#0d0d0d;color:#fff;}
@@ -83,7 +88,13 @@ footer p{font-size:.78rem;color:rgba(255,255,255,0.2);}
 
 <nav>
   <span class="nav-logo">CryptoBasics</span>
-  <a href="/" class="nav-back">← Back to home</a>
+  <div class="site-nav-links">
+    <a href="/#products" class="site-nav-link">Courses</a>
+    <a href="/news/" class="site-nav-link">News</a>
+    <a href="/glossary/" class="site-nav-link">Glossary</a>
+    <a href="/regulation-tracker/" class="site-nav-link">Regulation</a>
+    <a href="/" class="site-nav-link home">&larr; Home</a>
+  </div>
 </nav>
 
 <section class="hero">
