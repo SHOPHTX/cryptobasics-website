@@ -36,6 +36,50 @@ a{color:inherit;text-decoration:none;}
 .glossary-body{padding:48px 24px 100px;}
 .count-label{font-size:.72rem;color:rgba(255,255,255,0.25);letter-spacing:.08em;text-transform:uppercase;margin-bottom:32px;}
 #no-results{display:none;text-align:center;padding:48px 0;color:rgba(255,255,255,0.3);font-size:.95rem;}
+
+.jb-banner{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(175deg,#0B0F1E 0%,#131b34 48%,#0B0F1E 100%);
+  border-top:1px solid rgba(242,185,59,0.25);
+  border-bottom:1px solid rgba(242,185,59,0.25);
+  padding:28px 24px;
+}
+.jb-banner .jb-ribbon{
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:linear-gradient(-20deg,
+    transparent 5%, rgba(242,185,59,0.14) 18%, transparent 31%,
+    transparent 57%, rgba(242,185,59,0.14) 70%, transparent 83%);
+}
+.jb-banner-inner{
+  position:relative; z-index:1;
+  max-width:760px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center; gap:20px;
+  flex-wrap:wrap;
+}
+.jb-banner-badge{ width:64px; height:auto; flex-shrink:0; }
+.jb-banner-text{ text-align:left; }
+.jb-banner-text .jb-headline{
+  font-family:'Fraunces',serif; font-weight:700;
+  color:#F4EFE2;
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "smcp","c2sc";
+  letter-spacing:.01em;
+  font-size:clamp(1.15rem,3.4vw,1.5rem);
+  line-height:1;
+  margin-bottom:4px;
+}
+.jb-banner-text .jb-tagline{
+  font-family:'Poppins',sans-serif; font-weight:500;
+  color:#F2B93B; font-size:.8rem;
+}
+.jb-banner-buck{ width:52px; height:auto; flex-shrink:0; filter:drop-shadow(0 10px 14px rgba(0,0,0,0.45)); }
+@media (max-width:520px){
+  .jb-banner-inner{ text-align:center; justify-content:center; }
+  .jb-banner-text{ text-align:center; order:1; width:100%; }
+  .jb-banner-badge{ order:0; }
+  .jb-banner-buck{ display:none; }
+}
 </style>
 </head>
 <body>
@@ -50,6 +94,19 @@ a{color:inherit;text-decoration:none;}
     <a href="/" class="site-nav-link home">&larr; Home</a>
   </div>
 </nav>
+
+
+<div class="jb-banner">
+  <div class="jb-ribbon"></div>
+  <div class="jb-banner-inner">
+    <img src="/images/jargon-buster-badge.webp" alt="Jargon Buster" class="jb-banner-badge">
+    <div class="jb-banner-text">
+      <div class="jb-headline">You Found It.</div>
+      <div class="jb-tagline">The free glossary from every Jargon Buster episode.</div>
+    </div>
+    <img src="/images/buck-jargon-buster.webp" alt="Buck the Coin" class="jb-banner-buck">
+  </div>
+</div>
 
 <div class="hero-section">
   <div class="container">
