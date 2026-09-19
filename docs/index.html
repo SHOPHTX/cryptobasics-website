@@ -932,29 +932,59 @@ footer{
 }
 .tagline-line{display:block;}
 .tagline-line-block{
-  opacity:0;filter:blur(2px);
-  transform:translateY(14px);
-  animation:sr-lineIn 620ms cubic-bezier(.16,1,.3,1) forwards;
+  opacity:0;filter:blur(9px);
+  transform:translateY(30px) scale(1.06);
+  letter-spacing:.14em;
+  animation:sr-lineIn 1050ms cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes sr-lineIn{
-  to{opacity:1;filter:blur(0);transform:translateY(0);}
+  to{opacity:1;filter:blur(0);transform:translateY(0) scale(1);letter-spacing:normal;}
 }
 .tagline-word{
-  display:inline-block;opacity:0;filter:blur(3px);
-  transform:translateY(16px) scale(.94);
-  animation:sr-wordIn 540ms cubic-bezier(.16,1,.3,1) forwards;
+  display:inline-block;opacity:0;filter:blur(9px);
+  transform:translateY(32px) scale(.85);
+  animation:sr-wordIn 700ms cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes sr-wordIn{
   to{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
 }
 .tagline-word-final{
   color:var(--sr-accent);
-  text-shadow:0 0 18px rgba(255,214,0,0.45);
+  animation-name:sr-wordInFinal;
+  animation-duration:1600ms;
+  animation-timing-function:cubic-bezier(.16,1,.3,1);
+}
+@keyframes sr-wordInFinal{
+  0%{opacity:0;filter:blur(10px);transform:translateY(34px) scale(.78);text-shadow:none;}
+  42%{opacity:1;filter:blur(0);transform:translateY(0) scale(1.12);text-shadow:0 0 26px rgba(255,214,0,.7);}
+  58%{opacity:1;filter:blur(0);transform:scale(1);text-shadow:0 0 10px rgba(255,214,0,.3);}
+  76%{opacity:1;filter:blur(0);transform:scale(1);text-shadow:0 0 30px rgba(255,214,0,.7);}
+  100%{opacity:1;filter:blur(0);transform:scale(1);text-shadow:0 0 15px rgba(255,214,0,.42);}
+}
+
+.sr-callout{
+  margin-top:26px;display:inline-flex;flex-direction:column;align-items:center;gap:9px;
+  padding:16px 28px;max-width:520px;
+  border:1px solid rgba(255,214,0,0.35);border-radius:16px;
+  background:rgba(255,214,0,0.06);
+  opacity:0;transform:translateY(18px);
+}
+.sr-ready .sr-callout{
+  animation:sr-calloutIn 700ms cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes sr-calloutIn{
+  to{opacity:1;transform:translateY(0);}
+}
+.sr-callout-badge{
+  font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--sr-accent);
+}
+.sr-callout-copy{
+  color:rgba(255,255,255,0.75);font-size:.92rem;line-height:1.55;margin:0;
 }
 .phone-frame.is-tablet{
   width:min(940px,94%);border-radius:36px;padding:26px;
 }
-.phone-frame.is-tablet .phone-screen{border-radius:22px;}
+.phone-frame.is-tablet .phone-screen{border-radius:22px;min-height:430px;}
 .phone-frame.is-tablet .dynamic-island{display:none;}
 .phone-frame.is-tablet .cam-dot{display:block;}
 .phone-frame.is-tablet .phone-scroll{padding-top:36px;}
@@ -971,27 +1001,28 @@ footer{
 }
 #sr-intro{
   position:absolute;inset:0;overflow:hidden;z-index:5;
-  background:radial-gradient(circle at 50% 28%, rgba(255,214,0,0.16) 0%, transparent 62%), linear-gradient(160deg,#141414 0%,#000 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:30px 26px;
+  background:linear-gradient(180deg,#0c1016 0%,#05070a 100%);
+  display:flex;flex-direction:column;
+  padding:92px 24px 20px;
+  color:#fff;
 }
-.alert-kicker{
-  font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#1a1500;
-  background:var(--sr-accent);border:1px solid var(--sr-accent);border-radius:9999px;
-  padding:6px 14px;margin-bottom:14px;
-}
-.alert-heading{
-  font-family:'Fraunces',serif;font-weight:800;font-size:1.7rem;color:#fff;margin-bottom:10px;text-wrap:balance;
-}
-.alert-copy{
-  color:rgba(255,255,255,0.75);font-size:.94rem;line-height:1.55;max-width:360px;
-}
-.alert-hint{
-  margin-top:18px;font-size:.78rem;font-weight:800;color:var(--sr-accent);
-  display:flex;align-items:center;gap:6px;
-  animation:sr-hintPulse 1.7s ease-in-out 1.1s infinite;
-}
-@keyframes sr-hintPulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+.sr-trade-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.sr-trade-app{font-weight:800;font-size:.85rem;color:rgba(255,255,255,.7);letter-spacing:.02em;}
+.sr-trade-live{font-size:.66rem;font-weight:800;color:#39d98a;letter-spacing:.08em;text-transform:uppercase;}
+.sr-trade-balance-label{font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.09em;margin-bottom:6px;}
+.sr-trade-balance{font-family:'Fraunces',serif;font-weight:800;font-size:2.15rem;color:#fff;margin-bottom:6px;line-height:1;}
+.sr-trade-change{font-size:.84rem;font-weight:700;color:#39d98a;margin-bottom:20px;}
+.sr-trade-chart{margin-bottom:24px;}
+.sr-trade-chart svg{width:100%;height:60px;display:block;}
+.sr-trade-holdings{display:flex;flex-direction:column;gap:13px;}
+.sr-trade-row{display:flex;align-items:center;gap:10px;font-size:.85rem;}
+.sr-coin-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.sr-coin-dot.btc{background:#f7931a;}
+.sr-coin-dot.eth{background:#627eea;}
+.sr-coin-dot.sol{background:#14f195;}
+.sr-coin-name{font-weight:700;width:38px;color:rgba(255,255,255,.9);}
+.sr-coin-amt{color:rgba(255,255,255,.42);flex:1;}
+.sr-coin-val{font-weight:700;color:rgba(255,255,255,.9);}
 
 /* ---- "new message" notification begging to be tapped ---- */
 .notif-banner{
@@ -1576,6 +1607,11 @@ footer{
       <p class="hero-tagline" id="sr-tagline" style="max-width:680px;margin-left:auto;margin-right:auto;animation:none;opacity:1;">
         Fear keeps you out. Confusion keeps you stuck. Let's get unstuck and be fear-less...together.
       </p>
+
+      <div class="sr-callout" id="sr-callout">
+        <span class="sr-callout-badge">🪙 Buck's Scam Radar</span>
+        <p class="sr-callout-copy">5 real-looking DMs and posts. You call it: legit, or a scammer counting on you not knowing better.</p>
+      </div>
     </div>
 
     <div class="hero-visual" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0 0;position:relative;z-index:2;">
@@ -1600,12 +1636,25 @@ footer{
             </div>
             <div class="phone-scroll">
               <div class="game-wrap">
-                <!-- INTRO STATE -->
+                <!-- INTRO STATE: dropped straight into a live trading screen -->
                 <div id="sr-intro">
-                  <div class="alert-kicker">Buck's Scam Radar</div>
-                  <div class="alert-heading">Think you can spot a scam?</div>
-                  <p class="alert-copy">5 real-looking DMs and posts. You call it: legit, or a scammer counting on you not knowing better.</p>
-                  <div class="alert-hint">👆 Check your notification above to get started</div>
+                  <div class="sr-trade-header">
+                    <span class="sr-trade-app">CryptoBasics Wallet</span>
+                    <span class="sr-trade-live">● Live</span>
+                  </div>
+                  <div class="sr-trade-balance-label">Total balance</div>
+                  <div class="sr-trade-balance">$12,483.92</div>
+                  <div class="sr-trade-change">▲ 3.8% today</div>
+                  <div class="sr-trade-chart">
+                    <svg viewBox="0 0 300 60" preserveAspectRatio="none">
+                      <path d="M0,46 L30,40 L60,44 L90,28 L120,33 L150,16 L180,24 L210,10 L240,19 L270,6 L300,13" fill="none" stroke="#ffd600" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="sr-trade-holdings">
+                    <div class="sr-trade-row"><span class="sr-coin-dot btc"></span><span class="sr-coin-name">BTC</span><span class="sr-coin-amt">0.184</span><span class="sr-coin-val">$8,220.10</span></div>
+                    <div class="sr-trade-row"><span class="sr-coin-dot eth"></span><span class="sr-coin-name">ETH</span><span class="sr-coin-amt">1.42</span><span class="sr-coin-val">$3,102.44</span></div>
+                    <div class="sr-trade-row"><span class="sr-coin-dot sol"></span><span class="sr-coin-name">SOL</span><span class="sr-coin-amt">6.7</span><span class="sr-coin-val">$1,161.38</span></div>
+                  </div>
                 </div>
 
                 <!-- GAME STATE -->
@@ -1615,16 +1664,11 @@ footer{
                     <div class="progress" id="sr-progress"></div>
                   </div>
                   <div class="card" id="sr-game-card">
-                    <div class="swipe-card" id="sr-swipe-card">
-                      <div class="swipe-stamp scam" id="sr-stamp-scam">Scam</div>
-                      <div class="swipe-stamp legit" id="sr-stamp-legit">Legit</div>
-                      <div class="scenario-tag" id="sr-scenario-tag">Direct Message</div>
-                      <div id="sr-scenario-mock"></div>
-                    </div>
-                    <div class="swipe-hint">← swipe or tap to answer →</div>
+                    <div class="scenario-tag" id="sr-scenario-tag">Direct Message</div>
+                    <div id="sr-scenario-mock"></div>
                     <div class="choice-row" id="sr-choice-row">
-                      <button class="choice-btn choice-scam" onclick="srButtonChoose('scam')">← 🚩 Scam</button>
-                      <button class="choice-btn choice-legit" onclick="srButtonChoose('legit')">✅ Legit →</button>
+                      <button class="choice-btn choice-scam" onclick="srButtonChoose('scam')">🚩 Scam</button>
+                      <button class="choice-btn choice-legit" onclick="srButtonChoose('legit')">✅ Legit</button>
                     </div>
                     <div class="reveal" id="sr-reveal">
                       <div class="reveal-badge" id="sr-reveal-badge"></div>
@@ -1808,12 +1852,6 @@ footer{
     document.getElementById('sr-choice-row').querySelectorAll('button').forEach(function(b){ b.disabled=false; b.classList.remove('picked-correct','picked-wrong'); });
     var card=document.getElementById('sr-game-card');
     card.classList.remove('enter'); void card.offsetWidth; card.classList.add('enter');
-    var swipeCard=document.getElementById('sr-swipe-card');
-    swipeCard.style.transition='none';
-    swipeCard.style.transform='translateX(0) rotate(0)';
-    swipeCard.style.opacity='1';
-    document.getElementById('sr-stamp-legit').style.opacity=0;
-    document.getElementById('sr-stamp-scam').style.opacity=0;
   }
   function srChoose(pick){
     if(srAnswered) return; srAnswered=true;
@@ -1837,57 +1875,13 @@ footer{
   }
   function srButtonChoose(pick){
     if(srAnswered) return;
-    srSwipeAway(pick);
+    srChoose(pick);
   }
-  function srSwipeAway(pick){
-    if(srAnswered) return;
-    var swipeCard=document.getElementById('sr-swipe-card');
-    var dir = pick==='legit' ? 1 : -1;
-    swipeCard.style.transition='transform .32s cubic-bezier(.3,.6,.4,1), opacity .32s ease';
-    swipeCard.style.transform='translateX('+(dir*560)+'px) rotate('+(dir*22)+'deg)';
-    swipeCard.style.opacity='0';
-    setTimeout(function(){ srChoose(pick); }, 220);
-  }
-  (function(){
-    var swipeCard=document.getElementById('sr-swipe-card');
-    var stampLegit=document.getElementById('sr-stamp-legit');
-    var stampScam=document.getElementById('sr-stamp-scam');
-    if(!swipeCard) return;
-    var dragging=false, startX=0, dx=0;
-    var THRESHOLD=90;
-    swipeCard.addEventListener('pointerdown', function(e){
-      if(srAnswered) return;
-      dragging=true; startX=e.clientX; dx=0;
-      swipeCard.style.transition='none';
-      try{ swipeCard.setPointerCapture(e.pointerId); }catch(err){}
-    });
-    swipeCard.addEventListener('pointermove', function(e){
-      if(!dragging) return;
-      dx = e.clientX - startX;
-      swipeCard.style.transform='translateX('+dx+'px) rotate('+(dx/16)+'deg)';
-      stampLegit.style.opacity = Math.max(0, Math.min(1, dx/THRESHOLD));
-      stampScam.style.opacity = Math.max(0, Math.min(1, -dx/THRESHOLD));
-    });
-    function endDrag(){
-      if(!dragging) return;
-      dragging=false;
-      swipeCard.style.transition='transform .3s cubic-bezier(.2,.8,.4,1)';
-      if(dx > THRESHOLD){ srSwipeAway('legit'); }
-      else if(dx < -THRESHOLD){ srSwipeAway('scam'); }
-      else{
-        swipeCard.style.transform='translateX(0) rotate(0)';
-        stampLegit.style.opacity=0; stampScam.style.opacity=0;
-      }
-      dx=0;
-    }
-    swipeCard.addEventListener('pointerup', endDrag);
-    swipeCard.addEventListener('pointercancel', endDrag);
-  })();
   (function(){
     // Cinematic tagline reveal: line 1 and line 2 land as whole beats,
     // line 3 types in word by word with a held pause before "together."
     var el = document.getElementById('sr-tagline');
-    var heroVisual = document.querySelector('.hero-visual');
+    var heroVisual = document.querySelector('.hero-grid');
     if(!el || !heroVisual) return;
     var LINE1 = "Fear keeps you out.";
     var LINE2 = "Confusion keeps you stuck.";
@@ -1908,10 +1902,10 @@ footer{
     line3.className = 'tagline-line';
     el.appendChild(line3);
 
-    var LINE1_DELAY = 200, LINE_DUR = 620;
-    var LINE2_DELAY = LINE1_DELAY + LINE_DUR + 280;
-    var LINE3_START = LINE2_DELAY + LINE_DUR + 450;
-    var STAGGER = 140, WORD_DUR = 540, TOGETHER_PAUSE = 650;
+    var LINE1_DELAY = 300, LINE_DUR = 950;
+    var LINE2_DELAY = LINE1_DELAY + LINE_DUR + 550;
+    var LINE3_START = LINE2_DELAY + LINE_DUR + 700;
+    var STAGGER = 230, WORD_DUR = 700, TOGETHER_PAUSE = 800;
 
     line1.style.animationDelay = LINE1_DELAY + 'ms';
     line2.style.animationDelay = LINE2_DELAY + 'ms';
