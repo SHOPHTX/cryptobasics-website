@@ -1069,6 +1069,24 @@ footer{
   padding:4px 11px;border-radius:9999px;margin-bottom:14px;
 }
 
+/* ---- Tinder-style swipe to answer ---- */
+.swipe-card{
+  position:relative;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
+  will-change:transform;
+}
+.swipe-card:active{cursor:grabbing;}
+.swipe-stamp{
+  position:absolute;top:10px;padding:6px 16px;border-radius:8px;
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.15rem;text-transform:uppercase;letter-spacing:.04em;
+  border:3px solid;opacity:0;pointer-events:none;z-index:6;transition:opacity .08s linear;
+}
+.swipe-stamp.legit{right:6px;border-color:var(--sr-legit);color:var(--sr-legit);transform:rotate(-10deg);}
+.swipe-stamp.scam{left:6px;border-color:var(--sr-scam);color:var(--sr-scam);transform:rotate(10deg);}
+.swipe-hint{
+  text-align:center;font-size:.7rem;font-weight:700;color:var(--sr-gray);letter-spacing:.03em;
+  margin-top:12px;text-transform:uppercase;
+}
+
 /* ---- realistic platform mockups ---- */
 .mock-avatar{
   width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -1571,11 +1589,16 @@ footer{
                     <div class="progress" id="sr-progress"></div>
                   </div>
                   <div class="card" id="sr-game-card">
-                    <div class="scenario-tag" id="sr-scenario-tag">Direct Message</div>
-                    <div id="sr-scenario-mock"></div>
+                    <div class="swipe-card" id="sr-swipe-card">
+                      <div class="swipe-stamp scam" id="sr-stamp-scam">Scam</div>
+                      <div class="swipe-stamp legit" id="sr-stamp-legit">Legit</div>
+                      <div class="scenario-tag" id="sr-scenario-tag">Direct Message</div>
+                      <div id="sr-scenario-mock"></div>
+                    </div>
+                    <div class="swipe-hint">← swipe or tap to answer →</div>
                     <div class="choice-row" id="sr-choice-row">
-                      <button class="choice-btn choice-legit" onclick="srChoose('legit')">✅ Legit</button>
-                      <button class="choice-btn choice-scam" onclick="srChoose('scam')">🚩 Scam</button>
+                      <button class="choice-btn choice-scam" onclick="srButtonChoose('scam')">← 🚩 Scam</button>
+                      <button class="choice-btn choice-legit" onclick="srButtonChoose('legit')">✅ Legit →</button>
                     </div>
                     <div class="reveal" id="sr-reveal">
                       <div class="reveal-badge" id="sr-reveal-badge"></div>
@@ -1759,6 +1782,12 @@ footer{
     document.getElementById('sr-choice-row').querySelectorAll('button').forEach(function(b){ b.disabled=false; b.classList.remove('picked-correct','picked-wrong'); });
     var card=document.getElementById('sr-game-card');
     card.classList.remove('enter'); void card.offsetWidth; card.classList.add('enter');
+    var swipeCard=document.getElementById('sr-swipe-card');
+    swipeCard.style.transition='none';
+    swipeCard.style.transform='translateX(0) rotate(0)';
+    swipeCard.style.opacity='1';
+    document.getElementById('sr-stamp-legit').style.opacity=0;
+    document.getElementById('sr-stamp-scam').style.opacity=0;
   }
   function srChoose(pick){
     if(srAnswered) return; srAnswered=true;
@@ -1767,7 +1796,7 @@ footer{
     var card=document.getElementById('sr-game-card');
     var buttons=document.getElementById('sr-choice-row').querySelectorAll('button');
     buttons.forEach(function(b){ b.disabled=true; });
-    var pickedBtn = pick==='legit' ? buttons[0] : buttons[1];
+    var pickedBtn = pick==='scam' ? buttons[0] : buttons[1];
     pickedBtn.classList.add(correct?'picked-correct':'picked-wrong');
     card.classList.remove('shake','flash-correct'); void card.offsetWidth;
     card.classList.add(correct?'flash-correct':'shake');
@@ -1780,6 +1809,54 @@ footer{
     document.getElementById('sr-next-btn').textContent = srCurrent===SR_ROUNDS.length-1?'See my score →':'Next round →';
     document.getElementById('sr-reveal').classList.add('show');
   }
+  function srButtonChoose(pick){
+    if(srAnswered) return;
+    srSwipeAway(pick);
+  }
+  function srSwipeAway(pick){
+    if(srAnswered) return;
+    var swipeCard=document.getElementById('sr-swipe-card');
+    var dir = pick==='legit' ? 1 : -1;
+    swipeCard.style.transition='transform .32s cubic-bezier(.3,.6,.4,1), opacity .32s ease';
+    swipeCard.style.transform='translateX('+(dir*560)+'px) rotate('+(dir*22)+'deg)';
+    swipeCard.style.opacity='0';
+    setTimeout(function(){ srChoose(pick); }, 220);
+  }
+  (function(){
+    var swipeCard=document.getElementById('sr-swipe-card');
+    var stampLegit=document.getElementById('sr-stamp-legit');
+    var stampScam=document.getElementById('sr-stamp-scam');
+    if(!swipeCard) return;
+    var dragging=false, startX=0, dx=0;
+    var THRESHOLD=90;
+    swipeCard.addEventListener('pointerdown', function(e){
+      if(srAnswered) return;
+      dragging=true; startX=e.clientX; dx=0;
+      swipeCard.style.transition='none';
+      try{ swipeCard.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    swipeCard.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      dx = e.clientX - startX;
+      swipeCard.style.transform='translateX('+dx+'px) rotate('+(dx/16)+'deg)';
+      stampLegit.style.opacity = Math.max(0, Math.min(1, dx/THRESHOLD));
+      stampScam.style.opacity = Math.max(0, Math.min(1, -dx/THRESHOLD));
+    });
+    function endDrag(){
+      if(!dragging) return;
+      dragging=false;
+      swipeCard.style.transition='transform .3s cubic-bezier(.2,.8,.4,1)';
+      if(dx > THRESHOLD){ srSwipeAway('legit'); }
+      else if(dx < -THRESHOLD){ srSwipeAway('scam'); }
+      else{
+        swipeCard.style.transform='translateX(0) rotate(0)';
+        stampLegit.style.opacity=0; stampScam.style.opacity=0;
+      }
+      dx=0;
+    }
+    swipeCard.addEventListener('pointerup', endDrag);
+    swipeCard.addEventListener('pointercancel', endDrag);
+  })();
   function srNextRound(){
     srCurrent++;
     if(srCurrent>=SR_ROUNDS.length){ srShowScore(); } else { srRenderRound(); }
