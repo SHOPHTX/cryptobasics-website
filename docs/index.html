@@ -885,6 +885,311 @@ footer{
   padding:0 4px;
 }
 
+
+/* ================================================================
+   Buck's Scam Radar — interactive hero game (hero-visual slot)
+   ================================================================ */
+:root{
+  --sr-accent:#FFD600;
+  --sr-card:#0c1520;
+  --sr-line:rgba(255,255,255,0.1);
+  --sr-scam:#EF4444;
+  --sr-legit:#4ADE80;
+  --sr-gray:rgba(255,255,255,0.55);
+}
+.game-demo{display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;z-index:1;width:100%;}
+.phone-frame{
+  position:relative;width:min(380px,100%);height:auto;flex-shrink:0;
+  background:linear-gradient(155deg,#3a3a3e,#0a0a0c 55%);
+  border-radius:54px;padding:14px;
+  box-shadow:0 40px 80px -25px rgba(0,0,0,.85), inset 0 0 0 1.5px rgba(255,255,255,0.08);
+  transition:width .4s cubic-bezier(.22,1,.36,1), border-radius .4s ease, padding .4s ease;
+}
+.phone-frame.is-tablet{
+  width:min(640px,100%);border-radius:36px;padding:20px;
+}
+.phone-frame.is-tablet .phone-screen{border-radius:22px;}
+.phone-frame.is-tablet .dynamic-island{display:none;}
+.phone-frame.is-tablet .cam-dot{display:block;}
+.phone-frame.is-tablet .phone-scroll{padding-top:36px;}
+.phone-frame.is-tablet .btn-power{top:130px;height:56px;}
+.phone-frame.is-tablet .btn-vol-up{top:130px;}
+.phone-frame.is-tablet .btn-vol-down{top:180px;}
+.cam-dot{
+  display:none;position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:9px;height:9px;border-radius:50%;background:#0a0a0c;z-index:30;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+.device-toggle{display:flex;gap:8px;}
+.device-btn{
+  padding:8px 18px;border-radius:9999px;border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);color:var(--sr-gray);font-weight:700;font-size:.78rem;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:.15s;
+}
+.device-btn.active{background:var(--sr-accent);color:#1a1500;border-color:var(--sr-accent);}
+.phone-screen{
+  position:relative;width:100%;height:auto;background:#000;border-radius:40px;overflow:hidden;min-height:320px;
+}
+#sr-intro{
+  position:absolute;inset:0;overflow:hidden;z-index:5;
+  background:linear-gradient(160deg,#ff4d4d 0%,#c81e1e 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:30px 26px;
+}
+.alert-kicker{
+  font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.9);
+  background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:9999px;
+  padding:6px 14px;margin-bottom:14px;
+}
+.alert-heading{
+  font-family:'Fraunces',serif;font-weight:800;font-size:1.55rem;color:#fff;margin-bottom:10px;text-wrap:balance;
+}
+.alert-copy{
+  color:rgba(255,255,255,0.92);font-size:.94rem;line-height:1.55;max-width:360px;
+}
+
+/* ---- "new message" notification begging to be tapped ---- */
+.notif-banner{
+  position:absolute;top:14px;left:50%;width:calc(100% - 28px);max-width:420px;
+  display:flex;gap:10px;align-items:flex-start;text-align:left;
+  background:rgba(28,28,32,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.14);border-radius:18px;padding:12px 14px;
+  box-shadow:0 10px 34px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  z-index:40;cursor:pointer;
+  animation:notifDrop 620ms cubic-bezier(.2,1.3,.4,1) 400ms backwards,
+            notifBeg 1.7s ease-in-out 1.1s infinite;
+}
+.notif-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#FFD600,#FFE34D);
+  display:flex;align-items:center;justify-content:center;font-size:1.15rem;
+  box-shadow:0 0 0 0 rgba(255,214,0,0.6);
+  animation:notifIconPulse 1.7s ease-in-out 1.1s infinite;
+}
+@keyframes notifIconPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,214,0,0.55);}
+  50%{box-shadow:0 0 0 7px rgba(255,214,0,0);}
+}
+.notif-textwrap{flex:1;min-width:0;}
+.notif-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.notif-title{font-size:.78rem;font-weight:800;color:#fff;letter-spacing:.01em;}
+.notif-time{font-weight:500;color:rgba(255,255,255,0.4);font-size:.66rem;flex-shrink:0;}
+.notif-body{font-size:.78rem;color:rgba(255,255,255,0.8);line-height:1.4;margin-top:2px;}
+.notif-dot{
+  position:absolute;top:-4px;right:-4px;width:12px;height:12px;border-radius:50%;
+  background:var(--sr-scam);border:2px solid #0a0a0c;
+  animation:notifDotBlink 1.1s ease-in-out infinite;
+}
+@keyframes notifDotBlink{0%,100%{opacity:1;}50%{opacity:.35;}}
+@keyframes notifDrop{
+  0%{opacity:0;transform:translate(-50%,-70px) scale(.92);}
+  65%{opacity:1;}
+  100%{opacity:1;transform:translate(-50%,0) scale(1);}
+}
+@keyframes notifBeg{
+  0%,100%{transform:translate(-50%,0) scale(1) rotate(0deg);}
+  8%{transform:translate(-50%,0) scale(1.035) rotate(-1.2deg);}
+  16%{transform:translate(-50%,0) scale(1.035) rotate(1.2deg);}
+  24%{transform:translate(-50%,0) scale(1) rotate(0deg);}
+  45%{transform:translate(-50%,-5px) scale(1.02) rotate(0deg);}
+  55%{transform:translate(-50%,0) scale(1) rotate(0deg);}
+}
+.notif-banner.hidden{display:none!important;}
+
+.side-btn{position:absolute;background:#0a0a0c;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);}
+.btn-mute{left:-3px;top:108px;width:3px;height:24px;}
+.btn-vol-up{left:-3px;top:150px;width:3px;height:44px;}
+.btn-vol-down{left:-3px;top:204px;width:3px;height:44px;}
+.btn-power{right:-3px;top:170px;width:3px;height:80px;}
+.phone-scroll{
+  position:static;overflow:visible;
+  padding:52px 20px 34px;
+}
+.dynamic-island{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);width:106px;height:29px;
+  background:#000;border-radius:20px;z-index:30;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+.home-indicator{
+  position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:128px;height:5px;
+  background:rgba(255,255,255,0.35);border-radius:3px;z-index:30;pointer-events:none;
+}
+
+.game-wrap{max-width:460px;margin:0 auto;width:100%;}
+.progress{display:flex;gap:7px;margin:0 0 16px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--sr-line);transition:background .3s;}
+.dot.done{background:var(--sr-accent);}
+.dot.current{background:#fff;}
+
+.card{
+  background:var(--sr-card);border:1px solid var(--sr-line);border-radius:20px;
+  padding:24px 22px;box-shadow:0 16px 40px rgba(0,0,0,0.4);
+  transition:box-shadow .3s;
+}
+.card.enter{animation:cardDrop 520ms cubic-bezier(.34,1.56,.64,1);}
+@keyframes cardDrop{
+  0%{transform:scale(.9) translateY(14px);opacity:0;}
+  100%{transform:scale(1) translateY(0);opacity:1;}
+}
+.card.shake{animation:shakeX 420ms ease;}
+@keyframes shakeX{
+  10%,90%{transform:translateX(-3px);}
+  20%,80%{transform:translateX(5px);}
+  30%,50%,70%{transform:translateX(-8px);}
+  40%,60%{transform:translateX(8px);}
+}
+.card.flash-correct{animation:flashGreen 600ms ease;}
+@keyframes flashGreen{
+  0%{box-shadow:0 16px 40px rgba(0,0,0,0.4);}
+  30%{box-shadow:0 0 0 3px rgba(74,222,128,0.55), 0 16px 40px rgba(0,0,0,0.4);}
+  100%{box-shadow:0 16px 40px rgba(0,0,0,0.4);}
+}
+.scenario-tag{
+  display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sr-accent);background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.25);
+  padding:4px 11px;border-radius:9999px;margin-bottom:14px;
+}
+
+/* ---- realistic platform mockups ---- */
+.mock-avatar{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:0;
+}
+.mock-avatar-ring{
+  width:40px;height:40px;border-radius:50%;padding:2.5px;flex-shrink:0;
+  background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4);
+}
+.mock-avatar-ring .mock-avatar{width:100%;height:100%;background:#111;}
+.mock-icon{display:inline-flex;}
+.mock-icon svg{display:block;}
+
+.mock-imsg-header{display:flex;align-items:center;margin-bottom:10px;}
+.mock-back{color:#3a9dfa;flex:0 0 24px;}
+.mock-imsg-contact{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.mock-contact-name{font-weight:700;font-size:.8rem;}
+.mock-header-spacer{flex:0 0 24px;}
+.mock-timestamp{text-align:center;font-size:.64rem;color:var(--sr-gray);margin-bottom:10px;letter-spacing:.02em;}
+.mock-bubble{font-size:.88rem;line-height:1.48;padding:11px 14px;max-width:86%;}
+.mock-bubble-sms{
+  background:#3a3a3c;color:#fff;border-radius:18px 18px 18px 5px;position:relative;
+}
+
+.mock-row{display:flex;gap:9px;align-items:flex-start;}
+.mock-row-between{display:flex;align-items:flex-start;justify-content:space-between;}
+.mock-name{font-weight:800;font-size:.82rem;display:flex;align-items:center;gap:5px;}
+.mock-handle{font-weight:500;color:var(--sr-gray);font-size:.72rem;}
+.mock-time{font-size:.68rem;color:var(--sr-gray);margin-top:1px;}
+.mock-more{color:var(--sr-gray);flex-shrink:0;padding-top:2px;}
+.mock-verified{
+  display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;
+  background:#1d9bf0;color:#fff;font-size:9px;font-weight:900;flex-shrink:0;
+}
+.mock-bubble-dm{
+  background:#16324f;color:#eaf2ff;border-radius:16px 16px 16px 4px;margin-top:9px;
+}
+.mock-inputbar{
+  display:flex;align-items:center;gap:8px;margin-top:16px;padding:9px 14px;border-radius:9999px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--sr-gray);font-size:.78rem;
+}
+.mock-inputbar .mock-icon{margin-left:auto;color:var(--sr-gray);}
+
+.mock-tweet-text{font-size:.9rem;line-height:1.5;margin-top:9px;color:#fff;}
+.mock-tweet-actions{
+  display:flex;gap:22px;margin-top:14px;font-size:.74rem;color:var(--sr-gray);font-weight:600;
+}
+.mock-tweet-actions span{display:flex;align-items:center;gap:5px;}
+
+.mock-ig-chat-header{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+.mock-ig-chat-header .mock-name{font-size:.85rem;}
+.mock-ig-header-icons{display:flex;gap:14px;margin-left:auto;color:#fff;}
+.mock-bubble-ig{
+  background:rgba(129,52,175,0.14);border:1px solid rgba(221,42,123,0.3);
+  border-radius:16px 16px 16px 4px;margin-top:9px;
+}
+.mock-ig-time{font-size:.62rem;color:var(--sr-gray);margin-top:7px;margin-left:2px;}
+
+.mock-sponsored{font-size:.62rem;color:var(--sr-gray);font-weight:600;display:block;margin-top:1px;}
+.mock-media{
+  margin-top:12px;border-radius:10px;overflow:hidden;position:relative;aspect-ratio:16/10;
+  background:linear-gradient(135deg,#2a2540,#1a2a3a 60%,#151515);
+  display:flex;align-items:center;justify-content:center;
+}
+.mock-play-btn{
+  width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+}
+.mock-ig-actions{display:flex;align-items:center;gap:16px;margin-top:12px;color:#fff;}
+.mock-ig-actions .mock-icon:last-child{margin-left:auto;}
+.mock-like-count{font-size:.8rem;font-weight:700;margin-top:9px;}
+.mock-ig-caption{font-size:.85rem;line-height:1.5;margin-top:5px;}
+.mock-ig-caption b{font-weight:800;}
+.mock-view-comments{font-size:.76rem;color:var(--sr-gray);margin-top:5px;}
+.mock-post-time{font-size:.62rem;color:var(--sr-gray);margin-top:6px;letter-spacing:.03em;text-transform:uppercase;}
+.choice-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+.choice-btn{
+  padding:15px 8px;border-radius:12px;font-weight:800;font-size:.95rem;cursor:pointer;
+  transition:transform .12s;font-family:'DM Sans',sans-serif;
+}
+.choice-btn:active{transform:scale(0.96);}
+.choice-legit{background:rgba(74,222,128,0.12);border:1.5px solid var(--sr-legit);color:var(--sr-legit);}
+.choice-scam{background:rgba(239,68,68,0.12);border:1.5px solid var(--sr-scam);color:var(--sr-scam);}
+.choice-btn:disabled{opacity:.4;pointer-events:none;}
+.choice-btn.picked-correct{animation:pickPulse 500ms ease;}
+.choice-btn.picked-wrong{animation:shakeX 420ms ease;}
+@keyframes pickPulse{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+
+.reveal{margin-top:18px;padding-top:18px;border-top:1px dashed var(--sr-line);display:none;}
+.reveal.show{display:block;animation:sr-fadein .35s ease;}
+@keyframes sr-fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.reveal-badge{
+  display:inline-flex;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 12px;border-radius:9999px;margin-bottom:9px;
+}
+.badge-correct{background:rgba(74,222,128,0.15);color:var(--sr-legit);}
+.badge-wrong{background:rgba(239,68,68,0.15);color:var(--sr-scam);}
+.reveal-verdict{font-family:'Fraunces',serif;font-weight:700;font-size:1.02rem;margin-bottom:8px;}
+.verdict-scam{color:var(--sr-scam);}
+.verdict-legit{color:var(--sr-legit);}
+.buck-line{
+  display:flex;gap:9px;background:rgba(255,255,255,0.04);border-radius:10px;padding:11px 13px;
+  font-size:.85rem;line-height:1.5;color:var(--sr-gray);
+}
+.next-btn{
+  margin-top:16px;width:100%;padding:14px;border:none;border-radius:9999px;
+  background:var(--sr-accent);color:#1a1500;font-weight:800;font-size:.9rem;cursor:pointer;
+  transition:transform .12s;
+}
+.next-btn:active{transform:scale(.97);}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.round-label{font-size:.72rem;color:var(--sr-gray);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+
+.score-screen{display:none;text-align:center;}
+.score-screen.show{display:block;animation:sr-fadein .4s ease;}
+.score-big{font-family:'Fraunces',serif;font-weight:900;font-size:4rem;color:var(--sr-accent);line-height:1;margin:6px 0 2px;}
+.score-big.pop{animation:scorePop 550ms cubic-bezier(.34,1.56,.64,1);}
+@keyframes scorePop{0%{transform:scale(.4);opacity:0;}70%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}
+.score-of{font-size:.92rem;color:var(--sr-gray);margin-bottom:16px;}
+.score-verdict-title{font-family:'Fraunces',serif;font-style:italic;font-weight:700;font-size:1.3rem;margin-bottom:9px;text-wrap:balance;}
+.score-verdict-body{color:var(--sr-gray);font-size:.9rem;line-height:1.6;margin:0 auto 22px;}
+.cta-row{display:flex;flex-direction:column;gap:10px;}
+.cta-row .cta-primary,.cta-row .cta-secondary{padding:15px;border-radius:9999px;font-weight:800;font-size:.9rem;cursor:pointer;text-decoration:none;display:block;}
+.cta-row .cta-primary{background:var(--sr-accent);color:#1a1500;border:none;}
+.cta-row .cta-secondary{background:transparent;border:1px solid var(--sr-line);color:var(--sr-gray);}
+
+.hidden{display:none!important;}
+
+.confetti-piece{
+  position:fixed;top:50%;left:50%;width:8px;height:8px;pointer-events:none;z-index:50;
+  border-radius:2px;
+}
+@media(max-width:480px){
+  .alert-heading{font-size:1.3rem;}
+  .alert-copy{font-size:.86rem;}
+}
 </style>
 </head>
 <body>
@@ -1254,46 +1559,307 @@ footer{
       </div>
     </div>
 
-    <div class="hero-visual" style="display:flex;flex-direction:column;justify-content:flex-end;padding:20px 0;position:relative;z-index:2;min-height:500px;">
-      <div style="
-        background:rgba(255,214,0,0.06);
-        border:1px solid rgba(255,214,0,0.2);
-        border-radius:20px;
-        padding:28px 32px;
-        min-height:132px;
-      ">
-        <div id="buck-quote-text" style="font-family:'Fraunces',serif;font-size:1.3rem;font-style:italic;color:#fff;line-height:1.5;margin-bottom:12px;transition:opacity .4s ease;">
-          &ldquo;Money is just a story everyone agreed to believe. Crypto is the next chapter.&rdquo;
+    <div class="hero-visual" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;position:relative;z-index:2;">
+      <div class="game-demo">
+        <div class="device-toggle">
+          <button class="device-btn" data-device="phone" onclick="srSetDevice('phone')">📱 Portrait</button>
+          <button class="device-btn active" data-device="tablet" onclick="srSetDevice('tablet')">📱 Landscape</button>
         </div>
-        <div style="font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-primary);">— Buck the Coin</div>
+
+        <div class="phone-frame is-tablet" id="sr-phone-frame">
+          <div class="side-btn btn-mute"></div>
+          <div class="side-btn btn-vol-up"></div>
+          <div class="side-btn btn-vol-down"></div>
+          <div class="side-btn btn-power"></div>
+          <div class="phone-screen">
+            <div class="dynamic-island"></div>
+            <div class="cam-dot"></div>
+            <div class="notif-banner" id="sr-notif-banner" onclick="srStartGame()">
+              <div class="notif-icon">🪙<span class="notif-dot"></span></div>
+              <div class="notif-textwrap">
+                <div class="notif-title-row">
+                  <span class="notif-title">Buck's Scam Radar</span>
+                  <span class="notif-time">now</span>
+                </div>
+                <div class="notif-body">🚨 New DM just came in. Think you can tell it's a scam?</div>
+              </div>
+            </div>
+            <div class="phone-scroll">
+              <div class="game-wrap">
+                <!-- INTRO STATE -->
+                <div id="sr-intro">
+                  <div class="alert-kicker">Buck's Scam Radar</div>
+                  <div class="alert-heading">Think you can spot a scam?</div>
+                  <p class="alert-copy">5 real-looking DMs and posts. You call it: legit, or a scammer counting on you not knowing better.</p>
+                </div>
+
+                <!-- GAME STATE -->
+                <div id="sr-game" class="hidden">
+                  <div class="progress-row">
+                    <span class="round-label" id="sr-round-label">Round 1 of 5</span>
+                    <div class="progress" id="sr-progress"></div>
+                  </div>
+                  <div class="card" id="sr-game-card">
+                    <div class="scenario-tag" id="sr-scenario-tag">Direct Message</div>
+                    <div id="sr-scenario-mock"></div>
+                    <div class="choice-row" id="sr-choice-row">
+                      <button class="choice-btn choice-legit" onclick="srChoose('legit')">✅ Legit</button>
+                      <button class="choice-btn choice-scam" onclick="srChoose('scam')">🚩 Scam</button>
+                    </div>
+                    <div class="reveal" id="sr-reveal">
+                      <div class="reveal-badge" id="sr-reveal-badge"></div>
+                      <div class="reveal-verdict" id="sr-reveal-verdict"></div>
+                      <div class="buck-line"><span>🪙</span><span id="sr-buck-text"></span></div>
+                      <button class="next-btn" onclick="srNextRound()" id="sr-next-btn">Next round →</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SCORE STATE -->
+                <div id="sr-score-screen" class="hidden score-screen">
+                  <div class="card">
+                    <div class="score-big" id="sr-score-big">0</div>
+                    <div class="score-of">out of 5 correct</div>
+                    <div class="score-verdict-title" id="sr-score-title"></div>
+                    <p class="score-verdict-body" id="sr-score-body"></p>
+                    <div class="cta-row">
+                      <a class="cta-primary" href="/glossary/">Keep leveling up →</a>
+                      <button class="cta-secondary" onclick="srStartGame()">Play again</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-  (function(){
-    var buckQuotes = [
-      "Money is just a story everyone agreed to believe. Crypto is the next chapter.",
-      "If someone can't explain it simply, they either don't understand it, or they don't want you to.",
-      "Confused people make bad decisions. Bad decisions make other people rich.",
-      "Your seed phrase is the only password on Earth with no ‘forgot password’ button.",
-      "The crypto industry loves sounding smart more than it loves being clear. I don’t.",
-      "Blockchain isn’t anonymous. It’s just very publicly pretending to be.",
-      "Nobody taught you this in school. That’s not your fault.",
-      "I’m a coin who speaks human. Turns out that’s rare."
-    ];
-    var idx = 0;
-    var el = document.getElementById('buck-quote-text');
-    if(!el) return;
-    setInterval(function(){
-      idx = (idx + 1) % buckQuotes.length;
-      el.style.opacity = 0;
-      setTimeout(function(){
-        el.innerHTML = '&ldquo;' + buckQuotes[idx] + '&rdquo;';
-        el.style.opacity = 1;
-      }, 400);
-    }, 5000);
-  })();
+  function srSetDevice(mode){
+    document.getElementById('sr-phone-frame').classList.toggle('is-tablet', mode==='tablet');
+    document.querySelectorAll('.device-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.device===mode); });
+  }
+  var SR_ROUNDS = [
+    { tag:"Direct Message", platform:"dm", name:"GiveBack Promo", handle:"@official_promo_0", time:"Just now", verified:false, avatarBg:"#5b4b8a", initials:"GP",
+      text:"🎉 Congrats! You've been randomly selected for the Official Giveback Promo. Send 0.1 BTC to the address below and receive 1 BTC back within 24 hours. Verified partner ✅",
+      answer:"scam", verdictScam:"Classic doubling scam.", buck:"Nobody sends you free money for “verification.” If a stranger promises to double your Bitcoin, they're doubling THEIR Bitcoin. With yours." },
+
+    { tag:"Text Message", platform:"sms", contact:"Coinbase Support", time:"Today 2:14 PM",
+      text:"This is Coinbase Support. We've detected suspicious activity on your account. Reply with your 12-word recovery phrase to verify your identity and prevent a permanent lock.",
+      answer:"scam", verdictScam:"Seed-phrase phishing.", buck:"Real support NEVER asks for your seed phrase. Ever. That phrase is the master key — the second you type it somewhere, it's not yours anymore." },
+
+    { tag:"Verified Exchange Post", platform:"tweet", name:"CryptoExchange", handle:"@cryptoexchange", time:"3h", verified:true, avatarBg:"#1d4ed8", initials:"CE",
+      text:"Scheduled maintenance tonight, 11PM–1AM PST. Withdrawals may be briefly delayed. Your funds are safe — no action needed on your end.",
+      replies:"812", retweets:"1.4K", likes:"6.2K",
+      answer:"legit", verdictLegit:"Normal, boring, real.", buck:"Boring, official, no ask for money or keys — that's what real communication looks like. Scary-sounding ≠ scam. Urgency + a money ask = scam." },
+
+    { tag:"Instagram DM", platform:"ig-dm", name:"cryptowins.signals", initials:"CW",
+      text:"I turned $500 into $40k in 3 weeks with my mentor's signals. Only 5 spots left in his group — comment 'CRYPTO' below and I'll DM you 👇",
+      answer:"scam", verdictScam:"Fake-guru funnel.", buck:"“Only 5 spots left” plus a screenshot nobody can verify — oldest trick in the book. Nobody actually making money is selling the secret for a comment." },
+
+    { tag:"Influencer Caption", platform:"ig-post", name:"cryptowithkat", initials:"CK",
+      text:"This video is sponsored by [Exchange]. I've personally used them for 2 years. As always — do your own research, this isn't financial advice.",
+      answer:"legit", verdictLegit:"Honest disclosure.", buck:"Paid partnership, clearly labeled, zero guaranteed returns promised. That's exactly what an honest recommendation is supposed to look like." }
+  ];
+
+  var SR_ICON = {
+    back:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+    more:'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+    reply:'<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    repost:'<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+    heart:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+    comment:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    send:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+    bookmark:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+    camera:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    phone:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .6 2.9a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.5 2.9.6a2 2 0 0 1 1.8 2.1z"/></svg>',
+    video:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
+    play:'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>'
+  };
+
+  function srBuildMock(r){
+    if(r.platform==='sms'){
+      return '\
+        <div class="mock-imsg-header">\
+          <span class="mock-back">'+SR_ICON.back+'</span>\
+          <div class="mock-imsg-contact">\
+            <div class="mock-avatar" style="background:#8e8e93">'+r.contact.split(' ').map(function(w){return w[0];}).join('').slice(0,2)+'</div>\
+            <span class="mock-contact-name">'+r.contact+'</span>\
+          </div>\
+          <span class="mock-header-spacer"></span>\
+        </div>\
+        <div class="mock-timestamp">Text Message · '+r.time+'</div>\
+        <div class="mock-bubble mock-bubble-sms">'+r.text+'</div>';
+    }
+    if(r.platform==='dm'){
+      return '\
+        <div class="mock-row-between">\
+          <div class="mock-row">\
+            <div class="mock-avatar" style="background:'+r.avatarBg+'">'+r.initials+'</div>\
+            <div>\
+              <div class="mock-name">'+r.name+'</div>\
+              <div class="mock-handle">'+r.handle+'</div>\
+              <div class="mock-time">'+r.time+'</div>\
+            </div>\
+          </div>\
+          <span class="mock-more">'+SR_ICON.more+'</span>\
+        </div>\
+        <div class="mock-bubble mock-bubble-dm">'+r.text+'</div>\
+        <div class="mock-inputbar"><span>Start a new message…</span><span class="mock-icon">'+SR_ICON.camera+'</span></div>';
+    }
+    if(r.platform==='tweet'){
+      return '\
+        <div class="mock-row-between">\
+          <div class="mock-row">\
+            <div class="mock-avatar" style="background:'+r.avatarBg+'">'+r.initials+'</div>\
+            <div>\
+              <div class="mock-name">'+r.name+' '+(r.verified?'<span class="mock-verified">✓</span>':'')+'</div>\
+              <div class="mock-handle">'+r.handle+' · '+r.time+'</div>\
+            </div>\
+          </div>\
+          <span class="mock-more">'+SR_ICON.more+'</span>\
+        </div>\
+        <div class="mock-tweet-text">'+r.text+'</div>\
+        <div class="mock-tweet-actions">\
+          <span class="mock-icon">'+SR_ICON.reply+'</span><span>'+r.replies+'</span>\
+          <span class="mock-icon">'+SR_ICON.repost+'</span><span>'+r.retweets+'</span>\
+          <span class="mock-icon">'+SR_ICON.heart+'</span><span>'+r.likes+'</span>\
+          <span class="mock-icon" style="margin-left:auto">'+SR_ICON.send+'</span>\
+        </div>';
+    }
+    if(r.platform==='ig-dm'){
+      return '\
+        <div class="mock-ig-chat-header">\
+          <span class="mock-back">'+SR_ICON.back+'</span>\
+          <div class="mock-avatar-ring"><div class="mock-avatar" style="background:#111">'+r.initials+'</div></div>\
+          <div class="mock-name">'+r.name+'</div>\
+          <div class="mock-ig-header-icons"><span class="mock-icon">'+SR_ICON.phone+'</span><span class="mock-icon">'+SR_ICON.video+'</span></div>\
+        </div>\
+        <div class="mock-bubble mock-bubble-ig">'+r.text+'</div>\
+        <div class="mock-ig-time">Active now</div>\
+        <div class="mock-inputbar" style="margin-top:14px;"><span class="mock-icon">'+SR_ICON.camera+'</span><span>Message…</span></div>';
+    }
+    if(r.platform==='ig-post'){
+      return '\
+        <div class="mock-row-between">\
+          <div class="mock-row">\
+            <div class="mock-avatar-ring"><div class="mock-avatar" style="background:#111">'+r.initials+'</div></div>\
+            <div><div class="mock-name">'+r.name+'</div><span class="mock-sponsored">Sponsored</span></div>\
+          </div>\
+          <span class="mock-more">'+SR_ICON.more+'</span>\
+        </div>\
+        <div class="mock-media"><span class="mock-play-btn">'+SR_ICON.play+'</span></div>\
+        <div class="mock-ig-actions">\
+          <span class="mock-icon">'+SR_ICON.heart+'</span><span class="mock-icon">'+SR_ICON.comment+'</span><span class="mock-icon">'+SR_ICON.send+'</span>\
+          <span class="mock-icon">'+SR_ICON.bookmark+'</span>\
+        </div>\
+        <div class="mock-like-count">12,482 likes</div>\
+        <div class="mock-ig-caption"><b>'+r.name+'</b> '+r.text+'</div>\
+        <div class="mock-view-comments">View all 341 comments</div>\
+        <div class="mock-post-time">2 hours ago</div>';
+    }
+    return '<div class="scenario-text">'+r.text+'</div>';
+  }
+  var srCurrent=0, srScore=0, srAnswered=false;
+
+  function srBuildProgress(){
+    var el=document.getElementById('sr-progress'); el.innerHTML='';
+    for(var i=0;i<SR_ROUNDS.length;i++){
+      var d=document.createElement('div');
+      d.className='dot'+(i<srCurrent?' done':(i===srCurrent?' current':''));
+      el.appendChild(d);
+    }
+    document.getElementById('sr-round-label').textContent = 'Round '+(srCurrent+1)+' of '+SR_ROUNDS.length;
+  }
+  function srStartGame(){
+    srCurrent=0; srScore=0; srAnswered=false;
+    var notif=document.getElementById('sr-notif-banner');
+    if(notif) notif.classList.add('hidden');
+    document.getElementById('sr-intro').classList.add('hidden');
+    document.getElementById('sr-score-screen').classList.remove('show'); document.getElementById('sr-score-screen').classList.add('hidden');
+    document.getElementById('sr-game').classList.remove('hidden');
+    srRenderRound();
+  }
+  function srRenderRound(){
+    srAnswered=false; srBuildProgress();
+    var r=SR_ROUNDS[srCurrent];
+    document.getElementById('sr-scenario-tag').textContent=r.tag;
+    document.getElementById('sr-scenario-mock').innerHTML=srBuildMock(r);
+    document.getElementById('sr-reveal').classList.remove('show');
+    document.getElementById('sr-choice-row').querySelectorAll('button').forEach(function(b){ b.disabled=false; b.classList.remove('picked-correct','picked-wrong'); });
+    var card=document.getElementById('sr-game-card');
+    card.classList.remove('enter'); void card.offsetWidth; card.classList.add('enter');
+  }
+  function srChoose(pick){
+    if(srAnswered) return; srAnswered=true;
+    var r=SR_ROUNDS[srCurrent]; var correct = pick===r.answer;
+    if(correct) srScore++;
+    var card=document.getElementById('sr-game-card');
+    var buttons=document.getElementById('sr-choice-row').querySelectorAll('button');
+    buttons.forEach(function(b){ b.disabled=true; });
+    var pickedBtn = pick==='legit' ? buttons[0] : buttons[1];
+    pickedBtn.classList.add(correct?'picked-correct':'picked-wrong');
+    card.classList.remove('shake','flash-correct'); void card.offsetWidth;
+    card.classList.add(correct?'flash-correct':'shake');
+    var badge=document.getElementById('sr-reveal-badge'), verdict=document.getElementById('sr-reveal-verdict');
+    badge.className='reveal-badge '+(correct?'badge-correct':'badge-wrong');
+    badge.textContent = correct?'You got it':'Not quite';
+    verdict.className='reveal-verdict '+(r.answer==='scam'?'verdict-scam':'verdict-legit');
+    verdict.textContent = r.answer==='scam' ? ('🚩 SCAM — '+r.verdictScam) : ('✅ LEGIT — '+r.verdictLegit);
+    document.getElementById('sr-buck-text').textContent=r.buck;
+    document.getElementById('sr-next-btn').textContent = srCurrent===SR_ROUNDS.length-1?'See my score →':'Next round →';
+    document.getElementById('sr-reveal').classList.add('show');
+  }
+  function srNextRound(){
+    srCurrent++;
+    if(srCurrent>=SR_ROUNDS.length){ srShowScore(); } else { srRenderRound(); }
+  }
+  function srShowScore(){
+    document.getElementById('sr-game').classList.add('hidden');
+    var screen=document.getElementById('sr-score-screen');
+    screen.classList.remove('hidden'); screen.classList.add('show');
+    var scoreBig = document.getElementById('sr-score-big');
+    scoreBig.classList.remove('pop'); void scoreBig.offsetWidth; scoreBig.classList.add('pop');
+    srAnimateCount(scoreBig, srScore);
+    var title,body;
+    if(srScore===5){ title="Certified Scam-Proof."; body="You already see through this stuff. Go put that radar to work — and maybe warn a friend before they don't."; srFireConfetti(); }
+    else if(srScore>=3){ title="Pretty sharp."; body="A couple of these almost got you. That's exactly the gap the glossary closes — five more minutes and none of them get you next time."; }
+    else { title="Good thing this was practice."; body="Scammers are counting on people not knowing the difference. Now you do — and there's a lot more where that came from."; }
+    document.getElementById('sr-score-title').textContent=title;
+    document.getElementById('sr-score-body').textContent=body;
+  }
+  function srAnimateCount(el, target){
+    var n=0;
+    if(target===0){ el.textContent='0'; return; }
+    var step=setInterval(function(){
+      n++; el.textContent=n;
+      if(n>=target) clearInterval(step);
+    }, 90);
+  }
+  function srFireConfetti(){
+    var colors=['#FFD600','#FFE34D','#4ADE80','#FFFFFF'];
+    for(var i=0;i<26;i++){
+      (function(i){
+        var p=document.createElement('div');
+        p.className='confetti-piece';
+        p.style.background=colors[i%colors.length];
+        var angle=(Math.random()*360)*(Math.PI/180);
+        var dist=80+Math.random()*220;
+        var dx=Math.cos(angle)*dist, dy=Math.sin(angle)*dist - 60;
+        p.style.transform='translate(-50%,-50%)';
+        p.style.transition='transform 900ms cubic-bezier(.16,1,.3,1), opacity 900ms ease';
+        document.body.appendChild(p);
+        requestAnimationFrame(function(){
+          p.style.transform='translate(calc(-50% + '+dx+'px), calc(-50% + '+dy+'px)) rotate('+(Math.random()*360)+'deg)';
+          p.style.opacity='0';
+        });
+        setTimeout(function(){ p.remove(); }, 950);
+      })(i);
+    }
+  }
   </script>
 </section>
 
