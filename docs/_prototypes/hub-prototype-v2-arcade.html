@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoBasics — Arcade Hub Prototype (DEMO ONLY)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#0c0d10;
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+
+/* chunky diagonal stripe backdrop instead of soft blurred blobs */
+.stripe-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,214,0,0.05) 0px, rgba(255,214,0,0.05) 2px, transparent 2px, transparent 42px),
+    #0c0d10;
+}
+.blob{position:fixed;border-radius:50%;z-index:0;pointer-events:none;opacity:.9;filter:none;}
+.blob-y{width:340px;height:340px;background:#FFD600;top:-160px;right:-140px;opacity:.14;}
+.blob-b{width:280px;height:280px;background:#3B82F6;bottom:-120px;left:-100px;opacity:.14;}
+
+.scanline{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, transparent 1px, transparent 3px);}
+
+.ticker-wrap{position:fixed;top:0;left:0;right:0;z-index:6;height:34px;background:#000;border-bottom:3px solid #FFD600;display:flex;align-items:center;overflow:hidden;font-size:.72rem;font-weight:800;}
+.ticker-track{display:flex;white-space:nowrap;animation:tickerScroll 14s linear infinite;padding-left:100%;}
+.tk{padding:0 20px;display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);border-right:1px solid rgba(255,255,255,0.15);}
+.tk b{color:#fff;}
+.up{color:#4ADE80;} .dn{color:#FF6B6B;}
+@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
+.logo{position:fixed;top:44px;left:28px;z-index:6;font-size:.85rem;font-weight:900;letter-spacing:.05em;color:#FFD600;}
+
+.stage{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 60px;}
+
+/* ===== SCREEN 1: title / insert-coin ===== */
+#screen-title{width:100%;max-width:640px;text-align:center;}
+.coin-badge{
+  width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #FFE770, #FFD600 55%, #C9A400 100%);
+  border:5px solid #0c0d10;
+  box-shadow:0 0 0 4px #FFD600, 6px 8px 0 rgba(0,0,0,0.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.6rem;
+  margin:0 auto 26px;
+  animation:coinSpin 3.2s cubic-bezier(.4,0,.2,1) infinite;
+}
+@keyframes coinSpin{
+  0%,70%{transform:rotateY(0deg);}
+  80%{transform:rotateY(180deg);}
+  90%{transform:rotateY(360deg);}
+  100%{transform:rotateY(360deg);}
+}
+.insert-coin{font-size:.72rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#FFD600;margin-bottom:14px;animation:blink 1.1s steps(2) infinite;}
+@keyframes blink{50%{opacity:.15;}}
+.title-h1{font-family:'Fraunces',serif;font-size:clamp(2.1rem,6vw,3.4rem);font-weight:900;line-height:1.05;margin-bottom:18px;}
+.title-h1 em{font-style:italic;color:#FFD600;}
+.title-sub{font-size:.95rem;color:rgba(255,255,255,0.5);margin-bottom:36px;}
+.start-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#FFD600;color:#0c0d10;
+  font-family:'DM Sans',sans-serif;font-weight:900;font-size:1rem;
+  padding:18px 44px;border-radius:10px;border:none;cursor:pointer;
+  box-shadow:0 6px 0 #B08D00;
+  transition:transform .12s ease, box-shadow .12s ease;
+  letter-spacing:.02em;
+}
+.start-btn:hover{transform:translateY(-2px);}
+.start-btn:active{transform:translateY(4px); box-shadow:0 2px 0 #B08D00;}
+
+/* ===== SCREEN 2: choose your path ===== */
+#screen-path{width:100%;max-width:720px;text-align:center;display:none;}
+.path-eyebrow{font-size:.7rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#FFD600;margin-bottom:12px;}
+.path-h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:900;margin-bottom:34px;}
+.path-h1 em{font-style:italic;color:#FFD600;}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:540px){.pgrid{grid-template-columns:1fr;}}
+.ptile{
+  position:relative;
+  background:#151621;
+  border:3px solid #292a38;
+  border-radius:14px;
+  padding:24px 20px;
+  cursor:pointer;
+  text-align:left;
+  box-shadow:5px 5px 0 rgba(0,0,0,0.4);
+  transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.ptile:hover{transform:translate(-3px,-3px); border-color:#FFD600; box-shadow:8px 8px 0 rgba(255,214,0,0.25);}
+.ptile:active{transform:translate(1px,1px); box-shadow:2px 2px 0 rgba(0,0,0,0.4);}
+.ptile .pi{font-size:1.7rem;margin-bottom:10px;display:block;}
+.ptile .pt{font-weight:900;font-size:1rem;margin-bottom:4px;}
+.ptile .pd{font-size:.8rem;color:rgba(255,255,255,0.45);line-height:1.5;}
+
+/* ===== SCREEN 3: level select ===== */
+#screen-levels{width:100%;max-width:920px;text-align:center;display:none;}
+.lvl-tag{font-size:.68rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px;}
+.lvl-h2{font-family:'Fraunces',serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:900;margin-bottom:40px;}
+.lvl-h2 em{font-style:italic;color:#FFD600;}
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1000px;}
+@media(max-width:680px){.lgrid{grid-template-columns:1fr 1fr;}}
+
+.card3d{position:relative;height:190px;cursor:pointer;}
+.card3d-inner{
+  position:relative;width:100%;height:100%;
+  transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.card3d:hover .card3d-inner{transform:rotateY(180deg);}
+.card-face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:18px;
+  border:3px solid #292a38;
+}
+.card-front{
+  background:#151621;
+  box-shadow:5px 5px 0 rgba(0,0,0,0.4);
+}
+.card-front .lvl-num{position:absolute;top:12px;left:14px;font-size:.65rem;font-weight:900;letter-spacing:.08em;color:#FFD600;}
+.card-front .lvl-icon{font-size:2.1rem;margin-bottom:10px;}
+.card-front .lvl-title{font-weight:900;font-size:.95rem;}
+.card-back{
+  background:linear-gradient(160deg,#FFD600,#FFB800);
+  color:#0c0d10;
+  transform:rotateY(180deg);
+  text-align:center;
+}
+.card-back .lvl-desc{font-size:.82rem;font-weight:700;line-height:1.5;margin-bottom:10px;}
+.card-back .lvl-go{font-size:.72rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;}
+.card3d.featured .card-front{border-color:#FFD600; box-shadow:5px 5px 0 rgba(255,214,0,0.35);}
+.card3d.featured .card-front::after{
+  content:'BEST FIT'; position:absolute; top:-11px; right:12px;
+  background:#FFD600;color:#0c0d10;font-size:.6rem;font-weight:900;letter-spacing:.05em;
+  padding:3px 10px;border-radius:9999px;
+}
+
+.back-link{margin-top:36px;font-size:.78rem;color:rgba(255,255,255,0.35);cursor:pointer;display:inline-block;font-weight:700;}
+.back-link:hover{color:#FFD600;}
+
+.demo-note{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:.68rem;color:rgba(255,255,255,0.25);z-index:6;letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<div class="stripe-bg"></div>
+<div class="blob blob-y"></div>
+<div class="blob blob-b"></div>
+<div class="scanline"></div>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="tk">₿ BTC <b>$71,240</b> <span class="up">▲ 2.1%</span></span>
+    <span class="tk">Ξ ETH <b>$3,940</b> <span class="up">▲ 1.4%</span></span>
+    <span class="tk">✕ XRP <b>$1.42</b> <span class="dn">▼ 0.6%</span></span>
+    <span class="tk">◎ SOL <b>$198</b> <span class="up">▲ 3.2%</span></span>
+    <span class="tk">₿ BTC <b>$71,240</b> <span class="up">▲ 2.1%</span></span>
+    <span class="tk">Ξ ETH <b>$3,940</b> <span class="up">▲ 1.4%</span></span>
+    <span class="tk">✕ XRP <b>$1.42</b> <span class="dn">▼ 0.6%</span></span>
+    <span class="tk">◎ SOL <b>$198</b> <span class="up">▲ 3.2%</span></span>
+  </div>
+</div>
+
+<div class="logo">CryptoBasics</div>
+
+<div class="stage">
+
+  <div id="screen-title">
+    <div class="coin-badge">🪙</div>
+    <div class="insert-coin">Insert knowledge to continue</div>
+    <h1 class="title-h1">Crypto, without<br>the <em>headache.</em></h1>
+    <p class="title-sub">No jargon. No hype. No finance degree required.</p>
+    <button class="start-btn" onclick="showScreen('path')">▶ Start</button>
+  </div>
+
+  <div id="screen-path">
+    <div class="path-eyebrow">Choose your path</div>
+    <h1 class="path-h1">What brings you<br><em>here today?</em></h1>
+    <div class="pgrid">
+      <div class="ptile" onclick="showLevels('new')">
+        <span class="pi">🌱</span>
+        <div class="pt">I'm brand new</div>
+        <div class="pd">Never bought crypto — start from zero.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('news')">
+        <span class="pi">📰</span>
+        <div class="pt">Catch me up on news</div>
+        <div class="pd">What's happening right now, plain English.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('jargon')">
+        <span class="pi">🔍</span>
+        <div class="pt">I hit a confusing term</div>
+        <div class="pd">Give me the plain-English version.</div>
+      </div>
+      <div class="ptile" onclick="showLevels('know')">
+        <span class="pi">🧠</span>
+        <div class="pt">I know some, teach me more</div>
+        <div class="pd">I've dabbled — show me everything.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-levels">
+    <div class="lvl-tag">Level select</div>
+    <h2 class="lvl-h2">Pick your <em>next move.</em></h2>
+    <div class="lgrid" id="lgrid"></div>
+    <div class="back-link" onclick="showScreen('path')">&larr; choose a different path</div>
+  </div>
+
+</div>
+
+<div class="demo-note">Prototype only — not the live site. Hover a level card to flip it.</div>
+
+<script>
+var LEVELS = [
+  {n:'LVL 1', icon:'📚', title:'Courses', desc:'9 volumes, zero to fluent.', key:'courses'},
+  {n:'LVL 2', icon:'📰', title:'Crypto News', desc:'Updated daily, plain English.', key:'news'},
+  {n:'LVL 3', icon:'🔍', title:'Jargon Buster', desc:'Look up any term instantly.', key:'jargon'},
+  {n:'LVL 4', icon:'🏛️', title:'Regulation Tracker', desc:"Who's actually passed laws.", key:'reg'},
+  {n:'LVL 5', icon:'👋', title:'Our Story', desc:'Meet Kenzo (and Buck).', key:'story'}
+];
+var FEATURED_BY_PATH = {new:'courses', news:'news', jargon:'jargon', know:'reg'};
+
+function showScreen(name){
+  document.getElementById('screen-title').style.display = name === 'title' ? 'block' : 'none';
+  document.getElementById('screen-path').style.display = name === 'path' ? 'block' : 'none';
+  document.getElementById('screen-levels').style.display = name === 'levels' ? 'block' : 'none';
+}
+
+function showLevels(path){
+  var featured = FEATURED_BY_PATH[path];
+  var grid = document.getElementById('lgrid');
+  grid.innerHTML = '';
+  var ordered = LEVELS.slice().sort(function(a,b){
+    if(a.key === featured) return -1;
+    if(b.key === featured) return 1;
+    return 0;
+  });
+  ordered.forEach(function(lv){
+    var wrap = document.createElement('div');
+    wrap.className = 'card3d' + (lv.key === featured ? ' featured' : '');
+    wrap.innerHTML =
+      '<div class="card3d-inner">' +
+        '<div class="card-face card-front">' +
+          '<span class="lvl-num">'+lv.n+'</span>' +
+          '<span class="lvl-icon">'+lv.icon+'</span>' +
+          '<span class="lvl-title">'+lv.title+'</span>' +
+        '</div>' +
+        '<div class="card-face card-back">' +
+          '<div class="lvl-desc">'+lv.desc+'</div>' +
+          '<div class="lvl-go">Enter &rarr;</div>' +
+        '</div>' +
+      '</div>';
+    grid.appendChild(wrap);
+  });
+  showScreen('levels');
+}
+</script>
+
+</body>
+</html>

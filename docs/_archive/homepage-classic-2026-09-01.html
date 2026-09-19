@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Basics — Education That Actually Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  /* Primary Accent - Cyber Yellow */
+  --accent-primary:#FFD600;
+  --accent-light:#FFE34D;
+  --accent-dark:#D9B300;
+  --accent-glow:rgba(255,214,0,0.3);
+  
+  /* Backgrounds */
+  --black:#000000;
+  --black-soft:#0A0A0A;
+  --black-card:#151515;
+  
+  /* Text */
+  --white:#FFFFFF;
+  --gray-light:#B3B3B3;
+  --gray-mid:#808080;
+}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+html{overflow-x:hidden;}
+
+/* Hero */
+.hero{
+  min-height:100vh;
+  background:var(--black);
+  position:relative;
+  display:flex;
+  align-items:center;
+  padding:80px 60px;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-20%;
+  width:800px;
+  height:800px;
+  background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  animation:float 12s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-50px,50px) scale(1.1)}
+}
+
+.hero-grid{
+  width:100%;
+  max-width:1400px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:80px;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+
+.hero-content{
+  animation:slideUp 0.8s ease-out;
+}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.company-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:#0c1520;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:50px;
+  padding:10px 24px;
+  margin-bottom:32px;
+  animation:slideUp 0.8s ease-out 0.2s backwards;
+}
+.badge-dot{
+  width:8px;
+  height:8px;
+  background:var(--accent-primary);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--accent-primary);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.3);opacity:0.7}
+}
+.badge-text{
+  color:var(--gray-light);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3.5rem,8vw,6rem);
+  font-weight:900;
+  line-height:0.95;
+  letter-spacing:-0.03em;
+  color:var(--white);
+  margin-bottom:32px;
+  animation:slideUp 0.8s ease-out 0.4s backwards;
+}
+h1 span{
+  color:var(--accent-primary);
+  text-shadow:0 0 40px var(--accent-glow);
+}
+
+.hero-tagline{
+  font-size:clamp(1.25rem,2.5vw,1.5rem);
+  line-height:1.6;
+  color:var(--gray-light);
+  margin-bottom:48px;
+  max-width:600px;
+  animation:slideUp 0.8s ease-out 0.6s backwards;
+}
+.hero-tagline strong{
+  color:var(--white);
+  font-weight:700;
+}
+
+.cta-group{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  animation:slideUp 0.8s ease-out 0.8s backwards;
+}
+.cta-secondary-row{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  gap:10px;
+}
+
+.btn-primary{
+  background:var(--accent-primary);
+  color:var(--black);
+  padding:20px 44px;
+  font-size:17px;
+  font-weight:800;
+  border:none;
+  border-radius:100px;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 30px var(--accent-glow);
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.btn-primary:hover{
+  transform:translateY(-4px);
+  box-shadow:0 0 50px var(--accent-glow), 0 8px 25px rgba(0,0,0,0.5);
+  background:var(--accent-light);
+}
+
+.btn-secondary{
+  background:transparent;
+  color:var(--white);
+  padding:11px 18px;
+  font-size:13px;
+  font-weight:700;
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:100px;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.3s ease;
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.05);
+  border-color:rgba(255,255,255,0.4);
+}
+
+.hero-visual{
+  position:relative;
+  animation:slideUp 0.8s ease-out 1s backwards;
+}
+.hero-card{
+  background:var(--black-card);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:32px;
+  padding:48px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+.stat-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+}
+.stat{
+  text-align:center;
+}
+.stat-number{
+  font-family:'Fraunces',serif;
+  font-size:3.5rem;
+  font-weight:900;
+  color:var(--accent-primary);
+  line-height:1;
+  margin-bottom:8px;
+}
+.stat-label{
+  color:var(--gray-light);
+  font-size:14px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+/* Products Section */
+.products{
+  padding:120px 60px;
+  background:#F5C842;
+  position:relative;
+}
+
+.section-header{
+  max-width:1400px;
+  margin:0 auto 80px;
+  text-align:center;
+}
+.section-tag{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(0,0,0,0.5);
+  margin-bottom:16px;
+}
+.section-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:900;
+  line-height:1.05;
+  color:#000;
+  margin-bottom:20px;
+}
+.section-desc{
+  font-size:1.25rem;
+  color:rgba(0,0,0,0.65);
+  max-width:700px;
+  margin:0 auto;
+  line-height:1.7;
+}
+
+/* ── Dark Accordion ── */
+.vol-list{
+  max-width:820px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.va{
+  background:#0c1520;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  overflow:hidden;
+  transition:border-color .2s ease;
+}
+.va:hover{border-color:rgba(255,214,0,0.3);}
+.va.open{border-color:rgba(255,214,0,0.35);background:#0f1c2e;}
+
+.va-trigger{
+  width:100%;
+  background:none;
+  border:none;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  text-align:left;
+}
+.va-icon{
+  font-size:1.6rem;
+  flex-shrink:0;
+  width:40px;
+  text-align:center;
+  line-height:1;
+}
+.va-meta{flex:1;min-width:0;}
+.va-tag{
+  font-size:.58rem;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(255,214,0,0.6);
+  margin-bottom:3px;
+}
+.va-title{
+  font-family:'Fraunces',serif;
+  font-size:1.05rem;
+  font-weight:800;
+  color:#fff;
+  line-height:1.2;
+}
+.va-sub{
+  font-size:.72rem;
+  color:rgba(255,255,255,0.35);
+  font-style:italic;
+  margin-top:2px;
+}
+.va-chevron{
+  flex-shrink:0;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.4);
+  font-size:1rem;
+  transition:transform .25s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.va.open .va-chevron{
+  transform:rotate(90deg);
+  background:rgba(255,214,0,0.15);
+  border-color:rgba(255,214,0,0.4);
+  color:#FFD600;
+}
+.va-body{
+  display:none;
+  padding:0 20px 20px 76px;
+  animation:vaSlide .2s ease forwards;
+}
+@keyframes vaSlide{
+  from{opacity:0;transform:translateY(-6px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.va-desc{
+  font-size:.9rem;
+  color:rgba(255,255,255,0.5);
+  line-height:1.75;
+  margin-bottom:16px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding-top:14px;
+}
+.va-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#FFD600;
+  color:#000;
+  font-family:'DM Sans',sans-serif;
+  font-size:.82rem;
+  font-weight:800;
+  padding:10px 22px;
+  border-radius:10px;
+  text-decoration:none;
+  transition:all .2s ease;
+}
+.va-cta:hover{background:#fff;gap:10px;}
+.va-cta.coming{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);cursor:default;}
+.va-cta.coming:hover{background:rgba(255,255,255,0.08);gap:6px;}
+
+@media(max-width:600px){
+  .va-body{padding:0 16px 16px 16px;}
+  .va-title{font-size:.95rem;}
+  .va-trigger{padding:14px 16px;gap:12px;}
+}
+
+/* About Section */
+.about{
+  padding:120px 60px;
+  background:#0c1520;
+  position:relative;
+}
+
+.about-container{
+  max-width:1200px;
+  margin:0 auto;
+  position:relative;
+}
+
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+
+.about-content h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2.5rem,5vw,4rem);
+  font-weight:900;
+  line-height:1.05;
+  color:var(--white);
+  margin-bottom:32px;
+}
+.about-content h2 span{
+  color:var(--accent-primary);
+}
+.about-content p{
+  font-size:1.2rem;
+  line-height:1.8;
+  color:var(--gray-light);
+  margin-bottom:24px;
+}
+
+.values-list{
+  list-style:none;
+}
+.values-list li{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  color:var(--white);
+  font-weight:600;
+  font-size:16px;
+}
+.values-list li::before{
+  content:'✓';
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  background:rgba(255,214,0,0.1);
+  color:var(--accent-primary);
+  border-radius:50%;
+  border:1px solid rgba(255,214,0,0.2);
+  font-weight:900;
+  flex-shrink:0;
+  font-size:18px;
+}
+
+/* Footer */
+footer{
+  background:#000;
+  color:var(--white);
+  padding:80px 60px 40px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.footer-grid{
+  max-width:1400px;
+  margin:0 auto 60px;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;
+}
+
+.footer-brand h3{
+  font-family:'Fraunces',serif;
+  font-size:2rem;
+  font-weight:900;
+  margin-bottom:16px;
+  color:var(--accent-primary);
+}
+.footer-brand p{
+  color:var(--gray-mid);
+  line-height:1.7;
+  margin-bottom:24px;
+}
+
+.footer-links h4{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+  color:var(--white);
+}
+.footer-links ul{
+  list-style:none;
+}
+.footer-links li{
+  margin-bottom:12px;
+}
+.footer-links a{
+  color:var(--gray-light);
+  text-decoration:none;
+  font-size:15px;
+  transition:all 0.2s ease;
+}
+.footer-links a:hover{
+  color:var(--accent-primary);
+  padding-left:4px;
+}
+
+.footer-bottom{
+  max-width:1400px;
+  margin:0 auto;
+  padding-top:40px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  text-align:center;
+  color:var(--gray-mid);
+  font-size:14px;
+}
+.footer-bottom a{
+  color:var(--accent-primary);
+  text-decoration:none;
+}
+
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;min-width:0;}
+  .hero-content, .hero-visual{min-width:0;max-width:100%;}
+  .about-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px;}
+  .products{padding:60px 20px!important;}
+}
+
+@media(max-width:768px){
+  .hero{padding:60px 16px;display:block!important;}
+  h1{font-size:2.5rem;line-height:1.1;}
+  .hero-tagline{font-size:1.1rem;}
+  .btn-primary{padding:18px 36px;font-size:16px;width:100%;}
+  .btn-secondary{padding:14px 24px;font-size:14px;width:100%;}
+  .cta-group{gap:10px;}
+  .cta-secondary-row{flex-direction:column;flex-wrap:wrap;width:100%;}
+  .btn-secondary{padding:14px 24px;font-size:14px;}
+  .section-title{font-size:2rem;}
+  .story-grid{grid-template-columns:1fr!important;gap:40px!important;}
+  .about{padding:60px 16px!important;}
+  .hero-grid{padding:0;width:100%;min-width:0!important;}
+  .hero-content{width:100%!important;min-width:0!important;max-width:100%!important;}
+  .hero-visual{min-height:unset!important;padding:0!important;min-width:0!important;max-width:100%!important;}
+  h1{max-width:100%!important;word-break:break-word;}
+  .company-badge{max-width:100%!important;white-space:normal!important;}
+  .stat-card{display:flex!important;width:100%!important;}
+  .stat-card>div{flex:1;}
+
+  .about-content h2{font-size:2rem;}
+  footer{padding:60px 24px 30px;}
+  .footer-grid{grid-template-columns:1fr;gap:30px;}
+
+  /* News section mobile fixes */
+  #news{padding:60px 16px!important;}
+  .news-card{padding:18px 16px!important;}
+  .news-card-stat{display:none!important;}
+  .news-card-header{flex-direction:column!important;gap:10px!important;}
+  .news-card h3{font-size:1.05rem!important;}
+  .news-card p{font-size:.86rem!important;line-height:1.7!important;}
+  #about{padding:56px 16px!important;}
+}
+
+/* News feed — single column grid, bulletproof */
+.news-feed{display:grid!important;grid-template-columns:1fr!important;gap:28px!important;width:100%!important;}
+.news-feed>div{width:100%!important;min-width:0!important;box-sizing:border-box!important;}
+
+/* ── Live Price Ticker ── */
+#price-ticker{
+  position:relative;
+  top:auto;left:auto;right:auto;
+  z-index:1;
+  height:34px;
+  background:#0a0f18;
+  border-bottom:1px solid rgba(255,214,0,0.18);
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+}
+#ticker-inner{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:tickerScroll 6s linear infinite;
+  gap:0;
+}
+#price-ticker:hover #ticker-inner{
+  animation-play-state:paused;
+}
+@keyframes tickerScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.tk-item{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:0 20px;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+.tk-sym{color:rgba(255,255,255,0.7);letter-spacing:.04em;}
+.tk-price{color:#fff;}
+.tk-up{color:#22c55e;}
+.tk-dn{color:#3B82F6;}
+.tk-dot{color:rgba(255,214,0,0.4);font-size:.55rem;}
+#ticker-label{
+  flex-shrink:0;
+  padding:0 12px 0 14px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#FFD600;
+  border-right:1px solid rgba(255,214,0,0.25);
+  white-space:nowrap;
+  background:#0a0f18;
+  z-index:1;
+  height:100%;
+  display:flex;
+  align-items:center;
+}
+/* ticker handled here */
+
+
+
+
+/* ── Bottom Price Ticker ── */
+@keyframes tickerScrollReverse{
+  0%{transform:translateX(-50%);}
+  100%{transform:translateX(0);}
+}
+#price-ticker-bottom{
+  height:34px;
+  background:#0a0f18;
+  border-top:1px solid rgba(255,214,0,0.18);
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+}
+#ticker-inner-bottom{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:tickerScrollReverse 6s linear infinite;
+  gap:0;
+}
+#price-ticker-bottom:hover #ticker-inner-bottom{
+  animation-play-state:paused;
+}
+#ticker-label-bottom{
+  flex-shrink:0;
+  padding:0 12px 0 14px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#FFD600;
+  border-right:1px solid rgba(255,214,0,0.25);
+  white-space:nowrap;
+  background:#0a0f18;
+  z-index:1;
+  height:100%;
+  display:flex;
+  align-items:center;
+}
+
+
+/* ── News Section Intro Animation ── */
+@keyframes breakingPulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(59,130,246,0.7);}
+  50%{opacity:.7;box-shadow:0 0 0 8px rgba(59,130,246,0);}
+}
+@keyframes scanline{
+  0%{transform:scaleX(0);opacity:0;}
+  40%{transform:scaleX(1);opacity:1;}
+  100%{transform:scaleX(1);opacity:1;}
+}
+@keyframes scanlinePulse{
+  0%,100%{opacity:1;}
+  50%{opacity:0.35;}
+}
+@keyframes headlineReveal{
+  0%{opacity:0;transform:translateY(18px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+@keyframes chyronSlide{
+  0%{opacity:0;transform:translateX(-30px);}
+  100%{opacity:1;transform:translateX(0);}
+}
+@keyframes staticFlash{
+  0%,100%{opacity:0;}
+  5%,15%{opacity:.06;}
+  10%,20%{opacity:0;}
+}
+
+.news-intro{
+  text-align:center;
+  margin-bottom:56px;
+  position:relative;
+}
+
+/* TV static overlay */
+.news-intro::before{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:180px 180px;
+  opacity:0;
+  pointer-events:none;
+  animation:staticFlash 4s ease-in-out infinite;
+  border-radius:12px;
+}
+
+/* BREAKING badge */
+.breaking-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#3B82F6;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:.65rem;
+  font-weight:900;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  padding:5px 14px;
+  border-radius:4px;
+  margin-bottom:20px;
+}
+.breaking-dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#fff;
+  animation:breakingPulse 1.4s ease-in-out infinite;
+}
+
+/* scanline bar that draws across */
+.news-scanline{
+  width:100%;
+  height:2px;
+  background:linear-gradient(to right, transparent, #3B82F6 20%, #FFD600 50%, #3B82F6 80%, transparent);
+  margin:20px auto;
+  max-width:600px;
+  transform-origin:left center;
+  animation:scanline 1s cubic-bezier(0.4,0,0.2,1) forwards, scanlinePulse 2.4s ease-in-out 1.3s infinite;
+  animation-delay:.3s, 1.3s;
+  transform:scaleX(0);
+  box-shadow:0 0 8px rgba(59,130,246,0.5), 0 0 20px rgba(255,214,0,0.2);
+}
+
+/* chyron bar — broadcast lower-third style */
+.news-chyron{
+  display:inline-flex;
+  align-items:stretch;
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:24px;
+  animation:chyronSlide .5s ease forwards;
+  animation-delay:.6s;
+  opacity:0;
+}
+.chyron-label{
+  background:#3B82F6;
+  color:#fff;
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:6px 14px;
+  display:flex;
+  align-items:center;
+}
+.chyron-text{
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.7);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  padding:6px 16px;
+  display:flex;
+  align-items:center;
+  border:1px solid rgba(255,255,255,0.08);
+  border-left:none;
+}
+
+/* headline text reveal */
+.news-headline-main{
+  font-family:'Fraunces',serif;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:900;
+  color:#fff;
+  line-height:1.1;
+  margin-bottom:16px;
+  animation:headlineReveal .7s cubic-bezier(0.4,0,0.2,1) forwards;
+  animation-delay:.2s;
+  opacity:0;
+}
+.news-sub{
+  font-size:1.1rem;
+  color:rgba(255,255,255,0.5);
+  max-width:600px;
+  margin:0 auto;
+  line-height:1.7;
+  animation:headlineReveal .6s ease forwards;
+  animation-delay:.8s;
+  opacity:0;
+}
+
+/* Trigger animation when section scrolls into view */
+.news-intro.not-visible .news-scanline{animation:none;transform:scaleX(0);}
+.news-intro.not-visible .news-chyron{animation:none;opacity:0;}
+.news-intro.not-visible .news-headline-main{animation:none;opacity:0;}
+.news-intro.not-visible .news-sub{animation:none;opacity:0;}
+
+
+/* ── News Red Ticker ── */
+.news-red-ticker{
+  width:100%;
+  background:#3B82F6;
+  overflow:hidden;
+  height:32px;
+  display:flex;
+  align-items:center;
+  margin-bottom:32px;
+  border-radius:6px;
+  position:relative;
+}
+
+.red-ticker-track{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  animation:redTickerScroll 18s linear infinite;
+  gap:0;
+}
+.news-red-ticker:hover .red-ticker-track{
+  animation-play-state:paused;
+}
+@keyframes redTickerScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.red-ticker-item{
+  display:inline-flex;
+  align-items:center;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:0 24px;
+}
+.red-ticker-sep{
+  color:rgba(255,255,255,0.5);
+  font-size:.9rem;
+  padding:0 4px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="price-ticker">
+  <div id="ticker-label">⚡ LIVE</div>
+
+  <div id="ticker-inner"><span class="tk-item" style="color:rgba(255,255,255,0.35);">Loading live prices…</span></div>
+</div>
+
+<script>
+(function(){
+  var COINS = [
+    {id:'bitcoin',    sym:'BTC', icon:'₿'},
+    {id:'ethereum',   sym:'ETH', icon:'Ξ'},
+    {id:'solana',     sym:'SOL', icon:'◎'},
+    {id:'ripple',     sym:'XRP', icon:'✕'},
+    {id:'cardano',    sym:'ADA', icon:'₳'},
+    {id:'dogecoin',   sym:'DOGE',icon:'Ð'},
+    {id:'chainlink',  sym:'LINK',icon:'⬡'},
+    {id:'avalanche-2',sym:'AVAX',icon:'△'},
+    {id:'polkadot',   sym:'DOT', icon:'●'},
+    {id:'uniswap',    sym:'UNI', icon:'🦄'},
+  ];
+  var ids = COINS.map(function(c){return c.id;}).join(',');
+  var URL = 'https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true';
+
+  function fmt(n){
+    if(n>=1000) return '$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+    if(n>=1)    return '$'+n.toFixed(2);
+    return '$'+n.toFixed(4);
+  }
+
+  function buildItems(data){
+    var items = '';
+    COINS.forEach(function(c){
+      var d = data[c.id];
+      if(!d) return;
+      var price = d.usd;
+      var chg   = d.usd_24h_change;
+      var up    = chg >= 0;
+      var arrow = up ? '▲' : '▼';
+      var cls   = up ? 'tk-up' : 'tk-dn';
+      items += '<span class="tk-item">'
+        + '<span class="tk-sym">'+c.sym+'</span>'
+        + '<span class="tk-price">'+fmt(price)+'</span>'
+        + '<span class="'+cls+'">'+arrow+' '+Math.abs(chg).toFixed(2)+'%</span>'
+        + '</span>';
+    });
+    return items;
+  }
+
+  var retryCount = 0;
+  var MAX_RETRIES = 4;
+
+  function showFallback(){
+    var msg = '<span class="tk-item" style="color:rgba(255,255,255,0.35);">Live prices unavailable right now — retrying…</span>';
+    var inner = document.getElementById('ticker-inner');
+    if(inner && !inner.dataset.loaded) inner.innerHTML = msg;
+    var innerB = document.getElementById('ticker-inner-bottom');
+    if(innerB && !innerB.dataset.loaded) innerB.innerHTML = msg;
+  }
+
+  function load(){
+    fetch(URL)
+      .then(function(r){
+        if(!r.ok) throw new Error('bad status ' + r.status);
+        return r.json();
+      })
+      .then(function(data){
+        retryCount = 0;
+        var inner = document.getElementById('ticker-inner');
+        if(inner){
+          var items = buildItems(data);
+          inner.innerHTML = items + items;
+          inner.dataset.loaded = '1';
+          var w = inner.scrollWidth / 2;
+          var speed = Math.max(6, w / 80);
+          inner.style.animationDuration = speed + 's';
+        }
+        var innerB = document.getElementById('ticker-inner-bottom');
+        if(innerB){
+          var items = buildItems(data);
+          innerB.innerHTML = items + items;
+          innerB.dataset.loaded = '1';
+          var w = innerB.scrollWidth / 2;
+          var speed = Math.max(6, w / 80);
+          innerB.style.animationDuration = speed + 's';
+        }
+      })
+      .catch(function(){
+        // CoinGecko's free tier rate-limits or drops requests fairly often.
+        // Retry a few times with backoff instead of leaving "Loading..." stuck forever.
+        if(retryCount < MAX_RETRIES){
+          retryCount++;
+          setTimeout(load, retryCount * 4000);
+        } else {
+          showFallback();
+        }
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    load();
+    setInterval(load, 60000); // refresh every 60s
+  });
+})();
+</script>
+
+
+<!-- Hero -->
+<section class="hero" style="position:relative;">
+  <!-- Fear & Greed Index (moved here from bottom of page) -->
+  <div id="fng-widget" style="position:absolute;top:16px;right:16px;z-index:10;max-width:280px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px 20px;overflow:visible;">
+      <div style="position:absolute;top:14px;right:16px;font-size:.6rem;font-weight:700;color:#4ADE80;display:flex;align-items:center;gap:4px;white-space:nowrap;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>LIVE
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;padding-right:44px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <div style="font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Fear &amp; Greed</div>
+            <div id="fng-info-wrap" style="position:relative;display:inline-block;">
+              <button type="button" id="fng-info-btn" aria-label="What is this?" style="width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);font-size:11px;font-weight:800;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:'DM Sans',sans-serif;">?</button>
+              <div id="fng-tooltip" style="display:none;position:absolute;top:24px;right:0;width:280px;background:#1a1a1a;border:1px solid rgba(255,214,0,0.25);border-radius:12px;padding:16px 17px;box-shadow:0 12px 30px rgba(0,0,0,0.5);z-index:20;text-align:left;">
+                <div style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:7px;">In plain English:</div>
+                <div style="font-size:.8rem;line-height:1.5;color:rgba(255,255,255,0.75);margin-bottom:9px;">This is basically a mood ring for crypto traders. It measures whether people are panicking or getting greedy right now — nothing more mystical than that.</div>
+                <div style="font-size:.75rem;line-height:1.65;color:rgba(255,255,255,0.6);">
+                  <div><span style="color:#ef4444;font-weight:700;">0–24 Extreme Fear</span> — everyone's panic selling</div>
+                  <div><span style="color:#f97316;font-weight:700;">25–44 Fear</span> — people are nervous</div>
+                  <div><span style="color:#FFD600;font-weight:700;">45–55 Neutral</span> — nobody's sure</div>
+                  <div><span style="color:#84cc16;font-weight:700;">56–75 Greed</span> — people are getting excited</div>
+                  <div><span style="color:#4ADE80;font-weight:700;">76–100 Extreme Greed</span> — euphoria (often a warning, not a green light)</div>
+                </div>
+                <div style="font-size:.72rem;line-height:1.5;color:rgba(255,255,255,0.4);margin-top:8px;font-style:italic;">It's not a crystal ball. It just tells you the crowd's emotional temperature — what people do with that is up to them.</div>
+                <div style="font-size:.68rem;line-height:1.5;color:rgba(255,255,255,0.35);margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">Data from Alternative.me's Crypto Fear &amp; Greed Index — running since 2018 and cited by outlets like CoinDesk and Bloomberg. We didn't make this number up.</div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <div id="fng-value" style="font-family:'Fraunces',serif;font-weight:900;font-size:1.9rem;color:#fff;line-height:1;">--</div>
+            <div id="fng-label" style="font-size:.85rem;font-weight:700;color:rgba(255,255,255,0.7);">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative;height:8px;border-radius:9999px;background:linear-gradient(90deg,#ef4444 0%,#f97316 30%,#FFD600 55%,#84cc16 75%,#4ADE80 100%);margin-top:9px;">
+        <div id="fng-marker" style="position:absolute;top:50%;left:0%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 0 0 1px #ef4444,0 1px 4px rgba(0,0,0,0.5);transition:left 1.2s cubic-bezier(.4,0,.2,1), box-shadow 1.2s;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.04em;">
+        <span>Fear</span><span>Neutral</span><span>Greed</span>
+      </div>
+
+      <div id="fng-updated" style="text-align:right;margin-top:10px;font-size:.7rem;color:rgba(255,255,255,0.3);">Fetching latest reading…</div>
+      <div style="text-align:right;margin-top:4px;">
+        <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" style="font-size:.6rem;color:rgba(255,255,255,0.25);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,0.25);">Source: Alternative.me</a>
+      </div>
+  </div>
+  <style>
+  @media (max-width: 640px){
+    #fng-widget{ display:none !important; }
+  }
+  </style>
+  <img src="images/buck.png" style="
+    position:absolute;
+    top:40%; left:50%;
+    transform:translate(-28%,-50%);
+    height:105%;
+    max-height:950px;
+    opacity:0.18;
+    mix-blend-mode:screen;
+    pointer-events:none;
+    z-index:1;
+  " alt="Buck" />
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="company-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">Crypto in Laymen's Terms</span>
+      </div>
+      
+      <h1>Learn crypto.<br>Without the <span>headache.</span></h1>
+      
+      <p class="hero-tagline">
+        Wall Street had a head start. Silicon Valley made it worse. We're giving the rest of us a fighting chance — one plain-English lesson at a time.
+      </p>
+
+      <a href="https://cryptobasicsco.gumroad.com/l/vol1" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.35);border-radius:9999px;padding:10px 20px;margin-bottom:20px;text-decoration:none;">
+        <span style="font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;background:var(--accent-primary);color:#0c1520;padding:3px 10px;border-radius:9999px;">Free</span>
+        <span style="font-size:.9rem;font-weight:700;color:#fff;">Vol. 1 — What the F*** Even IS Cryptocurrency? — get it free, no card required →</span>
+      </a>
+
+      <div class="cta-group">
+        <a href="#products" class="btn-primary">Explore Courses →</a>
+        <div class="cta-secondary-row">
+          <a href="#guides" class="btn-secondary">Guides</a>
+          <a href="#news" class="btn-secondary">Crypto News</a>
+          <a href="/glossary/" class="btn-secondary">Jargon Buster</a>
+          <a href="/regulation-tracker/" class="btn-secondary">Regulation Tracker</a>
+          <a href="/about/" class="btn-secondary">Our Story</a>
+        </div>
+      </div>
+
+      <!-- Compact stat card under CTA -->
+      <div class="stat-card" style="
+        display:inline-flex;
+        gap:0;
+        margin-top:24px;
+        background:#0c1520;
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:14px;
+        overflow:hidden;
+      ">
+        <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
+          <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Word Salad</div>
+        </div>
+        <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
+          <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Judgment</div>
+        </div>
+        <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
+          <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Finance Bros</div>
+        </div>
+        <div style="padding:14px 20px;text-align:center;">
+          <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">100%</div>
+          <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Laymen's Terms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual" style="display:flex;flex-direction:column;justify-content:flex-end;padding:20px 0;position:relative;z-index:2;min-height:500px;">
+      <div style="
+        background:rgba(255,214,0,0.06);
+        border:1px solid rgba(255,214,0,0.2);
+        border-radius:20px;
+        padding:28px 32px;
+        min-height:132px;
+      ">
+        <div id="buck-quote-text" style="font-family:'Fraunces',serif;font-size:1.3rem;font-style:italic;color:#fff;line-height:1.5;margin-bottom:12px;transition:opacity .4s ease;">
+          &ldquo;Money is just a story everyone agreed to believe. Crypto is the next chapter.&rdquo;
+        </div>
+        <div style="font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-primary);">— Buck the Coin</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var buckQuotes = [
+      "Money is just a story everyone agreed to believe. Crypto is the next chapter.",
+      "If someone can't explain it simply, they either don't understand it, or they don't want you to.",
+      "Confused people make bad decisions. Bad decisions make other people rich.",
+      "Your seed phrase is the only password on Earth with no ‘forgot password’ button.",
+      "The crypto industry loves sounding smart more than it loves being clear. I don’t.",
+      "Blockchain isn’t anonymous. It’s just very publicly pretending to be.",
+      "Nobody taught you this in school. That’s not your fault.",
+      "I’m a coin who speaks human. Turns out that’s rare."
+    ];
+    var idx = 0;
+    var el = document.getElementById('buck-quote-text');
+    if(!el) return;
+    setInterval(function(){
+      idx = (idx + 1) % buckQuotes.length;
+      el.style.opacity = 0;
+      setTimeout(function(){
+        el.innerHTML = '&ldquo;' + buckQuotes[idx] + '&rdquo;';
+        el.style.opacity = 1;
+      }, 400);
+    }, 5000);
+  })();
+  </script>
+</section>
+
+<!-- Letter from the Founder -->
+<section style="padding:70px 40px;background:#0a0a0a;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);">
+  <div style="max-width:640px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;">
+    <div style="width:88px;height:88px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,214,0,0.3);flex-shrink:0;">
+      <img src="/images/founder.png" alt="Kenzo — Founder of CryptoBasics" style="width:100%;height:100%;object-fit:contain;object-position:bottom;background:#111;"/>
+    </div>
+    <div>
+      <div style="font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD600;margin-bottom:10px;">A note from Kenzo</div>
+      <p style="font-size:1.02rem;line-height:1.8;color:rgba(255,255,255,0.65);margin-bottom:0;">I'm not a financial advisor or a Wall Street insider — just a veteran and entrepreneur who put in hundreds of hours of real research and still couldn't explain crypto to my own sister. So I built the explainer I wish someone had built for me. No jargon, no price predictions, no hype.</p>
+    </div>
+    <a href="/about/" style="display:inline-flex;align-items:center;gap:8px;padding:14px 30px;background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.35);border-radius:9999px;color:#FFD600;font-weight:800;font-size:.9rem;text-decoration:none;">Read My Story →</a>
+  </div>
+</section>
+
+<div id="guides" style="position:absolute;top:-34px;"></div>
+<!-- Products -->
+<section class="products" id="products">
+  <div class="section-header">
+    <div class="section-tag" style="font-size:21px;">The Courses</div>
+    <h2 class="section-title">Built different. On purpose.</h2>
+    <p class="section-desc" style="font-size:1.05rem;">
+      Every lesson is a conversation, not a lecture. Interactive. Witty. Built in bite-sized pieces — because nobody learns anything by staring at a wall of text.
+    </p>
+  </div>
+
+  <!-- Dark Accordion -->
+  <div class="vol-list" id="vol-accordion">
+
+    <div class="va" id="va-1">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-1')">
+        <div class="va-icon"><img src="/images/buck.png" alt="Buck" style="width:36px;height:36px;object-fit:contain;object-position:bottom;display:block;margin:0 auto;"/></div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 1 · Start Here · <span style="color:var(--accent-primary);">Free</span></div>
+          <div class="va-title">Crypto Basics</div>
+          <div class="va-sub">"What the F*** Even IS Cryptocurrency?"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">The one that started it all. Zero assumed knowledge. We explain what crypto actually is, why it exists, and why anyone should care — without making you feel stupid.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol1" target="_blank">Get It Free →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-2">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-2')">
+        <div class="va-icon">🌐</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 2</div>
+          <div class="va-title">The Internet Explained</div>
+          <div class="va-sub">"What the F*** Even IS the Internet?"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">You can't understand crypto without understanding the internet it runs on. We go back to basics — servers, data, trust — so the blockchain makes actual sense.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol2" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-3">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-3')">
+        <div class="va-icon">💵</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 3</div>
+          <div class="va-title">Stablecoins Explained</div>
+          <div class="va-sub">"What the F*** Even IS a Stablecoin?"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">Crypto that doesn't go up and down? Sounds boring. It's actually one of the most important innovations in money in decades. We break it down simply.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol3" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-4">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-4')">
+        <div class="va-icon">⛓️</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 4</div>
+          <div class="va-title">DeFi Explained</div>
+          <div class="va-sub">"What the F*** Even IS Decentralized Finance?"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">Banking without a bank. Lending without a lender. It sounds impossible — but it's already happening. Here's how DeFi actually works in plain English.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol4" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-5">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-5')">
+        <div class="va-icon">🏦</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 5</div>
+          <div class="va-title">Banks vs. Crypto</div>
+          <div class="va-sub">"The Banks vs. Crypto: How the Fight Ended"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">Banks spent years fighting crypto. Then they bought it. This is the story of how the establishment lost and what they did next.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol5" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-6">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-6')">
+        <div class="va-icon">📈</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 6</div>
+          <div class="va-title">Spot ETF Explained</div>
+          <div class="va-sub">"What the F*** Even IS a Spot ETF?"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">The news kept saying "Spot ETF approved" like it was huge. It was. Here's exactly why — and what it means for regular people who don't work on Wall Street.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol6" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-7">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-7')">
+        <div class="va-icon">🏗️</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 7 · New</div>
+          <div class="va-title">RWA Explained</div>
+          <div class="va-sub">"Real World Assets on the Blockchain"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">Houses, bonds, gold — on the blockchain. Real World Assets are the next giant wave. This guide explains what's happening and why it matters to you.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol7" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-8">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-8')">
+        <div class="va-icon">⚖️</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 8</div>
+          <div class="va-title">The Case Against Crypto</div>
+          <div class="va-sub">"The Strongest Argument Against Crypto"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">We believe in knowing both sides. This guide presents the strongest, most honest arguments against crypto — so you can make up your own mind.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol8" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-9">
+      <button type="button" class="va-trigger" onclick="vaToggle('va-9')">
+        <div class="va-icon">👀</div>
+        <div class="va-meta">
+          <div class="va-tag">Vol. 9 · New</div>
+          <div class="va-title">While You Were Watching the Price</div>
+          <div class="va-sub">"Behind the charts — infrastructure, whales, rails"</div>
+        </div>
+        <div class="va-chevron">›</div>
+      </button>
+      <div class="va-body">
+        <p class="va-desc">Everyone watches the price. Almost nobody watches what's building underneath it. Stablecoin rails, institutional custody, whale moves — this is the guide they don't want beginners to read.</p>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vol9" target="_blank">Get It →</a>
+      </div>
+    </div>
+
+    <div class="va" id="va-10" style="opacity:.5;pointer-events:none;">
+      <button class="va-trigger" style="cursor:default;">
+        <div class="va-icon">🔮</div>
+        <div class="va-meta">
+          <div class="va-tag" style="color:rgba(255,255,255,0.2);">Vol. 10 · Coming Soon</div>
+          <div class="va-title" style="color:rgba(255,255,255,0.3);">Something's brewing...</div>
+        </div>
+        <div class="va-chevron" style="opacity:.3;">›</div>
+      </button>
+    </div>
+
+  </div><!-- /vol-list -->
+
+  <script>
+  function vaToggle(id){
+    var row = document.getElementById(id);
+    if(!row) return;
+    var isOpen = row.classList.contains('open');
+    // close all first
+    document.querySelectorAll('.va').forEach(function(el){
+      el.classList.remove('open');
+      var b = el.querySelector('.va-body');
+      if(b) b.style.display = 'none';
+    });
+    // open clicked one if it was closed
+    if(!isOpen){
+      row.classList.add('open');
+      var b = row.querySelector('.va-body');
+      if(b) b.style.display = 'block';
+    }
+  }
+  </script>
+
+  <!-- Bundles -->
+  <div style="max-width:1100px;margin:80px auto 0;padding:0 20px;">
+    <div class="section-header" style="margin-bottom:40px;">
+      <div class="section-tag">Save When You Bundle</div>
+      <h2 class="section-title" style="font-size:1.8rem;">Buy more, pay less.</h2>
+      <p class="section-desc" style="font-size:1rem;">Stack volumes together and knock real money off the per-course price.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+
+      <div style="background:#0b1a2e;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-primary);margin-bottom:8px;">Vol. 1–3</div>
+        <div style="font-size:1.15rem;font-weight:800;margin-bottom:6px;color:#fff;">Start Here</div>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);flex-grow:1;margin-bottom:16px;">Crypto, the Internet, and Stablecoins — the true foundation. (Vol. 1 is free either way.)</p>
+        <div style="margin-bottom:16px;">
+          <span style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through;">$43.98</span>
+          <span style="font-size:1.4rem;font-weight:900;color:var(--accent-primary);margin-left:6px;">$39</span>
+        </div>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/xsffvi" target="_blank" style="text-align:center;">Get It →</a>
+      </div>
+
+      <div style="background:#0b1a2e;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-primary);margin-bottom:8px;">Vol. 4–6</div>
+        <div style="font-size:1.15rem;font-weight:800;margin-bottom:6px;color:#fff;">Go Deeper</div>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);flex-grow:1;margin-bottom:16px;">DeFi, banks vs. crypto, and spot ETFs.</p>
+        <div style="margin-bottom:16px;">
+          <span style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through;">$65.97</span>
+          <span style="font-size:1.4rem;font-weight:900;color:var(--accent-primary);margin-left:6px;">$49</span>
+        </div>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/pypszk" target="_blank" style="text-align:center;">Get It →</a>
+      </div>
+
+      <div style="background:#0b1a2e;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-primary);margin-bottom:8px;">Vol. 7–9</div>
+        <div style="font-size:1.15rem;font-weight:800;margin-bottom:6px;color:#fff;">See the Whole Picture</div>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);flex-grow:1;margin-bottom:16px;">RWAs, the case against crypto, and what's behind the charts.</p>
+        <div style="margin-bottom:16px;">
+          <span style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through;">$65.97</span>
+          <span style="font-size:1.4rem;font-weight:900;color:var(--accent-primary);margin-left:6px;">$49</span>
+        </div>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/vxiqw" target="_blank" style="text-align:center;">Get It →</a>
+      </div>
+
+      <div style="background:linear-gradient(160deg, #142a47, #0b1a2e);border:1px solid var(--accent-primary);border-radius:16px;padding:28px 22px;display:flex;flex-direction:column;position:relative;">
+        <div style="position:absolute;top:-12px;right:20px;background:var(--accent-primary);color:#000;font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:2px solid #0b1a2e;">Best Value</div>
+        <div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-primary);margin-bottom:8px;">Vol. 1–9</div>
+        <div style="font-size:1.15rem;font-weight:800;margin-bottom:6px;color:#fff;">Full Course Series</div>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);flex-grow:1;margin-bottom:16px;">Every volume, start to finish. The whole arc, in order.</p>
+        <div style="margin-bottom:16px;">
+          <span style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through;">$175.92</span>
+          <span style="font-size:1.4rem;font-weight:900;color:var(--accent-primary);margin-left:6px;">$99</span>
+        </div>
+        <a class="va-cta" href="https://cryptobasicsco.gumroad.com/l/dqpvmw" target="_blank" style="text-align:center;background:var(--accent-primary);">Get It →</a>
+      </div>
+
+    </div>
+  </div>
+  <style>
+    @media (max-width:900px){
+      #vol-accordion ~ div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
+    }
+    @media (max-width:560px){
+      #vol-accordion ~ div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr!important;}
+    }
+  </style>
+
+</section>
+
+<!-- News Section -->
+<section id="news" style="padding:100px 60px;background:#0d0d0d;border-top:1px solid rgba(255,255,255,0.06);display:block;">
+  <div style="max-width:900px;margin:0 auto;display:block;">
+    <div class="news-intro not-visible" id="news-intro">
+
+      <!-- Scrolling red ticker -->
+      <div class="news-red-ticker">
+        <div class="red-ticker-track">
+          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">No Fake News. No Hopium.</span><span class="red-ticker-sep">★</span>
+          <!-- duplicate for seamless loop -->
+          <span class="red-ticker-item">🔴 Breaking Crypto News</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Updated Regularly</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">WTF Does This Mean?</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">Why It Matters</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">In Plain English — Always</span><span class="red-ticker-sep">★</span>
+          <span class="red-ticker-item">No Fake News. No Hopium.</span><span class="red-ticker-sep">★</span>
+        </div>
+      </div>
+
+      <!-- Animated scanline -->
+      <div class="news-scanline"></div>
+
+      <!-- Main headline -->
+      <h2 class="news-headline-main">
+        Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span>
+      </h2>
+
+      <div id="today-date-widget" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:8px 18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>
+        <span style="font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Today:</span>
+        <span id="today-date-value" style="font-size:.8rem;font-weight:700;color:#fff;"></span>
+      </div>
+      <script>
+      (function(){
+        var el = document.getElementById('today-date-value');
+        if(!el) return;
+        function render(){
+          var d = new Date();
+          el.textContent = d.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        }
+        render();
+        setInterval(render, 60000);
+      })();
+      </script>
+
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Top Story -->
+      <div style="margin-bottom:36px;">
+        <div style="font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD600;margin-bottom:14px;">⭐ Top Story</div>
+        <div class="nc" data-category="hotgoss" style="background:linear-gradient(160deg,rgba(255,45,120,0.08),rgba(255,255,255,0.04));border:1px solid rgba(255,45,120,0.3);border-radius:18px;overflow:hidden;position:relative;">
+          <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:#FF2D78;border-radius:4px 0 0 4px;"></div>
+          <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle at top right,rgba(255,45,120,0.12),transparent 70%);pointer-events:none;"></div>
+          <button type="button" class="nc-trigger" onclick="ncToggle(this)" style="width:100%;background:none;border:none;padding:26px 28px 26px 32px;cursor:pointer;display:flex;align-items:center;gap:16px;text-align:left;font-family:'Poppins',sans-serif;">
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+                <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);">AUG 30, 2026</span>
+                <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
+                <span style="font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FF2D78;background:rgba(255,45,120,0.1);padding:2px 10px;border-radius:9999px;border:1px solid rgba(255,45,120,0.2);">🍵 Hot Goss</span>
+              </div>
+              <div class="nc-headline" style="font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:#fff;line-height:1.35;">A Hacked Price Feed Let Someone Fake a $10 Million Token Price — Four Blockchains Had to Go Dark</div>
+            </div>
+            <div class="nc-chevron" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:.9rem;transition:all .25s ease;">›</div>
+          </button>
+          <div class="nc-body" style="display:none;padding:0 28px 26px 32px;">
+            <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
+              <p style="font-size:.85rem;font-weight:800;color:#FF2D78;margin-bottom:6px;">🤔 WTF Does This Mean?</p>
+              <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Switchboard is an "oracle" — a service that feeds real-world price data (like "1 IOTA = $0.15") onto blockchains so smart contracts know what things are worth. On August 29-30, 2026, an attacker used a compromised oracle signing key to briefly fake IOTA's on-chain price at $10 million. With that fake sky-high price showing up, they tricked a lending protocol called Virtue CDP into thinking they'd posted way more collateral than they actually had, and minted roughly 4.94 million fake VUSD stablecoins out of thin air. Switchboard responded by halting its price feeds across four blockchains — Sui, Aptos, IOTA, and Movement — until it can verify nothing else was tampered with. Full Sail, a decentralized exchange on Sui that relied on those feeds for its automated vaults, confirmed it lost user funds and froze deposits and withdrawals until the investigation wraps.</p>
+              <p style="font-size:.85rem;font-weight:800;color:#FFD600;margin-bottom:6px;">💡 Why It Matters</p>
+              <p style="font-size:.92rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:14px;">Oracles are one of the most overlooked risks in DeFi — they're the bridge between real-world prices and on-chain contracts, so if that bridge gets compromised, every protocol that relies on it inherits the damage even if its own code is flawless. That's why the fix here wasn't "patch one app," it was "shut off the data feed for four entire blockchains." When you put money into a DeFi vault or lending protocol, part of what you're trusting is the price-feed infrastructure underneath it, not just the app on top.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+                <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,0.2);">📎 Sources:</span>
+                <a href="https://www.newsbtc.com/news/switchboard-halts-oracle-operations-sui-aptos-compromise/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">NewsBTC</a>
+                <a href="https://www.cryptotimes.io/2026/08/30/full-sail-confirms-sui-vault-losses-as-switchboard-halts-4-chains/" target="_blank" style="font-size:.75rem;font-weight:700;color:rgba(255,214,0,0.7);text-decoration:none;border-bottom:1px solid rgba(255,214,0,0.3);">The Crypto Times</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- More headlines (compact teasers) -->
+      <div style="font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;">More Headlines</div>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:32px;">
+
+        <a href="/news/" style="display:flex;align-items:center;gap:14px;padding:16px 4px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,0.1);padding:3px 10px;border-radius:9999px;border:1px solid rgba(59,130,246,0.2);white-space:nowrap;">📉 Markets</span>
+          <span style="flex:1;font-family:'Fraunces',serif;font-size:.98rem;font-weight:700;color:#fff;line-height:1.4;">Bitcoin Dropped 3% Because One Fed Speech Put a Rate Hike Back on the Table</span>
+          <span style="font-size:.68rem;color:rgba(255,255,255,0.3);white-space:nowrap;">AUG 29</span>
+        </a>
+
+        <a href="/news/" style="display:flex;align-items:center;gap:14px;padding:16px 4px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#FF2D78;background:rgba(255,45,120,0.1);padding:3px 10px;border-radius:9999px;border:1px solid rgba(255,45,120,0.2);white-space:nowrap;">🍵 Hot Goss</span>
+          <span style="flex:1;font-family:'Fraunces',serif;font-size:.98rem;font-weight:700;color:#fff;line-height:1.4;">An AI Found Bugs in Bitcoin's Lightning Network So Serious, Devs Told Node Operators to Go Dark</span>
+          <span style="font-size:.68rem;color:rgba(255,255,255,0.3);white-space:nowrap;">AUG 27</span>
+        </a>
+
+        <a href="/news/" style="display:flex;align-items:center;gap:14px;padding:16px 4px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#4ADE80;background:rgba(74,222,128,0.1);padding:3px 10px;border-radius:9999px;border:1px solid rgba(74,222,128,0.2);white-space:nowrap;">🏛️ Adoption</span>
+          <span style="flex:1;font-family:'Fraunces',serif;font-size:.98rem;font-weight:700;color:#fff;line-height:1.4;">You Can Now Buy a House Using Bitcoin as Collateral — Without Selling It</span>
+          <span style="font-size:.68rem;color:rgba(255,255,255,0.3);white-space:nowrap;">AUG 26</span>
+        </a>
+
+        <a href="/news/" style="display:flex;align-items:center;gap:14px;padding:16px 4px;text-decoration:none;">
+          <span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#FFD600;background:rgba(255,214,0,0.1);padding:3px 10px;border-radius:9999px;border:1px solid rgba(255,214,0,0.25);white-space:nowrap;">🇺🇸 Regulation</span>
+          <span style="flex:1;font-family:'Fraunces',serif;font-size:.98rem;font-weight:700;color:#fff;line-height:1.4;">The SEC Quietly Sent a New Rule to the White House That Could Rewrite How Your Crypto Gets Held in Custody</span>
+          <span style="font-size:.68rem;color:rgba(255,255,255,0.3);white-space:nowrap;">AUG 25</span>
+        </a>
+
+      </div>
+
+
+      <div style="text-align:center;">
+        <a href="/news/" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:100px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.03em;text-decoration:none;">See All News &rarr;</a>
+      </div>
+
+
+    <script>
+    (function(){
+      var COLORS = {
+        'Extreme Fear':'#ef4444','Fear':'#f97316','Neutral':'#FFD600',
+        'Greed':'#84cc16','Extreme Greed':'#4ADE80'
+      };
+      function load(){
+        fetch('https://api.alternative.me/fng/?limit=1&format=json')
+          .then(function(r){return r.json();})
+          .then(function(json){
+            var d = json.data && json.data[0];
+            if(!d) return;
+            var val = parseInt(d.value, 10);
+            var label = d.value_classification;
+            var color = COLORS[label] || '#fff';
+            var valEl = document.getElementById('fng-value');
+            var labelEl = document.getElementById('fng-label');
+            var updEl = document.getElementById('fng-updated');
+            var marker = document.getElementById('fng-marker');
+            if(valEl) valEl.textContent = val;
+            if(labelEl){
+              labelEl.textContent = label;
+              labelEl.style.color = color;
+            }
+            if(marker){
+              marker.style.left = val + '%';
+              marker.style.boxShadow = '0 0 0 2px '+color+', 0 2px 8px rgba(0,0,0,0.5)';
+            }
+            if(updEl){
+              var d2 = new Date(parseInt(d.timestamp,10)*1000);
+              updEl.textContent = 'Updated ' + d2.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' · ' + d2.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+            }
+          })
+          .catch(function(){
+            var labelEl = document.getElementById('fng-label');
+            if(labelEl) labelEl.textContent = 'Unavailable';
+          });
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        load();
+        setInterval(load, 300000); // refresh every 5 min
+
+        // Tooltip: hover on desktop, tap on mobile
+        var btn = document.getElementById('fng-info-btn');
+        var tip = document.getElementById('fng-tooltip');
+        var wrap = document.getElementById('fng-info-wrap');
+        if(btn && tip && wrap){
+          function showTip(){ tip.style.display = 'block'; }
+          function hideTip(){ tip.style.display = 'none'; }
+          wrap.addEventListener('mouseenter', showTip);
+          wrap.addEventListener('mouseleave', hideTip);
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            tip.style.display = (tip.style.display === 'block') ? 'none' : 'block';
+          });
+          document.addEventListener('click', function(e){
+            if(!wrap.contains(e.target)) hideTip();
+          });
+        }
+      });
+    })();
+    </script>
+  </div>
+</section>
+
+<script>
+function ncToggle(btn) {
+  var card = btn.closest('.nc');
+  var body = card.querySelector('.nc-body');
+  var chevron = card.querySelector('.nc-chevron');
+  var open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+  chevron.style.background = open ? '' : 'rgba(255,255,255,0.1)';
+}
+</script>
+
+
+
+
+
+
+<div id="price-ticker-bottom">
+  <div id="ticker-label-bottom">⚡ LIVE</div>
+  <div id="ticker-inner-bottom"><span class="tk-item" style="color:rgba(255,255,255,0.35);">Loading live prices…</span></div>
+</div>
+
+<!-- Testimonials + Contact + IG (shared background wrapper) -->
+<div style="position:relative;overflow:hidden;">
+  <div style="
+    position:absolute;
+    inset:0;
+    background-image:url('images/Buck_jump.webp');
+    background-size:cover;
+    background-position:center top;
+    background-repeat:no-repeat;
+    opacity:0.15;
+    mix-blend-mode:screen;
+    pointer-events:none;
+    z-index:0;
+  " aria-hidden="true"></div>
+
+<!-- Contact Us -->
+<section id="contact" style="position:relative;z-index:1;max-width:640px;margin:60px auto;padding:0 20px;text-align:center;">
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 32px;">
+    <div style="font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-primary);margin-bottom:10px;">Get In Touch</div>
+    <h2 style="font-family:'Fraunces',serif;font-size:1.6rem;color:#fff;margin-bottom:12px;">Questions? Feedback? Found a typo?</h2>
+    <p style="color:rgba(255,255,255,0.55);font-size:.95rem;line-height:1.6;max-width:440px;margin:0 auto 24px;">Buck reads everything (eventually). Whether it's a course question, a partnership idea, or you just want to tell us we got something wrong — reach out.</p>
+    <a href="mailto:hello@cryptobasics.co" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--accent-primary);color:#0c1520;border-radius:9999px;text-decoration:none;font-weight:800;font-size:.9rem;">✉️ hello@cryptobasics.co</a>
+  </div>
+  <div style="text-align:center;margin-top:28px;">
+    <p style="color:rgba(255,255,255,0.4);font-size:.82rem;margin-bottom:12px;">Free jargon breakdowns, myth-busting, and crypto news explained daily — on Instagram.</p>
+    <a href="https://www.instagram.com/cryptobasics.co" target="_blank" style="display:inline-flex;align-items:center;gap:9px;padding:14px 30px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:9999px;color:#fff;text-decoration:none;font-size:.9rem;font-weight:800;box-shadow:0 6px 20px rgba(220,39,67,0.35);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.15-.56.55-.9 1.11-1.16 1.77-.25.64-.42 1.37-.47 2.43C2.01 8.94 2 9.28 2 12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.15 1.77.55.56 1.11.9 1.77 1.16.64.25 1.37.42 2.43.47C8.94 21.99 9.28 22 12 22s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.15.56-.55.9-1.11 1.16-1.77.25-.64.42-1.37.47-2.43.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.43-.26-.66-.6-1.22-1.15-1.77-.55-.56-1.11-.9-1.77-1.16-.64-.25-1.37-.42-2.43-.47C15.06 2.01 14.72 2 12 2Zm0 1.8c2.67 0 2.99.01 4.04.06.98.04 1.5.21 1.85.34.47.18.8.4 1.15.75.35.35.57.68.75 1.15.13.36.29.87.34 1.85.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.98-.21 1.5-.34 1.85-.18.47-.4.8-.75 1.15-.35.35-.68.57-1.15.75-.36.13-.87.29-1.85.34-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.98-.04-1.5-.21-1.85-.34-.47-.18-.8-.4-1.15-.75-.35-.35-.57-.68-.75-1.15-.13-.36-.29-.87-.34-1.85C3.81 14.99 3.8 14.67 3.8 12s.01-2.99.06-4.04c.04-.98.21-1.5.34-1.85.18-.47.4-.8.75-1.15.35-.35.68-.57 1.15-.75.36-.13.87-.29 1.85-.34C9.01 3.81 9.33 3.8 12 3.8Zm0 3.05a5.15 5.15 0 1 0 0 10.3 5.15 5.15 0 0 0 0-10.3Zm0 8.5a3.35 3.35 0 1 1 0-6.7 3.35 3.35 0 0 1 0 6.7Zm5.35-8.7a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z" fill="#fff"/></svg>
+      Follow @cryptobasics.co
+    </a>
+  </div>
+</section>
+
+</div>
+
+<!-- Floating persistent IG follow button -->
+<a href="https://www.instagram.com/cryptobasics.co" target="_blank" style="position:fixed;bottom:20px;left:20px;z-index:50;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);box-shadow:0 6px 20px rgba(220,39,67,0.45);text-decoration:none;" aria-label="Follow @cryptobasics.co on Instagram">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.15-.56.55-.9 1.11-1.16 1.77-.25.64-.42 1.37-.47 2.43C2.01 8.94 2 9.28 2 12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.15 1.77.55.56 1.11.9 1.77 1.16.64.25 1.37.42 2.43.47C8.94 21.99 9.28 22 12 22s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.15.56-.55.9-1.11 1.16-1.77.25-.64.42-1.37.47-2.43.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.43-.26-.66-.6-1.22-1.15-1.77-.55-.56-1.11-.9-1.77-1.16-.64-.25-1.37-.42-2.43-.47C15.06 2.01 14.72 2 12 2Zm0 1.8c2.67 0 2.99.01 4.04.06.98.04 1.5.21 1.85.34.47.18.8.4 1.15.75.35.35.57.68.75 1.15.13.36.29.87.34 1.85.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.98-.21 1.5-.34 1.85-.18.47-.4.8-.75 1.15-.35.35-.68.57-1.15.75-.36.13-.87.29-1.85.34-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.98-.04-1.5-.21-1.85-.34-.47-.18-.8-.4-1.15-.75-.35-.35-.57-.68-.75-1.15-.13-.36-.29-.87-.34-1.85C3.81 14.99 3.8 14.67 3.8 12s.01-2.99.06-4.04c.04-.98.21-1.5.34-1.85.18-.47.4-.8.75-1.15.35-.35.68-.57 1.15-.75.36-.13.87-.29 1.85-.34C9.01 3.81 9.33 3.8 12 3.8Zm0 3.05a5.15 5.15 0 1 0 0 10.3 5.15 5.15 0 0 0 0-10.3Zm0 8.5a3.35 3.35 0 1 1 0-6.7 3.35 3.35 0 0 1 0 6.7Zm5.35-8.7a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z" fill="#fff"/></svg>
+</a>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-bottom" style="text-align:center;padding:0;">
+    <p>© 2026 Crypto Basics. All rights reserved.</p>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+  var intro = document.getElementById('news-intro');
+  if(!intro) return;
+  var triggered = false;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && !triggered){
+        triggered = true;
+        intro.classList.remove('not-visible');
+        observer.disconnect();
+      }
+    });
+  }, {threshold: 0.3});
+  observer.observe(intro);
+})();
+</script>
+
+
+
+</body>
+</html>

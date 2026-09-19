@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoBasics — Cinematic Space Background v2 (DEMO ONLY)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#05060c;
+  color:#fff;
+  position:relative;
+}
+canvas{position:fixed;inset:0;z-index:0;display:block;}
+
+.chrome{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;pointer-events:none;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:26px 32px;}
+.logo{font-size:.85rem;font-weight:900;letter-spacing:.05em;}
+.logo span{color:#FFD600;}
+.navcta{font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:#FFD600;color:#0c1520;padding:9px 18px;border-radius:9999px;}
+
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px;}
+.eyebrow{font-size:.68rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:#7FD8FF;margin-bottom:16px;text-shadow:0 0 12px rgba(127,216,255,0.5);}
+.h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2rem,5.5vw,3.6rem);line-height:1.1;max-width:800px;text-shadow:0 4px 30px rgba(0,0,0,0.6);}
+.h1 em{font-style:italic;color:#FFD600;}
+.sub{margin-top:16px;font-size:.9rem;color:rgba(255,255,255,0.5);max-width:480px;}
+
+.demo-note{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;font-size:.68rem;color:rgba(255,255,255,0.3);letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="chrome">
+  <div class="nav">
+    <div class="logo">Crypto<span>Basics</span></div>
+    <div class="navcta">Get Started</div>
+  </div>
+  <div class="hero">
+    <div class="eyebrow">You are here: The Chain</div>
+    <h1 class="h1">Floating in the <em>blockchain</em> —<br>calm, quiet, and yours to explore.</h1>
+    <p class="sub">Background only for now. The chain, the stops, and Buck come next.</p>
+  </div>
+</div>
+
+<div class="demo-note">Cinematic pass 2 — darker, less flat-blue, bigger twinkle, occasional shooting star.</div>
+
+<script>
+var canvas = document.getElementById('c');
+var ctx = canvas.getContext('2d');
+var W, H, DPR;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio||1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W*DPR; canvas.height = H*DPR;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ===== cinematic starfield v2 =====
+// Goals from feedback: less flat-blue (real space is closer to black, with only
+// faint, uneven color), and twinkle that's actually visible — bigger brightness
+// swings, mixed star temperatures (white/blue/amber, like real starlight), a
+// few "hero" stars with soft bloom, a faint Milky-Way dust band for depth, and
+// an occasional shooting star so it reads as alive rather than a static photo.
+
+var STAR_COUNT = 260;
+var stars = [];
+var STAR_COLORS = ['255,255,255','255,255,255','210,225,255','255,236,196','255,244,224'];
+for(var i=0;i<STAR_COUNT;i++){
+  var big = Math.random() < 0.06; // rare hero stars — bigger, bloomed, slower twinkle
+  stars.push({
+    x: Math.random()*W, y: Math.random()*H,
+    r: big ? (1.8+Math.random()*1.4) : (Math.random()*1.1+0.25),
+    color: STAR_COLORS[Math.floor(Math.random()*STAR_COLORS.length)],
+    tw: Math.random()*Math.PI*2,
+    twSpeed: big ? (0.004+Math.random()*0.006) : (0.008+Math.random()*0.03),
+    twDepth: big ? (0.5+Math.random()*0.3) : (0.55+Math.random()*0.45), // how far it dims, not just brightens
+    bloom: big
+  });
+}
+
+// faint diagonal dust/milky-way band — barely-there brightness variation, not a flat color wash
+var dustBand = {angle: -0.35, width: 0.32, cx:0.5, cy:0.42};
+
+// shooting stars — rare, single streak, fades fast (cinematic accent, not a gimmick loop)
+var shootingStars = [];
+function maybeSpawnShootingStar(){
+  if(Math.random() < 0.0035 && shootingStars.length < 1){
+    var sx = Math.random()*W*0.6 + W*0.2;
+    var sy = Math.random()*H*0.3;
+    var ang = 0.5 + Math.random()*0.3;
+    shootingStars.push({
+      x:sx, y:sy,
+      vx: Math.cos(ang)*11, vy: Math.sin(ang)*11,
+      life: 1
+    });
+  }
+}
+
+var t = 0;
+function tick(){
+  t += 1;
+
+  // near-black base with only a faint, uneven vignette of color — not a flat blue fill
+  ctx.fillStyle = '#020306';
+  ctx.fillRect(0,0,W,H);
+
+  var vg = ctx.createRadialGradient(W*0.5,H*0.4,0,W*0.5,H*0.4,Math.max(W,H)*0.75);
+  vg.addColorStop(0,'rgba(18,26,48,0.55)');
+  vg.addColorStop(0.6,'rgba(8,11,22,0.35)');
+  vg.addColorStop(1,'rgba(0,0,0,0.85)');
+  ctx.fillStyle = vg;
+  ctx.fillRect(0,0,W,H);
+
+  // faint milky-way dust band, soft and irregular
+  ctx.save();
+  ctx.translate(dustBand.cx*W, dustBand.cy*H);
+  ctx.rotate(dustBand.angle);
+  var bandLen = Math.max(W,H)*1.4;
+  var band = ctx.createLinearGradient(0,-H*dustBand.width,0,H*dustBand.width);
+  band.addColorStop(0,'rgba(120,140,200,0)');
+  band.addColorStop(0.5,'rgba(150,165,215,0.05)');
+  band.addColorStop(1,'rgba(120,140,200,0)');
+  ctx.fillStyle = band;
+  ctx.fillRect(-bandLen/2, -H*dustBand.width, bandLen, H*dustBand.width*2);
+  ctx.restore();
+
+  // stars — much more visible twinkle, mixed color temperature, bloom on hero stars
+  for(var i=0;i<stars.length;i++){
+    var s = stars[i];
+    var raw = 0.5+0.5*Math.sin(t*s.twSpeed + s.tw);
+    var tw = (1-s.twDepth) + s.twDepth*raw; // swings closer to 0 for visible twinkle
+
+    if(s.bloom){
+      var haloR = s.r*7;
+      var halo = ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,haloR);
+      halo.addColorStop(0,'rgba('+s.color+','+(tw*0.35).toFixed(2)+')');
+      halo.addColorStop(1,'rgba('+s.color+',0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, haloR, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba('+s.color+','+tw.toFixed(2)+')';
+    ctx.fill();
+
+    if(s.bloom && tw > 0.7){
+      ctx.strokeStyle = 'rgba('+s.color+','+((tw-0.7)*1.6).toFixed(2)+')';
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(s.x - s.r*4.5, s.y); ctx.lineTo(s.x + s.r*4.5, s.y);
+      ctx.moveTo(s.x, s.y - s.r*4.5); ctx.lineTo(s.x, s.y + s.r*4.5);
+      ctx.stroke();
+    }
+  }
+
+  // shooting stars
+  maybeSpawnShootingStar();
+  for(var i=shootingStars.length-1;i>=0;i--){
+    var sh = shootingStars[i];
+    sh.x += sh.vx; sh.y += sh.vy; sh.life -= 0.018;
+    if(sh.life <= 0 || sh.x > W+50 || sh.y > H+50){ shootingStars.splice(i,1); continue; }
+    var tailLen = 90;
+    var tx = sh.x - sh.vx*(tailLen/11), ty = sh.y - sh.vy*(tailLen/11);
+    var trail = ctx.createLinearGradient(sh.x, sh.y, tx, ty);
+    trail.addColorStop(0, 'rgba(255,255,255,'+sh.life.toFixed(2)+')');
+    trail.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.strokeStyle = trail;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(sh.x, sh.y);
+    ctx.lineTo(tx, ty);
+    ctx.stroke();
+  }
+
+  // subtle vignette edges for cinematic framing
+  var edge = ctx.createRadialGradient(W*0.5,H*0.5,Math.max(W,H)*0.35,W*0.5,H*0.5,Math.max(W,H)*0.72);
+  edge.addColorStop(0,'rgba(0,0,0,0)');
+  edge.addColorStop(1,'rgba(0,0,0,0.55)');
+  ctx.fillStyle = edge;
+  ctx.fillRect(0,0,W,H);
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
