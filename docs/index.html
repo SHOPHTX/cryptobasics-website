@@ -981,6 +981,14 @@ footer{
 .sr-callout-copy{
   color:rgba(255,255,255,0.75);font-size:.92rem;line-height:1.55;margin:0;
 }
+.sr-callout-cta{
+  color:var(--sr-accent);font-size:.85rem;font-weight:800;letter-spacing:.02em;margin:2px 0 0;
+  animation:sr-calloutCtaPulse 2s ease-in-out infinite;
+}
+@keyframes sr-calloutCtaPulse{
+  0%,100%{opacity:.65;}
+  50%{opacity:1;}
+}
 .phone-frame.is-tablet{
   width:min(940px,94%);border-radius:36px;padding:26px;
 }
@@ -1584,7 +1592,7 @@ footer{
 
 <!-- Hero -->
 <section class="hero" style="position:relative;">
-  <img src="/images/buck.png" style="
+  <img src="/images/Buck_skeptical.webp" style="
     position:absolute;
     top:40%; left:50%;
     transform:translate(-28%,-50%);
@@ -1611,6 +1619,7 @@ footer{
       <div class="sr-callout" id="sr-callout">
         <span class="sr-callout-badge">🪙 Buck's Scam Radar</span>
         <p class="sr-callout-copy">5 real-looking DMs and posts. You call it: legit, or a scammer counting on you not knowing better.</p>
+        <p class="sr-callout-cta">Go ahead. Check your message notifications.</p>
       </div>
     </div>
 
