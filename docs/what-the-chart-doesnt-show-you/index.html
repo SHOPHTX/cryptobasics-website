@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<title>What the Chart Doesn't Show You | CryptoBasics</title>
+<meta name="description" content="Price is the headline. It's rarely the whole story. Here's what's actually happening under the hood — myth vs. reality, in plain English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --accent-primary:#FFD600;
+  --accent-light:#FFE34D;
+  --accent-dark:#D9B300;
+  --accent-glow:rgba(255,214,0,0.3);
+  --black:#000000;
+  --black-soft:#0A0A0A;
+  --black-card:#151515;
+  --white:#FFFFFF;
+  --gray-light:#B3B3B3;
+  --gray-mid:#808080;
+  --myth-red:#FF5C5C;
+}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+html{overflow-x:hidden;}
+
+.site-nav-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;row-gap:6px;}
+.site-nav-link{font-size:.8rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .15s;white-space:nowrap;}
+.site-nav-link:hover{color:#FFD600;}
+.site-nav-link.home{display:flex;align-items:center;gap:6px;}
+
+.wcds-hero{
+  padding:140px 60px 90px;
+  background:var(--black);
+  text-align:center;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.wcds-kicker{
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent-primary);
+  margin-bottom:18px;
+}
+.wcds-title{
+  font-family:'Fraunces',serif;
+  font-weight:900;
+  font-size:clamp(2.2rem, 5vw, 4rem);
+  line-height:1.08;
+  max-width:900px;
+  margin:0 auto 22px;
+}
+.wcds-sub{
+  font-size:1.05rem;
+  color:var(--gray-light);
+  max-width:620px;
+  margin:0 auto;
+}
+.wcds-buck-line{
+  margin-top:28px;
+  font-style:italic;
+  color:rgba(255,255,255,0.45);
+  font-size:.9rem;
+}
+
+.wcds-intro{
+  max-width:720px;
+  margin:0 auto;
+  padding:70px 40px 30px;
+  font-size:1.05rem;
+  color:var(--gray-light);
+}
+.wcds-intro p{margin-bottom:18px;}
+.wcds-intro strong{color:var(--white);}
+
+.wcds-section-label{
+  max-width:900px;
+  margin:60px auto 30px;
+  padding:0 40px;
+  font-family:'Fraunces',serif;
+  font-weight:800;
+  font-size:1.8rem;
+}
+.wcds-section-label span{color:var(--accent-primary);}
+
+.wcds-pairs{
+  max-width:900px;
+  margin:0 auto;
+  padding:0 40px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.wcds-pair{
+  background:var(--black-card);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;
+  overflow:hidden;
+}
+.wcds-row{
+  padding:22px 26px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.wcds-row.myth{border-bottom:1px solid rgba(255,255,255,0.06);}
+.wcds-tag{
+  flex-shrink:0;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:5px 10px;
+  border-radius:6px;
+  margin-top:2px;
+}
+.wcds-tag.myth{background:rgba(255,92,92,0.12);color:var(--myth-red);}
+.wcds-tag.reality{background:rgba(255,214,0,0.12);color:var(--accent-primary);}
+.wcds-text{font-size:.98rem;color:var(--white);}
+.wcds-row.myth .wcds-text{color:rgba(255,255,255,0.55);}
+.wcds-metric{
+  display:inline-block;
+  margin-top:6px;
+  font-size:.75rem;
+  color:var(--gray-mid);
+  letter-spacing:.02em;
+}
+
+.wcds-cta{
+  max-width:700px;
+  margin:50px auto 0;
+  padding:60px 40px 100px;
+  text-align:center;
+}
+.wcds-cta h2{
+  font-family:'Fraunces',serif;
+  font-weight:900;
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  margin-bottom:16px;
+}
+.wcds-cta p{color:var(--gray-light);margin-bottom:28px;}
+.wcds-cta-btn{
+  display:inline-block;
+  background:var(--accent-primary);
+  color:#000;
+  font-weight:800;
+  font-size:.95rem;
+  padding:16px 34px;
+  border-radius:8px;
+  text-decoration:none;
+  transition:background .15s;
+}
+.wcds-cta-btn:hover{background:var(--accent-light);}
+
+@media(max-width:640px){
+  .wcds-hero{padding:110px 24px 60px;}
+  .wcds-intro{padding:50px 20px 20px;}
+  .wcds-section-label{padding:0 20px;}
+  .wcds-pairs{padding:0 20px 20px;}
+  .wcds-row{padding:18px 18px;flex-direction:column;gap:8px;}
+}
+</style>
+</head>
+<body>
+
+<nav style="background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,0.07);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;">
+  <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;font-size:.9rem;font-weight:900;letter-spacing:.04em;color:#FFD600;"><img src="/images/cb-logo-mark.webp" alt="" style="height:22px;width:auto;"><span>CryptoBasics</span></a>
+  <div class="site-nav-links">
+    <a href="/home/#products" class="site-nav-link">Courses</a>
+    <a href="/glossary/" class="site-nav-link">Glossary</a>
+    <a href="/news/" class="site-nav-link">Crypto News</a>
+    <a href="/regulation-tracker/" class="site-nav-link">Regulation</a>
+    <a href="/about/" class="site-nav-link">Our Story</a>
+    <a href="/" class="site-nav-link home">&larr; Home</a>
+  </div>
+</nav>
+
+<section class="wcds-hero">
+  <div class="wcds-kicker">Beyond the Price</div>
+  <h1 class="wcds-title">What the Chart Doesn't Show You</h1>
+  <p class="wcds-sub">Price is the headline. It's rarely the whole story. Here's what's actually moving underneath it &mdash; in plain English.</p>
+  <p class="wcds-buck-line">&mdash; Buck</p>
+</section>
+
+<div class="wcds-intro">
+  <p>Everyone watches the price. That's the whole problem.</p>
+  <p>Price is just <strong>one number, reacting</strong> &mdash; to news, to whales, to leverage getting liquidated, to a thousand things you never see. It tells you <em>what just happened</em>. It almost never tells you <em>why</em>, or what's coming next.</p>
+  <p>People who actually study this stuff aren't staring at a green candle feeling good. They're looking at a handful of quieter numbers &mdash; the ones that explain the price, instead of just being the price. Below are some of the most common gaps between what the chart shows you and what's actually going on.</p>
+</div>
+
+<h2 class="wcds-section-label">The Real <span>Scoreboard</span></h2>
+
+<div class="wcds-pairs">
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">Price is pumping, so everyone's buying and things are looking up.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">A pump can just as easily be whales quietly selling into demand &mdash; exchange inflows from big wallets often spike right as retail piles in.</span><br><span class="wcds-metric">Metric: exchange net flows / whale wallet activity</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">This coin has a small market cap, so it's still "cheap" with room to run.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">Market cap only counts coins already in circulation. Check the fully diluted valuation (FDV) &mdash; if most of the supply hasn't unlocked yet, "cheap" can turn into heavy dilution fast.</span><br><span class="wcds-metric">Metric: market cap vs. FDV, token unlock schedule</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">Everyone's hyped about it on social media, so the project must be legit.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">Hype is cheap to manufacture. A dead GitHub repo behind a loud Twitter account is one of the most consistent red flags there is &mdash; real projects keep shipping code whether or not anyone's watching.</span><br><span class="wcds-metric">Metric: developer / commit activity</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">This project is "getting adopted" &mdash; look how much people are talking about it.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">Talk isn't usage. For DeFi and utility tokens, total value locked (TVL) shows whether real money is actually flowing through it &mdash; and whether that money is sticky or just chasing a temporary reward.</span><br><span class="wcds-metric">Metric: TVL (total value locked)</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">It just mooned overnight &mdash; must be real momentum.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">A vertical move can be almost entirely leveraged longs piling in. When funding rates go extreme, it's often the exact setup for a liquidation cascade straight back down.</span><br><span class="wcds-metric">Metric: funding rates, open interest</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">The price hasn't moved, so nothing's happening &mdash; boring, ignore it.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">Quiet price action while coins keep flowing off exchanges into cold storage can mean supply is getting locked up by long-term holders &mdash; often exactly before a move, not instead of one.</span><br><span class="wcds-metric">Metric: exchange net outflows</span></div></div>
+  </div>
+
+  <div class="wcds-pair">
+    <div class="wcds-row myth"><span class="wcds-tag myth">Myth</span><span class="wcds-text">Thousands of holders and a busy community &mdash; this is clearly decentralized.</span></div>
+    <div class="wcds-row"><span class="wcds-tag reality">Reality</span><div><span class="wcds-text">Check who actually holds the supply. A lot of "decentralized" tokens have a handful of wallets that could crash the price alone if they decided to sell.</span><br><span class="wcds-metric">Metric: holder concentration / top-wallet %</span></div></div>
+  </div>
+
+</div>
+
+<div class="wcds-cta">
+  <h2>None of this is about picking winners.</h2>
+  <p>It's about knowing what you're actually looking at before you decide anything. That's the whole point of starting with the basics.</p>
+  <a href="/home/#products" class="wcds-cta-btn">Start With Volume 1 &mdash; Free</a>
+</div>
+
+<footer style="border-top:1px solid rgba(255,255,255,0.06);padding:32px 40px;text-align:center;">
+  <p style="font-size:.78rem;color:rgba(255,255,255,0.2);">&copy; 2026 Crypto Basics. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
