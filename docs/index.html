@@ -902,10 +902,12 @@ footer{
 }
 .game-demo::before{
   content:'';position:absolute;top:50%;left:50%;width:900px;height:900px;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,-50%) scale(.7);
   background:radial-gradient(circle, rgba(255,214,0,0.16) 0%, transparent 68%);
   pointer-events:none;z-index:0;opacity:0;
-  animation:sr-glowIn 1.4s ease 200ms forwards;
+}
+.sr-ready .game-demo::before{
+  animation:sr-glowIn 1.4s ease forwards;
 }
 @keyframes sr-glowIn{
   0%{opacity:0;transform:translate(-50%,-50%) scale(.7);}
@@ -918,12 +920,23 @@ footer{
   box-shadow:0 40px 80px -25px rgba(0,0,0,.85), inset 0 0 0 1.5px rgba(255,255,255,0.08);
   transition:width .4s cubic-bezier(.22,1,.36,1), border-radius .4s ease, padding .4s ease;
   opacity:0;
-  animation:sr-frameIn 900ms cubic-bezier(.16,1,.3,1) 150ms forwards;
+  transform:scale(.82) translateY(28px);
+}
+.sr-ready .phone-frame{
+  animation:sr-frameIn 900ms cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes sr-frameIn{
   0%{opacity:0;transform:scale(.82) translateY(28px);}
   60%{opacity:1;}
   100%{opacity:1;transform:scale(1) translateY(0);}
+}
+.tagline-word{
+  display:inline-block;opacity:0;filter:blur(3px);
+  transform:translateY(16px) scale(.94);
+  animation:sr-wordIn 560ms cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes sr-wordIn{
+  to{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
 }
 .phone-frame.is-tablet{
   width:min(940px,94%);border-radius:36px;padding:26px;
@@ -1547,7 +1560,7 @@ footer{
       
       <h1>Learn crypto.<br>Without the <span>headache.</span></h1>
       
-      <p class="hero-tagline" style="max-width:640px;margin-left:auto;margin-right:auto;">
+      <p class="hero-tagline" id="sr-tagline" style="max-width:680px;margin-left:auto;margin-right:auto;animation:none;opacity:1;">
         Fear keeps you out. Confusion keeps you stuck. Let's get unstuck and be fear-less...together.
       </p>
     </div>
@@ -1856,6 +1869,30 @@ footer{
     }
     swipeCard.addEventListener('pointerup', endDrag);
     swipeCard.addEventListener('pointercancel', endDrag);
+  })();
+  (function(){
+    // Cinematic word-by-word tagline reveal, then pop the tablet in once it finishes
+    var el = document.getElementById('sr-tagline');
+    var heroVisual = document.querySelector('.hero-visual');
+    if(!el || !heroVisual) return;
+    var text = el.textContent.trim();
+    var words = text.split(/\s+/);
+    el.innerHTML = '';
+    var STAGGER = 100, WORD_DUR = 560, START_DELAY = 950;
+    words.forEach(function(word, i){
+      var span = document.createElement('span');
+      span.className = 'tagline-word';
+      span.textContent = word;
+      span.style.animationDelay = (START_DELAY + i*STAGGER) + 'ms';
+      el.appendChild(span);
+      if(i < words.length - 1){
+        el.appendChild(document.createTextNode(' '));
+      }
+    });
+    var totalTime = START_DELAY + (words.length-1)*STAGGER + WORD_DUR + 350;
+    setTimeout(function(){
+      heroVisual.classList.add('sr-ready');
+    }, totalTime);
   })();
   function srNextRound(){
     srCurrent++;
