@@ -930,13 +930,26 @@ footer{
   60%{opacity:1;}
   100%{opacity:1;transform:scale(1) translateY(0);}
 }
+.tagline-line{display:block;}
+.tagline-line-block{
+  opacity:0;filter:blur(2px);
+  transform:translateY(14px);
+  animation:sr-lineIn 620ms cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes sr-lineIn{
+  to{opacity:1;filter:blur(0);transform:translateY(0);}
+}
 .tagline-word{
   display:inline-block;opacity:0;filter:blur(3px);
   transform:translateY(16px) scale(.94);
-  animation:sr-wordIn 560ms cubic-bezier(.16,1,.3,1) forwards;
+  animation:sr-wordIn 540ms cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes sr-wordIn{
   to{opacity:1;filter:blur(0);transform:translateY(0) scale(1);}
+}
+.tagline-word-final{
+  color:var(--sr-accent);
+  text-shadow:0 0 18px rgba(255,214,0,0.45);
 }
 .phone-frame.is-tablet{
   width:min(940px,94%);border-radius:36px;padding:26px;
@@ -1871,25 +1884,59 @@ footer{
     swipeCard.addEventListener('pointercancel', endDrag);
   })();
   (function(){
-    // Cinematic word-by-word tagline reveal, then pop the tablet in once it finishes
+    // Cinematic tagline reveal: line 1 and line 2 land as whole beats,
+    // line 3 types in word by word with a held pause before "together."
     var el = document.getElementById('sr-tagline');
     var heroVisual = document.querySelector('.hero-visual');
     if(!el || !heroVisual) return;
-    var text = el.textContent.trim();
-    var words = text.split(/\s+/);
+    var LINE1 = "Fear keeps you out.";
+    var LINE2 = "Confusion keeps you stuck.";
+    var LINE3_WORDS = ["Let's","get","unstuck","and","be","fear-less...","together."];
     el.innerHTML = '';
-    var STAGGER = 100, WORD_DUR = 560, START_DELAY = 950;
-    words.forEach(function(word, i){
+
+    var line1 = document.createElement('div');
+    line1.className = 'tagline-line tagline-line-block';
+    line1.textContent = LINE1;
+    el.appendChild(line1);
+
+    var line2 = document.createElement('div');
+    line2.className = 'tagline-line tagline-line-block';
+    line2.textContent = LINE2;
+    el.appendChild(line2);
+
+    var line3 = document.createElement('div');
+    line3.className = 'tagline-line';
+    el.appendChild(line3);
+
+    var LINE1_DELAY = 200, LINE_DUR = 620;
+    var LINE2_DELAY = LINE1_DELAY + LINE_DUR + 280;
+    var LINE3_START = LINE2_DELAY + LINE_DUR + 450;
+    var STAGGER = 140, WORD_DUR = 540, TOGETHER_PAUSE = 650;
+
+    line1.style.animationDelay = LINE1_DELAY + 'ms';
+    line2.style.animationDelay = LINE2_DELAY + 'ms';
+
+    var delays = [];
+    var t = LINE3_START;
+    LINE3_WORDS.forEach(function(word, i){
+      if(i === LINE3_WORDS.length - 1){ t += TOGETHER_PAUSE; }
+      delays.push(t);
+      t += STAGGER;
+    });
+
+    LINE3_WORDS.forEach(function(word, i){
+      var isLast = i === LINE3_WORDS.length - 1;
       var span = document.createElement('span');
-      span.className = 'tagline-word';
+      span.className = 'tagline-word' + (isLast ? ' tagline-word-final' : '');
       span.textContent = word;
-      span.style.animationDelay = (START_DELAY + i*STAGGER) + 'ms';
-      el.appendChild(span);
-      if(i < words.length - 1){
-        el.appendChild(document.createTextNode(' '));
+      span.style.animationDelay = delays[i] + 'ms';
+      line3.appendChild(span);
+      if(!isLast){
+        line3.appendChild(document.createTextNode(' '));
       }
     });
-    var totalTime = START_DELAY + (words.length-1)*STAGGER + WORD_DUR + 350;
+
+    var totalTime = delays[delays.length - 1] + WORD_DUR + 400;
     setTimeout(function(){
       heroVisual.classList.add('sr-ready');
     }, totalTime);
