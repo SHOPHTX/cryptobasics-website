@@ -920,13 +920,6 @@ footer{
   width:9px;height:9px;border-radius:50%;background:#0a0a0c;z-index:30;pointer-events:none;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12);
 }
-.device-toggle{display:flex;gap:8px;}
-.device-btn{
-  padding:8px 18px;border-radius:9999px;border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.05);color:var(--sr-gray);font-weight:700;font-size:.78rem;
-  cursor:pointer;font-family:'DM Sans',sans-serif;transition:.15s;
-}
-.device-btn.active{background:var(--sr-accent);color:#1a1500;border-color:var(--sr-accent);}
 .phone-screen{
   position:relative;width:100%;height:auto;background:#000;border-radius:40px;overflow:hidden;min-height:320px;
 }
@@ -1561,11 +1554,6 @@ footer{
 
     <div class="hero-visual" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;position:relative;z-index:2;">
       <div class="game-demo">
-        <div class="device-toggle">
-          <button class="device-btn" data-device="phone" onclick="srSetDevice('phone')">📱 Portrait</button>
-          <button class="device-btn active" data-device="tablet" onclick="srSetDevice('tablet')">📱 Landscape</button>
-        </div>
-
         <div class="phone-frame is-tablet" id="sr-phone-frame">
           <div class="side-btn btn-mute"></div>
           <div class="side-btn btn-vol-up"></div>
@@ -1638,10 +1626,6 @@ footer{
   </div>
 
   <script>
-  function srSetDevice(mode){
-    document.getElementById('sr-phone-frame').classList.toggle('is-tablet', mode==='tablet');
-    document.querySelectorAll('.device-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.device===mode); });
-  }
   var SR_ROUNDS = [
     { tag:"Direct Message", platform:"dm", name:"GiveBack Promo", handle:"@official_promo_0", time:"Just now", verified:false, avatarBg:"#5b4b8a", initials:"GP",
       text:"🎉 Congrats! You've been randomly selected for the Official Giveback Promo. Send 0.1 BTC to the address below and receive 1 BTC back within 24 hours. Verified partner ✅",
