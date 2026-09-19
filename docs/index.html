@@ -901,7 +901,7 @@ footer{
   display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;z-index:1;width:100%;
 }
 .game-demo::before{
-  content:'';position:absolute;top:50%;left:50%;width:640px;height:640px;
+  content:'';position:absolute;top:50%;left:50%;width:900px;height:900px;
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(255,214,0,0.16) 0%, transparent 68%);
   pointer-events:none;z-index:0;opacity:0;
@@ -926,7 +926,7 @@ footer{
   100%{opacity:1;transform:scale(1) translateY(0);}
 }
 .phone-frame.is-tablet{
-  width:min(760px,100%);border-radius:36px;padding:22px;
+  width:min(940px,94%);border-radius:36px;padding:26px;
 }
 .phone-frame.is-tablet .phone-screen{border-radius:22px;}
 .phone-frame.is-tablet .dynamic-island{display:none;}
@@ -1520,8 +1520,8 @@ footer{
     pointer-events:none;
     z-index:1;
   " alt="Buck" />
-  <div class="hero-grid">
-    <div class="hero-content">
+  <div class="hero-grid" style="grid-template-columns:1fr;max-width:1000px;text-align:center;">
+    <div class="hero-content" style="display:flex;flex-direction:column;align-items:center;">
       <div class="company-badge">
         <span class="badge-dot"></span>
         <span class="badge-text">Crypto, Unlocked.</span>
@@ -1529,12 +1529,12 @@ footer{
       
       <h1>Learn crypto.<br>Without the <span>headache.</span></h1>
       
-      <p class="hero-tagline">
+      <p class="hero-tagline" style="max-width:640px;margin-left:auto;margin-right:auto;">
         Fear keeps you out. Confusion keeps you stuck. Let's get unstuck and be fear-less...together.
       </p>
     </div>
 
-    <div class="hero-visual" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;position:relative;z-index:2;">
+    <div class="hero-visual" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0 0;position:relative;z-index:2;">
       <div class="game-demo">
         <div class="phone-frame is-tablet" id="sr-phone-frame">
           <div class="side-btn btn-mute"></div>
@@ -1828,52 +1828,6 @@ footer{
     }
   }
   </script>
-</section>
-
-<section style="padding:56px 24px 64px;background:var(--black);text-align:center;">
-  <a href="https://cryptobasicsco.gumroad.com/l/vol1" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.35);border-radius:9999px;padding:10px 20px;margin-bottom:24px;text-decoration:none;">
-    <span style="font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;background:var(--accent-primary);color:#0c1520;padding:3px 10px;border-radius:9999px;">Free</span>
-    <span style="font-size:.9rem;font-weight:700;color:#fff;">Vol. 1 — What the F*** Even IS Cryptocurrency? — get it free, no card required →</span>
-  </a>
-
-  <div class="cta-group" style="align-items:center;">
-    <a href="/glossary/" class="btn-primary">Start With the Jargon Buster →</a>
-    <div class="cta-secondary-row" style="justify-content:center;flex-wrap:wrap;">
-      <a href="#guides" class="btn-secondary">Guides</a>
-      <a href="#news" class="btn-secondary">Crypto News</a>
-      <a href="#products" class="btn-secondary">Courses</a>
-      <a href="/regulation-tracker/" class="btn-secondary">Regulation Tracker</a>
-      <a href="/about/" class="btn-secondary">Our Story</a>
-    </div>
-  </div>
-
-  <!-- Compact stat card -->
-  <div class="stat-card" style="
-    display:inline-flex;
-    gap:0;
-    margin-top:28px;
-    background:#0c1520;
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:14px;
-    overflow:hidden;
-  ">
-    <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
-      <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Word Salad</div>
-    </div>
-    <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
-      <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Judgment</div>
-    </div>
-    <div style="padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
-      <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">0%</div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Finance Bros</div>
-    </div>
-    <div style="padding:14px 20px;text-align:center;">
-      <div style="font-size:1.25rem;font-weight:900;color:var(--accent-primary);line-height:1;">100%</div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Laymen's Terms</div>
-    </div>
-  </div>
 </section>
 
 <div id="guides" style="position:absolute;top:-34px;"></div>
