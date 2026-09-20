@@ -1560,6 +1560,13 @@ footer{
 <script>
 (function(){
   try{
+    var params = new URLSearchParams(window.location.search);
+    if(params.has('replay')){
+      localStorage.removeItem('cb_seen_hero_intro');
+      params.delete('replay');
+      var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+      window.history.replaceState({}, '', cleanUrl);
+    }
     if(localStorage.getItem('cb_seen_hero_intro')){
       document.documentElement.classList.add('intro-skip');
     }
