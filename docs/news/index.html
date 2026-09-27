@@ -937,17 +937,24 @@ footer{
         Latest Crypto News.<br><span style="color:#FFD600;">In plain English.</span>
       </h2>
 
-      <div style="max-width:620px;margin:28px auto 0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,214,0,0.2);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:16px;text-align:left;flex-wrap:wrap;">
-        <img src="/images/Buck_newspaper.webp" alt="Buck reading the news" style="width:64px;height:auto;flex-shrink:0;">
-        <div style="flex:1;min-width:220px;">
-          <div style="font-family:'DM Sans',sans-serif;font-size:.85rem;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px;">Give me your email. I'll send you the news translated into actual English. No spam, I'm too lazy to write it.</div>
+      <div class="buck-news-capture" style="max-width:620px;margin:20px auto 0;background:rgba(255,255,255,0.03);border:1px solid rgba(255,214,0,0.15);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;text-align:left;">
+        <img src="/images/Buck_newspaper.webp" alt="Buck reading the news" class="buck-news-img" style="width:44px;height:auto;flex-shrink:0;">
+        <div style="flex:1;min-width:0;">
+          <div class="buck-news-copy" style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(255,255,255,0.75);line-height:1.4;margin-bottom:8px;">Give me your email. I'll send you the news translated into actual English.</div>
           <!-- MAILERLITE EMBED PENDING: paste the embed code for "News Page - Weekly Update Signup" (form id 199363695522874389) here, replacing this placeholder form -->
-          <form style="display:flex;gap:8px;flex-wrap:wrap;" onsubmit="return false;">
-            <input type="email" placeholder="your@email.com" style="flex:1;min-width:180px;padding:10px 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.3);color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;">
-            <button type="submit" style="padding:10px 20px;border-radius:9999px;border:none;background:#FFD600;color:#0d0d0d;font-weight:800;font-size:.8rem;cursor:pointer;">Get the News →</button>
+          <form style="display:flex;gap:8px;" onsubmit="return false;">
+            <input type="email" placeholder="your@email.com" style="flex:1;min-width:0;padding:8px 12px;border-radius:9999px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.3);color:#fff;font-family:'DM Sans',sans-serif;font-size:.78rem;">
+            <button type="submit" style="flex-shrink:0;padding:8px 16px;border-radius:9999px;border:none;background:#FFD600;color:#0d0d0d;font-weight:800;font-size:.74rem;cursor:pointer;white-space:nowrap;">Get News →</button>
           </form>
         </div>
       </div>
+      <style>
+        @media(max-width:600px){
+          .buck-news-capture{padding:10px 12px;gap:8px;border-radius:12px;margin-top:14px;}
+          .buck-news-img{width:32px;}
+          .buck-news-copy{font-size:.7rem;margin-bottom:6px;}
+        }
+      </style>
 
       <div id="today-date-widget" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:8px 18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;">
         <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block;box-shadow:0 0 5px #4ADE80;"></span>
